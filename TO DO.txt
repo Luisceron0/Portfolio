@@ -1,0 +1,47 @@
+Arquitectura Monolítica:
+
+Ejemplo de Proyecto: Una aplicación de gestión de finanzas: donde todas las funcionalidades (interfaz de usuario, lógica de negocio y acceso a datos) están integradas en un solo código base.
+
+
+Arquitectura en Capas (Layered Architecture):
+
+Ejemplo de Proyecto:  un sistema POS y un gestor de inventarios
+
+
+Arquitectura de Microservicios:
+
+Ejemplo de Proyecto: Una plataforma de comercio electrónico donde diferentes microservicios manejan funciones específicas como gestión de productos, procesamiento de pagos, gestión de usuarios y envío de notificaciones.
+
+
+Arquitectura Orientada a Servicios (SOA):
+
+Ejemplo de Proyecto: Chatbot para problemas cotidianos
+
+
+Arquitectura Basada en Eventos:
+
+Ejemplo de Proyecto: sistema de gestión de pedidos y envios
+
+
+Arquitectura de Cliente-Servidor:
+
+Ejemplo de Proyecto: sistema de gestión de notas y recordatorios
+
+Arquitectura de Pila (Stack Architecture):
+
+Ejemplo de Proyecto: Una aplicación web de blog utilizando la pila MERN (MongoDB, Express.js, React, Node.js) para gestionar publicaciones, comentarios y usuarios.
+
+
+Arquitectura de Microkernel:
+
+Ejemplo de Proyecto: Una plataforma que permite a los usuarios planificar y gestionar sus viajes, incluyendo reservas de vuelos y hoteles.
+
+
+Arquitectura de Serverless:
+
+Ejemplo de Proyecto: Un comparador de precios con web scrapper
+
+
+Arquitectura de Contenedores:
+
+Ejemplo de Proyecto: Plataforma de E-Learning
