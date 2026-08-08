@@ -1,5 +1,54 @@
 # Lessons learned
 
+## 2026-08-08 — `actions/upload-artifact@v4` no encuentra un directorio con punto inicial sin patrón explícito
+**Contexto:** primer run real de CI. El job `Lighthouse CI` pasó (✓, gate
+≥95/≥95 cumplido), pero el paso de subir el artefacto avisó: `No files were
+found with the provided path: .lighthouseci/`. El job `Playwright`, con
+`path: playwright-report/` (sin punto inicial), sí subió su artefacto sin
+problema en el mismo run.
+**Corrección:** `path: .lighthouseci/**/*.json` en vez de `.lighthouseci/` a
+secas — el glob de la acción sí matchea con un patrón explícito.
+**Regla para el futuro:** un directorio de artefacto que empiece con punto
+necesita un patrón glob explícito en `actions/upload-artifact`, no basta con
+la ruta del directorio. No bloqueaba el gate (la evidencia de que pasó estaba
+en el log), pero sí rompía la evidencia descargable.
+**Tags:** #ci #github-actions
+
+## 2026-08-08 — `globalSetup` de Playwright 1.62 corre DESPUÉS del plugin `webServer`, no antes
+**Contexto:** el primer deploy real disparó CI de verdad por primera vez (push a
+GitHub). El job `Playwright` falló con `[WebServer] Error: Could not find a
+production build in the '.next' directory` — el mismo error que
+`globalSetup` (`e2e/global-setup.ts`, que corría `npm run build`) existía
+específicamente para evitar. Todas las corridas locales anteriores habían
+pasado, así que el fallo pareció "solo en CI" al principio.
+**Investigación, no suposición:** en vez de asumir una diferencia de entorno,
+se reprodujo en local con `.next` borrado y el comando exacto de CI
+(`npm run test:e2e`, sin argumentos extra) — falló igual. Se instrumentó
+`global-setup.ts` con `console.error` al cargar el módulo y al invocar la
+función: **cero salida**, ni siquiera el trace de que el módulo se importó.
+Se leyó el código fuente instalado (`node_modules/playwright/lib/runner/index.js`,
+`createGlobalSetupTasks`): el array de tareas es
+`[removeOutputDirs, ...pluginSetupTasks, ...globalTeardowns, ...globalSetups]`
+— el plugin de `webServer` (que arranca los servidores) vive dentro de
+`pluginSetupTasks`, que se ejecuta ANTES que `globalSetups` en esa misma lista.
+Las corridas "verdes" anteriores solo funcionaban porque ya había un `.next`
+de un `npm run build` manual previo en la misma sesión de shell — nunca fue
+`globalSetup` lo que lo generaba.
+**Error a evitar:** confiar en el orden de ejecución de `globalSetup` vs
+`webServer` sin verificarlo contra la versión instalada — la documentación
+más antigua/genérica de Playwright describe `globalSetup` corriendo antes de
+todo, pero en 1.62.1 el plugin de `webServer` se registra primero en la cola.
+**Corrección:** se eliminó `e2e/global-setup.ts` y la clave `globalSetup` de
+`playwright.config.ts`. El build ahora se garantiza encadenándolo en el propio
+script: `"test:e2e": "npm run build && playwright test"` — determinista,
+independiente del orden interno de tareas de Playwright.
+**Regla para el futuro:** cuando un mecanismo "debería funcionar" y no lo
+hace, instrumentar con trazas (`console.error`) antes de teorizar. Y no
+confiar en el orden de hooks de un framework de terceros sin leer el código
+fuente de la versión instalada — el comportamiento documentado puede haber
+cambiado entre versiones mayores.
+**Tags:** #playwright #ci #falso-verde
+
 ## 2026-08-08 — El job `lighthouse` de CI nunca instalaba el Chromium que necesitaba
 **Contexto:** `scripts/run-lighthouse.mjs` resuelve el Chromium a usar con
 `playwright-core`'s `chromium.executablePath()`, para no depender de un

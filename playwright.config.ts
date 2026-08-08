@@ -42,8 +42,16 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
 
-  // Compila una vez; los dos servidores solo arrancan.
-  globalSetup: './e2e/global-setup.ts',
+  /*
+   * El build NO se hace aquí con `globalSetup`: en Playwright 1.62 el plugin
+   * de `webServer` arranca como parte de `createPluginSetupTasks`, que corre
+   * ANTES que `globalSetup` en la cola de tareas — al revés de lo que
+   * documentación más antigua sugiere. Un `globalSetup` que compila llega
+   * tarde: los 4 `webServer` de abajo ya intentaron un `next start` sin
+   * `.next` y fallan. La compilación se hace en el script `test:e2e` de
+   * package.json (`npm run build && playwright test`), que sí garantiza el
+   * orden. Ver tasks/lessons.md.
+   */
 
   use: {
     baseURL: HAPPY_PATH_URL,

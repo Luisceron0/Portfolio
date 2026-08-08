@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "check:pending": "node scripts/check-pending.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build && playwright test",
     "verify:guardrails": "node scripts/verify-guardrails.mjs",
     "verify:semgrep": "node scripts/verify-semgrep.mjs",
     "scan:semgrep": "semgrep --config semgrep-rules/ --error --quiet src/",

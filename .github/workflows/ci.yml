@@ -124,7 +124,11 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: lighthouse-report
-          path: .lighthouseci/
+          # Con solo ".lighthouseci/" (punto inicial) el glob de esta acción no
+          # encuentra nada — visto en el primer run real de CI: el job pasaba
+          # pero "No files were found with the provided path". El patrón
+          # explícito sí matchea.
+          path: .lighthouseci/**/*.json
           retention-days: 7
 
   content-readiness:
