@@ -1,0 +1,143 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Permisos mínimos por defecto; ningún job escribe en el repo.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Sin telemetría saliente desde CI.
+  NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  quality:
+    name: Lint, tipos y build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+
+  secrets:
+    name: Escaneo de secretos (T-101)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Historial completo: gitleaks debe revisar los commits, no solo el árbol.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # Red de seguridad propia, sin dependencias: corre aunque la acción de
+      # terceros no esté disponible.
+      - name: Escaneo local sin dependencias
+        run: npm run check:secrets
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GITLEAKS_LICENSE solo hace falta si el repo pertenece a una
+          # organización. Para una cuenta personal no se necesita.
+
+  sast:
+    name: Semgrep (reglas propias)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install semgrep
+      # Antes de confiar en las reglas, se demuestra que detectan lo que dicen
+      # detectar. Un scan con 0 hallazgos sobre reglas no validadas no
+      # distingue "código limpio" de "regla rota".
+      - name: Validar reglas contra el fixture vulnerable
+        run: npm run verify:semgrep
+      - name: Validar la regla ESLint de T-104 contra su fixture
+        run: npm run verify:guardrails
+      - name: Escanear src/ con las reglas
+        run: npm run scan:semgrep
+
+  e2e:
+    name: Playwright
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  lighthouse:
+    name: Lighthouse CI (Performance ≥95, Accessibility ≥95)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # scripts/run-lighthouse.mjs resuelve el Chromium de Playwright en vez
+      # de exigir un `google-chrome` de sistema; sin este paso el binario no
+      # existe en un runner limpio y el job falla con "Chrome installation
+      # not found" (visto en local antes de instalarlo — ver tasks/lessons.md).
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run lighthouse
+        env:
+          # Con las claves de prueba de Turnstile: sin esto el widget nunca
+          # entrega token y Accessibility penaliza un formulario inerte.
+          CONTACT_TEST_MODE: '1'
+          CONTACT_DRY_RUN: '1'
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          retention-days: 7
+
+  content-readiness:
+    name: Marcadores [PENDIENTE]
+    runs-on: ubuntu-latest
+    # TODO(Fase 4): quitar continue-on-error antes del primer despliegue.
+    # Hasta que el dueño aporte dominio, capturas y PDFs, este job informa pero
+    # no bloquea. Una vez resueltos, pasa a ser obligatorio: es lo que impide
+    # que un placeholder llegue a producción.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run check:pending

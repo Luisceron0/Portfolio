@@ -1,0 +1,28 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "MemberExpression[property.name='host'][object.callee.name='headers']",
+        "message": "T-104: no derives ninguna URL del header Host. Usa site.url de src/content.ts."
+      },
+      {
+        "selector": "MemberExpression[object.property.name='headers'][property.name='host']",
+        "message": "T-104: no derives ninguna URL del header Host. Usa site.url de src/content.ts."
+      },
+      {
+        "selector": "CallExpression[callee.property.name='get'] > Literal[value=/^(host|:authority|x-forwarded-host)$/i]",
+        "message": "T-104: no leas el header Host ni x-forwarded-host. Usa site.url de src/content.ts."
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "out/",
+    "playwright-report/",
+    "test-results/",
+    "security-fixtures/"
+  ]
+}

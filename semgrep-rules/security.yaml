@@ -1,0 +1,89 @@
+# Reglas Semgrep propias de este proyecto.
+#
+# El directorio NO se llama `.semgrep/`: semgrep ignora los directorios que
+# empiezan por punto al descubrir archivos de test, y `semgrep --test` no
+# encontraba el fixture. Ver tasks/lessons.md.
+#
+#   npm run verify:semgrep   -> valida las reglas contra semgrep-rules/security.ts
+#   npm run scan:semgrep     -> escanea src/ con estas reglas
+#
+# El orden importa: verify va ANTES que scan. Un scan con 0 hallazgos sobre
+# reglas no validadas no distingue "código limpio" de "regla rota".
+
+rules:
+  # ---------------------------------------------------------------------------
+  # T-104 — nunca derivar una URL del header Host.
+  # ---------------------------------------------------------------------------
+  - id: no-host-header-url
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: >-
+      T-104: esta expresión lee el header Host (o x-forwarded-host), que el
+      cliente controla. Cualquier URL construida así es manipulable. Usa
+      site.url de src/content.ts, que es un valor fijo.
+    metadata:
+      threat: T-104
+      cwe: 'CWE-20: Improper Input Validation'
+    patterns:
+      - pattern-either:
+          - pattern: $H.get("host")
+          - pattern: $H.get("Host")
+          - pattern: $H.get("x-forwarded-host")
+          - pattern: $H.get("X-Forwarded-Host")
+          - pattern: headers().host
+
+  # ---------------------------------------------------------------------------
+  # Logging — nunca contenido del formulario ni el correo del visitante.
+  # ---------------------------------------------------------------------------
+  - id: no-pii-in-logs
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: >-
+      Sección "Logging" de la SRS: los errores se registran con endpoint y un
+      mensaje genérico, nunca con el correo del visitante ni el contenido del
+      formulario. Registra un identificador de error, no el dato.
+    metadata:
+      threat: PII
+    patterns:
+      - pattern-either:
+          - pattern: console.$METHOD(..., $X.email, ...)
+          - pattern: console.$METHOD(..., email, ...)
+          - pattern: console.$METHOD(..., $X.senderEmail, ...)
+          - pattern: console.$METHOD(..., $FORM.get(...), ...)
+          - pattern: console.$METHOD(..., JSON.stringify($PAYLOAD), ...)
+
+  # ---------------------------------------------------------------------------
+  # T-101 — un secreto con prefijo NEXT_PUBLIC_ se sirve al navegador.
+  # ---------------------------------------------------------------------------
+  - id: no-secret-in-public-env
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: >-
+      T-101: todo lo que lleva el prefijo NEXT_PUBLIC_ se incrusta en el bundle
+      del cliente. Un secreto ahí es un secreto publicado. La site key de
+      Turnstile sí es pública; la secret key y la clave de Resend, no.
+    metadata:
+      threat: T-101
+      cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    patterns:
+      - pattern: process.env.$VAR
+      - metavariable-regex:
+          metavariable: $VAR
+          regex: ^NEXT_PUBLIC_.*(SECRET|PASSWORD|API_KEY|PRIVATE|CREDENTIAL).*$
+
+  # ---------------------------------------------------------------------------
+  # No devolver detalles internos del error al cliente.
+  # ---------------------------------------------------------------------------
+  - id: no-internal-error-to-client
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: >-
+      El mensaje de error que ve el visitante es texto estático de content.ts.
+      Devolver error.message filtra detalles de la integración (proveedor,
+      endpoint, motivo del rechazo) sin ninguna necesidad.
+    metadata:
+      threat: T-103
+    patterns:
+      - pattern-either:
+          - pattern: 'return { ..., error: $E.message, ... }'
+          - pattern: 'return { ..., detail: $E.message, ... }'

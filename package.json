@@ -1,0 +1,41 @@
+{
+  "name": "personal-site",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "check:pending": "node scripts/check-pending.mjs",
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "test:e2e": "playwright test",
+    "verify:guardrails": "node scripts/verify-guardrails.mjs",
+    "verify:semgrep": "node scripts/verify-semgrep.mjs",
+    "scan:semgrep": "semgrep --config semgrep-rules/ --error --quiet src/",
+    "lighthouse": "node scripts/run-lighthouse.mjs"
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.47.0",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "agent-browser": "^0.33.2",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.0"
+  }
+}
