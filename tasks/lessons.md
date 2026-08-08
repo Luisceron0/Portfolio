@@ -1,18 +1,26 @@
 # Lessons learned
 
-## 2026-08-08 — `actions/upload-artifact@v4` no encuentra un directorio con punto inicial sin patrón explícito
+## 2026-08-08 — `actions/upload-artifact@v4` excluye rutas con punto inicial por defecto
 **Contexto:** primer run real de CI. El job `Lighthouse CI` pasó (✓, gate
 ≥95/≥95 cumplido), pero el paso de subir el artefacto avisó: `No files were
 found with the provided path: .lighthouseci/`. El job `Playwright`, con
 `path: playwright-report/` (sin punto inicial), sí subió su artefacto sin
 problema en el mismo run.
-**Corrección:** `path: .lighthouseci/**/*.json` en vez de `.lighthouseci/` a
-secas — el glob de la acción sí matchea con un patrón explícito.
-**Regla para el futuro:** un directorio de artefacto que empiece con punto
-necesita un patrón glob explícito en `actions/upload-artifact`, no basta con
-la ruta del directorio. No bloqueaba el gate (la evidencia de que pasó estaba
-en el log), pero sí rompía la evidencia descargable.
-**Tags:** #ci #github-actions
+**Primer intento fallido:** cambiar el patrón a `.lighthouseci/**/*.json`
+asumiendo que era un problema de glob. Se verificó en un SEGUNDO run real de
+CI: **siguió sin subir nada**, mismo aviso. El patrón no era la causa.
+**Causa real:** `include-hidden-files` es `false` por defecto en
+`actions/upload-artifact@v4` (visible en el log del propio job `Playwright`,
+que lo declara explícitamente aunque no se haya puesto a mano) — cualquier
+ruta que empiece con punto se trata como oculta y se excluye del artefacto,
+sin importar el patrón.
+**Corrección:** `path: .lighthouseci/` (la ruta simple, como al principio) +
+`include-hidden-files: true` explícito.
+**Regla para el futuro:** ante un fallo de CI, verificar la causa en un run
+real antes de aplicar la segunda corrección — la primera hipótesis (glob) era
+razonable pero incorrecta, y sin volver a correr CI de verdad se habría dado
+por resuelta sin estarlo.
+**Tags:** #ci #github-actions #falso-verde
 
 ## 2026-08-08 — `globalSetup` de Playwright 1.62 corre DESPUÉS del plugin `webServer`, no antes
 **Contexto:** el primer deploy real disparó CI de verdad por primera vez (push a

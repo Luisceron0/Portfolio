@@ -124,12 +124,14 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: lighthouse-report
-          # Con solo ".lighthouseci/" (punto inicial) el glob de esta acción no
-          # encuentra nada — visto en el primer run real de CI: el job pasaba
-          # pero "No files were found with the provided path". El patrón
-          # explícito sí matchea.
-          path: .lighthouseci/**/*.json
+          path: .lighthouseci/
           retention-days: 7
+          # No era el patrón del glob (el primer intento con **/*.json tampoco
+          # sirvió). `include-hidden-files` es `false` por defecto en esta
+          # acción, y cualquier ruta que empiece con punto se trata como
+          # oculta y se excluye — visto en dos runs reales de CI: el job
+          # playwright-report (sin punto inicial) sí subió sin este flag.
+          include-hidden-files: true
 
   content-readiness:
     name: Marcadores [PENDIENTE]
