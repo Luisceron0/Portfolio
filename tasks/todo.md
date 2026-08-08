@@ -3,20 +3,23 @@
 **Goal:** deploy a working single-page site meeting RF-101 through RF-105 of the SRS.
 
 ## Phase 0: Unblock pending items
-> Aplazado por decisión del dueño (2026-08-07): se construye la estructura
-> primero y los recursos externos se incorporan después. Ninguno de estos
-> puntos se ha dado por resuelto ni se ha rellenado con un valor inventado.
-- [ ] Resolve `[PENDIENTE: domain name]` — pick and register a personal domain
-- [ ] Capture KOA live screenshot for RF-102 (CareLink's already exists)
+- [ ] Resolve `[PENDIENTE: domain name]` — **estrategia acordada (2026-08-08):
+  desplegar primero en Vercel, registrar el dominio con la URL real como
+  referencia, apuntar DNS después.** El sitio ya está desplegado (ver Phase 4);
+  falta que el dueño registre el dominio y lo conecte en el dashboard de Vercel
+- [x] Capture KOA live screenshot for RF-102 (CareLink's already exists) →
+  **completo (2026-08-08)**, ver Phase 3
 - [ ] Confirm portfolio-wide RF-001–003 (GitHub unification, renames, READMEs) are
   done — RF-102/105 of this SRS depend on them, don't build the links first and fix
   the target later
-- [ ] **(añadido)** Copiar la captura de CareLink a `public/proyectos/` — la SRS la
-  sitúa en `docs/portfolio/screenshots/` de otro repo, y copilot-instructions
-  prohíbe tocar ese repo desde aquí
+- [x] **(añadido)** Copiar la captura de CareLink a `public/proyectos/` →
+  **completo (2026-08-08)**, ver Phase 3
 - [ ] **(añadido)** Aportar `luis-ceron-cv-es.pdf` y `luis-ceron-cv-en.pdf` en
-  `public/cv/` — RF-103 no cierra con un botón que apunta a un 404
-- [ ] **(añadido)** Bandeja de destino del formulario (`CONTACT_TO_EMAIL`) para la Fase 2
+  `public/cv/` — RF-103 no cierra con un botón que apunta a un 404. El dueño
+  confirmó que los aportará cuando estén actualizados
+- [x] **(añadido)** Bandeja de destino del formulario (`CONTACT_TO_EMAIL`) →
+  confirmada por el dueño: `luiscerontrabajos@gmail.com`. Pendiente solo
+  configurarla en Vercel (ver Phase 4)
 
 ## Phase 1: Scaffold — COMPLETA (2026-08-07)
 - [x] Next.js 14 + Tailwind project init, matching ElevaForge conventions
@@ -99,22 +102,38 @@
       ningún dato pendiente de Fase 0
 
 ## Phase 4: Verification
-- [x] Lighthouse Performance ≥95, Accessibility ≥95 → medido localmente:
-      100/100, 99/100, 99/100 (3 corridas). **Falta:** confirmar que el job
-      `lighthouse` de CI (`.github/workflows/ci.yml`) pasa en GitHub Actions —
-      corrido solo en local hasta ahora
+- [x] Lighthouse Performance ≥95, Accessibility ≥95 → medido localmente
+      (100/100, 99/100, 99/100) **y confirmado en CI real** (GitHub Actions,
+      run 31283391049): job en verde, gate cumplido
 - [x] Playwright: happy path, Turnstile-blocked path, server-error path →
-      91 tests en verde, 0 fallos, incluido el crítico de fail-closed visto en
-      rojo a propósito antes de confiar en él
-- [ ] Secrets scan clean in CI → `npm run check:secrets` en verde localmente;
-      gitleaks + el job `secrets` de CI **no se han corrido todavía en GitHub
-      Actions** — este repo aún no tiene remoto
+      91 tests en verde localmente **y en CI real** (52.6s, mismo resultado)
+- [x] Secrets scan clean in CI → confirmado en GitHub Actions real: escáner
+      local + gitleaks, ambos en verde (run 31283391049)
 - [x] CSP header present on every response, verified → capturado con `curl`
-      contra una respuesta real (no reconstruido), las 13 directivas presentes,
-      nonce distinto en cada petición
+      contra una respuesta real, las 13 directivas presentes, nonce distinto
+      en cada petición
 - [ ] Cross-check: nothing on this page contradicts the CV, LinkedIn, or repo READMEs
-      → bloqueado por Fase 0: no hay contenido real que cotejar todavía (15
-      marcadores `[PENDIENTE]` abiertos)
+      → parcial: el usuario de GitHub del YAML del CV coincide con
+      `hero.githubLink`. Falta cotejar contra LinkedIn (no aportado) y contra
+      el resto de repos del portafolio cuando existan
+
+## Phase 4b: Deploy (2026-08-08)
+- [x] Push a GitHub — commit `e93a512` reemplaza el PoS en `Luisceron0/Portfolio`
+      main con el sitio nuevo; commits siguientes `a467512`/`b2f8b1e` corrigen CI
+- [x] CI verde en un run real de GitHub Actions (no solo local) →
+      run 31283391049, todos los jobs en verde salvo `content-readiness`
+      (rojo esperado por diseño: 2 `[PENDIENTE]` reales, `continue-on-error: true`)
+- [x] Dos bugs reales de CI encontrados y corregidos, verificados en runs
+      reales (no solo localmente): orden de build de Playwright vs `webServer`,
+      y `include-hidden-files` en el artifact de Lighthouse. Detalle completo
+      en `tasks/lessons.md`
+- [ ] Conectar el repo en el dashboard de Vercel — **requiere la sesión
+      autenticada del dueño, no ejecutable por el asistente**. Checklist
+      entregada en el chat
+- [ ] Configurar `CONTACT_TO_EMAIL=luiscerontrabajos@gmail.com` en Vercel
+      (confirmado por el dueño, no es secreto)
+- [ ] Registrar el dominio una vez exista la URL de Vercel; conectar dominio
+      personalizado; actualizar `site.url` en `src/content.ts`
 
 ## Completion criteria
 - [ ] All RF-101–105 acceptance criteria closed

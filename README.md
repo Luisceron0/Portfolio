@@ -81,10 +81,13 @@ fallo que el mecanismo previene.
 
 ## Estado
 
-Fase 1 (andamiaje) y Fase 2 (formulario de contacto) completas, con toolchain
-de verificación real: 91 tests de Playwright en verde (unitarios + navegador
-real), Semgrep y ESLint validados contra fixtures vulnerables propios,
-Lighthouse CI en 100/99/99 sobre 95/95. Fase 3 (contenido) bloqueada por
-Fase 0 — dominio, capturas y PDFs pendientes de aportar. Ver
+Fases 1-3 completas (andamiaje, formulario de contacto, contenido real de
+CareLink/KOA) y desplegadas en GitHub con CI en verde
+([Actions](https://github.com/Luisceron0/Portfolio/actions)): 91 tests de
+Playwright, Semgrep y ESLint validados contra fixtures vulnerables propios,
+Lighthouse CI en el gate ≥95/≥95 — todo verificado en un run real de GitHub
+Actions, no solo en local. Faltan 3 datos del dueño: dominio propio, y los
+dos PDF del CV. Conectar el repo a Vercel es un paso manual pendiente (ver
+`tasks/todo.md`, Fase 4b) — requiere la sesión autenticada del dueño. Ver
 [tasks/todo.md](tasks/todo.md) y [tasks/plan.md](tasks/plan.md) para el
 detalle y qué lo bloquea.
