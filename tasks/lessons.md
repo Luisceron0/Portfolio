@@ -1,5 +1,26 @@
 # Lessons learned
 
+## 2026-08-08 — Dos gotchas de `agent-browser` que cuestan tiempo si no se conocen
+**Contexto:** usado repetidamente para verificación visual (checkpoint del
+formulario, capturas de KOA en vivo, QA del rediseño).
+**Gotcha 1 — `screenshot <selector>` puede devolver un PNG en blanco.**
+`agent-browser screenshot "#contacto" archivo.png` guardó una imagen
+completamente en blanco más de una vez, sin error. No investigado a fondo
+(¿el elemento fuera del viewport en el momento de la captura, aunque
+`scrollintoview` ya se hubiera corrido?). **Solución de trabajo:**
+`screenshot --full` (página completa) siempre funciona; si hace falta solo una
+sección, recortarla después con Pillow (`Image.crop`) en vez de confiar en el
+selector.
+**Gotcha 2 — el viewport NO se fija con `agent-browser viewport <w> <h>`.**
+Ese comando no existe (`Unknown command: viewport`), aunque aparece así en un
+fragmento de `--help`. El comando real está bajo el grupo "Browser Settings":
+`agent-browser set viewport <w> <h>`.
+**Regla para el futuro:** para capturas de verificación visual, preferir
+`screenshot --full` + recorte posterior sobre `screenshot <selector>`. Para
+fijar viewport, `agent-browser set viewport <w> <h>`, no `agent-browser
+viewport <w> <h>`.
+**Tags:** #agent-browser #tooling
+
 ## 2026-08-08 — `actions/upload-artifact@v4` excluye rutas con punto inicial por defecto
 **Contexto:** primer run real de CI. El job `Lighthouse CI` pasó (✓, gate
 ≥95/≥95 cumplido), pero el paso de subir el artefacto avisó: `No files were

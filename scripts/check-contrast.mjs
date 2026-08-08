@@ -31,20 +31,23 @@ function contrastRatio(hexA, hexB) {
 // aquí, este script deja de reflejar la realidad — es la razón por la que
 // tailwind.config.ts enlaza a este archivo en su comentario.
 const PALETTE = {
-  ink: '#0f172a',
-  inkMuted: '#475569',
-  accent: '#3730a3',
-  surface: '#ffffff',
-  surfaceSubtle: '#f8fafc',
+  ink: '#211d16',
+  inkMuted: '#6b6255',
+  accent: '#322d84',
+  accentHover: '#26215f',
+  surface: '#f7f2ea',
+  surfaceCard: '#fffdfa',
+  surfaceSubtle: '#efe6d8',
   warn: '#854d0e',
-  warnSurface: '#fffbeb',
+  warnSurface: '#fdf3e0',
 }
 
 /** Cada par que el sitio realmente usa como texto sobre fondo. */
 const PAIRS = [
-  { label: 'ink sobre surface (texto principal)', fg: PALETTE.ink, bg: PALETTE.surface, min: 4.5 },
+  { label: 'ink sobre surface (texto principal, lienzo)', fg: PALETTE.ink, bg: PALETTE.surface, min: 4.5 },
+  { label: 'ink sobre surface-card (texto en tarjetas)', fg: PALETTE.ink, bg: PALETTE.surfaceCard, min: 4.5 },
   {
-    label: 'ink-muted sobre surface (texto secundario)',
+    label: 'ink-muted sobre surface (texto secundario, lienzo)',
     fg: PALETTE.inkMuted,
     bg: PALETTE.surface,
     min: 4.5,
@@ -56,7 +59,14 @@ const PAIRS = [
     min: 4.5,
   },
   { label: 'accent sobre surface (enlaces, botón secundario)', fg: PALETTE.accent, bg: PALETTE.surface, min: 4.5 },
-  { label: 'blanco sobre accent (botón primario)', fg: PALETTE.surface, bg: PALETTE.accent, min: 4.5 },
+  {
+    label: 'accent sobre surface-card (enlaces en tarjetas)',
+    fg: PALETTE.accent,
+    bg: PALETTE.surfaceCard,
+    min: 4.5,
+  },
+  { label: 'blanco cálido sobre accent (botón primario)', fg: PALETTE.surfaceCard, bg: PALETTE.accent, min: 4.5 },
+  { label: 'blanco cálido sobre accent-hover (botón primario, hover)', fg: PALETTE.surfaceCard, bg: PALETTE.accentHover, min: 4.5 },
   { label: 'warn sobre warn-surface (aviso [PENDIENTE])', fg: PALETTE.warn, bg: PALETTE.warnSurface, min: 4.5 },
 ]
 

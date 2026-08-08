@@ -5,9 +5,9 @@ type Variant = 'primary' | 'secondary'
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-accent text-white hover:bg-accent-hover border border-transparent',
+    'bg-accent text-surface-card hover:bg-accent-hover border border-transparent',
   secondary:
-    'bg-surface text-accent hover:bg-surface-subtle border border-accent',
+    'bg-surface-card text-accent hover:bg-surface-subtle border border-accent',
 }
 
 /**
@@ -43,7 +43,7 @@ export function ExternalLinkButton({
         ? {}
         : { target: '_blank', rel: 'noopener noreferrer' })}
       {...(isDownload ? { download } : {})}
-      className={`inline-flex min-h-[44px] items-center justify-center rounded-md px-5 py-2.5 text-base font-semibold transition-colors ${VARIANTS[variant]}`}
+      className={`inline-flex min-h-[44px] items-center justify-center rounded-full px-6 py-2.5 text-base font-semibold transition-colors ${VARIANTS[variant]}`}
     >
       {link.label}
       {!isInternalAnchor && !isDownload && (

@@ -72,6 +72,16 @@
       rojo con un umbral imposible antes de confiar en el verde
 
 ## Phase 3: Content and polish
+- [x] **(añadido, 2026-08-08)** Rediseño visual — lienzo cálido tipo papel
+      (`surface`), índigo profundo como único color ancla (`accent`), bordes
+      finos en vez de sombras (`hairline`), esquinas generosas, botones
+      píldora, tipografía de hero más grande. Síntesis de 5 referencias de
+      diseño pedidas por el dueño, adaptada a un portafolio de seguridad: sin
+      ilustraciones, sin tipografía externa (D-05 se mantiene), sin gradientes.
+      Contraste WCAG AA medido de nuevo con la paleta nueva (`npm run
+      check:contrast`, todos los pares OK); RF-101 (375px sin scroll) sigue en
+      verde con el hero más grande; Lighthouse 97-99/100 Performance, 100/100
+      Accessibility; suite completa 91/91 en verde
 - [x] Hero + value prop copy (RF-101) → `src/content.ts` (`hero.pitch`), texto
       real desde la Fase 1. Verificado por `e2e/landing.spec.ts` (legible sin
       scroll en 375px, sin jerga)

@@ -19,7 +19,7 @@ export function CvDownloads() {
       className="bg-surface-subtle py-14 sm:py-20"
     >
       <div className="mx-auto max-w-content px-5 sm:px-8">
-        <h2 id="cv-title" className="text-2xl font-bold sm:text-3xl">
+        <h2 id="cv-title" className="text-3xl font-bold tracking-tight sm:text-4xl">
           {cv.heading}
         </h2>
 

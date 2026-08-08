@@ -29,7 +29,7 @@ export function Contact() {
       id="contacto"
       className="mx-auto max-w-content px-5 py-14 sm:px-8 sm:py-20"
     >
-      <h2 id="contacto-title" className="text-2xl font-bold sm:text-3xl">
+      <h2 id="contacto-title" className="text-3xl font-bold tracking-tight sm:text-4xl">
         {contact.heading}
       </h2>
 

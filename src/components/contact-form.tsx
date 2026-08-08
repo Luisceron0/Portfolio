@@ -58,7 +58,7 @@ function SubmitButton({ disabled }: { disabled: boolean }) {
     <button
       type="submit"
       disabled={disabled || pending}
-      className="inline-flex min-h-[44px] items-center justify-center rounded-md border border-transparent bg-accent px-5 py-2.5 text-base font-semibold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-200 disabled:text-slate-600"
+      className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-transparent bg-accent px-6 py-2.5 text-base font-semibold text-surface-card transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:border-hairline disabled:bg-surface-subtle disabled:text-ink-muted"
     >
       {pending ? contact.labels.submitting : contact.labels.submit}
     </button>
@@ -132,7 +132,7 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
               autoComplete="name"
               aria-invalid={fieldErrors?.name ? true : undefined}
               aria-describedby={fieldErrors?.name ? 'contact-name-error' : undefined}
-              className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-base"
+              className="mt-1 block w-full rounded-xl border border-hairline-strong bg-surface-card px-3.5 py-2.5 text-base"
             />
             <FieldError id="contact-name-error" code={fieldErrors?.name} />
           </div>
@@ -150,7 +150,7 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
               autoComplete="email"
               aria-invalid={fieldErrors?.email ? true : undefined}
               aria-describedby={fieldErrors?.email ? 'contact-email-error' : undefined}
-              className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-base"
+              className="mt-1 block w-full rounded-xl border border-hairline-strong bg-surface-card px-3.5 py-2.5 text-base"
             />
             <FieldError id="contact-email-error" code={fieldErrors?.email} />
           </div>
@@ -170,7 +170,7 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
               aria-describedby={
                 fieldErrors?.message ? 'contact-message-error' : 'contact-message-hint'
               }
-              className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-base"
+              className="mt-1 block w-full rounded-xl border border-hairline-strong bg-surface-card px-3.5 py-2.5 text-base"
             />
             <p id="contact-message-hint" className="mt-1 text-sm text-ink-muted">
               {contact.hints.message}
@@ -203,7 +203,7 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
           {state.status === 'success' && (
             <p
               data-testid="contact-success"
-              className="rounded-md border border-accent bg-surface-subtle px-4 py-3 text-base font-medium text-accent"
+              className="rounded-xl border border-accent bg-surface-subtle px-4 py-3 text-base font-medium text-accent"
             >
               {contact.successMessage}
             </p>
@@ -211,7 +211,7 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
           {state.status === 'error' && (
             <p
               data-testid="contact-error"
-              className="rounded-md border border-warn-border bg-warn-surface px-4 py-3 text-base font-medium text-warn"
+              className="rounded-xl border border-warn-border bg-warn-surface px-4 py-3 text-base font-medium text-warn"
             >
               {contact.errors[state.code]}
             </p>

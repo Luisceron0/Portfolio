@@ -15,13 +15,13 @@ export function Hero() {
       aria-labelledby="hero-title"
       className="mx-auto max-w-content px-5 pb-12 pt-10 sm:px-8 sm:pb-20 sm:pt-20"
     >
-      <p className="text-sm font-semibold uppercase tracking-wide text-ink-muted">
+      <p className="inline-block rounded-full border border-hairline-strong px-3 py-1 text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
         {hero.role}
       </p>
 
       <h1
         id="hero-title"
-        className="mt-2 text-3xl font-bold leading-tight tracking-tight sm:mt-3 sm:text-5xl"
+        className="mt-4 text-4xl font-bold leading-[0.98] tracking-tight sm:mt-5 sm:text-6xl md:text-7xl"
       >
         {hero.name}
       </h1>

@@ -20,7 +20,7 @@ function ProjectScreenshot({ project }: { project: Project }) {
   // gris que parezca contenido real.
   if (!src || !alt) {
     return (
-      <div className="flex aspect-[16/10] w-full items-center justify-center rounded-lg border border-dashed border-warn-border bg-warn-surface p-4 text-center">
+      <div className="flex aspect-[16/10] w-full items-center justify-center rounded-2xl border border-dashed border-warn-border bg-warn-surface p-4 text-center">
         <PendingNote value={project.screenshot.src} />
       </div>
     )
@@ -32,7 +32,7 @@ function ProjectScreenshot({ project }: { project: Project }) {
       alt={alt}
       width={1280}
       height={800}
-      className="w-full rounded-lg border border-slate-200"
+      className="w-full rounded-2xl border border-hairline"
       sizes="(min-width: 768px) 50vw, 100vw"
     />
   )
@@ -44,9 +44,9 @@ function ProjectCard({ project }: { project: Project }) {
   return (
     <article
       aria-labelledby={headingId}
-      className="rounded-xl border border-slate-200 bg-surface p-5 sm:p-6"
+      className="rounded-2xl border border-hairline bg-surface-card p-5 sm:p-6"
     >
-      <h3 id={headingId} className="text-xl font-bold sm:text-2xl">
+      <h3 id={headingId} className="text-xl font-bold tracking-tight sm:text-2xl">
         {project.name}
       </h3>
 
@@ -56,20 +56,26 @@ function ProjectCard({ project }: { project: Project }) {
 
       <dl className="mt-5 space-y-3 text-base leading-relaxed text-ink-muted">
         <div>
-          <dt className="font-semibold text-ink">Qué problema resuelve</dt>
-          <dd className="mt-1">
+          <dt className="text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
+            Qué problema resuelve
+          </dt>
+          <dd className="mt-1.5 text-ink">
             <TextOrPending value={project.problem} />
           </dd>
         </div>
         <div>
-          <dt className="font-semibold text-ink">Con qué está hecho</dt>
-          <dd className="mt-1">
+          <dt className="text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
+            Con qué está hecho
+          </dt>
+          <dd className="mt-1.5 text-ink">
             <TextOrPending value={project.stack} />
           </dd>
         </div>
         <div>
-          <dt className="font-semibold text-ink">El ángulo de seguridad</dt>
-          <dd className="mt-1">
+          <dt className="text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
+            El ángulo de seguridad
+          </dt>
+          <dd className="mt-1.5 text-ink">
             <TextOrPending value={project.security} />
           </dd>
         </div>
@@ -89,7 +95,7 @@ export function Projects() {
       id="proyectos"
       className="mx-auto max-w-content px-5 py-14 sm:px-8 sm:py-20"
     >
-      <h2 id="proyectos-title" className="text-2xl font-bold sm:text-3xl">
+      <h2 id="proyectos-title" className="text-3xl font-bold tracking-tight sm:text-4xl">
         Dos cosas que he construido
       </h2>
 
