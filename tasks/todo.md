@@ -71,6 +71,32 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 3c: Bilingüe y dinamismo visual (2026-08-09)
+> Tercera petición del dueño. La SRS subió a v1.2 ANTES de tocar código: RF-109
+> (bilingüe) sale de la lista de "fuera de alcance" del §3, y se añade RF-110
+> (dinamismo visual). Sigue siendo una sola página y una sola ruta.
+- [x] Sin rayas largas en el copy visible, con guardián propio
+      (`npm run check:dashes`) verificado en rojo plantando una a propósito
+- [x] RF-109 bilingüe ES/EN. Decisión de diseño: el idioma es un parámetro de
+      query (`/?lang=en`) resuelto en el SERVIDOR, no una ruta nueva ni un
+      intercambio en el cliente. Así el `<html lang>` es correcto en la primera
+      respuesta y el idioma elegido es compartible
+      - Cada texto visible es un `Localized` con `es` y `en` obligatorios:
+        olvidar una traducción es un error de compilación, no un hueco silencioso
+      - Un `?lang=` desconocido cae a español, nunca a una página en blanco
+      - Enlaces localizados solo donde existe la versión de verdad: KOA Store
+        tiene `/en` (HTTP 200, comprobado); koa-landing y elevaforge devuelven
+        404 en `/en`, así que sus enlaces NO se localizan
+- [x] RF-110 dinamismo visual, solo CSS, cero peticiones nuevas: halos radiales
+      fijos que cambian de tono al hacer scroll sin animar nada, textura de
+      papel en malla de puntos, tarjetas semitransparentes que dejan pasar el
+      fondo, y estados hover en chips, tarjetas, botones y puntos de la
+      trayectoria
+- [x] Contraste re-medido incluyendo el color REAL compuesto de las tarjetas
+      semitransparentes (`#fefbf7`), no el hex nominal
+- [x] `check:contrast` y `check:dashes` añadidos al job de calidad de CI
+- [x] 128 tests en verde (antes 114), Lighthouse 98-99/100 y 100/100
+
 ## Phase 3b: Ampliación de alcance y rediseño dinámico (2026-08-09)
 > El dueño pidió más contenido y un diseño más vivo. La SRS se actualizó a la
 > v1.1 ANTES de escribir código (RF-102 de 2→4 proyectos; nuevos RF-106

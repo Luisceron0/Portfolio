@@ -1,23 +1,29 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
-import { nav, projects, skills, timeline } from '@/content'
+import { LOCALES, nav, projects, skills, timeline, type Locale } from '@/content'
 
 /**
  * Criterios de aceptación de RF-102 (4 proyectos), RF-106 (perfil y
- * trayectoria), RF-107 (habilidades) y RF-108 (navegación interna).
+ * trayectoria), RF-107 (habilidades), RF-108 (navegación interna) y RF-109
+ * (bilingüe).
  *
  * Se comprueba contra `src/content.ts` en vez de contra literales copiados
  * aquí: si el dueño edita el contenido, estos tests siguen midiendo lo que la
  * página realmente promete, no una copia que se quedó vieja.
  */
 
+/** URL de la página en un idioma. El español es el idioma por defecto. */
+function pageUrl(locale: Locale): string {
+  return locale === 'es' ? '/' : `/?lang=${locale}`
+}
+
+async function gotoLocale(page: Page, locale: Locale) {
+  await page.goto(pageUrl(locale))
+}
+
 test.describe('RF-108 — navegación interna', () => {
   test('cada elemento de la nav apunta a un ancla que existe', async ({ page }) => {
     await page.goto('/')
-
-    const navLinks = page.getByRole('navigation', { name: /Secciones/ }).getByRole('link')
-    // Los elementos declarados en content.ts, más el enlace de marca.
-    await expect(navLinks).toHaveCount(nav.items.length + 1)
 
     for (const item of nav.items) {
       const target = item.href.replace('#', '')
@@ -28,14 +34,17 @@ test.describe('RF-108 — navegación interna', () => {
     }
   })
 
-  test('la nav no introduce rutas: todos los destinos son anclas', async ({ page }) => {
+  test('los destinos de sección son anclas, nunca rutas nuevas', async ({ page }) => {
     await page.goto('/')
 
     const hrefs = await page
-      .getByRole('navigation', { name: /Secciones/ })
+      .getByRole('navigation')
+      .getByRole('list')
+      .first()
       .getByRole('link')
       .evaluateAll((links) => links.map((link) => link.getAttribute('href') ?? ''))
 
+    expect(hrefs.length).toBe(nav.items.length)
     for (const href of hrefs) {
       expect(href, 'una sola página: la nav no puede llevar a otra ruta').toMatch(/^#/)
     }
@@ -53,6 +62,75 @@ test.describe('RF-108 — navegación interna', () => {
   })
 })
 
+test.describe('RF-109 — bilingüe', () => {
+  test('el atributo lang del documento coincide con el idioma renderizado', async ({
+    page,
+  }) => {
+    for (const locale of LOCALES) {
+      await gotoLocale(page, locale)
+      await expect(
+        page.locator('html'),
+        `?lang=${locale} debe producir <html lang="${locale}">`
+      ).toHaveAttribute('lang', locale)
+    }
+  })
+
+  test('el lang correcto llega ya en la respuesta del servidor, sin ejecutar JS', async ({
+    page,
+  }) => {
+    // Criterio explícito: el idioma se resuelve en servidor, no con un
+    // intercambio en el cliente.
+    const response = await page.request.get('/?lang=en')
+    const html = await response.text()
+
+    expect(html).toContain('lang="en"')
+    // Y el contenido ya viene traducido en ese mismo HTML.
+    expect(html).toContain('Full-Stack Software Engineer')
+  })
+
+  test('el contenido cambia realmente de idioma', async ({ page }) => {
+    await gotoLocale(page, 'es')
+    await expect(page.getByRole('heading', { name: 'Perfil', exact: true })).toBeVisible()
+
+    await gotoLocale(page, 'en')
+    await expect(page.getByRole('heading', { name: 'Profile', exact: true })).toBeVisible()
+  })
+
+  test('el selector de idioma son enlaces, para que el idioma sea compartible', async ({
+    page,
+  }) => {
+    await page.goto('/')
+
+    const group = page.getByRole('group', { name: /Idioma|Language/ })
+    const links = group.getByRole('link')
+    await expect(links).toHaveCount(LOCALES.length)
+
+    // Enlaces reales con href, no botones que dependan de JavaScript.
+    const hrefs = await links.evaluateAll((nodes) =>
+      nodes.map((node) => node.getAttribute('href') ?? '')
+    )
+    expect(hrefs).toContain('/')
+    expect(hrefs).toContain('/?lang=en')
+  })
+
+  test('un idioma desconocido cae al español, nunca a una página en blanco', async ({
+    page,
+  }) => {
+    const response = await page.goto('/?lang=zz')
+
+    expect(response?.status()).toBe(200)
+    await expect(page.locator('html')).toHaveAttribute('lang', 'es')
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+  })
+
+  test('el idioma no introduce rutas nuevas: sigue siendo la misma página', async ({
+    page,
+  }) => {
+    await gotoLocale(page, 'en')
+    expect(new URL(page.url()).pathname).toBe('/')
+  })
+})
+
 test.describe('RF-102 — cuatro proyectos', () => {
   test('los cuatro proyectos se renderizan con nombre y captura', async ({ page }) => {
     await page.goto('/')
@@ -63,7 +141,6 @@ test.describe('RF-102 — cuatro proyectos', () => {
       const article = page.locator(`article[aria-labelledby="proyecto-${project.id}"]`)
       await expect(article, `falta el bloque del proyecto ${project.name}`).toHaveCount(1)
       await expect(article.getByRole('heading', { name: project.name })).toBeVisible()
-      // Captura presente y con texto alternativo real.
       const image = article.locator('img')
       await expect(image).toHaveCount(1)
       await expect(image).toHaveAttribute('alt', /\S/)
@@ -99,12 +176,33 @@ test.describe('RF-102 — cuatro proyectos', () => {
 
       for (let i = 0; i < count; i++) {
         const link = links.nth(i)
-        const href = await link.getAttribute('href')
-        expect(href).toMatch(/^https:\/\//)
+        expect(await link.getAttribute('href')).toMatch(/^https:\/\//)
         // Sin acceso a window.opener desde la pestaña nueva.
         expect(await link.getAttribute('rel')).toContain('noopener')
       }
     }
+  })
+
+  test('KOA Store enlaza a su versión localizada, verificada, y el resto no', async ({
+    page,
+  }) => {
+    /*
+     * Solo store.koa.elevaforge.com tiene versión en inglés (/en devuelve 200).
+     * koa.elevaforge.com y elevaforge.com devuelven 404 en /en, así que sus
+     * enlaces NO deben localizarse. Criterio de RF-109: verificado por URL,
+     * nunca supuesto.
+     */
+    await gotoLocale(page, 'en')
+    const store = page.locator('article[aria-labelledby="proyecto-koa-store"]')
+    await expect(store.getByRole('link', { name: /store\.koa\.elevaforge\.com/ })).toHaveAttribute(
+      'href',
+      'https://store.koa.elevaforge.com/en'
+    )
+
+    const landing = page.locator('article[aria-labelledby="proyecto-koa-landing"]')
+    await expect(
+      landing.getByRole('link', { name: /koa\.elevaforge\.com/ }).first()
+    ).toHaveAttribute('href', 'https://koa.elevaforge.com/')
   })
 })
 
@@ -117,10 +215,9 @@ test.describe('RF-106 / RF-107 — perfil, trayectoria y habilidades', () => {
     const entries = page.locator('#trayectoria ol > li')
     await expect(entries).toHaveCount(timeline.entries.length)
 
-    // Cada entrada muestra su periodo: una cronología sin fechas no es una
-    // cronología.
+    // Cada entrada muestra su periodo: una cronología sin fechas no lo es.
     for (const entry of timeline.entries) {
-      await expect(page.locator('#trayectoria')).toContainText(entry.period)
+      await expect(page.locator('#trayectoria')).toContainText(entry.period.es)
       await expect(page.locator('#trayectoria')).toContainText(entry.organization)
     }
   })
@@ -129,12 +226,12 @@ test.describe('RF-106 / RF-107 — perfil, trayectoria y habilidades', () => {
     await page.goto('/')
 
     for (const group of skills.groups) {
-      const heading = page.locator('#habilidades').getByRole('heading', { name: group.label })
-      await expect(heading).toBeVisible()
+      await expect(
+        page.locator('#habilidades').getByRole('heading', { name: group.label.es })
+      ).toBeVisible()
     }
 
-    // Todos los elementos de todos los grupos están presentes.
-    const totalItems = skills.groups.reduce((sum, group) => sum + group.items.length, 0)
+    const totalItems = skills.groups.reduce((sum, group) => sum + group.items.es.length, 0)
     const chips = page.locator('#habilidades ul li')
     expect(await chips.count()).toBeGreaterThanOrEqual(totalItems)
   })
@@ -194,9 +291,7 @@ test.describe('Animaciones', () => {
     const response = await page.request.get('/')
     const html = await response.text()
 
-    // Ningún bloque puede venir ya oculto desde el servidor.
     expect(html).not.toContain('data-reveal="hidden"')
-    // Y el contenido de las secciones de abajo tiene que estar en ese HTML.
     expect(html).toContain('Politécnico Grancolombiano')
     expect(html).toContain('KOA Store')
   })
@@ -204,13 +299,10 @@ test.describe('Animaciones', () => {
   test('con prefers-reduced-motion el contenido es visible desde el principio', async ({
     browser,
   }) => {
-    // Contexto nuevo con la preferencia activada: es la única forma de probar
-    // que la regla existe de verdad y no es una suposición.
     const context = await browser.newContext({ reducedMotion: 'reduce' })
     const page = await context.newPage()
     await page.goto('/')
 
-    // Sin hacer scroll: los bloques de más abajo ya deben estar a opacidad 1.
     const opacities = await page
       .locator('.reveal')
       .evaluateAll((nodes) => nodes.map((node) => Number(getComputedStyle(node).opacity)))

@@ -1,4 +1,4 @@
-import { hero } from '@/content'
+import { hero, type Locale } from '@/content'
 import { ExternalLinkButton } from '@/components/external-link'
 
 /**
@@ -13,14 +13,14 @@ import { ExternalLinkButton } from '@/components/external-link'
  * propuesta de valor y los dos CTA entren en 375x667. Cualquier elemento nuevo
  * por encima de los botones consume ese presupuesto. Es intencionado.
  */
-export function Hero() {
+export function Hero({ locale }: { locale: Locale }) {
   return (
     <section
       aria-labelledby="hero-title"
       className="mx-auto max-w-content px-5 pb-12 pt-8 sm:px-8 sm:pb-24 sm:pt-16"
     >
-      <p className="inline-block rounded-full border border-hairline-strong px-3 py-1 text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
-        {hero.role}
+      <p className="inline-block rounded-full border border-hairline-strong bg-surface-card/60 px-3 py-1 text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
+        {hero.role[locale]}
       </p>
 
       <h1
@@ -31,20 +31,20 @@ export function Hero() {
       </h1>
 
       <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-muted sm:mt-5 sm:text-xl">
-        {hero.pitch}
+        {hero.pitch[locale]}
       </p>
 
       <div className="mt-5 flex flex-col gap-3 sm:mt-7 sm:flex-row sm:items-center">
-        <ExternalLinkButton link={hero.contactCta} variant="primary" />
-        <ExternalLinkButton link={hero.githubLink} variant="secondary" />
+        <ExternalLinkButton link={hero.contactCta} locale={locale} variant="primary" />
+        <ExternalLinkButton link={hero.githubLink} locale={locale} variant="secondary" />
       </div>
 
       {/* Debajo de los CTA a propósito: no compite por el espacio que RF-101
           reserva para el titular, la propuesta de valor y los botones. */}
       <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink-muted sm:mt-8">
-        <span>{hero.location}</span>
-        <span aria-hidden="true" className="h-1 w-1 rounded-full bg-hairline-strong" />
-        <span>{hero.availability}</span>
+        <span>{hero.location[locale]}</span>
+        <span aria-hidden="true" className="h-1 w-1 rounded-full bg-accent/50" />
+        <span>{hero.availability[locale]}</span>
       </p>
     </section>
   )

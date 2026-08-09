@@ -31,7 +31,10 @@ export function SectionHeading({
         >
           {number}
         </span>
-        <span aria-hidden="true" className="h-px flex-1 bg-hairline" />
+        <span
+          aria-hidden="true"
+          className="h-px flex-1 bg-gradient-to-r from-hairline-strong to-transparent"
+        />
       </div>
 
       <h2

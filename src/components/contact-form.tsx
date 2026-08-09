@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
 
 import { submitContact } from '@/app/actions/contact'
-import { contact } from '@/content'
+import { contact, type Locale } from '@/content'
 import { initialContactState } from '@/lib/contact-state'
 import { LIMITS } from '@/lib/validation'
 
@@ -50,7 +50,7 @@ declare global {
   }
 }
 
-function SubmitButton({ disabled }: { disabled: boolean }) {
+function SubmitButton({ disabled, locale }: { disabled: boolean; locale: Locale }) {
   // useFormStatus solo funciona en un hijo del <form>, de ahí este componente.
   const { pending } = useFormStatus()
 
@@ -60,21 +60,35 @@ function SubmitButton({ disabled }: { disabled: boolean }) {
       disabled={disabled || pending}
       className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-transparent bg-accent px-6 py-2.5 text-base font-semibold text-surface-card transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:border-hairline disabled:bg-surface-subtle disabled:text-ink-muted"
     >
-      {pending ? contact.labels.submitting : contact.labels.submit}
+      {pending ? contact.labels.submitting[locale] : contact.labels.submit[locale]}
     </button>
   )
 }
 
-function FieldError({ id, code }: { id: string; code?: keyof typeof contact.fieldErrors }) {
+function FieldError({
+  id,
+  code,
+  locale,
+}: {
+  id: string
+  code?: keyof typeof contact.fieldErrors
+  locale: Locale
+}) {
   if (!code) return null
   return (
     <p id={id} className="mt-1 text-sm font-medium text-warn">
-      {contact.fieldErrors[code]}
+      {contact.fieldErrors[code][locale]}
     </p>
   )
 }
 
-export function ContactForm({ sitekey }: { sitekey: string | null }) {
+export function ContactForm({
+  sitekey,
+  locale,
+}: {
+  sitekey: string | null
+  locale: Locale
+}) {
   const [state, formAction] = useFormState(submitContact, initialContactState)
   const [token, setToken] = useState<string | null>(null)
   const widgetRef = useRef<HTMLDivElement>(null)
@@ -121,7 +135,7 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
         <div className="space-y-5">
           <div>
             <label htmlFor="contact-name" className="block text-sm font-semibold">
-              {contact.labels.name}
+              {contact.labels.name[locale]}
             </label>
             <input
               id="contact-name"
@@ -134,12 +148,12 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
               aria-describedby={fieldErrors?.name ? 'contact-name-error' : undefined}
               className="mt-1 block w-full rounded-xl border border-hairline-strong bg-surface-card px-3.5 py-2.5 text-base"
             />
-            <FieldError id="contact-name-error" code={fieldErrors?.name} />
+            <FieldError id="contact-name-error" code={fieldErrors?.name} locale={locale} />
           </div>
 
           <div>
             <label htmlFor="contact-email" className="block text-sm font-semibold">
-              {contact.labels.email}
+              {contact.labels.email[locale]}
             </label>
             <input
               id="contact-email"
@@ -152,12 +166,12 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
               aria-describedby={fieldErrors?.email ? 'contact-email-error' : undefined}
               className="mt-1 block w-full rounded-xl border border-hairline-strong bg-surface-card px-3.5 py-2.5 text-base"
             />
-            <FieldError id="contact-email-error" code={fieldErrors?.email} />
+            <FieldError id="contact-email-error" code={fieldErrors?.email} locale={locale} />
           </div>
 
           <div>
             <label htmlFor="contact-message" className="block text-sm font-semibold">
-              {contact.labels.message}
+              {contact.labels.message[locale]}
             </label>
             <textarea
               id="contact-message"
@@ -173,9 +187,9 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
               className="mt-1 block w-full rounded-xl border border-hairline-strong bg-surface-card px-3.5 py-2.5 text-base"
             />
             <p id="contact-message-hint" className="mt-1 text-sm text-ink-muted">
-              {contact.hints.message}
+              {contact.hints.message[locale]}
             </p>
-            <FieldError id="contact-message-error" code={fieldErrors?.message} />
+            <FieldError id="contact-message-error" code={fieldErrors?.message} locale={locale} />
           </div>
         </div>
 
@@ -183,17 +197,17 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
         <div ref={widgetRef} className="mt-6" data-testid="turnstile-widget" />
 
         <div className="mt-6 flex flex-col gap-3">
-          <SubmitButton disabled={!captchaReady} />
+          <SubmitButton disabled={!captchaReady} locale={locale} />
 
           {/* Por qué el botón está deshabilitado, dicho en voz alta. */}
           {!sitekey && (
             <p role="alert" className="text-sm font-medium text-warn">
-              {contact.captcha.unavailable}
+              {contact.captcha.unavailable[locale]}
             </p>
           )}
           {sitekey && !token && (
             <p data-testid="captcha-pending" className="text-sm text-ink-muted">
-              {contact.captcha.pending}
+              {contact.captcha.pending[locale]}
             </p>
           )}
         </div>
@@ -205,7 +219,7 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
               data-testid="contact-success"
               className="rounded-xl border border-accent bg-surface-subtle px-4 py-3 text-base font-medium text-accent"
             >
-              {contact.successMessage}
+              {contact.successMessage[locale]}
             </p>
           )}
           {state.status === 'error' && (
@@ -213,7 +227,7 @@ export function ContactForm({ sitekey }: { sitekey: string | null }) {
               data-testid="contact-error"
               className="rounded-xl border border-warn-border bg-warn-surface px-4 py-3 text-base font-medium text-warn"
             >
-              {contact.errors[state.code]}
+              {contact.errors[state.code][locale]}
             </p>
           )}
         </div>

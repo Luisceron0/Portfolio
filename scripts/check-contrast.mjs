@@ -27,6 +27,23 @@ function contrastRatio(hexA, hexB) {
   return (lighter + 0.05) / (darker + 0.05)
 }
 
+/**
+ * Compone un color semitransparente sobre un fondo y devuelve el hex efectivo.
+ *
+ * Hace falta porque `.card-surface` (RF-110) no es opaca: es blanco cálido al
+ * 82% sobre el lienzo de papel. Medir el contraste contra el hex nominal daría
+ * un número que no es el que ve nadie. Esto calcula el color real resultante.
+ */
+function over(foregroundHex, backgroundHex, alpha) {
+  const channel = (hex, index) => parseInt(hex.slice(index, index + 2), 16)
+  const mixed = [1, 3, 5].map((index) => {
+    const value =
+      alpha * channel(foregroundHex, index) + (1 - alpha) * channel(backgroundHex, index)
+    return Math.round(value).toString(16).padStart(2, '0')
+  })
+  return `#${mixed.join('')}`
+}
+
 // Los mismos valores hex que tailwind.config.ts. Si uno cambia allá y no
 // aquí, este script deja de reflejar la realidad — es la razón por la que
 // tailwind.config.ts enlaza a este archivo en su comentario.
@@ -42,10 +59,35 @@ const PALETTE = {
   warnSurface: '#fdf3e0',
 }
 
+/**
+ * Color REAL de una tarjeta: `.card-surface` es blanco cálido al 82% sobre el
+ * lienzo (RF-110), no un color sólido. Se compone aquí para medir lo que de
+ * verdad ve un visitante, no el hex nominal.
+ */
+const CARD_EFFECTIVE = over(PALETTE.surfaceCard, PALETTE.surface, 0.82)
+
 /** Cada par que el sitio realmente usa como texto sobre fondo. */
 const PAIRS = [
   { label: 'ink sobre surface (texto principal, lienzo)', fg: PALETTE.ink, bg: PALETTE.surface, min: 4.5 },
   { label: 'ink sobre surface-card (texto en tarjetas)', fg: PALETTE.ink, bg: PALETTE.surfaceCard, min: 4.5 },
+  {
+    label: `ink sobre tarjeta REAL compuesta al 82% (${CARD_EFFECTIVE})`,
+    fg: PALETTE.ink,
+    bg: CARD_EFFECTIVE,
+    min: 4.5,
+  },
+  {
+    label: 'ink-muted sobre tarjeta REAL compuesta al 82%',
+    fg: PALETTE.inkMuted,
+    bg: CARD_EFFECTIVE,
+    min: 4.5,
+  },
+  {
+    label: 'accent sobre tarjeta REAL compuesta al 82%',
+    fg: PALETTE.accent,
+    bg: CARD_EFFECTIVE,
+    min: 4.5,
+  },
   {
     label: 'ink-muted sobre surface (texto secundario, lienzo)',
     fg: PALETTE.inkMuted,

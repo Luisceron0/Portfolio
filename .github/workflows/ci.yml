@@ -31,6 +31,11 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
+      # Contraste WCAG AA medido, no asumido, incluida la superficie
+      # semitransparente de las tarjetas (RF-110).
+      - run: npm run check:contrast
+      # Sin rayas largas en el copy visible: petición explícita del dueño.
+      - run: npm run check:dashes
       - run: npm run build
 
   secrets:

@@ -32,9 +32,44 @@
     }
   }
 
+  /*
+   * RF-110 — dinamismo visual.
+   *
+   * Tres capas superpuestas sobre el lienzo de papel, todas en CSS puro: cero
+   * peticiones de red, cero imágenes, cero fuentes. Es la restricción que fija
+   * la propia RF-110 para no pagarlo en el gate de Lighthouse.
+   *
+   *   1 y 2. Dos halos radiales muy suaves en el color de acento y en un tono
+   *          cálido. Dan profundidad sin que se lea "gradiente".
+   *   3.     La textura de papel: una malla de puntos casi invisible que rompe
+   *          la planitud del color sólido. Es lo que hace que el fondo parezca
+   *          material en vez de un relleno.
+   *
+   * `background-attachment: fixed` hace que las capas 1 y 2 no acompañen al
+   * scroll, así que el fondo cambia de tono al recorrer la página sin animar
+   * absolutamente nada: movimiento aparente a coste cero, y nada que pueda
+   * marear a quien pide `prefers-reduced-motion`.
+   */
   body {
     @apply bg-surface text-ink antialiased;
     font-family: var(--font-sans);
+    background-image:
+      radial-gradient(
+        60rem 45rem at 78% -8%,
+        rgba(50, 45, 132, 0.07),
+        transparent 62%
+      ),
+      radial-gradient(
+        50rem 40rem at 5% 22%,
+        rgba(201, 188, 158, 0.24),
+        transparent 60%
+      ),
+      radial-gradient(rgba(33, 29, 22, 0.055) 1px, transparent 1px);
+    background-size:
+      auto,
+      auto,
+      22px 22px;
+    background-attachment: fixed, fixed, scroll;
   }
 
   /* Foco siempre visible y con contraste suficiente: navegación por teclado. */
@@ -85,5 +120,21 @@
       transform: none;
       transition: none;
     }
+  }
+
+  /*
+   * RF-110 — superficie de tarjeta.
+   *
+   * Semitransparente a propósito: deja pasar los halos y la textura del fondo,
+   * así que una tarjeta al principio de la página y otra al final no tienen
+   * exactamente el mismo tono. Es lo que evita que ocho bloques idénticos se
+   * lean como una hoja de cálculo.
+   *
+   * El desenfoque va detrás del contenido, nunca sobre el texto: el contraste
+   * medido en `npm run check:contrast` sigue siendo el del par sólido.
+   */
+  .card-surface {
+    background-color: rgb(255 253 250 / 0.82);
+    backdrop-filter: blur(6px);
   }
 }

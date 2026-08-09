@@ -1,5 +1,32 @@
 # Lessons learned
 
+## 2026-08-09 — `reuseExistingServer` convierte un servidor zombi en un falso verde
+**Contexto:** tras el refactor bilingüe, la suite reportó `93 passed` en 8,4
+minutos. Antes eran `114 passed` en 1,3 minutos. Menos tests de los que había,
+y seis veces más lento, con exit code 0: verde mentiroso.
+**Causa:** `playwright.config.ts` usa `reuseExistingServer: !process.env.CI`, o
+sea `true` en local. Habían quedado vivos los `next start` de pruebas
+manuales anteriores en los mismos puertos. Playwright los reutilizó en vez de
+arrancar los suyos, así que **la suite entera se ejecutó contra un build
+antiguo**, sin el código que se acababa de escribir. La corrida siguiente
+falló con `EADDRINUSE`, que fue la pista que destapó el problema.
+**Por qué importa:** el modo reuse existe para iterar rápido, pero significa
+que un servidor olvidado puede hacer pasar (o fallar) tests por motivos que no
+tienen nada que ver con el código actual. En CI no ocurre porque `CI=true`
+fuerza servidores nuevos; el riesgo es exclusivamente local, que es justo donde
+se toman las decisiones de "esto ya está listo para commitear".
+**Cómo matarlos, y el detalle que cuesta media hora:** `pkill -f "next-server"`
+**se mata a sí mismo**, porque la línea de comandos del propio `bash -c` que lo
+ejecuta contiene la cadena "next-server" y el patrón la encuentra. Se manifiesta
+como exit code 143 o 144 sin ningún mensaje. La solución es el truco de
+corchetes: `pkill -f "[n]ext-server"`. El regex `[n]ext-server` casa con
+"next-server" pero NO con el literal "[n]ext-server" de la propia línea.
+**Regla para el futuro:** antes de fiarse de una corrida local, comprobar que
+los puertos están libres. Si el número de tests o la duración cambian de forma
+inexplicable respecto a la corrida anterior, sospechar del servidor antes que
+del código.
+**Tags:** #playwright #falso-verde #tooling
+
 ## 2026-08-09 — Una animación "reveal on scroll" no puede ser requisito para leer la página
 **Contexto:** al añadir animaciones de aparición se hizo lo que hace casi todo
 tutorial: `.reveal { opacity: 0 }` en CSS, y un IntersectionObserver que añade

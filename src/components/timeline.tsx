@@ -1,4 +1,4 @@
-import { timeline, type TimelineEntry } from '@/content'
+import { timeline, type Locale, type TimelineEntry } from '@/content'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
 
@@ -12,32 +12,42 @@ import { Section, SectionHeading } from '@/components/section'
  * Todas las entradas salen del YAML del CV. Ninguna fecha, cargo ni empleador
  * se escribe aquí a mano.
  */
-function Entry({ entry, index }: { entry: TimelineEntry; index: number }) {
+function Entry({
+  entry,
+  index,
+  locale,
+}: {
+  entry: TimelineEntry
+  index: number
+  locale: Locale
+}) {
   return (
-    <li className="relative pl-8 sm:pl-10">
+    <li className="group relative pl-8 sm:pl-10">
       {/* Punto sobre la línea vertical. Decorativo. */}
       <span
         aria-hidden="true"
-        className="absolute left-0 top-1.5 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-accent bg-surface"
+        className="absolute left-0 top-1.5 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-accent bg-surface transition-all duration-300 group-hover:scale-125 group-hover:bg-accent"
       />
 
       <Reveal delayMs={index * 70}>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span className="rounded-full border border-hairline-strong px-2.5 py-0.5 text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
-            {entry.kind}
+          <span className="rounded-full border border-hairline-strong bg-surface-card/60 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
+            {timeline.kinds[entry.kind][locale]}
           </span>
-          <span className="text-sm font-medium text-ink-muted">{entry.period}</span>
+          <span className="text-sm font-medium text-ink-muted">{entry.period[locale]}</span>
         </div>
 
-        <h3 className="mt-3 text-xl font-bold tracking-tight sm:text-2xl">{entry.title}</h3>
+        <h3 className="mt-3 text-xl font-bold tracking-tight sm:text-2xl">
+          {entry.title[locale]}
+        </h3>
 
         <p className="mt-1 text-base font-medium text-accent">
           {entry.organization}
-          <span className="font-normal text-ink-muted"> · {entry.location}</span>
+          <span className="font-normal text-ink-muted"> · {entry.location[locale]}</span>
         </p>
 
         <ul className="mt-4 space-y-2">
-          {entry.highlights.map((highlight) => (
+          {entry.highlights[locale].map((highlight) => (
             <li
               key={highlight}
               className="relative pl-5 text-base leading-relaxed text-ink-muted"
@@ -55,19 +65,19 @@ function Entry({ entry, index }: { entry: TimelineEntry; index: number }) {
   )
 }
 
-export function Timeline() {
+export function Timeline({ locale }: { locale: Locale }) {
   return (
-    <Section id="trayectoria" labelledBy="trayectoria-title" className="!py-16 sm:!py-24">
+    <Section id="trayectoria" labelledBy="trayectoria-title">
       <SectionHeading
         id="trayectoria-title"
         number="02"
-        title={timeline.heading}
-        intro={timeline.intro}
+        title={timeline.heading[locale]}
+        intro={timeline.intro[locale]}
       />
 
       <ol className="relative mt-12 space-y-12 border-l border-hairline">
         {timeline.entries.map((entry, index) => (
-          <Entry key={entry.id} entry={entry} index={index} />
+          <Entry key={entry.id} entry={entry} index={index} locale={locale} />
         ))}
       </ol>
     </Section>

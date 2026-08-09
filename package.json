@@ -17,7 +17,9 @@
     "verify:guardrails": "node scripts/verify-guardrails.mjs",
     "verify:semgrep": "node scripts/verify-semgrep.mjs",
     "scan:semgrep": "semgrep --config semgrep-rules/ --error --quiet src/",
-    "lighthouse": "node scripts/run-lighthouse.mjs"
+    "lighthouse": "node scripts/run-lighthouse.mjs",
+    "check:dashes": "node scripts/check-dashes.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs"
   },
   "dependencies": {
     "next": "^14.2.0",

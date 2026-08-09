@@ -37,8 +37,9 @@ what does he build, why does security matter in his work, and how do I reach him
   scope creep for a v1.
 - CMS / admin panel. Content is a static config file edited via PR, same discipline
   as the rest of the portfolio repos.
-- Multilingual toggle (ES/EN switch on the site itself). Spanish-first per D-06 of the
-  portfolio SRS; English version is a v2 candidate, not v1.
+- ~~Multilingual toggle (ES/EN switch on the site itself).~~ **Moved into scope in
+  v1.2 (2026-08-09)** at the owner's request. See RF-109. Still no new routes: the
+  language is a query parameter on the same single page, not a `/en` route.
 - Any account system, database, or user-generated content beyond the contact form.
 
 ## 4. Functional requirements
@@ -124,6 +125,39 @@ what does he build, why does security matter in his work, and how do I reach him
 - **Acceptance criteria:**
   - [ ] Visible without scrolling past the hero.
   - [ ] Points to the profile, not to a single repo.
+
+### RF-109: Bilingual content (ES / EN)
+- **Description:** every visible string on the page is available in Spanish and
+  English, with a visible switch. Spanish stays the default (D-06 of the portfolio
+  SRS).
+- **Added in v1.2 (2026-08-09)**, moved out of §3's out-of-scope list at the owner's
+  request.
+- **Design constraint that keeps §3 intact:** the language is selected by a query
+  parameter on the same page (`/?lang=en`), **not** by a new route. One page, one
+  route, as before. The parameter is read server-side so the language is correct in
+  the first response, not after a client-side swap.
+- **Acceptance criteria:**
+  - [ ] No visible string exists in only one language: a missing translation must be
+    a type error, not a silent fallback to Spanish.
+  - [ ] `<html lang>` matches the language actually rendered, set server-side.
+  - [ ] The switch is a real link, so the chosen language is shareable and
+    bookmarkable.
+  - [ ] An unrecognised or absent `lang` value renders Spanish, never a blank page.
+  - [ ] Project links that have a real localized version point to it; ones that do
+    not keep their original URL. Verified per URL, never assumed.
+
+### RF-110: Visual liveliness
+- **Description:** the page should read as designed and alive rather than as a
+  document, without decoration that competes with the content.
+- **Added in v1.2 (2026-08-09)** at the owner's request ("demasiado plana y sin
+  vida").
+- **Constraint:** whatever is added must not cost the Lighthouse gate (≥95/≥95), must
+  not introduce an external dependency or asset, and must keep every text/background
+  pair at WCAG AA.
+- **Acceptance criteria:**
+  - [ ] Lighthouse Performance and Accessibility both still ≥95, measured.
+  - [ ] Contrast still AA on every pair, measured, including any new surface.
+  - [ ] No new network request: decoration is CSS, not images or fonts.
 
 ## 5. Non-functional requirements
 
@@ -219,3 +253,4 @@ is not retained.
 |---|---|---|---|
 | 1.0 | 2026-08-07 | Arch-Sentinel + Luis | Initial version, split from the portfolio-wide SRS per user request |
 | 1.1 | 2026-08-09 | Luis | Scope widened at the owner's request: RF-102 goes from 2 to 4 projects (ElevaForge, CareLink, KOA Landing, KOA Store shown separately); new RF-106 (profile + career timeline), RF-107 (skills), RF-108 (in-page nav). Still one page, still no CMS, still no routes — §3's out-of-scope list is unchanged. |
+| 1.2 | 2026-08-09 | Luis | RF-109 (bilingüe ES/EN por query param, sin rutas nuevas) y RF-110 (dinamismo visual) añadidos a petición del dueño. El toggle multilingüe sale de la lista de fuera de alcance del §3. |
