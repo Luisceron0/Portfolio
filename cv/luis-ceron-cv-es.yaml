@@ -1,0 +1,72 @@
+cv:
+  name: Luis Alejandro Cerón Muñoz
+  headline: Ingeniero de Software Full-Stack
+  location: Pasto, Nariño, Colombia (disponibilidad de relocalización)
+  email: luiscerontrabajos@gmail.com
+  phone: "+57 314 4087963"
+  social_networks:
+    - network: LinkedIn
+      username: luis-ceronmunoz
+    - network: GitHub
+      username: luisceron0
+  sections:
+    Perfil Profesional:
+      - Ingeniero de Software Full-Stack con experiencia en desarrollo de aplicaciones web escalables (React, Vue, Spring Boot, Django), integración de protocolos de seguridad (RBAC, JWT) y despliegue en la nube (AWS, Docker). Egresado de la Universidad Cooperativa de Colombia, actualmente cursando una especialización en Seguridad de la Información en el Politécnico Grancolombiano. Bilingüe (inglés C1), con disponibilidad para relocalización.
+
+    Experiencia:
+      - company: Alcaldía de Pasto
+        position: Practicante de Ingeniería de Software Full-Stack
+        location: Pasto, Colombia
+        start_date: 2025-10
+        end_date: 2025-12
+        highlights:
+          - Desarrollé un sistema full-stack de gestión de mantenimientos para una entidad pública, construyendo la interfaz de usuario y la lógica backend.
+          - Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas para prevenir inyecciones SQL y ataques XSS.
+          - Optimicé consultas de base de datos y arquitectura backend para mejorar los tiempos de respuesta del sistema.
+      - company: Freelance
+        position: Desarrollador de Software Full-Stack
+        location: Remoto
+        start_date: 2023-03
+        end_date: present
+        highlights:
+          - 'Trabajo desarrollado en modalidad de medio tiempo, en paralelo a la carrera universitaria y, posteriormente, a la práctica en la Alcaldía de Pasto.'
+          - 'Ejecución de migraciones de datos hacia SAP y Oracle NetSuite, aplicando cifrado y respaldo de información.'
+          - 'Implementación de soluciones CRM personalizadas (Salesforce, HubSpot) para negocios de e-commerce, incluyendo configuración de controles de acceso.'
+          - 'Desarrollo de sistemas de reportes automatizados con Odoo, Python y PostgreSQL para procesamiento de datos en tiempo real.'
+
+    Educación:
+      - institution: Universidad Cooperativa de Colombia
+        area: Ingeniería de Software
+        degree: Ingeniería
+        location: Pasto, Colombia
+        start_date: 2022-02
+        end_date: 2025-12
+        highlights:
+          - 'Proyecto de grado: API REST para gestión de espacios físicos utilizando IA, con autenticación JWT y gestión segura de secretos.'
+          - 'Cursos relevantes: Arquitectura de Sistemas Escalables, Desarrollo Back-End, Metodologías Ágiles (Scrum), Ciberseguridad, Seguridad de Redes.'
+      - institution: Politécnico Grancolombiano
+        area: Seguridad de la Información
+        degree: Especialización
+        location: Colombia
+        start_date: 2026-01
+        end_date: present
+        highlights:
+          - 'En curso, finalización estimada: 2027.'
+
+    Certificaciones:
+      - 'Ciberseguridad, MinTIC Colombia (Sept 2024)'
+      - 'Network Security, Cisco (Dic 2024)'
+      - 'Desarrollo de Software Ágil y Scrum, IBM (Ene 2025)'
+      - 'Building Scalable Systems, IBM (Feb 2025)'
+      - 'Introduction to Back-End Development, Meta (Feb 2025)'
+      - 'Certificaciones en IA y Productividad, Microsoft & LinkedIn (Feb 2025)'
+
+    Habilidades:
+      - label: Desarrollo
+        details: React, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
+      - label: Seguridad y DevOps
+        details: RBAC, JWT, Prácticas de Código Seguro, Docker, AWS (EC2, S3), CI/CD, Seguridad de Redes
+      - label: Bases de Datos
+        details: PostgreSQL, MySQL, MongoDB
+      - label: Idiomas
+        details: Español (Nativo), Inglés (Avanzado C1, EF SET Certified)

@@ -1,0 +1,72 @@
+cv:
+  name: Luis Alejandro Cerón Muñoz
+  headline: Full-Stack Software Engineer
+  location: Pasto, Nariño, Colombia (open to relocation)
+  email: luiscerontrabajos@gmail.com
+  phone: "+57 314 4087963"
+  social_networks:
+    - network: LinkedIn
+      username: luis-ceronmunoz
+    - network: GitHub
+      username: luisceron0
+  sections:
+    Professional Profile:
+      - Full-Stack Software Engineer with experience building scalable web applications (React, Vue, Spring Boot, Django), integrating security protocols (RBAC, JWT), and deploying to the cloud (AWS, Docker). Graduate of Universidad Cooperativa de Colombia, currently pursuing a postgraduate specialization in Information Security at Politécnico Grancolombiano. Bilingual (English C1), open to relocation.
+
+    Experience:
+      - company: Alcaldía de Pasto (City Government)
+        position: Full-Stack Software Engineering Intern
+        location: Pasto, Colombia
+        start_date: 2025-10
+        end_date: 2025-12
+        highlights:
+          - Built a full-stack maintenance-management system for a public-sector entity, covering both the user interface and secure backend logic.
+          - Implemented Role-Based Access Control (RBAC) and input sanitization to prevent SQL injection and XSS attacks.
+          - Optimized database queries and backend architecture to improve system response times.
+      - company: Freelance
+        position: Full-Stack Software Developer
+        location: Remote
+        start_date: 2023-03
+        end_date: present
+        highlights:
+          - 'Carried out part-time, in parallel with university studies and, later, the internship at Alcaldía de Pasto.'
+          - 'Executed data migrations to SAP and Oracle NetSuite, applying encryption and data backup practices.'
+          - 'Implemented custom CRM solutions (Salesforce, HubSpot) for e-commerce businesses, including access-control configuration.'
+          - 'Built automated reporting systems with Odoo, Python, and PostgreSQL for real-time data processing.'
+
+    Education:
+      - institution: Universidad Cooperativa de Colombia
+        area: Software Engineering
+        degree: BEng
+        location: Pasto, Colombia
+        start_date: 2022-02
+        end_date: 2025-12
+        highlights:
+          - 'Capstone project: REST API for physical space management using AI, with JWT authentication and secure secrets management.'
+          - 'Relevant coursework: Scalable Systems Architecture, Back-End Development, Agile Methodologies (Scrum), Cybersecurity, Network Security.'
+      - institution: Politécnico Grancolombiano
+        area: Information Security
+        degree: Postgraduate Specialization
+        location: Colombia
+        start_date: 2026-01
+        end_date: present
+        highlights:
+          - 'In progress, expected completion: 2027.'
+
+    Certifications:
+      - 'Cybersecurity, MinTIC Colombia (Sept 2024)'
+      - 'Network Security, Cisco (Dec 2024)'
+      - 'Agile Software Development and Scrum, IBM (Jan 2025)'
+      - 'Building Scalable Systems, IBM (Feb 2025)'
+      - 'Introduction to Back-End Development, Meta (Feb 2025)'
+      - 'AI and Productivity Certifications, Microsoft & LinkedIn (Feb 2025)'
+
+    Skills:
+      - label: Development
+        details: React, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
+      - label: Security & DevOps
+        details: RBAC, JWT, Secure Coding Practices, Docker, AWS (EC2, S3), CI/CD, Network Security
+      - label: Databases
+        details: PostgreSQL, MySQL, MongoDB
+      - label: Languages
+        details: Spanish (Native), English (Advanced C1, EF SET Certified)
