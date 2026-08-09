@@ -1,5 +1,6 @@
 import { cv } from '@/content'
 import { ExternalLinkButton } from '@/components/external-link'
+import { Reveal } from '@/components/reveal'
 
 /**
  * RF-103 — descarga del CV.
@@ -13,27 +14,32 @@ import { ExternalLinkButton } from '@/components/external-link'
  */
 export function CvDownloads() {
   return (
-    <section
-      aria-labelledby="cv-title"
-      id="cv"
-      className="bg-surface-subtle py-14 sm:py-20"
-    >
+    <section aria-labelledby="cv-title" id="cv" className="bg-surface-subtle py-16 sm:py-20">
       <div className="mx-auto max-w-content px-5 sm:px-8">
-        <h2 id="cv-title" className="text-3xl font-bold tracking-tight sm:text-4xl">
-          {cv.heading}
-        </h2>
+        <Reveal>
+          <h2
+            id="cv-title"
+            className="text-3xl font-bold tracking-tight sm:text-4xl"
+          >
+            {cv.heading}
+          </h2>
 
-        <ul className="mt-6 flex flex-col gap-3 sm:flex-row">
-          {cv.downloads.map((download) => (
-            <li key={download.language}>
-              <ExternalLinkButton
-                link={{ label: download.label, href: download.href }}
-                variant="secondary"
-                download={download.fileName}
-              />
-            </li>
-          ))}
-        </ul>
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-muted">
+            {cv.intro}
+          </p>
+
+          <ul className="mt-8 flex flex-col gap-3 sm:flex-row">
+            {cv.downloads.map((download) => (
+              <li key={download.language}>
+                <ExternalLinkButton
+                  link={{ label: download.label, href: download.href }}
+                  variant="secondary"
+                  download={download.fileName}
+                />
+              </li>
+            ))}
+          </ul>
+        </Reveal>
       </div>
     </section>
   )

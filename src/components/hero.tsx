@@ -8,12 +8,16 @@ import { ExternalLinkButton } from '@/components/external-link'
  *  - RF-101: legible y comprensible SIN hacer scroll en un viewport de 375 px.
  *  - RF-105: el enlace al perfil de GitHub visible sin pasar del hero.
  * Por eso ambos CTA van dentro de esta sección, no más abajo.
+ *
+ * OJO al añadir cosas aquí: `e2e/landing.spec.ts` mide que el titular, la
+ * propuesta de valor y los dos CTA entren en 375x667. Cualquier elemento nuevo
+ * por encima de los botones consume ese presupuesto. Es intencionado.
  */
 export function Hero() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="mx-auto max-w-content px-5 pb-12 pt-10 sm:px-8 sm:pb-20 sm:pt-20"
+      className="mx-auto max-w-content px-5 pb-12 pt-8 sm:px-8 sm:pb-24 sm:pt-16"
     >
       <p className="inline-block rounded-full border border-hairline-strong px-3 py-1 text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
         {hero.role}
@@ -30,10 +34,18 @@ export function Hero() {
         {hero.pitch}
       </p>
 
-      <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
+      <div className="mt-5 flex flex-col gap-3 sm:mt-7 sm:flex-row sm:items-center">
         <ExternalLinkButton link={hero.contactCta} variant="primary" />
         <ExternalLinkButton link={hero.githubLink} variant="secondary" />
       </div>
+
+      {/* Debajo de los CTA a propósito: no compite por el espacio que RF-101
+          reserva para el titular, la propuesta de valor y los botones. */}
+      <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink-muted sm:mt-8">
+        <span>{hero.location}</span>
+        <span aria-hidden="true" className="h-1 w-1 rounded-full bg-hairline-strong" />
+        <span>{hero.availability}</span>
+      </p>
     </section>
   )
 }

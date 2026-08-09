@@ -25,7 +25,8 @@ what does he build, why does security matter in his work, and how do I reach him
 ## 3. Scope
 
 **In scope:**
-- Single landing page (hero, value prop, 2 project highlights, contact CTA).
+- Single landing page (hero, value prop, profile, career timeline, 4 project
+  highlights, skills, contact CTA).
 - Downloadable CV (ES/EN, generated from the RenderCV YAML per RF-006 of the
   portfolio-wide SRS — this site only *links* to the PDFs, it does not generate them).
 - Contact form → email, with spam protection.
@@ -49,17 +50,53 @@ what does he build, why does security matter in his work, and how do I reach him
   - [ ] Readable and understood without scrolling on a 375px viewport.
   - [ ] No jargon that a non-technical recruiter has to look up.
 
-### RF-102: Project highlights (2 max)
-- **Description:** CareLink and ElevaForge/KOA, each with a 1-paragraph blurb, a
-  screenshot, and a link — CareLink to its screenshots doc, KOA to the live demo.
+### RF-102: Project highlights (4)
+- **Description:** ElevaForge, CareLink, KOA Landing and KOA Store, each with a
+  blurb, a screenshot, a technology list, and links to the live site and/or the
+  repository.
+- **Scope change (v1.1, 2026-08-09):** was "2 max" (CareLink + a single combined
+  ElevaForge/KOA entry). The owner asked for the four projects to be shown
+  separately, since KOA Landing and KOA Store are distinct deliverables with
+  distinct live URLs, and ElevaForge is the studio itself. Widening this is a
+  deliberate scope decision, not scope creep — recorded here before building.
 - **Precondition:** the unified GitHub account (portfolio SRS RF-001) exists, since
   both project links ultimately point there.
 - **Acceptance criteria:**
   - [ ] Each project answers "what problem, what stack, what's the security angle" in
     the blurb.
-  - [ ] Screenshot present for both (CareLink: from `docs/portfolio/screenshots/`,
-    already produced; KOA: live screenshot to capture).
+  - [ ] Screenshot present for all four, captured against the real live site (or,
+    for CareLink which has no public deploy, from its own repo's screenshots doc).
+  - [ ] Every live/demo link resolves (HTTP 200), verified — not assumed.
   - [ ] No claim on this page that isn't backed by the linked repo or demo.
+
+### RF-106: Professional profile and career timeline
+- **Description:** a profile paragraph plus a chronological timeline of experience
+  and education, sourced from the owner's RenderCV YAML so the site and the CV
+  cannot drift apart.
+- **Added in v1.1 (2026-08-09)** at the owner's request: the v1 page carried the
+  value prop but nothing about who Luis is professionally, which left a technical
+  recruiter with no way to assess depth without leaving the page.
+- **Acceptance criteria:**
+  - [ ] Every role and study entry matches the CV YAML — no invented dates, titles
+    or employers.
+  - [ ] Entries are ordered most-recent-first and state their date range.
+  - [ ] Nothing here contradicts the CV or LinkedIn (cross-check of §9).
+
+### RF-107: Skills
+- **Description:** technology and language competencies, grouped by category,
+  sourced from the same CV YAML as RF-106.
+- **Added in v1.1 (2026-08-09).**
+- **Acceptance criteria:**
+  - [ ] Groups and items match the CV YAML exactly.
+  - [ ] Rendered as scannable chips, not a wall of prose.
+
+### RF-108: In-page navigation
+- **Description:** a sticky in-page nav linking to the sections of the single page.
+- **Added in v1.1 (2026-08-09).** This does **not** introduce routes: every target
+  is an anchor on the same page, so the "one page" constraint of §3 holds.
+- **Acceptance criteria:**
+  - [ ] Every nav item targets an anchor that exists on the page.
+  - [ ] Keyboard reachable, and it never covers the skip-to-content link.
 
 ### RF-103: CV download
 - **Description:** one button, auto-detects nothing — offers both ES and EN PDFs
@@ -181,3 +218,4 @@ is not retained.
 | Version | Date | Author | Changes |
 |---|---|---|---|
 | 1.0 | 2026-08-07 | Arch-Sentinel + Luis | Initial version, split from the portfolio-wide SRS per user request |
+| 1.1 | 2026-08-09 | Luis | Scope widened at the owner's request: RF-102 goes from 2 to 4 projects (ElevaForge, CareLink, KOA Landing, KOA Store shown separately); new RF-106 (profile + career timeline), RF-107 (skills), RF-108 (in-page nav). Still one page, still no CMS, still no routes — §3's out-of-scope list is unchanged. |

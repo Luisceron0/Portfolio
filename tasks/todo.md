@@ -71,6 +71,28 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 3b: Ampliación de alcance y rediseño dinámico (2026-08-09)
+> El dueño pidió más contenido y un diseño más vivo. La SRS se actualizó a la
+> v1.1 ANTES de escribir código (RF-102 de 2→4 proyectos; nuevos RF-106
+> perfil/trayectoria, RF-107 habilidades, RF-108 nav interna). Sigue siendo una
+> sola página, sin CMS y sin rutas: la lista de "out of scope" del §3 no cambió.
+- [x] SRS actualizada a v1.1 con el cambio de alcance registrado y justificado
+- [x] RF-102 → 4 proyectos: ElevaForge, CareLink, KOA Landing, KOA Store, cada
+      uno con kicker, problema, chips de stack, ángulo de seguridad, viñetas
+      técnicas y enlaces a demo + código. Las 4 URLs en vivo verificadas con
+      HTTP 200 antes de escribirlas; capturas tomadas contra los sitios reales
+- [x] Enlaces de KOA actualizados a los dominios definitivos
+      (`koa.elevaforge.com` y `store.koa.elevaforge.com/es`)
+- [x] RF-106 → perfil + trayectoria (4 entradas) desde el YAML del CV
+- [x] RF-107 → habilidades en 4 grupos + 6 certificaciones, desde el mismo YAML
+- [x] RF-108 → nav pegajosa con anclas internas; ninguna ruta nueva
+- [x] Animaciones de aparición al hacer scroll, sin dependencias nuevas
+      (IntersectionObserver + CSS): +0,2 kB de JS. Un bug real encontrado y
+      corregido en el proceso — ver `tasks/lessons.md`, el contenido nunca puede
+      depender de que la animación corra
+- [x] Cobertura nueva en `e2e/content.spec.ts` para RF-102/106/107/108 y para
+      las animaciones, escrita contra `src/content.ts` en vez de literales
+
 ## Phase 3: Content and polish
 - [x] **(añadido, 2026-08-08)** Rediseño visual — lienzo cálido tipo papel
       (`surface`), índigo profundo como único color ancla (`accent`), bordes

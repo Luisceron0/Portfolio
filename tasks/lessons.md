@@ -1,5 +1,36 @@
 # Lessons learned
 
+## 2026-08-09 — Una animación "reveal on scroll" no puede ser requisito para leer la página
+**Contexto:** al añadir animaciones de aparición se hizo lo que hace casi todo
+tutorial: `.reveal { opacity: 0 }` en CSS, y un IntersectionObserver que añade
+la clase que lo muestra. Se verificó con una captura de pantalla completa: el
+encabezado "Perfil" aparecía y **todo lo demás estaba en blanco**. Consultando
+el DOM: de 10 bloques `.reveal`, **9 seguían en `opacity: 0`** después de
+recorrer la página entera.
+**Dos fallos, uno encima del otro:**
+1. *Del método de prueba:* el sitio tiene `scroll-behavior: smooth`, así que un
+   bucle de `window.scrollTo(0, y)` se interrumpe a sí mismo — la página nunca
+   pasa de verdad por las secciones y el observer no dispara. Un test que
+   scrollea así mide su propio artefacto.
+2. *Del diseño, y este es el grave:* poner el contenido en `opacity: 0` por
+   defecto convierte la animación en un **requisito para leer la página**.
+   Falla con un crawler o Lighthouse que renderiza sin hacer scroll, con
+   JavaScript lento o bloqueado, y con cualquier salto de scroll que no active
+   el observer. Un `<noscript><style>` tapa solo el caso "sin JS" y deja fuera
+   todos los demás.
+**Corrección:** se invirtió el estado por defecto. El servidor renderiza todo
+con `data-reveal="static"`, que no lleva ningún estilo de ocultación: visible.
+Solo al montar en el cliente, y solo para bloques que están POR DEBAJO del
+viewport (que nadie está mirando todavía), el componente pasa a `hidden` y los
+observa. El peor caso posible pasó a ser "no hay animación" en vez de "no hay
+contenido".
+**Regla para el futuro:** cualquier efecto que oculte contenido debe ocultarlo
+desde el cliente y solo donde el usuario no lo esté viendo. Si el HTML que sale
+del servidor ya trae contenido invisible, el efecto dejó de ser decoración y
+pasó a ser un punto único de fallo. El test que lo cubre comprueba el HTML del
+servidor directamente (`page.request.get`), sin ejecutar JavaScript.
+**Tags:** #animaciones #accesibilidad #progressive-enhancement #falso-verde
+
 ## 2026-08-08 — Dos gotchas de `agent-browser` que cuestan tiempo si no se conocen
 **Contexto:** usado repetidamente para verificación visual (checkpoint del
 formulario, capturas de KOA en vivo, QA del rediseño).

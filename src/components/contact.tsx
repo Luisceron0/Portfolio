@@ -1,5 +1,7 @@
 import { contact } from '@/content'
 import { ContactForm } from '@/components/contact-form'
+import { Reveal } from '@/components/reveal'
+import { Section, SectionHeading } from '@/components/section'
 import { isTestMode, TURNSTILE_TEST_KEYS } from '@/lib/test-mode'
 
 /**
@@ -24,20 +26,17 @@ function resolveSitekey(): string | null {
 
 export function Contact() {
   return (
-    <section
-      aria-labelledby="contacto-title"
-      id="contacto"
-      className="mx-auto max-w-content px-5 py-14 sm:px-8 sm:py-20"
-    >
-      <h2 id="contacto-title" className="text-3xl font-bold tracking-tight sm:text-4xl">
-        {contact.heading}
-      </h2>
+    <Section id="contacto" labelledBy="contacto-title">
+      <SectionHeading
+        id="contacto-title"
+        number="05"
+        title={contact.heading}
+        intro={contact.intro}
+      />
 
-      <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-muted">
-        {contact.intro}
-      </p>
-
-      <ContactForm sitekey={resolveSitekey()} />
-    </section>
+      <Reveal>
+        <ContactForm sitekey={resolveSitekey()} />
+      </Reveal>
+    </Section>
   )
 }

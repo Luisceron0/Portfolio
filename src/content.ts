@@ -8,6 +8,12 @@
  * Regla 3: ninguna afirmación sin enlace que la respalde. Si un dato todavía no
  * se puede respaldar, se escribe como `[PENDIENTE: ...]` — nunca se inventa.
  * `scripts/check-pending.mjs` falla si queda alguno antes de un despliegue.
+ *
+ * FUENTES DE ESTE ARCHIVO (nada aquí es inventado):
+ *  - Perfil, trayectoria, educación, certificaciones, habilidades: el YAML de
+ *    RenderCV del dueño (RF-106/107). Si el CV cambia, este archivo cambia.
+ *  - Proyectos: los README públicos de cada repo + las URLs en vivo, todas
+ *    verificadas con HTTP 200 antes de escribirlas aquí (RF-102).
  */
 
 // ---------------------------------------------------------------------------
@@ -51,14 +57,36 @@ export interface ProjectImage {
 export interface Project {
   id: string
   name: string
+  /** Una línea de contexto: qué es, para quién. */
+  kicker: string
   /** Qué problema resuelve, en lenguaje llano. Criterio RF-102. */
   problem: MaybePending
-  /** Stack técnico real. Criterio RF-102. */
-  stack: MaybePending
-  /** Ángulo de seguridad. Criterio RF-102. */
+  /** Stack técnico real, como chips. Criterio RF-102. */
+  stack: readonly string[]
+  /** Ángulo de seguridad o de ingeniería. Criterio RF-102. */
   security: MaybePending
+  /** Detalles técnicos verificables, en viñetas. */
+  highlights: readonly string[]
   screenshot: ProjectImage
-  link: ExternalLink
+  /** Enlaces del proyecto: demo en vivo, repositorio, documentación. */
+  links: readonly ExternalLink[]
+}
+
+export interface TimelineEntry {
+  id: string
+  /** 'trabajo' | 'estudio' — determina el icono y la etiqueta. */
+  kind: 'trabajo' | 'estudio'
+  title: string
+  organization: string
+  location: string
+  /** Rango legible tal cual se muestra. Sale del CV, no se calcula. */
+  period: string
+  highlights: readonly string[]
+}
+
+export interface SkillGroup {
+  label: string
+  items: readonly string[]
 }
 
 export interface CvDownload {
@@ -70,8 +98,13 @@ export interface CvDownload {
   fileName: string
 }
 
+export interface NavItem {
+  label: string
+  href: string
+}
+
 // ---------------------------------------------------------------------------
-// Contenido
+// Sitio
 // ---------------------------------------------------------------------------
 
 export const site = {
@@ -82,16 +115,32 @@ export const site = {
    */
   url: '[PENDIENTE: dominio propio, pendiente de registrar]' as MaybePending,
   locale: 'es-ES',
-  title: 'Luis Alejandro Cerón Muñoz — Desarrollador full-stack',
+  title: 'Luis Alejandro Cerón Muñoz — Ingeniero de Software Full-Stack',
   /** Meta description. Una frase, sin jerga. */
   description:
-    'Desarrollo aplicaciones web completas y las diseño para que sean seguras desde el primer día.',
+    'Ingeniero de software full-stack. Construyo aplicaciones web completas y las diseño para que sean seguras desde el primer día.',
 } as const
+
+/** RF-108: navegación dentro de la misma página. Ningún destino es una ruta. */
+export const nav = {
+  brand: 'LC',
+  items: [
+    { label: 'Perfil', href: '#perfil' },
+    { label: 'Trayectoria', href: '#trayectoria' },
+    { label: 'Proyectos', href: '#proyectos' },
+    { label: 'Habilidades', href: '#habilidades' },
+    { label: 'Contacto', href: '#contacto' },
+  ] satisfies readonly NavItem[],
+} as const
+
+// ---------------------------------------------------------------------------
+// RF-101 — Hero
+// ---------------------------------------------------------------------------
 
 export const hero = {
   name: 'Luis Alejandro Cerón Muñoz',
   /** Título de una línea. RF-101: un reclutador no técnico lo entiende sin buscar nada. */
-  role: 'Desarrollador full-stack con enfoque en seguridad',
+  role: 'Ingeniero de Software Full-Stack',
   /**
    * RF-101: máximo dos frases, legibles sin hacer scroll en 375 px.
    * Sin jerga que obligue a buscar un término.
@@ -101,6 +150,8 @@ export const hero = {
    */
   pitch:
     'Construyo aplicaciones web completas y las diseño desde el principio para que resistan a quien intente romperlas. Entrego producto que funciona, sin dejarte un problema de seguridad detrás.',
+  location: 'Pasto, Nariño, Colombia',
+  availability: 'Disponible para relocalización',
   /** RF-105: visible sin pasar del hero. Enlace al perfil, no a un repo suelto. */
   githubLink: {
     label: 'Ver mi perfil de GitHub',
@@ -113,50 +164,256 @@ export const hero = {
   },
 } as const
 
+// ---------------------------------------------------------------------------
+// RF-106 — Perfil profesional
+// ---------------------------------------------------------------------------
+
+export const profile = {
+  heading: 'Perfil',
+  /** Texto del CV, sin reescribir: si el CV cambia, esto cambia. */
+  summary:
+    'Ingeniero de Software Full-Stack con experiencia en desarrollo de aplicaciones web escalables (React, Vue, Spring Boot, Django), integración de protocolos de seguridad (RBAC, JWT) y despliegue en la nube (AWS, Docker). Egresado de la Universidad Cooperativa de Colombia, actualmente cursando una especialización en Seguridad de la Información en el Politécnico Grancolombiano. Bilingüe (inglés C1), con disponibilidad para relocalización.',
+  /** Datos de contacto públicos, tomados del CV. */
+  facts: [
+    { label: 'Ubicación', value: 'Pasto, Nariño, Colombia' },
+    { label: 'Correo', value: 'luiscerontrabajos@gmail.com' },
+    { label: 'Formación', value: 'Ing. de Software · Esp. en Seguridad de la Información (en curso)' },
+    { label: 'Idiomas', value: 'Español nativo · Inglés C1 (EF SET)' },
+  ],
+  links: [
+    { label: 'LinkedIn: luis-ceronmunoz', href: 'https://www.linkedin.com/in/luis-ceronmunoz' },
+    { label: 'GitHub: Luisceron0', href: 'https://github.com/Luisceron0' },
+  ] satisfies readonly ExternalLink[],
+} as const
+
+// ---------------------------------------------------------------------------
+// RF-106 — Trayectoria (más reciente primero)
+// ---------------------------------------------------------------------------
+
+export const timeline = {
+  heading: 'Trayectoria',
+  intro:
+    'Experiencia y formación, en orden cronológico inverso. Todo lo de aquí sale del mismo CV que puedes descargar más abajo.',
+  entries: [
+    {
+      id: 'especializacion',
+      kind: 'estudio',
+      title: 'Especialización en Seguridad de la Información',
+      organization: 'Politécnico Grancolombiano',
+      location: 'Colombia',
+      period: 'Ene 2026 — en curso',
+      highlights: ['En curso — finalización estimada: 2027.'],
+    },
+    {
+      id: 'alcaldia',
+      kind: 'trabajo',
+      title: 'Practicante de Ingeniería de Software Full-Stack',
+      organization: 'Alcaldía de Pasto',
+      location: 'Pasto, Colombia',
+      period: 'Oct 2025 — Dic 2025',
+      highlights: [
+        'Desarrollé un sistema full-stack de gestión de mantenimientos para una entidad pública, construyendo la interfaz de usuario y la lógica backend.',
+        'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas para prevenir inyecciones SQL y ataques XSS.',
+        'Optimicé consultas de base de datos y arquitectura backend para mejorar los tiempos de respuesta del sistema.',
+      ],
+    },
+    {
+      id: 'universidad',
+      kind: 'estudio',
+      title: 'Ingeniería de Software',
+      organization: 'Universidad Cooperativa de Colombia',
+      location: 'Pasto, Colombia',
+      period: 'Feb 2022 — Dic 2025',
+      highlights: [
+        'Proyecto de grado: API REST para gestión de espacios físicos utilizando IA, con autenticación JWT y gestión segura de secretos.',
+        'Cursos relevantes: Arquitectura de Sistemas Escalables, Desarrollo Back-End, Metodologías Ágiles (Scrum), Ciberseguridad, Seguridad de Redes.',
+      ],
+    },
+    {
+      id: 'freelance',
+      kind: 'trabajo',
+      title: 'Desarrollador de Software Full-Stack',
+      organization: 'Freelance',
+      location: 'Remoto',
+      period: 'Mar 2023 — actualidad',
+      highlights: [
+        'Trabajo desarrollado en modalidad de medio tiempo, en paralelo a la carrera universitaria y, posteriormente, a la práctica en la Alcaldía de Pasto.',
+        'Ejecución de migraciones de datos hacia SAP y Oracle NetSuite, aplicando cifrado y respaldo de información.',
+        'Implementación de soluciones CRM personalizadas (Salesforce, HubSpot) para negocios de e-commerce, incluyendo configuración de controles de acceso.',
+        'Desarrollo de sistemas de reportes automatizados con Odoo, Python y PostgreSQL para procesamiento de datos en tiempo real.',
+      ],
+    },
+  ] satisfies readonly TimelineEntry[],
+} as const
+
+// ---------------------------------------------------------------------------
+// RF-102 — Proyectos (4)
+// ---------------------------------------------------------------------------
+
 export const projects: readonly Project[] = [
   {
     id: 'carelink',
     name: 'CareLink',
+    kicker: 'Plataforma clínica multi-tenant · implementación de referencia',
     // Fuente: README de github.com/Luisceron0/CareLink (repo público).
     problem:
       'Un hospital necesita llevar historia clínica, triage y coordinación entre médicos sin que nadie —ni un administrador— pueda alterar un registro después de firmado, ni ver el historial de un paciente que no le corresponde.',
-    stack: 'Java (Spring Boot) y PostgreSQL 16 en el backend, React 18 + Vite en el frontend, todo en Docker.',
+    stack: ['Java', 'Spring Boot', 'PostgreSQL 16', 'React 18', 'Vite', 'Docker', 'Flyway'],
     security:
-      'Un encuentro clínico firmado es inmutable a nivel de trigger de PostgreSQL — ni la aplicación ni un acceso directo a la base pueden editarlo (ver la captura: intento de edición rechazado con 409). El acceso de un especialista a una interconsulta se revalida en cada petición, y el motor de búsqueda de casos previos oculta resultados por debajo de 5 pacientes distintos para evitar la re-identificación.',
+      'Un encuentro clínico firmado es inmutable a nivel de trigger de PostgreSQL — ni la aplicación ni un acceso directo a la base pueden editarlo. La captura muestra el intento de edición rechazado con 409.',
+    highlights: [
+      'Aislamiento por schema-per-tenant, con filtro por servicio dentro del WHERE de la consulta, no sobre filas ya traídas.',
+      'El acceso de un especialista vía interconsulta se revalida en cada request: el mismo JWT pasa de 200 a 403 al cerrarse, sin re-login.',
+      'El motor de conocimiento suprime resultados con menos de 5 pacientes distintos, dentro de la propia query, para evitar la re-identificación.',
+      'Cifrado de PHI con AES-256-GCM, IV aleatorio por operación y clave derivada por tenant.',
+      'Auditoría de seguridad end-to-end: reglas Semgrep propias validadas contra código deliberadamente vulnerable, sqlmap contra la instancia real, y un hallazgo de severidad alta corregido con evidencia.',
+    ],
     screenshot: {
-      // Descargada directamente de docs/portfolio/screenshots/07-encounter-edit-409.png
-      // del repo público de CareLink (asset público, no se tocó el repo).
+      // Descargada del repo público de CareLink (asset público, no se tocó el repo).
       src: '/proyectos/carelink.png',
       alt: 'Pantalla de CareLink mostrando el intento de editar un encuentro clínico ya firmado, rechazado con un error 409 por un trigger de la base de datos.',
     },
-    link: {
-      label: 'Ver las capturas de CareLink',
-      href: 'https://github.com/Luisceron0/CareLink/blob/main/docs/portfolio/SCREENSHOTS.md',
-    },
+    links: [
+      {
+        label: 'Ver las capturas del sistema',
+        href: 'https://github.com/Luisceron0/CareLink/blob/main/docs/portfolio/SCREENSHOTS.md',
+      },
+      { label: 'Código en GitHub', href: 'https://github.com/Luisceron0/CareLink' },
+    ],
   },
   {
-    id: 'koa',
-    name: 'ElevaForge / KOA',
-    // Fuente: README de github.com/luisCeron0Portfolio/koa-landing (repo público).
+    id: 'elevaforge',
+    name: 'ElevaForge',
+    kicker: 'Agencia de software · sitio corporativo con panel de administración',
+    // Fuente: README de github.com/Luisceron0/ElevaForge + sitio en vivo.
+    problem:
+      'Una agencia de software necesita captar clientes potenciales y poder editar el contenido de su propio sitio —paquetes, proyectos, equipo— sin llamar a un desarrollador cada vez.',
+    stack: ['Next.js 14', 'TypeScript', 'Tailwind CSS', 'Supabase', 'PostgreSQL', 'Vercel'],
+    security:
+      'Las tablas de Supabase tienen Row Level Security activado y deny-by-default: ninguna tiene policies para usuarios anónimos o autenticados a propósito. Todo el acceso pasa por el servidor, nunca por la clave pública del navegador.',
+    highlights: [
+      'Panel de administración con múltiples cuentas, altas y bajas gestionadas desde la propia interfaz.',
+      'La semilla de sesión del panel es un secreto propio y dedicado; el arranque avisa si quedan credenciales legacy activas.',
+      'Contenido editable desde el panel: paquetes, proyectos y sección de equipo, sin tocar código.',
+      'Outbox de leads de contacto y diagnóstico, con estado revisable desde el panel.',
+    ],
+    screenshot: {
+      src: '/proyectos/elevaforge.png',
+      alt: 'Página de inicio de ElevaForge con el titular "Forjamos el motor digital de tu empresa".',
+    },
+    links: [
+      { label: 'Ver elevaforge.com', href: 'https://www.elevaforge.com' },
+      { label: 'Código en GitHub', href: 'https://github.com/Luisceron0/ElevaForge' },
+    ],
+  },
+  {
+    id: 'koa-landing',
+    name: 'KOA Landing',
+    kicker: 'Lanzamiento de producto · captación de lista de espera',
+    // Fuente: README de github.com/luisCeron0Portfolio/koa-landing + sitio en vivo.
     problem:
       'Captar la lista de espera de un lanzamiento de producto sin que el formulario se convierta en una puerta abierta para spam ni en un ataque de fuerza bruta contra la bandeja de correo.',
-    stack: 'Astro 7 + React para el frontend, Neon Postgres y Resend para el backend, desplegado en Vercel.',
+    stack: ['Astro 7', 'React', 'TypeScript', 'Neon Postgres', 'Resend', 'Upstash', 'Turnstile'],
     security:
-      'El formulario valida los datos en servidor, limita los envíos por IP con Upstash (la IP se guarda con hash, no en claro), y bloquea el envío hasta que Cloudflare Turnstile confirma que no es un bot — el mismo patrón fail-closed que reutilicé en el formulario de contacto de este sitio, después de corregir una condición de carrera real (ver tasks/lessons.md).',
+      'El envío se bloquea hasta que Cloudflare Turnstile confirma que no es un bot — el mismo patrón fail-closed que reutilicé en el formulario de este sitio, después de corregir una condición de carrera real.',
+    highlights: [
+      'Validación en servidor y flujo de confirmación por token antes de dar por buena una suscripción.',
+      'Rate limiting por IP con Upstash: la IP se almacena con hash, nunca en claro.',
+      'Contenido de las secciones gestionado desde un CMS, editable sin desplegar.',
+      'Cobertura con tests unitarios (Vitest) y end-to-end (Playwright), incluidos los caminos de bot y de rate limit.',
+    ],
     screenshot: {
-      // Captura tomada en vivo con agent-browser contra el despliegue real de Vercel.
-      src: '/proyectos/koa.png',
-      alt: 'Página de inicio de la demo en vivo de KOA Buds, con el CTA "Unirme a la lista de espera".',
+      src: '/proyectos/koa-landing.png',
+      alt: 'Página de inicio de KOA Landing, con el producto KOA Buds y el llamado a unirse a la lista de espera.',
     },
-    link: {
-      label: 'Abrir la demo en vivo de KOA',
-      href: 'https://demo-landing-delta.vercel.app',
+    links: [
+      { label: 'Ver koa.elevaforge.com', href: 'https://koa.elevaforge.com/' },
+      { label: 'Código en GitHub', href: 'https://github.com/luisCeron0Portfolio/koa-landing' },
+    ],
+  },
+  {
+    id: 'koa-store',
+    name: 'KOA Store',
+    kicker: 'Tienda de producto · catálogo bilingüe y simulación de compra',
+    // Fuente: README de github.com/luisCeron0Portfolio/koa-store + sitio en vivo.
+    problem:
+      'Mostrar un catálogo de producto completo, en dos idiomas, con un flujo de compra realista de principio a fin — pero sin procesar pagos reales ni retener datos de nadie.',
+    stack: ['Astro', 'TypeScript', 'Content Collections', 'PostgreSQL', 'Vitest', 'Vercel'],
+    security:
+      'El precio se valida en el servidor, no se confía en lo que llega del carrito. El carrito es anónimo y de sesión, y la tienda incluye una vía explícita de borrado de datos.',
+    highlights: [
+      'Catálogo bilingüe (español e inglés) con páginas de producto y selección de variantes.',
+      'Simulación de checkout con validación de precios en servidor: no se procesa ningún pago real.',
+      'SEO completo: sitemap, robots.txt, datos estructurados JSON-LD y metadatos por página.',
+      'Cabeceras de seguridad y CSP gestionadas para el despliegue en Vercel.',
+    ],
+    screenshot: {
+      src: '/proyectos/koa-store.png',
+      alt: 'Tienda KOA con el titular "Seis productos. Ninguno de más." y el selector de idioma español/inglés.',
     },
+    links: [
+      { label: 'Ver store.koa.elevaforge.com', href: 'https://store.koa.elevaforge.com/es' },
+      { label: 'Código en GitHub', href: 'https://github.com/luisCeron0Portfolio/koa-store' },
+    ],
   },
 ] as const
 
+// ---------------------------------------------------------------------------
+// RF-107 — Habilidades
+// ---------------------------------------------------------------------------
+
+export const skills = {
+  heading: 'Habilidades',
+  intro: 'Las tecnologías con las que trabajo, agrupadas como aparecen en mi CV.',
+  groups: [
+    {
+      label: 'Desarrollo',
+      items: [
+        'React',
+        'Vue.js',
+        'Angular',
+        'Spring Boot',
+        'Django',
+        'JavaScript',
+        'TypeScript',
+        'Java',
+        'Python',
+        'C#',
+      ],
+    },
+    {
+      label: 'Seguridad y DevOps',
+      items: [
+        'RBAC',
+        'JWT',
+        'Prácticas de código seguro',
+        'Docker',
+        'AWS (EC2, S3)',
+        'CI/CD',
+        'Seguridad de redes',
+      ],
+    },
+    { label: 'Bases de datos', items: ['PostgreSQL', 'MySQL', 'MongoDB'] },
+    { label: 'Idiomas', items: ['Español (nativo)', 'Inglés (C1 — EF SET Certified)'] },
+  ] satisfies readonly SkillGroup[],
+  certificationsHeading: 'Certificaciones',
+  certifications: [
+    'Ciberseguridad — MinTIC Colombia (Sept 2024)',
+    'Network Security — Cisco (Dic 2024)',
+    'Desarrollo de Software Ágil y Scrum — IBM (Ene 2025)',
+    'Building Scalable Systems — IBM (Feb 2025)',
+    'Introduction to Back-End Development — Meta (Feb 2025)',
+    'Certificaciones en IA y Productividad — Microsoft & LinkedIn (Feb 2025)',
+  ],
+} as const
+
+// ---------------------------------------------------------------------------
+// RF-103 — CV
+// ---------------------------------------------------------------------------
+
 export const cv = {
   heading: 'Descarga mi CV',
+  intro: 'El mismo contenido de esta página, en un PDF que puedes guardar o reenviar.',
   /** RF-103: los dos idiomas etiquetados de forma explícita, sin autodetección. */
   downloads: [
     {
@@ -173,6 +430,10 @@ export const cv = {
     },
   ] satisfies readonly CvDownload[],
 } as const
+
+// ---------------------------------------------------------------------------
+// RF-104 — Contacto
+// ---------------------------------------------------------------------------
 
 export const contact = {
   heading: 'Hablemos',
