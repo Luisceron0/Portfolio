@@ -72,11 +72,15 @@
       rojo con un umbral imposible antes de confiar en el verde
 
 ## Phase 3d: Paleta multicolor y CV actualizado (2026-08-09)
-- [x] Contenido actualizado desde el PDF del CV nuevo: 6 grupos de habilidades
-      (antes 4), incluido "IA y ciencia de datos" que faltaba por completo, más
-      C++, Dart, HTML5, CSS3, Astro, Bootstrap, Tailwind, Git y pruebas de
-      penetración. Métricas reales de la experiencia (20% de mejora, +10
-      clientes PYME, 100% de integridad) y entrada de voluntariado
+- [x] Contenido actualizado desde el PDF del CV nuevo: grupos de habilidades
+      ampliados con C++, Dart, HTML5, CSS3, Astro, Bootstrap, Tailwind, Git y
+      pruebas de penetración, más la entrada de voluntariado
+- [x] **(revisión del dueño, 2026-08-09)** Retiradas las métricas cuantificadas
+      (20% de mejora, +10 clientes PYME, 100% de integridad, cero downtime): con
+      un modelo freelance no son sostenibles como afirmación pública, y la regla
+      3 del proyecto prohíbe cualquier afirmación sin respaldo. Retirado también
+      el grupo "IA y ciencia de datos" con Anaconda, YOLO, OpenCV y Random
+      Forest. Quedan 5 grupos de habilidades
 - [x] Resumen del perfil actualizado al enfoque DevSecOps y AppSec del CV nuevo
 - [x] RF-110 paleta multicolor: 5 tonos (índigo, verde azulado, ciruela,
       terracota, ocre). Un tono por sección, uno por proyecto y uno por grupo

@@ -324,12 +324,12 @@ export const timeline = {
         es: [
           'Desarrollé un sistema full-stack de gestión de mantenimientos para una entidad pública, construyendo la interfaz de usuario y la lógica backend.',
           'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas para prevenir inyecciones SQL y ataques XSS.',
-          'Optimicé consultas de base de datos y arquitectura backend, reduciendo los tiempos de respuesta en un estimado del 20% en un entorno de administración pública.',
+          'Optimicé consultas de base de datos y arquitectura backend para mejorar los tiempos de respuesta del sistema.',
         ],
         en: [
           'Built a full-stack maintenance management system for a public sector entity, covering both the user interface and the backend logic.',
           'Implemented Role-Based Access Control (RBAC) and input sanitisation to prevent SQL injection and XSS attacks.',
-          'Optimised database queries and backend architecture, cutting response times by an estimated 20% in a public administration environment.',
+          'Optimised database queries and backend architecture to improve system response times.',
         ],
       },
     },
@@ -364,13 +364,13 @@ export const timeline = {
       highlights: {
         es: [
           'Trabajo desarrollado en modalidad de medio tiempo, en paralelo a la carrera universitaria y, posteriormente, a la práctica en la Alcaldía de Pasto.',
-          'Ejecución de migraciones complejas de datos hacia SAP y Oracle NetSuite para más de 10 clientes PYME, garantizando 100% de integridad, cero tiempo de inactividad y aplicando cifrado con copias de seguridad.',
+          'Ejecución de migraciones de datos hacia SAP y Oracle NetSuite para clientes PYME, aplicando cifrado y copias de seguridad.',
           'Despliegue de soluciones CRM personalizadas (Salesforce, HubSpot) para e-commerce, optimizando flujos de trabajo y aplicando controles de acceso estrictos.',
           'Desarrollo de sistemas de reportes automatizados con Odoo, Python y PostgreSQL, procesando grandes volúmenes de datos de forma segura en tiempo real.',
         ],
         en: [
           'Part-time work carried out alongside my degree and, later, alongside the internship at Alcaldía de Pasto.',
-          'Complex data migrations to SAP and Oracle NetSuite for more than 10 SME clients, guaranteeing 100% integrity, zero downtime, and applying encryption with backups.',
+          'Data migrations to SAP and Oracle NetSuite for SME clients, applying encryption and backups.',
           'Custom CRM deployments (Salesforce, HubSpot) for e-commerce, streamlining workflows and applying strict access controls.',
           'Automated reporting systems built with Odoo, Python and PostgreSQL, processing large volumes of data securely in real time.',
         ],
@@ -711,13 +711,6 @@ export const skills = {
       items: {
         es: ['PostgreSQL', 'MySQL', 'MongoDB'],
         en: ['PostgreSQL', 'MySQL', 'MongoDB'],
-      },
-    },
-    {
-      label: { es: 'IA y ciencia de datos', en: 'AI and data science' },
-      items: {
-        es: ['Anaconda', 'YOLO', 'OpenCV', 'Random Forest'],
-        en: ['Anaconda', 'YOLO', 'OpenCV', 'Random Forest'],
       },
     },
     {

@@ -8,8 +8,8 @@ import {
   type Tone,
 } from '@/components/section'
 
-/** RF-110: un tono por grupo, para que seis tarjetas no se lean como una sola. */
-const GROUP_TONES: readonly Tone[] = ['indigo', 'teal', 'rust', 'ochre', 'plum', 'teal']
+/** RF-110: un tono por grupo, para que cinco tarjetas no se lean como una sola. */
+const GROUP_TONES: readonly Tone[] = ['indigo', 'teal', 'rust', 'ochre', 'plum']
 
 /**
  * RF-107 — habilidades y certificaciones.
