@@ -1,12 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="7" fill="#322d84"/>
-  <text
-    x="16"
-    y="22"
-    text-anchor="middle"
-    font-family="ui-sans-serif, system-ui, sans-serif"
-    font-size="15"
-    font-weight="700"
-    fill="#ffffff"
-  >LC</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="LC">
+  <!--
+    Favicon. Sustituye al monograma "LC" plano sobre índigo, que era el
+    resultado por defecto de cualquier generador.
+
+    Dos ideas, no una:
+      - La forma es un ESCUDO, no un cuadrado: es lo que distingue este
+        portafolio (ingeniería con foco en seguridad) de otro cualquiera.
+      - El relleno recorre los cuatro tonos reales de la paleta del sitio
+        (índigo, verde azulado, ciruela, terracota), así que el icono y la
+        página hablan el mismo idioma cromático.
+
+    La "L" calada deja ver el papel del lienzo a través del escudo, en vez de
+    pintarse encima. A 16 px se lee como una marca sólida con un corte claro.
+  -->
+  <defs>
+    <linearGradient id="lc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#322d84"/>
+      <stop offset="0.42" stop-color="#0f6459"/>
+      <stop offset="0.72" stop-color="#6d2a63"/>
+      <stop offset="1" stop-color="#9c3f2a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Escudo, con la "L" calada mediante regla de relleno par-impar. -->
+  <path
+    fill="url(#lc)"
+    fill-rule="evenodd"
+    d="M16 1.6 4.6 5.4v10.9c0 6.6 4.6 11.5 11.4 14.1 6.8-2.6 11.4-7.5 11.4-14.1V5.4L16 1.6Z
+       M12.4 8.8h3.5v10.6h5.2v3.4h-8.7V8.8Z"
+  />
 </svg>

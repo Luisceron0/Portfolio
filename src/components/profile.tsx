@@ -13,7 +13,12 @@ import { projectsSection } from '@/content'
 export function Profile({ locale }: { locale: Locale }) {
   return (
     <Section id="perfil" labelledBy="perfil-title">
-      <SectionHeading id="perfil-title" number="01" title={profile.heading[locale]} />
+      <SectionHeading
+        id="perfil-title"
+        number="01"
+        title={profile.heading[locale]}
+        tone="indigo"
+      />
 
       <div className="mt-10 grid gap-10 md:grid-cols-[1.5fr_1fr]">
         <Reveal>

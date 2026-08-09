@@ -35,41 +35,40 @@
   /*
    * RF-110 — dinamismo visual.
    *
-   * Tres capas superpuestas sobre el lienzo de papel, todas en CSS puro: cero
-   * peticiones de red, cero imágenes, cero fuentes. Es la restricción que fija
-   * la propia RF-110 para no pagarlo en el gate de Lighthouse.
+   * Se sustituyó la malla de puntos original: era la textura más genérica
+   * posible, la que trae de serie cualquier plantilla. En su lugar, dos ideas
+   * que sí dicen algo del sitio.
    *
-   *   1 y 2. Dos halos radiales muy suaves en el color de acento y en un tono
-   *          cálido. Dan profundidad sin que se lea "gradiente".
-   *   3.     La textura de papel: una malla de puntos casi invisible que rompe
-   *          la planitud del color sólido. Es lo que hace que el fondo parezca
-   *          material en vez de un relleno.
+   *   1. CAMPOS DE COLOR. Cuatro lavados amplísimos con los tonos reales de la
+   *      paleta (índigo, verde azulado, ciruela, terracota), colocados de forma
+   *      asimétrica y a opacidad muy baja. Como van `fixed`, no acompañan al
+   *      scroll: el lienzo pasa de frío a cálido según por dónde vas, sin
+   *      animar un solo píxel. Movimiento aparente a coste cero, y nada que
+   *      pueda marear a quien pide `prefers-reduced-motion`.
    *
-   * `background-attachment: fixed` hace que las capas 1 y 2 no acompañen al
-   * scroll, así que el fondo cambia de tono al recorrer la página sin animar
-   * absolutamente nada: movimiento aparente a coste cero, y nada que pueda
-   * marear a quien pide `prefers-reduced-motion`.
+   *   2. TRAMA DIAGONAL. Líneas finísimas a 45 grados en vez de puntos: se lee
+   *      como papel técnico, no como fondo de plantilla. Va con el scroll para
+   *      que se note que es material del lienzo y no una capa flotando encima.
+   *
+   * Todo en CSS puro: cero peticiones de red, cero imágenes, cero fuentes. Es
+   * la restricción que fija la propia RF-110 para no pagarlo en Lighthouse.
    */
   body {
     @apply bg-surface text-ink antialiased;
     font-family: var(--font-sans);
     background-image:
-      radial-gradient(
-        60rem 45rem at 78% -8%,
-        rgba(50, 45, 132, 0.07),
-        transparent 62%
-      ),
-      radial-gradient(
-        50rem 40rem at 5% 22%,
-        rgba(201, 188, 158, 0.24),
-        transparent 60%
-      ),
-      radial-gradient(rgba(33, 29, 22, 0.055) 1px, transparent 1px);
-    background-size:
-      auto,
-      auto,
-      22px 22px;
-    background-attachment: fixed, fixed, scroll;
+      radial-gradient(48rem 38rem at 82% -6%, rgba(50, 45, 132, 0.1), transparent 65%),
+      radial-gradient(42rem 34rem at 2% 30%, rgba(15, 100, 89, 0.09), transparent 62%),
+      radial-gradient(46rem 36rem at 92% 62%, rgba(109, 42, 99, 0.08), transparent 64%),
+      radial-gradient(40rem 32rem at 8% 92%, rgba(156, 63, 42, 0.08), transparent 62%),
+      repeating-linear-gradient(
+        45deg,
+        rgba(33, 29, 22, 0.028) 0,
+        rgba(33, 29, 22, 0.028) 1px,
+        transparent 1px,
+        transparent 9px
+      );
+    background-attachment: fixed, fixed, fixed, fixed, scroll;
   }
 
   /* Foco siempre visible y con contraste suficiente: navegación por teclado. */

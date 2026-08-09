@@ -57,6 +57,11 @@ const PALETTE = {
   surfaceSubtle: '#efe6d8',
   warn: '#854d0e',
   warnSurface: '#fdf3e0',
+  // RF-110: tonos de sección y de proyecto. No son decorativos: llevan texto.
+  toneTeal: '#0f6459',
+  tonePlum: '#6d2a63',
+  toneRust: '#9c3f2a',
+  toneOchre: '#8a5310',
 }
 
 /**
@@ -110,6 +115,26 @@ const PAIRS = [
   { label: 'blanco cálido sobre accent (botón primario)', fg: PALETTE.surfaceCard, bg: PALETTE.accent, min: 4.5 },
   { label: 'blanco cálido sobre accent-hover (botón primario, hover)', fg: PALETTE.surfaceCard, bg: PALETTE.accentHover, min: 4.5 },
   { label: 'warn sobre warn-surface (aviso [PENDIENTE])', fg: PALETTE.warn, bg: PALETTE.warnSurface, min: 4.5 },
+
+  /*
+   * RF-110: los tonos de sección y de proyecto NO son decorativos, llevan
+   * texto (números de sección, kickers, encabezados de grupo, enlaces). Cada
+   * uno se mide sobre los dos fondos donde realmente aparece.
+   */
+  ...["toneTeal", "tonePlum", "toneRust", "toneOchre"].flatMap((key) => [
+    {
+      label: `${key} sobre surface (número de sección, viñetas)`,
+      fg: PALETTE[key],
+      bg: PALETTE.surface,
+      min: 4.5,
+    },
+    {
+      label: `${key} sobre tarjeta REAL compuesta`,
+      fg: PALETTE[key],
+      bg: CARD_EFFECTIVE,
+      min: 4.5,
+    },
+  ]),
 ]
 
 let failed = false

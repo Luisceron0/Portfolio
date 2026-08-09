@@ -26,7 +26,7 @@ function Entry({
       {/* Punto sobre la línea vertical. Decorativo. */}
       <span
         aria-hidden="true"
-        className="absolute left-0 top-1.5 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-accent bg-surface transition-all duration-300 group-hover:scale-125 group-hover:bg-accent"
+        className="absolute left-0 top-1.5 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-tone-teal bg-surface transition-all duration-300 group-hover:scale-125 group-hover:bg-tone-teal"
       />
 
       <Reveal delayMs={index * 70}>
@@ -41,7 +41,7 @@ function Entry({
           {entry.title[locale]}
         </h3>
 
-        <p className="mt-1 text-base font-medium text-accent">
+        <p className="mt-1 text-base font-medium text-tone-teal">
           {entry.organization}
           <span className="font-normal text-ink-muted"> · {entry.location[locale]}</span>
         </p>
@@ -73,6 +73,7 @@ export function Timeline({ locale }: { locale: Locale }) {
         number="02"
         title={timeline.heading[locale]}
         intro={timeline.intro[locale]}
+        tone="teal"
       />
 
       <ol className="relative mt-12 space-y-12 border-l border-hairline">

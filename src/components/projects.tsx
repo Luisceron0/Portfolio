@@ -10,7 +10,24 @@ import {
 } from '@/content'
 import { PendingNote } from '@/components/pending'
 import { Reveal } from '@/components/reveal'
-import { Section, SectionHeading } from '@/components/section'
+import {
+  Section,
+  SectionHeading,
+  TONE_BORDER,
+  TONE_BORDER_SOLID,
+  TONE_DOT,
+  TONE_HOVER_BORDER,
+  TONE_TEXT,
+  TONE_WASH,
+  type Tone,
+} from '@/components/section'
+
+/**
+ * RF-110: un tono por proyecto. Cuatro tarjetas del mismo color se leen como
+ * una lista; con un tono cada una, se leen como cuatro trabajos distintos.
+ * El orden sigue al de `projects` en content.ts.
+ */
+const PROJECT_TONES: readonly Tone[] = ['indigo', 'ochre', 'teal', 'plum']
 
 /**
  * RF-102 — cuatro proyectos destacados.
@@ -61,11 +78,12 @@ function ProjectCard({
 }) {
   const headingId = `proyecto-${project.id}`
   const imageFirst = index % 2 === 0
+  const tone = PROJECT_TONES[index % PROJECT_TONES.length]
 
   return (
     <article
       aria-labelledby={headingId}
-      className="card-surface rounded-3xl border border-hairline p-5 transition-colors duration-300 hover:border-hairline-strong sm:p-8"
+      className={`card-surface rounded-3xl border border-hairline p-5 transition-colors duration-300 sm:p-8 ${TONE_HOVER_BORDER[tone]}`}
     >
       <div className="grid items-start gap-8 lg:grid-cols-2">
         {/* `order` solo en pantallas grandes: en móvil el orden es siempre el
@@ -80,7 +98,9 @@ function ProjectCard({
         </Reveal>
 
         <Reveal delayMs={80} className={imageFirst ? 'lg:order-2' : 'lg:order-1'}>
-          <p className="text-xs font-semibold uppercase tracking-widest2 text-accent">
+          <p
+            className={`text-xs font-semibold uppercase tracking-widest2 ${TONE_TEXT[tone]}`}
+          >
             {project.kicker[locale]}
           </p>
 
@@ -102,15 +122,19 @@ function ProjectCard({
             {project.stack.map((tech) => (
               <li
                 key={tech}
-                className="rounded-full border border-hairline-strong bg-surface px-2.5 py-1 text-xs font-medium text-ink transition-colors duration-200 hover:border-accent hover:text-accent"
+                className={`rounded-full border border-hairline-strong bg-surface px-2.5 py-1 text-xs font-medium text-ink transition-colors duration-200 ${TONE_HOVER_BORDER[tone]}`}
               >
                 {tech}
               </li>
             ))}
           </ul>
 
-          <div className="mt-6 rounded-2xl border border-accent/25 bg-accent/[0.04] p-4">
-            <h4 className="text-xs font-semibold uppercase tracking-widest2 text-accent">
+          <div
+            className={`mt-6 rounded-2xl border p-4 ${TONE_BORDER[tone]} ${TONE_WASH[tone]}`}
+          >
+            <h4
+              className={`text-xs font-semibold uppercase tracking-widest2 ${TONE_TEXT[tone]}`}
+            >
               {projectsSection.labels.securityAngle[locale]}
             </h4>
             <p className="mt-2 text-base leading-relaxed text-ink">
@@ -126,7 +150,7 @@ function ProjectCard({
               >
                 <span
                   aria-hidden="true"
-                  className="absolute left-0 top-[0.6em] h-1.5 w-1.5 rounded-full bg-accent"
+                  className={`absolute left-0 top-[0.6em] h-1.5 w-1.5 rounded-full ${TONE_DOT[tone]}`}
                 />
                 {highlight}
               </li>
@@ -144,7 +168,7 @@ function ProjectCard({
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-[44px] items-center rounded-full border border-accent px-4 py-2 text-sm font-semibold text-accent transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-subtle"
+                      className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-subtle ${TONE_BORDER_SOLID[tone]} ${TONE_TEXT[tone]}`}
                     >
                       {link.label[locale]}
                       <span className="sr-only">
@@ -172,6 +196,7 @@ export function Projects({ locale }: { locale: Locale }) {
         number="03"
         title={projectsSection.heading[locale]}
         intro={projectsSection.intro[locale]}
+        tone="ochre"
       />
 
       <div className="mt-12 space-y-8">

@@ -32,6 +32,7 @@ export function Contact({ locale }: { locale: Locale }) {
         number="05"
         title={contact.heading[locale]}
         intro={contact.intro[locale]}
+        tone="rust"
       />
 
       <Reveal>

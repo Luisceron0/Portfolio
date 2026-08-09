@@ -71,6 +71,24 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 3d: Paleta multicolor y CV actualizado (2026-08-09)
+- [x] Contenido actualizado desde el PDF del CV nuevo: 6 grupos de habilidades
+      (antes 4), incluido "IA y ciencia de datos" que faltaba por completo, más
+      C++, Dart, HTML5, CSS3, Astro, Bootstrap, Tailwind, Git y pruebas de
+      penetración. Métricas reales de la experiencia (20% de mejora, +10
+      clientes PYME, 100% de integridad) y entrada de voluntariado
+- [x] Resumen del perfil actualizado al enfoque DevSecOps y AppSec del CV nuevo
+- [x] RF-110 paleta multicolor: 5 tonos (índigo, verde azulado, ciruela,
+      terracota, ocre). Un tono por sección, uno por proyecto y uno por grupo
+      de habilidades. El color pasa de decoración a orientación
+- [x] Fondo rehecho: fuera la malla de puntos genérica, dentro cuatro campos de
+      color fijos de la propia paleta más una trama diagonal fina
+- [x] Favicon rehecho: escudo con la "L" calada y degradado de los cuatro tonos,
+      en vez del monograma plano de generador
+- [x] Contraste medido en los 20 pares, incluidos los 4 tonos nuevos sobre los
+      dos fondos donde aparecen. Todos AA
+- [x] 128 tests en verde, Lighthouse 97-98/100 y 100/100
+
 ## Phase 3c: Bilingüe y dinamismo visual (2026-08-09)
 > Tercera petición del dueño. La SRS subió a v1.2 ANTES de tocar código: RF-109
 > (bilingüe) sale de la lista de "fuera de alcance" del §3, y se añade RF-110

@@ -5,38 +5,51 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Paleta editorial: lienzo cálido tipo papel en vez de blanco puro,
-        // un solo color ancla (índigo), bordes finos en vez de sombras.
-        // Síntesis de 5 referencias de diseño (ver tasks/lessons.md) adaptada
-        // a un portafolio de seguridad: sin ilustraciones, sin tipografía
-        // externa, sin gradientes arcoíris — la calidez y la tipografía
-        // grande hacen el trabajo que ahí hacían los personajes ilustrados.
+        // Paleta editorial: lienzo cálido tipo papel en vez de blanco puro y
+        // bordes finos en vez de sombras.
+        //
+        // RF-110: la paleta NO es monocromática. El índigo sigue siendo el
+        // ancla de marca (CTA, foco, enlaces), pero cada sección y cada
+        // proyecto tienen su propio tono. El color deja de ser decoración y
+        // pasa a ser orientación: dice en qué parte de la página estás.
         //
         // Los ratios de contraste NO se calculan de memoria en este
         // comentario: se miden con `npm run check:contrast`
         // (scripts/check-contrast.mjs), que falla si algún par baja de 4.5:1.
         // Si cambias un hex aquí, cámbialo también en ese script.
         ink: {
-          DEFAULT: '#211d16', // near-black cálido, no slate frío — hermana con el papel
+          DEFAULT: '#211d16', // near-black cálido, no slate frío
           muted: '#6b6255', // gris cálido para texto secundario
         },
         accent: {
-          DEFAULT: '#322d84', // índigo profundo, el único ancla cromática del sitio
+          DEFAULT: '#322d84', // índigo profundo: ancla de marca
           hover: '#26215f',
         },
+        /**
+         * Tonos de sección. Cada uno medido sobre lienzo y sobre tarjeta.
+         * Se usan en números de sección, reglas, viñetas, bordes y hover;
+         * nunca como fondo de un bloque grande de texto.
+         */
+        tone: {
+          indigo: '#322d84',
+          teal: '#0f6459',
+          plum: '#6d2a63',
+          rust: '#9c3f2a',
+          ochre: '#8a5310',
+        },
         surface: {
-          DEFAULT: '#f7f2ea', // papel cálido: lienzo principal de la página
-          card: '#fffdfa', // blanco cálido: reservado para tarjetas elevadas
-          subtle: '#efe6d8', // tono más profundo para secciones alternas (CV)
+          DEFAULT: '#f7f2ea', // papel cálido: lienzo principal
+          card: '#fffdfa', // blanco cálido: tarjetas elevadas
+          subtle: '#efe6d8', // tono más profundo para secciones alternas
           inverse: '#211d16',
         },
         hairline: {
-          DEFAULT: '#e2d8c4', // borde fino "marco de galería", reemplaza las sombras
+          DEFAULT: '#e2d8c4',
           strong: '#c9bc9e',
         },
         warn: {
-          DEFAULT: '#854d0e', // amber-800
-          surface: '#fdf3e0', // ajustado a tono cálido en vez de amber-50 frío
+          DEFAULT: '#854d0e',
+          surface: '#fdf3e0',
           border: '#e8c675',
         },
       },
@@ -47,8 +60,8 @@ const config: Config = {
         content: '68rem',
       },
       letterSpacing: {
-        // Tracking amplio para eyebrows/labels editoriales; ninguna fuente
-        // nueva, solo espaciado — funciona con cualquier fuente del sistema.
+        // Tracking amplio para eyebrows y etiquetas editoriales; ninguna fuente
+        // nueva, solo espaciado.
         widest2: '0.18em',
       },
     },
