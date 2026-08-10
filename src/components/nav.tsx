@@ -1,5 +1,15 @@
 import { HTML_LANG, LOCALES, nav, type Locale } from '@/content'
 import { localeHref } from '@/lib/locale'
+import { TONE_DOT, type Tone } from '@/components/section'
+
+/**
+ * RF-110: el orden de `nav.items` es el mismo que el de las secciones
+ * numeradas (01 Perfil … 05 Contacto), así que el subrayado en hover usa el
+ * tono de la sección a la que apunta cada enlace. No es un color nuevo: es el
+ * mismo sistema de orientación por color que ya usan los números y las
+ * tarjetas, aplicado a la navegación.
+ */
+const NAV_TONES: readonly Tone[] = ['indigo', 'teal', 'ochre', 'plum', 'rust']
 
 /**
  * RF-108 (navegación interna) + RF-109 (selector de idioma).
@@ -61,13 +71,17 @@ export function SiteNav({ locale }: { locale: Locale }) {
         </a>
 
         <ul className="flex min-w-0 items-center gap-0.5 overflow-x-auto sm:gap-2">
-          {nav.items.map((item) => (
+          {nav.items.map((item, index) => (
             <li key={item.href}>
               <a
                 href={item.href}
-                className="inline-block whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm font-medium text-ink-muted transition-colors hover:bg-surface-subtle hover:text-ink sm:px-3"
+                className="group relative inline-block whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm font-medium text-ink-muted transition-colors hover:bg-surface-subtle hover:text-ink sm:px-3"
               >
                 {item.label[locale]}
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute inset-x-2.5 bottom-0.5 h-0.5 origin-left scale-x-0 transition-transform duration-200 group-hover:scale-x-100 sm:inset-x-3 ${TONE_DOT[NAV_TONES[index % NAV_TONES.length]]}`}
+                />
               </a>
             </li>
           ))}

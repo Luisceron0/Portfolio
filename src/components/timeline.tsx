@@ -1,6 +1,7 @@
 import { timeline, type Locale, type TimelineEntry } from '@/content'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
+import { TimelineIcon } from '@/components/icons'
 
 /**
  * RF-106 — trayectoria.
@@ -74,6 +75,7 @@ export function Timeline({ locale }: { locale: Locale }) {
         title={timeline.heading[locale]}
         intro={timeline.intro[locale]}
         tone="teal"
+        icon={<TimelineIcon />}
       />
 
       <ol className="relative mt-12 space-y-12 border-l border-hairline">

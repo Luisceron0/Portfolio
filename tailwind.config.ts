@@ -43,6 +43,26 @@ const config: Config = {
           subtle: '#efe6d8', // tono más profundo para secciones alternas
           inverse: '#211d16',
         },
+        /**
+         * RF-110 — superficie "consola". Un único momento oscuro dentro de un
+         * sitio claro: la tarjeta de ángulo de seguridad de cada proyecto, con
+         * estética de terminal. No es un tema oscuro global, es un acento.
+         * `console.bg` es el mismo hex que `surface.inverse`: no se duplica el
+         * valor, se reutiliza el que ya existía.
+         */
+        console: {
+          bg: '#211d16',
+          text: '#efe6d5',
+          muted: '#b8ab93',
+        },
+        /** Variantes claras de `tone.*` para texto sobre `console.bg` (oscuro). */
+        toneBright: {
+          indigo: '#a29cf2',
+          teal: '#4fd6c4',
+          plum: '#e08fd6',
+          rust: '#f2896a',
+          ochre: '#f0b93d',
+        },
         hairline: {
           DEFAULT: '#e2d8c4',
           strong: '#c9bc9e',

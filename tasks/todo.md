@@ -71,6 +71,39 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 3e: Tercera ronda de referencias visuales (2026-08-10)
+> El dueño trajo 3 referencias nuevas (Shelby Kay, Impossible Foods, Cake
+> Equity), cada una con su DESIGN.md. Síntesis, no copia: se extrajeron
+> principios compatibles con un portafolio de seguridad y se rechazó lo que no
+> lo era (tema oscuro global, radio 0, tipografía externa, quitar los botones).
+- [x] Tarjeta "consola" oscura para el ángulo de seguridad de cada proyecto
+      (idea de la "Midnight Surface" de Cake Equity, reinterpretada con
+      estética de terminal: encaja con el perfil de seguridad del sitio en vez
+      de sentirse importada). Único momento oscuro del sitio, a propósito.
+      Paleta `console.*` / `toneBright.*` nueva en `tailwind.config.ts`,
+      medida en `check:contrast` ANTES de aplicarla (13 pares nuevos, los 27
+      totales en verde)
+- [x] Glifos SVG propios por sección (`src/components/icons.tsx`): 5 iconos
+      trazados a mano, `currentColor`, sin librería ni fuente de iconos. Cero
+      bytes de red
+- [x] Subrayado animado en la nav: cada enlace usa el tono de la sección a la
+      que apunta (mismo orden que los números 01-05), reforzando el sistema de
+      orientación por color que ya existía en vez de añadir uno nuevo
+- [x] Hero: tracking más cerrado en pantallas ≥640px y un salto de tamaño
+      extra en `lg` (`text-8xl`), inspirado en la energía tipográfica de
+      Impossible Foods sin llegar a sus tamaños extremos. RF-101 (375px sin
+      scroll) verificado en verde, sin tocar las clases base
+- [x] Franja de 3px con los 5 tonos reales, fija en el borde superior — firma
+      de marca a coste cero (gradiente CSS, ninguna imagen)
+- [x] Verificación visual en navegador real con `agent-browser`: confirmado
+      que el patrón de aparición-al-scroll (RF-110 ya existente) sigue
+      funcionando con los componentes nuevos — una captura de página completa
+      sin scroll previo muestra secciones vacías por diseño (`.reveal`
+      oculto hasta que el observer dispara); tras recorrer la página con
+      scroll, todo el contenido nuevo se ve correctamente
+- [x] 132 tests en verde (sin cambios de conteo: cambios puramente visuales),
+      Lighthouse 100/100 Performance y Accessibility en 3 corridas
+
 ## Phase 4c: PDFs del CV generados con RenderCV (2026-08-10)
 - [x] RenderCV instalado (`pip install "rendercv[full]"`, v2.8) y validado
       contra los dos YAML en `cv/`. No es un CMS ni una función del sitio en

@@ -2,6 +2,7 @@ import { profile, resolved, linkHref, type Locale } from '@/content'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
 import { projectsSection } from '@/content'
+import { ProfileIcon } from '@/components/icons'
 
 /**
  * RF-106 — perfil profesional.
@@ -18,6 +19,7 @@ export function Profile({ locale }: { locale: Locale }) {
         number="01"
         title={profile.heading[locale]}
         tone="indigo"
+        icon={<ProfileIcon />}
       />
 
       <div className="mt-10 grid gap-10 md:grid-cols-[1.5fr_1fr]">

@@ -62,6 +62,16 @@ const PALETTE = {
   tonePlum: '#6d2a63',
   toneRust: '#9c3f2a',
   toneOchre: '#8a5310',
+  // RF-110: superficie "consola" (tarjeta oscura de ángulo de seguridad) y sus
+  // variantes claras de tono, pensadas específicamente para ese fondo oscuro.
+  consoleBg: '#211d16',
+  consoleText: '#efe6d5',
+  consoleMuted: '#b8ab93',
+  toneBrightIndigo: '#a29cf2',
+  toneBrightTeal: '#4fd6c4',
+  toneBrightPlum: '#e08fd6',
+  toneBrightRust: '#f2896a',
+  toneBrightOchre: '#f0b93d',
 }
 
 /**
@@ -135,6 +145,19 @@ const PAIRS = [
       min: 4.5,
     },
   ]),
+
+  /*
+   * RF-110: superficie "consola" — tarjeta oscura del ángulo de seguridad.
+   * Bloque aparte porque el fondo no es ninguno de los anteriores.
+   */
+  { label: 'console-text sobre console-bg (cuerpo de la terminal)', fg: PALETTE.consoleText, bg: PALETTE.consoleBg, min: 4.5 },
+  { label: 'console-muted sobre console-bg (prompt, metadatos)', fg: PALETTE.consoleMuted, bg: PALETTE.consoleBg, min: 4.5 },
+  ...["toneBrightIndigo", "toneBrightTeal", "toneBrightPlum", "toneBrightRust", "toneBrightOchre"].map((key) => ({
+    label: `${key} sobre console-bg (encabezado de terminal)`,
+    fg: PALETTE[key],
+    bg: PALETTE.consoleBg,
+    min: 4.5,
+  })),
 ]
 
 let failed = false

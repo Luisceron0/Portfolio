@@ -313,4 +313,25 @@ elsewhere in the portfolio (Resend + Turnstile), read that repo's `tasks/lessons
 first. Don't relearn a lesson that's already written down.
 **Tags:** #security #reused-pattern
 
+## 2026-08-10 — `agent-browser screenshot --full` no dispara las revelaciones por scroll
+**Contexto:** al verificar visualmente la tarjeta terminal y los iconos nuevos
+de RF-110 (Fase 3e), una captura de página completa (`--full`) inmediatamente
+después de `open` mostró casi todo el contenido bajo el hero en blanco: cajas
+vacías del tamaño correcto pero sin texto.
+**Error a evitar:** interpretarlo como una regresión y ponerse a depurar
+componentes que en realidad estaban bien. `--full` cambia el tamaño del
+viewport para capturar todo el documento, pero no hace scroll real por la
+página, así que el `IntersectionObserver` de `Reveal` (ver la entrada de
+"`.reveal{opacity:0}` por defecto" más abajo) nunca dispara para el contenido
+bajo el pliegue inicial: se queda en `data-reveal="hidden"`.
+**Corrección:** antes de una captura de página completa con fines de QA
+visual, hacer scroll manual por toda la página primero (`agent-browser scroll
+down <px>` varias veces) para que el observer marque todo como
+`data-reveal="shown"`, y solo entonces capturar.
+**Regla para el futuro:** cualquier verificación visual de una página con
+animaciones de aparición-al-scroll necesita un scroll real antes de la
+captura, sea con `agent-browser` o cualquier otra herramienta. Un `--full` o
+equivalente que solo redimensiona el viewport no basta.
+**Tags:** #testing #agent-browser #rf-110
+
 <!-- New entries go above this line, most recent first. -->

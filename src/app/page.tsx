@@ -29,6 +29,8 @@ export default function HomePage() {
 
   return (
     <>
+      <div aria-hidden="true" className="tone-strip fixed inset-x-0 top-0 z-50 h-[3px]" />
+
       <SiteNav locale={locale} />
 
       <main id="contenido">

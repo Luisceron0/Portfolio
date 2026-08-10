@@ -25,7 +25,7 @@ export function Hero({ locale }: { locale: Locale }) {
 
       <h1
         id="hero-title"
-        className="mt-4 text-4xl font-bold leading-[0.98] tracking-tight sm:mt-5 sm:text-6xl md:text-7xl"
+        className="mt-4 text-4xl font-bold leading-[0.95] tracking-tight sm:mt-5 sm:text-6xl sm:tracking-tighter md:text-7xl lg:text-8xl"
       >
         {hero.name}
       </h1>

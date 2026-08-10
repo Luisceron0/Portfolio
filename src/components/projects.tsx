@@ -13,14 +13,14 @@ import { Reveal } from '@/components/reveal'
 import {
   Section,
   SectionHeading,
-  TONE_BORDER,
   TONE_BORDER_SOLID,
   TONE_DOT,
   TONE_HOVER_BORDER,
   TONE_TEXT,
-  TONE_WASH,
+  TONE_TEXT_BRIGHT,
   type Tone,
 } from '@/components/section'
+import { ProjectsIcon } from '@/components/icons'
 
 /**
  * RF-110: un tono por proyecto. Cuatro tarjetas del mismo color se leen como
@@ -129,15 +129,28 @@ function ProjectCard({
             ))}
           </ul>
 
-          <div
-            className={`mt-6 rounded-2xl border p-4 ${TONE_BORDER[tone]} ${TONE_WASH[tone]}`}
-          >
-            <h4
-              className={`text-xs font-semibold uppercase tracking-widest2 ${TONE_TEXT[tone]}`}
-            >
-              {projectsSection.labels.securityAngle[locale]}
-            </h4>
-            <p className="mt-2 text-base leading-relaxed text-ink">
+          {/*
+            RF-110: único momento oscuro del sitio, a propósito. El ángulo de
+            seguridad es el dato que más distingue a cada proyecto, así que se
+            presenta como una terminal, no como una caja de texto más. El tono
+            del proyecto sigue presente en el encabezado y los "puntos" de la
+            barra superior: no es un color nuevo, es el mismo con más contraste.
+          */}
+          <div className="mt-6 overflow-hidden rounded-2xl bg-console-bg">
+            <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
+              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-white/15" />
+              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-white/15" />
+              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-white/15" />
+              <h4
+                className={`ml-2 text-xs font-semibold uppercase tracking-widest2 ${TONE_TEXT_BRIGHT[tone]}`}
+              >
+                {projectsSection.labels.securityAngle[locale]}
+              </h4>
+            </div>
+            <p className="px-4 py-4 font-mono text-sm leading-relaxed text-console-text sm:text-[0.95rem]">
+              <span aria-hidden="true" className={TONE_TEXT_BRIGHT[tone]}>
+                ${' '}
+              </span>
               {project.security[locale]}
             </p>
           </div>
@@ -197,6 +210,7 @@ export function Projects({ locale }: { locale: Locale }) {
         title={projectsSection.heading[locale]}
         intro={projectsSection.intro[locale]}
         tone="ochre"
+        icon={<ProjectsIcon />}
       />
 
       <div className="mt-12 space-y-8">

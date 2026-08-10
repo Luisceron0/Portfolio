@@ -71,6 +71,20 @@ export const TONE_HOVER_BORDER: Record<Tone, string> = {
 }
 
 /**
+ * RF-110 — variantes claras de cada tono, para texto sobre `console-bg`
+ * (fondo oscuro). Los `tone.*` normales están medidos sobre lienzo claro y
+ * fallan AA sobre un fondo casi negro; estas son un color distinto, no el
+ * mismo con opacidad.
+ */
+export const TONE_TEXT_BRIGHT: Record<Tone, string> = {
+  indigo: 'text-toneBright-indigo',
+  teal: 'text-toneBright-teal',
+  ochre: 'text-toneBright-ochre',
+  plum: 'text-toneBright-plum',
+  rust: 'text-toneBright-rust',
+}
+
+/**
  * Cabecera de sección numerada, en la línea editorial de las referencias de
  * diseño: el número pequeño con tracking amplio en el tono de la sección, una
  * regla que se desvanece desde ese mismo tono, y el título grande debajo.
@@ -85,16 +99,19 @@ export function SectionHeading({
   title,
   intro,
   tone,
+  icon,
 }: {
   id: string
   number: string
   title: string
   intro?: string
   tone: Tone
+  icon?: ReactNode
 }) {
   return (
     <Reveal>
       <div className="flex items-center gap-3">
+        {icon && <span className={TONE_TEXT[tone]}>{icon}</span>}
         <span
           aria-hidden="true"
           className={`text-xs font-semibold tracking-widest2 ${TONE_TEXT[tone]}`}

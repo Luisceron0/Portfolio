@@ -7,6 +7,7 @@ import {
   TONE_TEXT,
   type Tone,
 } from '@/components/section'
+import { SkillsIcon } from '@/components/icons'
 
 /** RF-110: un tono por grupo, para que cinco tarjetas no se lean como una sola. */
 const GROUP_TONES: readonly Tone[] = ['indigo', 'teal', 'rust', 'ochre', 'plum']
@@ -27,6 +28,7 @@ export function Skills({ locale }: { locale: Locale }) {
         title={skills.heading[locale]}
         intro={skills.intro[locale]}
         tone="plum"
+        icon={<SkillsIcon />}
       />
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2">
