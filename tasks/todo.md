@@ -71,6 +71,46 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 3h: Contenido desarrollado y fondo ASCII animado (2026-08-10)
+> Tres peticiones del dueño: perfil y proyectos mejor redactados y con los
+> aspectos técnicos más desarrollados; que la mirada de arquitectura se entienda
+> de forma implícita en vez de anunciarse; y un ASCII menos genérico, animado y
+> de fondo.
+- [x] **Fuera el bloque etiquetado "Cómo trabajo" (DEV / ARCH / SEC).** Una
+      taxonomía con etiquetas se lee como un organigrama de uno mismo. Las tres
+      disciplinas pasan a tres párrafos de prosa en el perfil, sin nombrarse, y
+      quedan demostradas en el ángulo de seguridad de cada proyecto
+- [x] Los cuatro proyectos reescritos por completo (problema, ángulo de
+      seguridad y viñetas, en los dos idiomas). El criterio: cada viñeta explica
+      el mecanismo Y por qué se eligió, no solo qué se usó. Ejemplos: por qué
+      filtrar dentro del WHERE y no después (los datos ya salieron de la base),
+      por qué la autorización vive en el estado y no en el token, por qué
+      deny-by-default no es una lista de permisos con huecos
+- [x] Ningún hecho técnico nuevo inventado: es reescritura de lo que ya estaba
+      respaldado por los README y las URLs verificadas, con la explicación que
+      antes faltaba
+- [x] `summary` sigue intacto, palabra por palabra desde el YAML del CV. Los
+      párrafos nuevos son contenido propio del sitio, así que el PDF descargable
+      y la página siguen sin contradecirse
+- [x] **Fondo ASCII animado, tercera versión.** Las dos anteriores fallaron por
+      motivos distintos y ambos quedan anotados en el código: la 1ª era
+      abstracta pero estática y ocupaba sitio como si fuera contenido; la 2ª
+      (diagrama de capas) tenía forma pero es el dibujo de cualquier
+      presentación de infraestructura. Esta es abstracta otra vez, y ahora sí
+      funciona, porque se mueve y está detrás del contenido
+- [x] Animación sin JavaScript ni frames apilados: el campo se genera con un
+      periodo vertical exacto y se dibujan dos periodos, así que desplazarlo un
+      50% de su altura equivale a un periodo completo y el bucle no tiene
+      costura. Un solo elemento animando `transform`, compuesto por GPU
+- [x] Movimiento verificado de verdad, no supuesto: dos capturas separadas 6
+      segundos con hash distinto
+- [x] La opacidad del fondo NO es libre y está documentado por qué: el texto del
+      hero se lee encima, así que decide el fondo efectivo. Par nuevo en
+      `check:contrast` con el caso peor (carácter más denso a plena cobertura):
+      5.97:1 para `ink-muted`. 35 pares en total, todos AA
+- [x] 132 tests en verde, Lighthouse 100/100 y 100/100 en las 3 corridas: el
+      fondo animado no cuesta rendimiento medible
+
 ## Phase 3g: ASCII con forma, y profundidad de arquitecto (2026-08-10)
 > Tres peticiones del dueño en el mismo mensaje: el ASCII "no parece tener
 > forma de nada", añadir Next y Nuxt, y dar profundidad al perfil de arquitecto

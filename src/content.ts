@@ -252,55 +252,36 @@ export const profile = {
     en: 'Bilingual (C1) Full-Stack Software Engineer with a strong specialization in DevSecOps and Application Security (AppSec). Proven experience architecting scalable web applications (React, Spring Boot, Django) and integrating security protocols (RBAC, JWT, encryption). Skilled in cloud deployment (AWS, Docker) and CI/CD automation. Focused on building high performance solutions that are secure by design. Open to international relocation.',
   } satisfies Localized,
   /**
-   * Las tres capas del mismo trabajo, no tres cargos distintos.
+   * Ampliación del perfil, en prosa.
+   *
+   * Sustituye al bloque "Cómo trabajo" que existía antes con tres fichas
+   * etiquetadas (DEV / ARCH / SEC). Se retiró a petición del dueño: una
+   * taxonomía con etiquetas se lee como un organigrama de uno mismo, y lo que
+   * hace falta es que la mirada de arquitectura y de seguridad se note al leer,
+   * sin anunciarla. Aquí va dicha en prosa, y en cada proyecto va demostrada.
    *
    * Este bloque NO sale del CV: es contenido propio del sitio, igual que la
-   * descripción de cada proyecto. Por eso `summary` se deja intacto, palabra
-   * por palabra como está en el YAML del CV. Si se reescribiera el resumen
-   * aquí, la página y el PDF descargable dirían cosas distintas, que es
+   * descripción de los proyectos. Por eso `summary` se deja intacto, palabra
+   * por palabra como está en el YAML del CV. Reescribir el resumen aquí haría
+   * que la página y el PDF descargable dijeran cosas distintas, que es
    * exactamente lo que prohíbe el criterio de aceptación del §9 de la SRS.
    *
    * Cada afirmación es comprobable contra un proyecto enlazado en esta misma
-   * página (permisos por fila en ElevaForge, fallo cerrado en este formulario,
-   * cabeceras en el middleware). Ninguna es una cualidad genérica.
+   * página: permisos por fila en ElevaForge, inmutabilidad por trigger en
+   * CareLink, fallo cerrado en el formulario de este sitio.
    */
-  practicesHeading: { es: 'Cómo trabajo', en: 'How I work' } satisfies Localized,
-  practices: [
-    {
-      /** Código de ficha técnica. Decorativo: se renderiza con aria-hidden. */
-      code: 'DEV',
-      label: {
-        es: 'Desarrollo full-stack',
-        en: 'Full-stack development',
-      } satisfies Localized,
-      body: {
-        es: 'Construyo el producto de punta a punta: interfaz, API, base de datos y despliegue. No hace falta que otra persona cierre la mitad del trabajo.',
-        en: 'I build the product end to end: interface, API, database and deployment. Nobody else needs to close the other half of the work.',
-      } satisfies Localized,
-    },
-    {
-      code: 'ARCH',
-      label: {
-        es: 'Arquitectura de software',
-        en: 'Software architecture',
-      } satisfies Localized,
-      body: {
-        es: 'Decido la estructura antes del primer archivo: límites entre módulos, contratos de datos y qué tiene que poder cambiar mañana sin reescribir lo de hoy.',
-        en: 'I decide the structure before the first file: module boundaries, data contracts, and what has to be able to change tomorrow without rewriting today.',
-      } satisfies Localized,
-    },
-    {
-      code: 'SEC',
-      label: {
-        es: 'Arquitectura de seguridad',
-        en: 'Security architecture',
-      } satisfies Localized,
-      body: {
-        es: 'Modelo las amenazas del sistema y pongo cada control en la capa que le toca: permisos por fila en la base, verificación en el servidor, cabeceras en el borde y fallo cerrado por defecto.',
-        en: 'I model the threats to the system and put each control at the layer where it belongs: row level permissions in the database, verification on the server, headers at the edge, and fail closed by default.',
-      } satisfies Localized,
-    },
-  ],
+  approach: {
+    es: [
+      'Trabajo de punta a punta. La interfaz, la API, el modelo de datos y el despliegue son partes del mismo encargo y no cuatro conversaciones distintas, así que las decisiones que cruzan capas (dónde vive un permiso, qué se valida y en qué lado, qué se puede cachear) se toman una sola vez y con toda la información delante.',
+      'Antes del primer archivo decido la estructura: dónde van los límites entre módulos, qué contratos de datos tienen que aguantar y qué partes deben poder cambiar el mes que viene sin obligar a reescribir las de hoy. Es la diferencia entre un proyecto que crece y uno que hay que rehacer cuando llega el segundo requisito grande.',
+      'La seguridad no es una capa que se añade al final. Modelo qué puede salir mal y coloco cada control donde de verdad se sostiene: los permisos en la base de datos, la verificación en el servidor, las cabeceras en el borde. Y cuando algo falla, falla cerrado, porque un control que se abre ante la duda no es un control.',
+    ],
+    en: [
+      'I work end to end. The interface, the API, the data model and the deployment are parts of the same job rather than four separate conversations, so the decisions that cross layers (where a permission lives, what gets validated and on which side, what can be cached) are made once and with the whole picture in view.',
+      'Before the first file I decide the structure: where the boundaries between modules go, which data contracts have to hold, and which parts must be able to change next month without forcing a rewrite of the ones written today. That is the difference between a project that grows and one that has to be redone when the second large requirement arrives.',
+      'Security is not a layer added at the end. I model what can go wrong and put each control where it actually holds: permissions in the database, verification on the server, headers at the edge. And when something fails, it fails closed, because a control that opens when in doubt is not a control.',
+    ],
+  } satisfies LocalizedList,
   facts: [
     {
       label: { es: 'Ubicación', en: 'Location' },
@@ -487,28 +468,28 @@ export const projects: readonly Project[] = [
     },
     // Fuente: README de github.com/Luisceron0/CareLink (repo público).
     problem: {
-      es: 'Un hospital necesita llevar historia clínica, triage y coordinación entre médicos sin que nadie, ni siquiera un administrador, pueda alterar un registro después de firmado, ni ver el historial de un paciente que no le corresponde.',
-      en: 'A hospital needs to keep clinical records, triage and coordination between doctors without anyone, not even an administrator, being able to alter a record once signed, or see the history of a patient outside their care.',
+      es: 'Un hospital lleva historia clínica, triage y coordinación entre especialistas sobre los mismos datos. Guardarlos es la parte fácil. Lo difícil son dos garantías que no admiten excepciones: que un registro firmado no se pueda alterar después, ni siquiera por un administrador con acceso directo a la base, y que ningún profesional vea el historial de un paciente que no está a su cargo.',
+      en: 'A hospital keeps clinical records, triage and coordination between specialists on the same data. Storing it is the easy part. The hard part is two guarantees that admit no exceptions: that a signed record cannot be altered afterwards, not even by an administrator with direct database access, and that no clinician sees the history of a patient who is not in their care.',
     },
     stack: ['Java', 'Spring Boot', 'PostgreSQL 16', 'React 18', 'Vite', 'Docker', 'Flyway'],
     security: {
-      es: 'Un encuentro clínico firmado es inmutable a nivel de trigger de PostgreSQL: ni la aplicación ni un acceso directo a la base pueden editarlo. La captura muestra el intento de edición rechazado con 409.',
-      en: 'A signed clinical encounter is immutable at the PostgreSQL trigger level: neither the application nor direct database access can edit it. The screenshot shows the edit attempt rejected with a 409.',
+      es: 'La inmutabilidad no se delega a la capa de aplicación. Un trigger de PostgreSQL rechaza cualquier UPDATE sobre un encuentro ya firmado, así que la regla se cumple igual si alguien entra por fuera de la API, con un cliente SQL o con una migración mal escrita. Poner el control en la capa que nadie puede saltarse es la diferencia entre una regla de negocio y una garantía. La captura muestra el intento rechazado con un 409.',
+      en: 'Immutability is not delegated to the application layer. A PostgreSQL trigger rejects any UPDATE on an already signed encounter, so the rule holds even if someone comes in outside the API, with a SQL client or through a badly written migration. Putting the control at the layer nobody can bypass is the difference between a business rule and a guarantee. The screenshot shows the attempt rejected with a 409.',
     },
     highlights: {
       es: [
-        'Aislamiento por schema-per-tenant, con filtro por servicio dentro del WHERE de la consulta, no sobre filas ya traídas.',
-        'El acceso de un especialista vía interconsulta se revalida en cada request: el mismo JWT pasa de 200 a 403 al cerrarse, sin volver a iniciar sesión.',
-        'El motor de conocimiento suprime resultados con menos de 5 pacientes distintos, dentro de la propia query, para evitar la re-identificación.',
-        'Cifrado de PHI con AES-256-GCM, IV aleatorio por operación y clave derivada por tenant.',
-        'Auditoría de seguridad de extremo a extremo: reglas Semgrep propias validadas contra código deliberadamente vulnerable, sqlmap contra la instancia real, y un hallazgo de severidad alta corregido con evidencia.',
+        'Aislamiento multi-tenant por schema: cada institución vive en su propio schema de PostgreSQL, y el filtro por servicio va dentro del WHERE de la consulta, no aplicado sobre filas ya traídas a memoria. La distinción no es de estilo: filtrar después significa que los datos ya salieron de la base.',
+        'El permiso de un especialista sobre un paciente nace de una interconsulta y se revalida en cada petición. El mismo JWT responde 200 mientras la interconsulta está abierta y 403 en cuanto se cierra, sin que el usuario vuelva a iniciar sesión: la autorización vive en el estado del sistema, no dentro del token.',
+        'El motor de conocimiento agrega datos clínicos para consulta estadística y descarta cualquier resultado que se apoye en menos de cinco pacientes distintos. La supresión ocurre dentro de la propia consulta, así que el recuento pequeño nunca llega a formar parte de la respuesta: es la defensa contra la re-identificación por cruce de agregados.',
+        'La información de salud se cifra con AES-256-GCM, con IV aleatorio en cada operación y clave derivada por tenant. Un volcado de la base sin las claves no es aprovechable, y comprometer un tenant no arrastra al resto.',
+        'Auditoría de seguridad antes de darlo por terminado, no después: reglas Semgrep propias validadas primero contra código deliberadamente vulnerable (una regla que nunca se ha visto fallar en rojo no demuestra nada), sqlmap contra la instancia real, y un hallazgo de severidad alta corregido y documentado con evidencia.',
       ],
       en: [
-        'Schema-per-tenant isolation, with the service filter inside the query WHERE clause, not applied to rows already fetched.',
-        'A specialist’s access through a referral is revalidated on every request: the same JWT goes from 200 to 403 once it closes, with no re-login.',
-        'The knowledge engine suppresses results with fewer than 5 distinct patients, inside the query itself, to prevent re-identification.',
-        'PHI encrypted with AES-256-GCM, a random IV per operation and a key derived per tenant.',
-        'End to end security audit: custom Semgrep rules validated against deliberately vulnerable code, sqlmap against the real instance, and one high severity finding fixed with evidence.',
+        'Multi-tenant isolation by schema: each institution lives in its own PostgreSQL schema, and the service filter goes inside the query WHERE clause, not applied to rows already fetched into memory. The distinction is not stylistic: filtering afterwards means the data already left the database.',
+        'A specialist’s permission over a patient comes from a referral and is revalidated on every request. The same JWT answers 200 while the referral is open and 403 the moment it closes, with no re-login: authorization lives in the state of the system, not inside the token.',
+        'The knowledge engine aggregates clinical data for statistical queries and drops any result resting on fewer than five distinct patients. The suppression happens inside the query itself, so the small count never becomes part of the response: it is the defence against re-identification by cross-referencing aggregates.',
+        'Health information is encrypted with AES-256-GCM, with a random IV per operation and a key derived per tenant. A database dump without the keys is not usable, and compromising one tenant does not drag the rest with it.',
+        'Security audit before calling it done, not after: custom Semgrep rules validated first against deliberately vulnerable code (a rule never seen failing in red proves nothing), sqlmap against the real instance, and one high severity finding fixed and documented with evidence.',
       ],
     },
     screenshot: {
@@ -542,26 +523,26 @@ export const projects: readonly Project[] = [
     },
     // Fuente: README de github.com/Luisceron0/ElevaForge y el sitio en vivo.
     problem: {
-      es: 'Una agencia de software necesita captar clientes potenciales y poder editar el contenido de su propio sitio (paquetes, proyectos, equipo) sin llamar a un desarrollador cada vez.',
-      en: 'A software agency needs to capture leads and edit its own site content (packages, projects, team) without calling a developer every time.',
+      es: 'Una agencia necesita captar clientes y poder editar el contenido de su propio sitio (paquetes, proyectos, equipo) sin llamar a un desarrollador por cada cambio de texto. El reto real no es el panel de administración: es dar esa autonomía sin que el panel se convierta en la puerta de entrada más fácil al sitio.',
+      en: 'An agency needs to capture clients and edit its own site content (packages, projects, team) without calling a developer for every copy change. The real challenge is not the admin panel: it is granting that autonomy without turning the panel into the easiest way into the site.',
     },
     stack: ['Next.js 14', 'TypeScript', 'Tailwind CSS', 'Supabase', 'PostgreSQL', 'Vercel'],
     security: {
-      es: 'Las tablas de Supabase tienen Row Level Security activado y deny-by-default: ninguna tiene policies para usuarios anónimos o autenticados, a propósito. Todo el acceso pasa por el servidor, nunca por la clave pública del navegador.',
-      en: 'The Supabase tables have Row Level Security enabled and deny-by-default: none of them has policies for anonymous or authenticated users, deliberately. All access goes through the server, never through the browser’s public key.',
+      es: 'Las tablas de Supabase van con Row Level Security activada y sin una sola policy para el rol anónimo ni para el autenticado. Eso es deny-by-default de verdad, y no una lista de permisos con huecos: lo que no está explícitamente concedido, no existe. Todo el acceso a datos pasa por el servidor, así que la clave pública que viaja al navegador no abre nada, porque no hay ninguna policy que la habilite.',
+      en: 'The Supabase tables run with Row Level Security enabled and not a single policy for the anonymous or the authenticated role. That is deny-by-default in the real sense, not an allow list with gaps: what is not explicitly granted does not exist. All data access goes through the server, so the public key shipped to the browser opens nothing, because no policy enables it.',
     },
     highlights: {
       es: [
-        'Panel de administración con múltiples cuentas, altas y bajas gestionadas desde la propia interfaz.',
-        'La semilla de sesión del panel es un secreto propio y dedicado; el arranque avisa si quedan credenciales legacy activas.',
-        'Contenido editable desde el panel: paquetes, proyectos y sección de equipo, sin tocar código.',
-        'Bandeja de leads de contacto y diagnóstico, con estado revisable desde el panel.',
+        'Panel de administración multi-cuenta: las altas y las bajas se gestionan desde la propia interfaz, sin entrar a la base de datos a mano ni compartir un usuario único entre varias personas.',
+        'La semilla de sesión del panel es un secreto propio y dedicado, no reutilizado de otra parte del sistema. El arranque avisa de forma explícita si quedan credenciales antiguas activas, en lugar de dejarlas pasar en silencio, que es como sobreviven durante meses.',
+        'Paquetes, proyectos y la sección de equipo son contenido editable desde el panel: cambiar un precio o añadir un caso no exige un despliegue ni un desarrollador disponible.',
+        'Las solicitudes de contacto y de diagnóstico caen en una bandeja con estado revisable, así que ningún posible cliente depende de que alguien vigile una casilla de correo.',
       ],
       en: [
-        'Admin panel with multiple accounts, created and deactivated from the interface itself.',
-        'The panel’s session seed is its own dedicated secret; startup warns if legacy credentials are still active.',
-        'Content editable from the panel: packages, projects and the team section, without touching code.',
-        'Inbox of contact and diagnostic leads, with status reviewable from the panel.',
+        'Multi-account admin panel: accounts are created and deactivated from the interface itself, without touching the database by hand or sharing one login between several people.',
+        'The panel’s session seed is its own dedicated secret, not reused from elsewhere in the system. Startup warns explicitly if old credentials are still active, instead of letting them through in silence, which is how they survive for months.',
+        'Packages, projects and the team section are content editable from the panel: changing a price or adding a case study needs neither a deploy nor an available developer.',
+        'Contact and diagnostic requests land in an inbox with reviewable status, so no prospective client depends on somebody watching a mailbox.',
       ],
     },
     screenshot: {
@@ -591,26 +572,26 @@ export const projects: readonly Project[] = [
     },
     // Fuente: README de github.com/luisCeron0Portfolio/koa-landing y el sitio en vivo.
     problem: {
-      es: 'Captar la lista de espera de un lanzamiento de producto sin que el formulario se convierta en una puerta abierta para spam ni en un ataque de fuerza bruta contra la bandeja de correo.',
-      en: 'Capture the waitlist for a product launch without the form becoming an open door for spam or a brute force attack against the inbox.',
+      es: 'Captar la lista de espera de un lanzamiento con un formulario público, que es exactamente el tipo de endpoint que los bots encuentran solos. Sin control, se convierte en dos problemas a la vez: una lista llena de direcciones basura que ya no sirve para medir interés, y una vía barata para inundar la bandeja del equipo.',
+      en: 'Capture the waitlist for a launch through a public form, which is exactly the kind of endpoint bots find on their own. Left uncontrolled it becomes two problems at once: a list full of junk addresses that no longer measures interest, and a cheap way to flood the team inbox.',
     },
     stack: ['Astro 7', 'React', 'TypeScript', 'Neon Postgres', 'Resend', 'Upstash', 'Turnstile'],
     security: {
-      es: 'El envío se bloquea hasta que Cloudflare Turnstile confirma que no es un bot: el mismo patrón fail-closed que reutilicé en el formulario de este sitio, después de corregir una condición de carrera real.',
-      en: 'Submission is blocked until Cloudflare Turnstile confirms it is not a bot: the same fail-closed pattern I reused in this site’s contact form, after fixing a real race condition.',
+      es: 'El envío queda bloqueado hasta que Cloudflare Turnstile confirma que hay una persona detrás, y el servidor vuelve a verificar ese token aunque el cliente afirme que todo está en orden: el navegador no es una fuente de verdad. Es el mismo patrón fail-closed que reutilicé en el formulario de este sitio, y llegó aquí después de corregir una condición de carrera real en la que el botón se podía pulsar antes de que el token existiera.',
+      en: 'Submission stays blocked until Cloudflare Turnstile confirms there is a person behind it, and the server verifies that token again even when the client claims everything is fine: the browser is not a source of truth. It is the same fail-closed pattern I reused in this site’s contact form, and it got here after fixing a real race condition where the button could be pressed before the token existed.',
     },
     highlights: {
       es: [
-        'Validación en servidor y flujo de confirmación por token antes de dar por buena una suscripción.',
-        'Límite de envíos por IP con Upstash: la IP se almacena con hash, nunca en claro.',
-        'Contenido de las secciones gestionado desde un CMS, editable sin desplegar.',
-        'Cobertura con tests unitarios (Vitest) y de extremo a extremo (Playwright), incluidos los caminos de bot y de límite de envíos.',
+        'Validación en servidor y confirmación por token: una dirección no cuenta como suscrita hasta que su dueño la confirma, así que nadie puede apuntar a terceros a la lista.',
+        'Límite de envíos por IP con Upstash. La IP se guarda con hash y nunca en claro: sirve para contar intentos sin convertir el control antiabuso en un registro de quién visitó la página.',
+        'El contenido de las secciones se gestiona desde un CMS, de modo que una corrección de texto no necesita pasar por un despliegue.',
+        'Cobertura con Vitest y Playwright que incluye los caminos que suelen quedarse sin probar precisamente por ser los de fallo: el del bot detectado y el del límite de envíos alcanzado.',
       ],
       en: [
-        'Server-side validation and a token confirmation flow before a subscription counts as valid.',
-        'Per-IP rate limiting with Upstash: the IP is stored hashed, never in plain text.',
-        'Section content managed from a CMS, editable without a deploy.',
-        'Covered by unit tests (Vitest) and end to end tests (Playwright), including the bot and rate limit paths.',
+        'Server-side validation and token confirmation: an address does not count as subscribed until its owner confirms it, so nobody can sign someone else up.',
+        'Per-IP rate limiting with Upstash. The IP is stored hashed and never in plain text: it serves to count attempts without turning the anti-abuse control into a log of who visited the page.',
+        'Section content is managed from a CMS, so a copy fix does not have to go through a deploy.',
+        'Covered by Vitest and Playwright, including the paths that usually go untested precisely because they are the failure ones: bot detected and rate limit reached.',
       ],
     },
     screenshot: {
@@ -641,26 +622,26 @@ export const projects: readonly Project[] = [
     },
     // Fuente: README de github.com/luisCeron0Portfolio/koa-store y el sitio en vivo.
     problem: {
-      es: 'Mostrar un catálogo de producto completo, en dos idiomas, con un flujo de compra realista de principio a fin, pero sin procesar pagos reales ni retener datos de nadie.',
-      en: 'Show a complete product catalogue, in two languages, with a realistic end to end purchase flow, but without processing real payments or retaining anyone’s data.',
+      es: 'Mostrar un catálogo completo en dos idiomas con un flujo de compra realista de principio a fin, pero sin cobrar un solo pago real ni quedarse con los datos de nadie. La exigencia está en esa mezcla: tiene que comportarse como una tienda de verdad, no limitarse a parecerlo, y a la vez no crear ninguna obligación de custodiar información personal.',
+      en: 'Show a complete catalogue in two languages with a realistic end to end purchase flow, while charging no real payment and keeping nobody’s data. The demand is in that mix: it has to behave like a real store rather than merely look like one, and at the same time create no obligation to safeguard personal information.',
     },
     stack: ['Astro', 'TypeScript', 'Content Collections', 'PostgreSQL', 'Vitest', 'Vercel'],
     security: {
-      es: 'El precio se valida en el servidor, no se confía en lo que llega del carrito. El carrito es anónimo y de sesión, y la tienda incluye una vía explícita de borrado de datos.',
-      en: 'Prices are validated on the server, never trusting what arrives from the cart. The cart is anonymous and session based, and the store includes an explicit data erasure path.',
+      es: 'El precio se recalcula en el servidor a partir del catálogo: lo que llega desde el carrito del navegador se trata como una propuesta, nunca como un dato de confianza. Es el fallo clásico de una tienda, y no se evita validando mejor en el cliente sino no confiando en él. El carrito es anónimo y de sesión, y hay una vía explícita de borrado de datos en vez de dejar la retención al azar.',
+      en: 'The price is recalculated on the server from the catalogue: whatever arrives from the browser cart is treated as a proposal, never as trusted data. This is the classic storefront flaw, and it is not avoided by validating better on the client but by not trusting it at all. The cart is anonymous and session based, and there is an explicit data erasure path instead of leaving retention to chance.',
     },
     highlights: {
       es: [
-        'Catálogo bilingüe (español e inglés) con páginas de producto y selección de variantes.',
-        'Simulación de checkout con validación de precios en servidor: no se procesa ningún pago real.',
+        'Catálogo bilingüe (español e inglés) con páginas de producto y selección de variantes, generado desde una única fuente de contenido: las dos versiones no pueden desincronizarse porque no son dos textos distintos que alguien tenga que mantener a la par.',
+        'Simulación de checkout de principio a fin con validación de precios en servidor. No se procesa ningún pago real, y eso se dice en la interfaz en lugar de esconderse.',
         'SEO completo: sitemap, robots.txt, datos estructurados JSON-LD y metadatos por página.',
-        'Cabeceras de seguridad y CSP gestionadas para el despliegue en Vercel.',
+        'Cabeceras de seguridad y CSP definidas explícitamente para el despliegue en Vercel, no heredadas de los valores por defecto de la plataforma.',
       ],
       en: [
-        'Bilingual catalogue (Spanish and English) with product pages and variant selection.',
-        'Checkout simulation with server-side price validation: no real payment is processed.',
+        'Bilingual catalogue (Spanish and English) with product pages and variant selection, generated from a single content source: the two versions cannot drift apart because they are not two separate texts someone has to keep in step.',
+        'End to end checkout simulation with server-side price validation. No real payment is processed, and the interface says so instead of hiding it.',
         'Full SEO: sitemap, robots.txt, JSON-LD structured data and per-page metadata.',
-        'Security headers and CSP managed for the Vercel deployment.',
+        'Security headers and CSP defined explicitly for the Vercel deployment, not inherited from the platform defaults.',
       ],
     },
     screenshot: {

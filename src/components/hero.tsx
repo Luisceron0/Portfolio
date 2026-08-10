@@ -1,6 +1,6 @@
 import { hero, type Locale } from '@/content'
 import { ExternalLinkButton } from '@/components/external-link'
-import { AsciiField } from '@/components/ascii'
+import { AsciiBackdrop } from '@/components/ascii'
 
 /**
  * RF-101 (propuesta de valor) + RF-105 (enlace a GitHub).
@@ -12,19 +12,23 @@ import { AsciiField } from '@/components/ascii'
  *
  * OJO al añadir cosas aquí: `e2e/landing.spec.ts` mide que el titular, la
  * propuesta de valor y los dos CTA entren en 375x667. Cualquier elemento nuevo
- * por encima de los botones consume ese presupuesto. Es intencionado, y es la
- * razón de que el ASCII art solo aparezca a partir de `lg`: en móvil ocuparía
- * espacio que pertenece al contenido que el requisito exige ver.
+ * por encima de los botones consume ese presupuesto. Es intencionado.
+ *
+ * El fondo ASCII sí puede mostrarse en móvil sin romper nada: va en posición
+ * absoluta, así que no aporta altura al flujo y no toca ese presupuesto.
  */
 export function Hero({ locale }: { locale: Locale }) {
   return (
     <section
       aria-labelledby="hero-title"
-      className="mx-auto max-w-content px-5 pb-12 pt-8 sm:px-8 sm:pb-24 sm:pt-16"
+      className="relative mx-auto max-w-content overflow-hidden px-5 pb-12 pt-8 sm:px-8 sm:pb-24 sm:pt-16"
     >
-      <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-start">
+      <AsciiBackdrop />
+
+      {/* `relative` para que el contenido quede por encima del telón. */}
+      <div className="relative">
         <div>
-          <p className="inline-block border border-hairline-strong px-3 py-1 font-mono text-[0.7rem] uppercase tracking-spec text-ink-muted">
+          <p className="inline-block border border-hairline-strong bg-surface/60 px-3 py-1 font-mono text-[0.7rem] uppercase tracking-spec text-ink-muted">
             {hero.role[locale]}
           </p>
 
@@ -55,8 +59,6 @@ export function Hero({ locale }: { locale: Locale }) {
             <span>{hero.availability[locale]}</span>
           </p>
         </div>
-
-        <AsciiField />
       </div>
     </section>
   )

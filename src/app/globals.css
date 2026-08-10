@@ -177,55 +177,55 @@
   }
 
   /*
-   * Barrido sobre el ASCII art del hero.
+   * Fondo ASCII animado — ver src/components/ascii.tsx.
    *
-   * Una banda de luz que recorre el diagrama de arriba abajo, como el barrido
-   * de un escáner. Se anima `transform` y nada más: es una propiedad que
-   * compone la GPU, así que no fuerza recálculo de layout ni de estilo en cada
-   * fotograma, que es lo que penaliza Lighthouse.
+   * El campo se genera con un periodo vertical exacto y se dibujan dos
+   * periodos seguidos, así que desplazarlo un 50% de su propia altura equivale
+   * a un periodo completo: el bucle no tiene costura. Solo se anima
+   * `transform`, que compone la GPU y no fuerza recálculo de layout.
    *
-   * `overflow: hidden` recorta la banda a la caja del dibujo; sin eso, la luz
-   * se pasearía por media página.
+   * `letter-spacing` estira el campo horizontalmente para que 150 columnas
+   * cubran una pantalla ancha sin generar más caracteres de los necesarios:
+   * cada columna extra es peso real en el HTML.
    */
-  .ascii-scan {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .ascii-scan::after {
-    content: '';
+  .ascii-backdrop__field {
     position: absolute;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
     top: 0;
-    height: 45%;
-    background: linear-gradient(
-      180deg,
-      transparent,
-      rgba(162, 156, 242, 0.12),
-      transparent
-    );
-    animation: ascii-scan 5s linear infinite;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.55;
+    letter-spacing: 0.28em;
+    white-space: pre;
+    /*
+     * La opacidad NO es libre: el texto del hero se lee ENCIMA de esto, así que
+     * este color decide el fondo efectivo. El par
+     * "ink-muted sobre el fondo con el ASCII más denso encima" está medido en
+     * `npm run check:contrast`. Si lo subes, vuelve a medirlo.
+     */
+    color: rgba(162, 156, 242, 0.13);
+    animation: ascii-drift 48s linear infinite;
   }
 
-  @keyframes ascii-scan {
+  @keyframes ascii-drift {
     from {
-      transform: translateY(-110%);
+      transform: translateY(0);
     }
     to {
-      transform: translateY(400%);
+      transform: translateY(-50%);
     }
   }
 
   /*
-   * Bajo `prefers-reduced-motion` la banda no se ralentiza: desaparece. La
-   * regla global de `@layer base` deja las animaciones en 0.01ms, y eso aquí
-   * dejaría la luz congelada en una posición arbitraria, que se vería como una
-   * mancha. Mejor no dibujarla.
+   * Bajo `prefers-reduced-motion` el campo se queda quieto, pero sigue ahí: es
+   * textura, no información, y detenerlo no le quita nada. La regla global de
+   * `@layer base` dejaría la animación en 0.01ms, que la congelaría en una
+   * posición arbitraria; esto la para en la inicial, que es la buena.
    */
   @media (prefers-reduced-motion: reduce) {
-    .ascii-scan::after {
-      display: none;
+    .ascii-backdrop__field {
+      animation: none;
     }
   }
 

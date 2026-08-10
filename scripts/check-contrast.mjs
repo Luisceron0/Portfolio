@@ -79,6 +79,18 @@ const PALETTE = {
  */
 const CARD_EFFECTIVE = over(PALETTE.surfaceCard, PALETTE.surface, 0.72)
 
+/**
+ * Fondo efectivo del hero con el ASCII animado detrás.
+ *
+ * El texto del hero se lee ENCIMA de ese campo, así que el fondo real no es el
+ * lienzo limpio. Se mide el caso peor: el carácter más denso de la rampa, a la
+ * opacidad declarada en `.ascii-backdrop__field` (globals.css), cubriendo el
+ * 100% de la celda. Un glifo real nunca la cubre entera, así que el ratio de
+ * verdad es mejor que este. Si subes esa opacidad, este número baja.
+ */
+const ASCII_BACKDROP_ALPHA = 0.13
+const HERO_EFFECTIVE = over(PALETTE.accent, PALETTE.surface, ASCII_BACKDROP_ALPHA)
+
 const TONE_KEYS = ['toneIndigo', 'toneTeal', 'tonePlum', 'toneRust', 'toneOchre']
 
 /** Cada par que el sitio realmente usa como texto sobre fondo. */
@@ -123,6 +135,23 @@ const PAIRS = [
    */
   { label: 'surface sobre accent (botón primario, letra oscura)', fg: PALETTE.surface, bg: PALETTE.accent, min: 4.5 },
   { label: 'surface sobre accent-hover (botón primario, hover)', fg: PALETTE.surface, bg: PALETTE.accentHover, min: 4.5 },
+  /*
+   * Hero con el fondo ASCII animado detrás. Caso peor: carácter más denso a
+   * plena cobertura. Es el par que decide hasta dónde puede subir la opacidad
+   * del telón de fondo.
+   */
+  {
+    label: `ink sobre hero con ASCII detrás (${HERO_EFFECTIVE}, caso peor)`,
+    fg: PALETTE.ink,
+    bg: HERO_EFFECTIVE,
+    min: 4.5,
+  },
+  {
+    label: 'ink-muted sobre hero con ASCII detrás (caso peor)',
+    fg: PALETTE.inkMuted,
+    bg: HERO_EFFECTIVE,
+    min: 4.5,
+  },
   { label: 'warn sobre warn-surface (aviso [PENDIENTE])', fg: PALETTE.warn, bg: PALETTE.warnSurface, min: 4.5 },
   { label: 'ink sobre warn-surface (cuerpo del aviso)', fg: PALETTE.ink, bg: PALETTE.warnSurface, min: 4.5 },
 

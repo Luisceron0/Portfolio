@@ -1,76 +1,87 @@
 /**
- * RF-110 v2 — ASCII art.
+ * RF-110 v2 — fondo ASCII animado.
  *
- * Dibujo hecho con caracteres, no con imágenes: cero peticiones de red, cero
- * bytes de asset y nada que pueda fallar al cargar.
+ * Tercera versión, y la primera que se mueve. Vale la pena dejar por qué
+ * fallaron las dos anteriores, porque explica la forma de esta:
  *
- * La primera versión era un campo de densidad generado (una cuña de bloques con
- * una onda). Se retiró porque no representaba nada: a ese tamaño se leía como
- * ruido de compresión, no como una pieza con intención. Lo sustituye un
- * diagrama que SÍ es reconocible y que además dice algo del perfil: las capas
- * de una aplicación con el control de seguridad que le corresponde a cada una.
+ *   1ª) Campo de densidad estático en la columna derecha del hero. Retirado:
+ *       era abstracto Y estaba quieto Y ocupaba sitio como si fuera contenido,
+ *       así que se leía como ruido de compresión.
+ *   2ª) Diagrama de capas (WWW / TLS / CSP / API / DB). Tenía forma, pero es
+ *       el dibujo que sale en cualquier presentación de infraestructura.
  *
- * Dos reglas que condicionan la implementación:
+ * Esta es abstracta otra vez, y esta vez está bien: se mueve y está DETRÁS del
+ * contenido. Un fondo no tiene que representar nada, tiene que dar textura y
+ * profundidad sin pedir atención. Lo que no podía hacer la primera versión era
+ * ser abstracta ocupando el sitio de una pieza principal.
  *
- *  1. SOLO ACRÓNIMOS TÉCNICOS. WWW, TLS, CSP, WAF, API, JWT, RBAC, DB, RLS se
- *     escriben igual en español y en inglés. Es lo que permite que el dibujo
- *     sea el mismo en las dos versiones del sitio sin convertirse en copy sin
- *     traducir, que es justo lo que este proyecto no permite (RF-109).
- *
- *  2. DECORATIVO. Va con `aria-hidden`: para un lector de pantalla, una caja
- *     dibujada con guiones es ruido. La misma idea está dicha en texto real en
- *     las prácticas del perfil y en el ángulo de seguridad de cada proyecto,
- *     así que no se pierde información por ocultarlo.
+ * Cómo se anima sin JavaScript ni frames apilados: el campo se genera con un
+ * PERIODO VERTICAL exacto y se dibujan dos periodos seguidos. Desplazarlo un
+ * 50% de su propia altura equivale a desplazarlo exactamente un periodo, así
+ * que el final encaja con el principio y el bucle no tiene costura. Es un
+ * único elemento animando `transform`, que compone la GPU: no recalcula layout
+ * en ningún fotograma.
  */
 
-/**
- * Capas de la aplicación, de fuera hacia dentro, con su control.
- *
- * Todas las líneas miden exactamente 20 caracteres y los conectores caen en la
- * misma columna: si editas una caja, cuenta los caracteres. Una sola columna
- * desalineada rompe el dibujo entero, y en monoespaciada se nota al instante.
- */
-const STACK_DIAGRAM = [
-  '┌──────────────────┐',
-  '│       WWW        │',
-  '└────────┬─────────┘',
-  '         │ TLS',
-  '┌────────▼─────────┐',
-  '│   CSP  ·  WAF    │',
-  '└────────┬─────────┘',
-  '         │',
-  '┌────────▼─────────┐',
-  '│   API  ·  JWT    │',
-  '│       RBAC       │',
-  '└────────┬─────────┘',
-  '         │',
-  '┌────────▼─────────┐',
-  '│   DB   ·  RLS    │',
-  '└──────────────────┘',
-].join('\n')
+/** Filas por periodo. La altura total es el doble, para poder desplazar uno. */
+const PERIOD_ROWS = 40
+const TOTAL_ROWS = PERIOD_ROWS * 2
+const COLS = 150
+
+/** De vacío a denso. El primer carácter es un espacio: la mayor parte respira. */
+const RAMP = ' .:-=+*#'
 
 /**
- * Bloque decorativo del hero.
+ * Interferencia de dos ondas.
  *
- * Oculto por debajo de `lg` a propósito: RF-101 exige que el titular, la
- * propuesta de valor y los dos CTA se lean sin scroll en 375px, y cualquier
- * elemento extra consume ese presupuesto. En escritorio sobra sitio a la
- * derecha, así que ahí sí aparece.
- *
- * `ascii-scan` le pasa por encima una banda de luz que recorre el diagrama de
- * arriba abajo, como el barrido de un escáner. Es CSS puro sobre `transform`
- * (compuesto por la GPU, no provoca repintado de layout) y se desactiva sola
- * bajo `prefers-reduced-motion`.
+ * Ambos términos son periódicos en `y` con periodo `PERIOD_ROWS` (el segundo
+ * lo es con la mitad, que también divide al total), y de ahí sale la costura
+ * invisible. Si tocas las frecuencias, mantén esa propiedad o el bucle salta.
  */
-export function AsciiField() {
+function buildField(): string {
+  const rows: string[] = []
+
+  for (let y = 0; y < TOTAL_ROWS; y += 1) {
+    const ny = y / PERIOD_ROWS
+    let row = ''
+
+    for (let x = 0; x < COLS; x += 1) {
+      const nx = x / COLS
+
+      const primary = Math.sin(2 * Math.PI * ny + 1.15 * Math.sin(2 * Math.PI * nx * 2))
+      const secondary = Math.sin(4 * Math.PI * ny - 2 * Math.PI * nx * 3)
+      const value = 0.62 * primary + 0.38 * secondary
+
+      // Sesgo hacia lo vacío: sin esto el campo es una pared sólida de signos.
+      const normalized = ((value + 1) / 2) ** 1.7
+      row += RAMP[Math.round(normalized * (RAMP.length - 1))]
+    }
+
+    rows.push(row)
+  }
+
+  return rows.join('\n')
+}
+
+/** Se calcula una vez por proceso, no una por petición. */
+const FIELD = buildField()
+
+/**
+ * Telón de fondo. Se coloca en un contenedor `relative` y se estira sobre él.
+ *
+ * `aria-hidden` y `select-none`: es textura, no contenido. Para un lector de
+ * pantalla, doce mil signos de puntuación serían un desastre.
+ *
+ * No afecta a RF-101 aunque se muestre en móvil: al ir en posición absoluta no
+ * aporta altura, así que no consume el presupuesto vertical del hero.
+ */
+export function AsciiBackdrop() {
   return (
     <div
       aria-hidden="true"
-      className="ascii-scan pointer-events-none hidden select-none lg:block"
+      className="ascii-backdrop pointer-events-none absolute inset-0 select-none overflow-hidden"
     >
-      <pre className="font-mono text-[0.78rem] leading-[1.15] text-accent/60">
-        {STACK_DIAGRAM}
-      </pre>
+      <pre className="ascii-backdrop__field">{FIELD}</pre>
     </div>
   )
 }
