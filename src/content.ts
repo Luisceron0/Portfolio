@@ -197,9 +197,17 @@ export const nav = {
 export const hero = {
   /** Nombre propio: idéntico en ambos idiomas. */
   name: 'Luis Alejandro Cerón Muñoz',
+  /**
+   * Tres disciplinas, no tres empleos. El orden va de lo más concreto a lo más
+   * transversal, que es como se lee de un vistazo.
+   *
+   * OJO: esto se renderiza encima del titular, así que cuenta para el
+   * presupuesto vertical de RF-101 (hero completo en 375x667). Si lo alargas,
+   * verifica `e2e/landing.spec.ts` antes de darlo por bueno.
+   */
   role: {
-    es: 'Ingeniero de Software Full-Stack',
-    en: 'Full-Stack Software Engineer',
+    es: 'Ingeniero de Software Full-Stack · Arquitectura y Seguridad',
+    en: 'Full-Stack Software Engineer · Architecture and Security',
   } satisfies Localized,
   /**
    * RF-101: máximo dos frases, legibles sin hacer scroll en 375 px.
@@ -243,6 +251,56 @@ export const profile = {
     es: 'Ingeniero de Software Full-Stack bilingüe (C1) con una fuerte especialización en DevSecOps y Seguridad de Aplicaciones (AppSec). Experiencia comprobada en la arquitectura de aplicaciones web escalables (React, Spring Boot, Django) y la integración de protocolos de seguridad (RBAC, JWT, cifrado). Hábil en despliegues en la nube (AWS, Docker) y automatización CI/CD. Apasionado por crear soluciones de alto rendimiento, seguras desde el diseño. Disponibilidad para relocalización internacional.',
     en: 'Bilingual (C1) Full-Stack Software Engineer with a strong specialization in DevSecOps and Application Security (AppSec). Proven experience architecting scalable web applications (React, Spring Boot, Django) and integrating security protocols (RBAC, JWT, encryption). Skilled in cloud deployment (AWS, Docker) and CI/CD automation. Focused on building high performance solutions that are secure by design. Open to international relocation.',
   } satisfies Localized,
+  /**
+   * Las tres capas del mismo trabajo, no tres cargos distintos.
+   *
+   * Este bloque NO sale del CV: es contenido propio del sitio, igual que la
+   * descripción de cada proyecto. Por eso `summary` se deja intacto, palabra
+   * por palabra como está en el YAML del CV. Si se reescribiera el resumen
+   * aquí, la página y el PDF descargable dirían cosas distintas, que es
+   * exactamente lo que prohíbe el criterio de aceptación del §9 de la SRS.
+   *
+   * Cada afirmación es comprobable contra un proyecto enlazado en esta misma
+   * página (permisos por fila en ElevaForge, fallo cerrado en este formulario,
+   * cabeceras en el middleware). Ninguna es una cualidad genérica.
+   */
+  practicesHeading: { es: 'Cómo trabajo', en: 'How I work' } satisfies Localized,
+  practices: [
+    {
+      /** Código de ficha técnica. Decorativo: se renderiza con aria-hidden. */
+      code: 'DEV',
+      label: {
+        es: 'Desarrollo full-stack',
+        en: 'Full-stack development',
+      } satisfies Localized,
+      body: {
+        es: 'Construyo el producto de punta a punta: interfaz, API, base de datos y despliegue. No hace falta que otra persona cierre la mitad del trabajo.',
+        en: 'I build the product end to end: interface, API, database and deployment. Nobody else needs to close the other half of the work.',
+      } satisfies Localized,
+    },
+    {
+      code: 'ARCH',
+      label: {
+        es: 'Arquitectura de software',
+        en: 'Software architecture',
+      } satisfies Localized,
+      body: {
+        es: 'Decido la estructura antes del primer archivo: límites entre módulos, contratos de datos y qué tiene que poder cambiar mañana sin reescribir lo de hoy.',
+        en: 'I decide the structure before the first file: module boundaries, data contracts, and what has to be able to change tomorrow without rewriting today.',
+      } satisfies Localized,
+    },
+    {
+      code: 'SEC',
+      label: {
+        es: 'Arquitectura de seguridad',
+        en: 'Security architecture',
+      } satisfies Localized,
+      body: {
+        es: 'Modelo las amenazas del sistema y pongo cada control en la capa que le toca: permisos por fila en la base, verificación en el servidor, cabeceras en el borde y fallo cerrado por defecto.',
+        en: 'I model the threats to the system and put each control at the layer where it belongs: row level permissions in the database, verification on the server, headers at the edge, and fail closed by default.',
+      } satisfies Localized,
+    },
+  ],
   facts: [
     {
       label: { es: 'Ubicación', en: 'Location' },
@@ -657,11 +715,18 @@ export const skills = {
     {
       label: { es: 'Frameworks', en: 'Frameworks' },
       items: {
+        /*
+         * Cada meta-framework va detrás de su base (Next.js tras React, Nuxt
+         * tras Vue.js): el orden comunica la relación entre ambos, que es
+         * información gratis para quien lee la lista por encima.
+         */
         es: [
           'Spring Boot',
           'Django',
           'React',
+          'Next.js',
           'Vue.js',
+          'Nuxt',
           'Angular',
           'Astro',
           'Bootstrap',
@@ -671,7 +736,9 @@ export const skills = {
           'Spring Boot',
           'Django',
           'React',
+          'Next.js',
           'Vue.js',
+          'Nuxt',
           'Angular',
           'Astro',
           'Bootstrap',

@@ -71,6 +71,49 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 3g: ASCII con forma, y profundidad de arquitecto (2026-08-10)
+> Tres peticiones del dueño en el mismo mensaje: el ASCII "no parece tener
+> forma de nada", añadir Next y Nuxt, y dar profundidad al perfil de arquitecto
+> de software y de seguridad además de desarrollador full-stack.
+- [x] **ASCII rehecho.** El campo de densidad generado se retira: tenía razón el
+      dueño, a ese tamaño se leía como ruido de compresión y no representaba
+      nada. Lo sustituye un diagrama reconocible de las capas de una aplicación
+      con el control que le toca a cada una (WWW / TLS / CSP·WAF / API·JWT·RBAC
+      / DB·RLS). Doble beneficio: es ASCII con forma Y demuestra la mirada de
+      arquitectura que pedía la tercera petición
+- [x] **Solo acrónimos técnicos** en el dibujo, y es deliberado: WWW, TLS, CSP,
+      WAF, API, JWT, RBAC, DB y RLS se escriben igual en español y en inglés.
+      Es lo que permite un único dibujo en las dos versiones sin convertirlo en
+      copy sin traducir, que RF-109 no permite
+- [x] **Animación de barrido** (`.ascii-scan`): una banda de luz recorre el
+      diagrama como el barrido de un escáner. Solo anima `transform`, que
+      compone la GPU y no fuerza recálculo de layout. Bajo
+      `prefers-reduced-motion` NO se ralentiza, se oculta: la regla global deja
+      las animaciones en 0.01ms y eso la habría congelado como una mancha en
+      una posición arbitraria. Lighthouse 100/100 en las 3 corridas, así que la
+      animación infinita no cuesta nada medible
+- [x] Next.js y Nuxt añadidos al grupo de frameworks, cada meta-framework
+      detrás de su base (Next tras React, Nuxt tras Vue) para que el orden
+      comunique la relación
+- [x] **CV regenerado para no contradecir al sitio.** Añadir tecnologías solo
+      en la página habría dejado el PDF descargable diciendo otra cosa, que es
+      justo lo que prohíbe el criterio del §9. Se actualizaron los dos YAML y
+      se volvieron a generar ambos PDF con RenderCV, verificando con extracción
+      de texto real (pypdf) que "Next.js" y "Nuxt" están dentro. Un primer
+      intento de verificación con un extractor casero dio falso negativo: los
+      PDF de Typst usan fuentes subconjunto y el texto no está en claro
+- [x] **Profundidad de arquitecto** como bloque nuevo en el perfil (`practices`):
+      tres disciplinas, no tres cargos, con un tono cada una. Cada afirmación es
+      comprobable contra un proyecto enlazado en la misma página (permisos por
+      fila, fallo cerrado, cabeceras), ninguna es una cualidad genérica
+- [x] `summary` se deja intacto, palabra por palabra como está en el YAML del
+      CV: el bloque nuevo es contenido propio del sitio, no una reescritura del
+      resumen. Reescribirlo habría vuelto a separar la página del PDF
+- [x] `hero.role` pasa a nombrar las tres disciplinas. Era el cambio con riesgo
+      real, porque se renderiza encima del titular y cuenta para el presupuesto
+      vertical de RF-101: verificado en verde a 375px antes de seguir
+- [x] 132 tests en verde, Lighthouse 100/100 y 100/100
+
 ## Phase 3f: Rediseño oscuro, suizo y de ficha técnica (2026-08-10)
 > Cuarta petición del dueño, y la primera que da una dirección estética
 > concreta en vez de referencias sueltas: "colores oscuros, ascii art, estilo

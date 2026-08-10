@@ -356,4 +356,25 @@ Cualquier reinicio local que preceda a una verificación visual lleva su
 comprobación de puerto en medio, no un `sleep` y fe.
 **Tags:** #tooling #falso-verde #agent-browser
 
+## 2026-08-10 — Un extractor casero de PDF da falso negativo con fuentes subconjunto
+**Contexto:** tras añadir Next.js y Nuxt al CV y regenerar los PDF con RenderCV,
+se comprobó el resultado con un script propio que descomprime los `stream` del
+PDF y busca el texto. Devolvió "NO ENCONTRADO" en los dos archivos.
+**Error a evitar:** concluir que el cambio no se aplicó y ponerse a depurar el
+YAML o RenderCV. El cambio SÍ estaba: lo confirmó `pypdf`, que encontró
+"Next.js" y "Nuxt" en ambos.
+**Causa:** los PDF que genera Typst incrustan fuentes en subconjunto y dibujan
+el texto por identificador de glifo, no como cadenas legibles. Descomprimir el
+stream y hacer `grep` no puede funcionar salvo por casualidad. Hace falta una
+librería que resuelva el mapa de codificación de la fuente.
+**Cómo se distinguió del fallo real:** contrastando contra el `.typ` intermedio
+que RenderCV deja en `cv/rendercv_output/`, que sí es texto plano y ya contenía
+las dos tecnologías. Eso separó "el pipeline no recogió el cambio" de "mi
+verificación no sabe leer el formato".
+**Regla para el futuro:** para afirmar que algo está DENTRO de un PDF, usar un
+extractor de verdad (`pypdf`, `pdftotext`). Un negativo de un parser casero no
+es evidencia de ausencia, y en un proyecto que exige verificar antes de afirmar
+eso es peor que no comprobar nada, porque parece una comprobación.
+**Tags:** #verificacion #falso-negativo #rendercv
+
 <!-- New entries go above this line, most recent first. -->

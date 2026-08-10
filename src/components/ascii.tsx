@@ -1,55 +1,53 @@
 /**
- * RF-110 v2 — ASCII art generativo.
+ * RF-110 v2 — ASCII art.
  *
  * Dibujo hecho con caracteres, no con imágenes: cero peticiones de red, cero
- * bytes de asset y nada que pueda fallar al cargar. Encaja con el registro de
- * ficha técnica del resto de la página.
+ * bytes de asset y nada que pueda fallar al cargar.
+ *
+ * La primera versión era un campo de densidad generado (una cuña de bloques con
+ * una onda). Se retiró porque no representaba nada: a ese tamaño se leía como
+ * ruido de compresión, no como una pieza con intención. Lo sustituye un
+ * diagrama que SÍ es reconocible y que además dice algo del perfil: las capas
+ * de una aplicación con el control de seguridad que le corresponde a cada una.
  *
  * Dos reglas que condicionan la implementación:
  *
- *  1. DETERMINISTA. Ni un `Math.random()`. El dibujo es una función pura de la
- *     posición, así que el servidor y el cliente producen exactamente los
- *     mismos caracteres y React no tiene nada que reconciliar. Con contenido
- *     aleatorio esto sería un error de hidratación en cuanto se renderizara en
- *     ambos lados.
+ *  1. SOLO ACRÓNIMOS TÉCNICOS. WWW, TLS, CSP, WAF, API, JWT, RBAC, DB, RLS se
+ *     escriben igual en español y en inglés. Es lo que permite que el dibujo
+ *     sea el mismo en las dos versiones del sitio sin convertirse en copy sin
+ *     traducir, que es justo lo que este proyecto no permite (RF-109).
  *
- *  2. DECORATIVO. Todo va con `aria-hidden`: para un lector de pantalla, una
- *     retícula de bloques Unicode es ruido puro, no información. Por el mismo
- *     motivo no lleva texto: sería copy sin traducir en un sitio bilingüe.
- *
- * Se calcula una sola vez por proceso (constante a nivel de módulo), no una vez
- * por petición, aunque la página sea `force-dynamic`.
+ *  2. DECORATIVO. Va con `aria-hidden`: para un lector de pantalla, una caja
+ *     dibujada con guiones es ruido. La misma idea está dicha en texto real en
+ *     las prácticas del perfil y en el ángulo de seguridad de cada proyecto,
+ *     así que no se pierde información por ocultarlo.
  */
-
-/** Rampa de densidad, de vacío a sólido. */
-const RAMP = ' ░▒▓█'
 
 /**
- * Campo de densidad: una diagonal atravesada por una onda suave. La diagonal
- * da dirección de lectura y la onda evita que parezca un degradado plano.
+ * Capas de la aplicación, de fuera hacia dentro, con su control.
+ *
+ * Todas las líneas miden exactamente 20 caracteres y los conectores caen en la
+ * misma columna: si editas una caja, cuenta los caracteres. Una sola columna
+ * desalineada rompe el dibujo entero, y en monoespaciada se nota al instante.
  */
-function buildField(cols: number, rows: number): readonly string[] {
-  const lines: string[] = []
-
-  for (let y = 0; y < rows; y += 1) {
-    let line = ''
-    for (let x = 0; x < cols; x += 1) {
-      const nx = x / (cols - 1)
-      const ny = y / (rows - 1)
-
-      const wave = Math.sin(nx * Math.PI * 1.6 + ny * Math.PI * 0.9)
-      const density = 1 - (nx * 0.72 + ny * 0.5) + wave * 0.2
-      const clamped = Math.min(1, Math.max(0, density))
-
-      line += RAMP[Math.round(clamped * (RAMP.length - 1))]
-    }
-    lines.push(line)
-  }
-
-  return lines
-}
-
-const HERO_FIELD = buildField(26, 22).join('\n')
+const STACK_DIAGRAM = [
+  '┌──────────────────┐',
+  '│       WWW        │',
+  '└────────┬─────────┘',
+  '         │ TLS',
+  '┌────────▼─────────┐',
+  '│   CSP  ·  WAF    │',
+  '└────────┬─────────┘',
+  '         │',
+  '┌────────▼─────────┐',
+  '│   API  ·  JWT    │',
+  '│       RBAC       │',
+  '└────────┬─────────┘',
+  '         │',
+  '┌────────▼─────────┐',
+  '│   DB   ·  RLS    │',
+  '└──────────────────┘',
+].join('\n')
 
 /**
  * Bloque decorativo del hero.
@@ -58,19 +56,22 @@ const HERO_FIELD = buildField(26, 22).join('\n')
  * propuesta de valor y los dos CTA se lean sin scroll en 375px, y cualquier
  * elemento extra consume ese presupuesto. En escritorio sobra sitio a la
  * derecha, así que ahí sí aparece.
+ *
+ * `ascii-scan` le pasa por encima una banda de luz que recorre el diagrama de
+ * arriba abajo, como el barrido de un escáner. Es CSS puro sobre `transform`
+ * (compuesto por la GPU, no provoca repintado de layout) y se desactiva sola
+ * bajo `prefers-reduced-motion`.
  */
 export function AsciiField() {
   return (
-    <pre
+    <div
       aria-hidden="true"
-      // Tintado con el índigo de marca en vez de gris plano: a este tamaño un
-      // gris neutro se lee como ruido de compresión, y el tinte lo convierte en
-      // un elemento con intención. Al ser decoración `aria-hidden`, el mínimo
-      // de contraste de WCAG no le aplica.
-      className="pointer-events-none hidden select-none font-mono text-[0.72rem] leading-[0.78] text-accent/30 lg:block"
+      className="ascii-scan pointer-events-none hidden select-none lg:block"
     >
-      {HERO_FIELD}
-    </pre>
+      <pre className="font-mono text-[0.78rem] leading-[1.15] text-accent/60">
+        {STACK_DIAGRAM}
+      </pre>
+    </div>
   )
 }
 
@@ -85,7 +86,7 @@ export function SpecRule({ className = '' }: { className?: string }) {
   return (
     <div
       aria-hidden="true"
-      className={`overflow-hidden select-none whitespace-nowrap font-mono text-xs text-deco ${className}`}
+      className={`select-none overflow-hidden whitespace-nowrap font-mono text-xs text-deco ${className}`}
     >
       {SPEC_RULE}
     </div>

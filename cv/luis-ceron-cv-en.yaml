@@ -63,7 +63,7 @@ cv:
 
     Skills:
       - label: Development
-        details: React, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
+        details: React, Next.js, Vue.js, Nuxt, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
       - label: Security & DevOps
         details: RBAC, JWT, Secure Coding Practices, Docker, AWS (EC2, S3), CI/CD, Network Security
       - label: Databases

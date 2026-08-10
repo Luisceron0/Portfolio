@@ -177,6 +177,59 @@
   }
 
   /*
+   * Barrido sobre el ASCII art del hero.
+   *
+   * Una banda de luz que recorre el diagrama de arriba abajo, como el barrido
+   * de un escáner. Se anima `transform` y nada más: es una propiedad que
+   * compone la GPU, así que no fuerza recálculo de layout ni de estilo en cada
+   * fotograma, que es lo que penaliza Lighthouse.
+   *
+   * `overflow: hidden` recorta la banda a la caja del dibujo; sin eso, la luz
+   * se pasearía por media página.
+   */
+  .ascii-scan {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ascii-scan::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 45%;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(162, 156, 242, 0.12),
+      transparent
+    );
+    animation: ascii-scan 5s linear infinite;
+  }
+
+  @keyframes ascii-scan {
+    from {
+      transform: translateY(-110%);
+    }
+    to {
+      transform: translateY(400%);
+    }
+  }
+
+  /*
+   * Bajo `prefers-reduced-motion` la banda no se ralentiza: desaparece. La
+   * regla global de `@layer base` deja las animaciones en 0.01ms, y eso aquí
+   * dejaría la luz congelada en una posición arbitraria, que se vería como una
+   * mancha. Mejor no dibujarla.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .ascii-scan::after {
+      display: none;
+    }
+  }
+
+  /*
    * Firma de marca: franja de 3px con los cinco tonos, fija arriba del todo.
    * Sobre lienzo oscuro pesa mucho más que sobre papel, así que es lo único
    * saturado que hay en pantalla de forma permanente.

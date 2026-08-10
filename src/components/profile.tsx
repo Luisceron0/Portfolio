@@ -1,8 +1,11 @@
 import { profile, resolved, linkHref, type Locale } from '@/content'
 import { Reveal } from '@/components/reveal'
-import { Section, SectionHeading } from '@/components/section'
+import { Section, SectionHeading, TONE_TEXT, type Tone } from '@/components/section'
 import { projectsSection } from '@/content'
 import { ProfileIcon } from '@/components/icons'
+
+/** Un tono por disciplina, en el mismo sistema que el resto de la página. */
+const PRACTICE_TONES: readonly Tone[] = ['indigo', 'teal', 'rust']
 
 /**
  * RF-106 — perfil profesional.
@@ -52,6 +55,39 @@ export function Profile({ locale }: { locale: Locale }) {
               )
             })}
           </ul>
+
+          {/*
+            Las tres disciplinas, como filas de una ficha. Un tono por fila:
+            reutiliza el mismo sistema de orientación por color del resto de la
+            página en vez de introducir uno nuevo.
+          */}
+          <h3 className="mt-12 border-b border-hairline pb-3 font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
+            {profile.practicesHeading[locale]}
+          </h3>
+
+          <dl className="mt-2">
+            {profile.practices.map((practice, index) => {
+              const tone = PRACTICE_TONES[index % PRACTICE_TONES.length]
+              return (
+                <div key={practice.code} className="border-b border-hairline py-5">
+                  <dt className="flex items-baseline gap-3">
+                    <span
+                      aria-hidden="true"
+                      className={`font-mono text-[0.65rem] uppercase tracking-spec ${TONE_TEXT[tone]}`}
+                    >
+                      {practice.code}
+                    </span>
+                    <span className="text-lg font-bold tracking-tight text-ink">
+                      {practice.label[locale]}
+                    </span>
+                  </dt>
+                  <dd className="mt-2 text-base leading-relaxed text-ink-muted">
+                    {practice.body[locale]}
+                  </dd>
+                </div>
+              )
+            })}
+          </dl>
         </Reveal>
 
         <Reveal delayMs={90}>
