@@ -246,42 +246,24 @@ export const hero = {
 
 export const profile = {
   heading: { es: 'Perfil', en: 'Profile' } satisfies Localized,
-  /** Texto del CV, sin reescribir: si el CV cambia, esto cambia. */
-  summary: {
-    es: 'Ingeniero de Software Full-Stack bilingüe (C1) con una fuerte especialización en DevSecOps y Seguridad de Aplicaciones (AppSec). Experiencia comprobada en la arquitectura de aplicaciones web escalables (React, Spring Boot, Django) y la integración de protocolos de seguridad (RBAC, JWT, cifrado). Hábil en despliegues en la nube (AWS, Docker) y automatización CI/CD. Apasionado por crear soluciones de alto rendimiento, seguras desde el diseño. Disponibilidad para relocalización internacional.',
-    en: 'Bilingual (C1) Full-Stack Software Engineer with a strong specialization in DevSecOps and Application Security (AppSec). Proven experience architecting scalable web applications (React, Spring Boot, Django) and integrating security protocols (RBAC, JWT, encryption). Skilled in cloud deployment (AWS, Docker) and CI/CD automation. Focused on building high performance solutions that are secure by design. Open to international relocation.',
-  } satisfies Localized,
   /**
-   * Ampliación del perfil, en prosa.
+   * Un único párrafo, por decisión del dueño. Antes eran cuatro: el resumen
+   * literal del CV más tres párrafos de `approach` sobre la forma de trabajar.
    *
-   * Sustituye al bloque "Cómo trabajo" que existía antes con tres fichas
-   * etiquetadas (DEV / ARCH / SEC). Se retiró a petición del dueño: una
-   * taxonomía con etiquetas se lee como un organigrama de uno mismo, y lo que
-   * hace falta es que la mirada de arquitectura y de seguridad se note al leer,
-   * sin anunciarla. Aquí va dicha en prosa, y en cada proyecto va demostrada.
+   * OJO, esto cambia una garantía anterior: el resumen YA NO es la copia
+   * literal del "Perfil Profesional" del YAML del CV. Página y PDF siguen sin
+   * CONTRADECIRSE (mismos hechos: full-stack, DevSecOps y AppSec, el mismo
+   * stack, inglés C1), pero ya no son el mismo texto, y eso es deliberado: un
+   * resumen de CV y la entradilla de un sitio no tienen por qué sonar igual.
+   * Si alguna vez cambian los HECHOS de uno, hay que tocar el otro.
    *
-   * Este bloque NO sale del CV: es contenido propio del sitio, igual que la
-   * descripción de los proyectos. Por eso `summary` se deja intacto, palabra
-   * por palabra como está en el YAML del CV. Reescribir el resumen aquí haría
-   * que la página y el PDF descargable dijeran cosas distintas, que es
-   * exactamente lo que prohíbe el criterio de aceptación del §9 de la SRS.
-   *
-   * Cada afirmación es comprobable contra un proyecto enlazado en esta misma
-   * página: permisos por fila en ElevaForge, inmutabilidad por trigger en
-   * CareLink, fallo cerrado en el formulario de este sitio.
+   * La disponibilidad para relocalización salió de aquí a propósito: ya está en
+   * `hero.availability`, y repetirla restaba en vez de sumar.
    */
-  approach: {
-    es: [
-      'Trabajo de punta a punta. La interfaz, la API, el modelo de datos y el despliegue son partes del mismo encargo y no cuatro conversaciones distintas, así que las decisiones que cruzan capas (dónde vive un permiso, qué se valida y en qué lado, qué se puede cachear) se toman una sola vez y con toda la información delante.',
-      'Antes del primer archivo decido la estructura: dónde van los límites entre módulos, qué contratos de datos tienen que aguantar y qué partes deben poder cambiar el mes que viene sin obligar a reescribir las de hoy. Es la diferencia entre un proyecto que crece y uno que hay que rehacer cuando llega el segundo requisito grande.',
-      'La seguridad no es una capa que se añade al final. Modelo qué puede salir mal y coloco cada control donde de verdad se sostiene: los permisos en la base de datos, la verificación en el servidor, las cabeceras en el borde. Y cuando algo falla, falla cerrado, porque un control que se abre ante la duda no es un control.',
-    ],
-    en: [
-      'I work end to end. The interface, the API, the data model and the deployment are parts of the same job rather than four separate conversations, so the decisions that cross layers (where a permission lives, what gets validated and on which side, what can be cached) are made once and with the whole picture in view.',
-      'Before the first file I decide the structure: where the boundaries between modules go, which data contracts have to hold, and which parts must be able to change next month without forcing a rewrite of the ones written today. That is the difference between a project that grows and one that has to be redone when the second large requirement arrives.',
-      'Security is not a layer added at the end. I model what can go wrong and put each control where it actually holds: permissions in the database, verification on the server, headers at the edge. And when something fails, it fails closed, because a control that opens when in doubt is not a control.',
-    ],
-  } satisfies LocalizedList,
+  summary: {
+    es: 'Ingeniero de software full-stack bilingüe (inglés C1), especializado en DevSecOps y seguridad de aplicaciones, con experiencia en React, Spring Boot y Django, despliegue en AWS y Docker, y automatización CI/CD. Trabajo de punta a punta: la interfaz, la API, el modelo de datos y el despliegue son partes del mismo encargo y no cuatro conversaciones distintas, así que las decisiones que cruzan capas (dónde vive un permiso, qué se valida y de qué lado, qué se puede cachear) se toman una sola vez y con toda la información delante. Antes del primer archivo decido la estructura: dónde van los límites entre módulos, qué contratos de datos tienen que aguantar y qué debe poder cambiar el mes que viene sin obligar a reescribir lo de hoy, que es la diferencia entre un proyecto que crece y uno que hay que rehacer cuando llega el segundo requisito grande. Y la seguridad no la añado al final: modelo qué puede salir mal y pongo cada control donde de verdad se sostiene, los permisos en la base de datos, la verificación en el servidor, las cabeceras en el borde. Cuando algo falla, falla cerrado, porque un control que se abre ante la duda no es un control.',
+    en: "Full-stack software engineer, bilingual (English C1), specialized in DevSecOps and application security, with experience across React, Spring Boot and Django, deployment on AWS and Docker, and CI/CD automation. I work end to end: the interface, the API, the data model and the deployment are parts of the same job rather than four separate conversations, so the decisions that cross layers (where a permission lives, what gets validated and on which side, what can be cached) are made once and with the whole picture in view. Before the first file I decide the structure: where the boundaries between modules go, which data contracts have to hold, and what must be able to change next month without forcing a rewrite of today's work, which is the difference between a project that grows and one that has to be redone when the second large requirement arrives. And security is not something I add at the end: I model what can go wrong and put each control where it actually holds, permissions in the database, verification on the server, headers at the edge. When something fails, it fails closed, because a control that opens when in doubt is not a control.",
+  } satisfies Localized,
   facts: [
     {
       label: { es: 'Ubicación', en: 'Location' },

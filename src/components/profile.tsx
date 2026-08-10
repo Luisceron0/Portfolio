@@ -16,9 +16,9 @@ import { ProfileIcon } from '@/components/icons'
  * presenta como tabla de especificaciones, en monoespaciada y con una regla
  * entre filas.
  *
- * Tras el resumen del CV van los párrafos de `approach`, que son contenido
- * propio del sitio. Ahí es donde la mirada de arquitectura y de seguridad se
- * cuenta en prosa, en lugar del bloque etiquetado DEV/ARCH/SEC que había antes.
+ * El perfil es UN solo párrafo. Pasó por tres formas antes de esta: el resumen
+ * del CV a secas, luego el resumen más un bloque etiquetado DEV/ARCH/SEC, y
+ * luego el resumen más tres párrafos de prosa. Se unificó a petición del dueño.
  */
 export function Profile({ locale }: { locale: Locale }) {
   return (
@@ -33,18 +33,9 @@ export function Profile({ locale }: { locale: Locale }) {
 
       <div className="mt-12 grid gap-12 md:grid-cols-[1.5fr_1fr]">
         <Reveal>
-          {/* Entradilla: el resumen literal del CV, a mayor tamaño. */}
-          <p className="border-l-2 border-accent pl-5 text-lg leading-relaxed text-ink sm:text-xl">
+          <p className="border-l-2 border-accent pl-5 text-lg leading-relaxed text-ink">
             {profile.summary[locale]}
           </p>
-
-          <div className="mt-8 space-y-5">
-            {profile.approach[locale].map((paragraph) => (
-              <p key={paragraph} className="text-base leading-relaxed text-ink-muted">
-                {paragraph}
-              </p>
-            ))}
-          </div>
 
           <ul className="mt-10 flex flex-wrap gap-3">
             {profile.links.map((link) => {

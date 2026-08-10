@@ -71,6 +71,19 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 3i: Perfil unificado en un solo párrafo (2026-08-10)
+- [x] Los cuatro párrafos del perfil (resumen del CV más los tres de forma de
+      trabajar) fundidos en uno solo, reescrito y comprimido en vez de
+      concatenado, en español e inglés
+- [x] **Cambia una garantía anterior y queda anotado en el código:** el resumen
+      YA NO es la copia literal del "Perfil Profesional" del YAML del CV.
+      Página y PDF siguen sin contradecirse (mismos hechos: full-stack,
+      DevSecOps y AppSec, mismo stack, inglés C1), pero ya no son el mismo
+      texto. Si cambian los HECHOS de uno, hay que tocar el otro
+- [x] La disponibilidad para relocalización sale del párrafo a propósito: ya
+      estaba en `hero.availability` y repetirla restaba
+- [x] 132 tests en verde
+
 ## Phase 3h: Contenido desarrollado y fondo ASCII animado (2026-08-10)
 > Tres peticiones del dueño: perfil y proyectos mejor redactados y con los
 > aspectos técnicos más desarrollados; que la mirada de arquitectura se entienda

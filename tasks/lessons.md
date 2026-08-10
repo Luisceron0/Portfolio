@@ -377,4 +377,27 @@ es evidencia de ausencia, y en un proyecto que exige verificar antes de afirmar
 eso es peor que no comprobar nada, porque parece una comprobación.
 **Tags:** #verificacion #falso-negativo #rendercv
 
+## 2026-08-10 — La sesión de agent-browser sirve la página cacheada tras un redeploy
+**Contexto:** tras unificar el perfil en un solo párrafo, reconstruir y
+relanzar el servidor, la captura seguía mostrando los CUATRO párrafos
+anteriores.
+**Error a evitar:** dar por hecho que el cambio no se aplicó y volver a editar
+el contenido, o peor, "arreglar" algo que ya estaba bien. El puerto estaba
+comprobado y el build era nuevo, así que la sospecha se fue al código.
+**Cómo se aisló, en tres comprobaciones baratas:** (1) `grep` en la fuente:
+la frase vieja ya no estaba; (2) `grep` sobre el HTML servido con `curl`: la
+frase nueva SÍ estaba y la vieja no; (3) por tanto el servidor era correcto y
+el desfase estaba en el cliente. Era la sesión persistente del navegador
+sirviendo su copia cacheada.
+**Corrección:** navegar con un parámetro que rompa la caché
+(`?cb=$(date +%s)`) antes de capturar.
+**Regla para el futuro:** cuando una captura contradice al código, comprobar
+primero QUÉ está sirviendo el servidor con `curl`, y solo después mirar el
+código. Separa en un comando "el build está mal" de "lo que veo está mal", que
+son dos problemas completamente distintos. Es la tercera vez en este proyecto
+que una verificación visual engaña por una capa intermedia (servidor zombi,
+patrón de pkill equivocado, y ahora caché del navegador): la captura es la
+última comprobación, nunca la única.
+**Tags:** #agent-browser #falso-negativo #verificacion
+
 <!-- New entries go above this line, most recent first. -->
