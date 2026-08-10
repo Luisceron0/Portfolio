@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 
 import './globals.css'
 import { footer, HTML_LANG, LOCALES, resolved, site } from '@/content'
@@ -11,6 +11,19 @@ import { getLocale, localeHref } from '@/lib/locale'
  * acabaría desplegado.
  */
 const siteUrl = resolved(site.url)
+
+/**
+ * El sitio es oscuro sin conmutador, así que el navegador debe pintar sus
+ * propios cromos (barra de direcciones en móvil, fondo de sobre-scroll) del
+ * mismo color que el lienzo. Sin esto aparece una franja blanca al rebotar el
+ * scroll, que delata que la página "no es" oscura de verdad.
+ *
+ * Va en el export `viewport` y no en `metadata`: en Next 14 `themeColor` dentro
+ * de `metadata` está deprecado y se ignora con un aviso en build.
+ */
+export const viewport: Viewport = {
+  themeColor: '#0b0b0c',
+}
 
 /**
  * Los metadatos también son bilingües (RF-109). `generateMetadata` es una
@@ -57,7 +70,7 @@ export default function RootLayout({
         {/* Salto al contenido: primer elemento tabulable de la página (WCAG 2.4.1). */}
         <a
           href="#contenido"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-surface-card"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-accent focus:px-4 focus:py-2 focus:font-bold focus:text-surface"
         >
           {footer.skipToContent[locale]}
         </a>

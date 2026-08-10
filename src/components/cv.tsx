@@ -1,6 +1,7 @@
 import { cv, type Locale } from '@/content'
 import { ExternalLinkButton } from '@/components/external-link'
 import { Reveal } from '@/components/reveal'
+import { SpecRule } from '@/components/ascii'
 
 /**
  * RF-103 — descarga del CV.
@@ -15,14 +16,20 @@ import { Reveal } from '@/components/reveal'
  */
 export function CvDownloads({ locale }: { locale: Locale }) {
   return (
-    <section aria-labelledby="cv-title" id="cv" className="bg-surface-subtle py-16 sm:py-20">
+    <section
+      aria-labelledby="cv-title"
+      id="cv"
+      className="border-y border-hairline bg-surface-card py-16 sm:py-20"
+    >
       <div className="mx-auto max-w-content px-5 sm:px-8">
         <Reveal>
-          <h2 id="cv-title" className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <SpecRule className="mb-8" />
+
+          <h2 id="cv-title" className="text-4xl font-bold tracking-tighter sm:text-5xl">
             {cv.heading[locale]}
           </h2>
 
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-muted">
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-muted">
             {cv.intro[locale]}
           </p>
 

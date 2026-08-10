@@ -334,4 +334,26 @@ captura, sea con `agent-browser` o cualquier otra herramienta. Un `--full` o
 equivalente que solo redimensiona el viewport no basta.
 **Tags:** #testing #agent-browser #rf-110
 
+## 2026-08-10 — `pkill` con el patrón equivocado deja vivo al zombi y lo disimula
+**Contexto:** durante el rediseño oscuro, tras reconstruir se relanzó el
+servidor con `pkill -f "[n]ext start"` delante. La captura resultante mostraba
+el diseño ANTERIOR, y el arranque había devuelto `Exit 1` de fondo.
+**Causa:** el proceso no se llama `next start`, se llama `next-server (v14...)`.
+`next start` es solo el comando que lo lanza, y desaparece de la tabla de
+procesos en cuanto arranca al hijo. Así que el patrón no casaba con nada, el
+servidor viejo siguió escuchando en el puerto, el nuevo murió con `EADDRINUSE`
+y `agent-browser` fotografió tranquilamente el build antiguo.
+**Por qué es peor que el zombi de la entrada anterior:** aquí no hubo ningún
+síntoma llamativo. La página cargó, el título era correcto y la captura salió
+bien; solo el diseño estaba desactualizado. Es exactamente el fallo que hace
+dar por bueno un cambio que no se ha visto nunca.
+**Corrección:** matar por el nombre real del proceso (`[n]ext-server`, con el
+truco de corchetes de la entrada anterior) y, sobre todo, **verificar el puerto
+después de matar y antes de arrancar**: `ss -tlnp | grep <puerto>`. Si sigue
+ocupado, no se arranca nada ni se cree ninguna captura.
+**Regla para el futuro:** matar un proceso no es comprobar que murió.
+Cualquier reinicio local que preceda a una verificación visual lleva su
+comprobación de puerto en medio, no un `sleep` y fe.
+**Tags:** #tooling #falso-verde #agent-browser
+
 <!-- New entries go above this line, most recent first. -->

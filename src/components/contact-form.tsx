@@ -58,7 +58,7 @@ function SubmitButton({ disabled, locale }: { disabled: boolean; locale: Locale 
     <button
       type="submit"
       disabled={disabled || pending}
-      className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-transparent bg-accent px-6 py-2.5 text-base font-semibold text-surface-card transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:border-hairline disabled:bg-surface-subtle disabled:text-ink-muted"
+      className="inline-flex min-h-[44px] items-center justify-center border border-accent bg-accent px-6 py-2.5 text-sm font-bold uppercase tracking-widest2 text-surface transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:border-hairline disabled:bg-surface-subtle disabled:text-ink-muted"
     >
       {pending ? contact.labels.submitting[locale] : contact.labels.submit[locale]}
     </button>
@@ -134,7 +134,7 @@ export function ContactForm({
 
         <div className="space-y-5">
           <div>
-            <label htmlFor="contact-name" className="block text-sm font-semibold">
+            <label htmlFor="contact-name" className="block font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
               {contact.labels.name[locale]}
             </label>
             <input
@@ -146,13 +146,13 @@ export function ContactForm({
               autoComplete="name"
               aria-invalid={fieldErrors?.name ? true : undefined}
               aria-describedby={fieldErrors?.name ? 'contact-name-error' : undefined}
-              className="mt-1 block w-full rounded-xl border border-hairline-strong bg-surface-card px-3.5 py-2.5 text-base"
+              className="mt-1 block w-full border border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink"
             />
             <FieldError id="contact-name-error" code={fieldErrors?.name} locale={locale} />
           </div>
 
           <div>
-            <label htmlFor="contact-email" className="block text-sm font-semibold">
+            <label htmlFor="contact-email" className="block font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
               {contact.labels.email[locale]}
             </label>
             <input
@@ -164,13 +164,13 @@ export function ContactForm({
               autoComplete="email"
               aria-invalid={fieldErrors?.email ? true : undefined}
               aria-describedby={fieldErrors?.email ? 'contact-email-error' : undefined}
-              className="mt-1 block w-full rounded-xl border border-hairline-strong bg-surface-card px-3.5 py-2.5 text-base"
+              className="mt-1 block w-full border border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink"
             />
             <FieldError id="contact-email-error" code={fieldErrors?.email} locale={locale} />
           </div>
 
           <div>
-            <label htmlFor="contact-message" className="block text-sm font-semibold">
+            <label htmlFor="contact-message" className="block font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
               {contact.labels.message[locale]}
             </label>
             <textarea
@@ -184,7 +184,7 @@ export function ContactForm({
               aria-describedby={
                 fieldErrors?.message ? 'contact-message-error' : 'contact-message-hint'
               }
-              className="mt-1 block w-full rounded-xl border border-hairline-strong bg-surface-card px-3.5 py-2.5 text-base"
+              className="mt-1 block w-full border border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink"
             />
             <p id="contact-message-hint" className="mt-1 text-sm text-ink-muted">
               {contact.hints.message[locale]}
@@ -217,7 +217,7 @@ export function ContactForm({
           {state.status === 'success' && (
             <p
               data-testid="contact-success"
-              className="rounded-xl border border-accent bg-surface-subtle px-4 py-3 text-base font-medium text-accent"
+              className="border-l-2 border-accent bg-surface-subtle px-4 py-3 text-base font-medium text-accent"
             >
               {contact.successMessage[locale]}
             </p>
@@ -225,7 +225,7 @@ export function ContactForm({
           {state.status === 'error' && (
             <p
               data-testid="contact-error"
-              className="rounded-xl border border-warn-border bg-warn-surface px-4 py-3 text-base font-medium text-warn"
+              className="border-l-2 border-warn bg-warn-surface px-4 py-3 text-base font-medium text-warn"
             >
               {contact.errors[state.code][locale]}
             </p>

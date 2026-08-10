@@ -5,84 +5,106 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Paleta editorial: lienzo cálido tipo papel en vez de blanco puro y
-        // bordes finos en vez de sombras.
-        //
-        // RF-110: la paleta NO es monocromática. El índigo sigue siendo el
-        // ancla de marca (CTA, foco, enlaces), pero cada sección y cada
-        // proyecto tienen su propio tono. El color deja de ser decoración y
-        // pasa a ser orientación: dice en qué parte de la página estás.
-        //
-        // Los ratios de contraste NO se calculan de memoria en este
-        // comentario: se miden con `npm run check:contrast`
-        // (scripts/check-contrast.mjs), que falla si algún par baja de 4.5:1.
-        // Si cambias un hex aquí, cámbialo también en ese script.
-        ink: {
-          DEFAULT: '#211d16', // near-black cálido, no slate frío
-          muted: '#6b6255', // gris cálido para texto secundario
-        },
-        accent: {
-          DEFAULT: '#322d84', // índigo profundo: ancla de marca
-          hover: '#26215f',
-        },
-        /**
-         * Tonos de sección. Cada uno medido sobre lienzo y sobre tarjeta.
-         * Se usan en números de sección, reglas, viñetas, bordes y hover;
-         * nunca como fondo de un bloque grande de texto.
+        /*
+         * RF-110 v2 — sistema oscuro, estilo suizo y hoja de especificaciones.
+         *
+         * El lienzo claro tipo papel se retiró por completo. La página es
+         * oscura de principio a fin: no hay tema claro, no hay conmutador y no
+         * se consulta `prefers-color-scheme`. Es una decisión de diseño, no una
+         * preferencia del visitante, y tratarla como preferencia obligaría a
+         * mantener y medir dos paletas en vez de una.
+         *
+         * Los nombres de token NO cambiaron respecto a la paleta clara (`ink`,
+         * `surface`, `hairline`, `tone`, `accent`, `warn`): solo sus valores.
+         * Así la inversión es un cambio de tokens y no una reescritura de cada
+         * componente, y `grep` sobre un nombre sigue encontrando todos sus usos.
+         *
+         * Los ratios NO se calculan de memoria aquí: se miden con
+         * `npm run check:contrast`, que falla si algún par de texto baja de
+         * 4.5:1. Si cambias un hex, cámbialo también en ese script.
          */
-        tone: {
-          indigo: '#322d84',
-          teal: '#0f6459',
-          plum: '#6d2a63',
-          rust: '#9c3f2a',
-          ochre: '#8a5310',
+        ink: {
+          DEFAULT: '#ededea', // blanco levemente cálido, no blanco puro
+          muted: '#9c9c98', // gris neutro para texto secundario
         },
         surface: {
-          DEFAULT: '#f7f2ea', // papel cálido: lienzo principal
-          card: '#fffdfa', // blanco cálido: tarjetas elevadas
-          subtle: '#efe6d8', // tono más profundo para secciones alternas
-          inverse: '#211d16',
+          DEFAULT: '#0b0b0c', // lienzo: casi negro, neutro
+          card: '#131315', // tarjeta elevada
+          subtle: '#1a1a1d', // bloque hundido: entradas, chips, paneles de spec
+          inverse: '#ededea', // claro, para lo que se invierte sobre oscuro
+        },
+        hairline: {
+          DEFAULT: '#29292d',
+          strong: '#3f3f45',
         },
         /**
-         * RF-110 — superficie "consola". Un único momento oscuro dentro de un
-         * sitio claro: la tarjeta de ángulo de seguridad de cada proyecto, con
-         * estética de terminal. No es un tema oscuro global, es un acento.
-         * `console.bg` es el mismo hex que `surface.inverse`: no se duplica el
-         * valor, se reutiliza el que ya existía.
+         * SOLO decoración: rejilla de fondo, ASCII art, marcas de corte. No
+         * alcanza 4.5:1 contra ningún fondo y por eso el nombre lo dice en voz
+         * alta. Si necesitas un gris para TEXTO, es `ink.muted`.
          */
-        console: {
-          bg: '#211d16',
-          text: '#efe6d5',
-          muted: '#b8ab93',
+        deco: '#55555a',
+        accent: {
+          DEFAULT: '#a29cf2', // índigo claro: ancla de marca sobre oscuro
+          hover: '#b8b3f6',
         },
-        /** Variantes claras de `tone.*` para texto sobre `console.bg` (oscuro). */
-        toneBright: {
+        /**
+         * Tonos de sección. Al invertir el fondo, estos pasaron a ser las
+         * variantes claras: los tonos oscuros de la paleta anterior no llegan a
+         * AA sobre casi negro. Por eso desapareció el mapa `toneBright`, ya no
+         * hacen falta dos juegos.
+         */
+        tone: {
           indigo: '#a29cf2',
           teal: '#4fd6c4',
           plum: '#e08fd6',
           rust: '#f2896a',
           ochre: '#f0b93d',
         },
-        hairline: {
-          DEFAULT: '#e2d8c4',
-          strong: '#c9bc9e',
-        },
         warn: {
-          DEFAULT: '#854d0e',
-          surface: '#fdf3e0',
-          border: '#e8c675',
+          DEFAULT: '#f0b93d',
+          surface: '#241d0c',
+          border: '#4a3a12',
         },
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        /*
+         * Estilo suizo con tipografía del sistema: Helvetica Neue en macOS,
+         * Arial en Windows, y en Linux el clon métrico que el sistema mapee a
+         * Arial. Ninguna descarga, ninguna ampliación de `font-src` en la CSP,
+         * cero bytes de fuente. La restricción D-05 se mantiene intacta y aun
+         * así se consigue la familia que define el estilo.
+         */
+        sans: ['var(--font-sans)', 'Helvetica', 'Arial', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
       },
       maxWidth: {
-        content: '68rem',
+        content: '72rem',
       },
       letterSpacing: {
-        // Tracking amplio para eyebrows y etiquetas editoriales; ninguna fuente
-        // nueva, solo espaciado.
         widest2: '0.18em',
+        // Etiquetas de ficha técnica: tracking aún más abierto en mayúsculas.
+        spec: '0.24em',
+      },
+      /*
+       * Ángulo recto en todo el sistema.
+       *
+       * El estilo suizo no tiene esquinas redondeadas, y una ficha técnica
+       * tampoco. Esto invalida a propósito la píldora y el `rounded-3xl` de la
+       * versión anterior: el override está en el tema para que ninguna clase
+       * `rounded-*` olvidada en un componente reintroduzca una curva por
+       * accidente. Los puntos decorativos pasan a ser cuadrados, que es lo
+       * correcto en este lenguaje visual.
+       */
+      borderRadius: {
+        none: '0',
+        sm: '0',
+        DEFAULT: '0',
+        md: '0',
+        lg: '0',
+        xl: '0',
+        '2xl': '0',
+        '3xl': '0',
+        full: '0',
       },
     },
   },

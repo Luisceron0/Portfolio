@@ -3,6 +3,7 @@ import { Reveal } from '@/components/reveal'
 import {
   Section,
   SectionHeading,
+  TONE_DOT,
   TONE_HOVER_BORDER,
   TONE_TEXT,
   type Tone,
@@ -31,46 +32,69 @@ export function Skills({ locale }: { locale: Locale }) {
         icon={<SkillsIcon />}
       />
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2">
-        {skills.groups.map((group, index) => (
-          <Reveal key={group.label.es} delayMs={index * 70}>
-            <div
-              className={`card-surface h-full rounded-2xl border border-hairline p-5 transition-colors duration-300 sm:p-6 ${
-                TONE_HOVER_BORDER[GROUP_TONES[index % GROUP_TONES.length]]
-              }`}
-            >
-              <h3
-                className={`text-xs font-semibold uppercase tracking-widest2 ${
-                  TONE_TEXT[GROUP_TONES[index % GROUP_TONES.length]]
-                }`}
-              >
-                {group.label[locale]}
-              </h3>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {group.items[locale].map((item) => (
-                  <li
-                    key={item}
-                    className={`rounded-full border border-hairline-strong bg-surface px-3 py-1.5 text-sm font-medium text-ink transition-colors duration-200 ${TONE_HOVER_BORDER[GROUP_TONES[index % GROUP_TONES.length]]}`}
+      <div className="mt-12 grid gap-px border border-hairline bg-hairline sm:grid-cols-2">
+        {/*
+          `gap-px` sobre fondo `hairline`: las celdas se separan por la rejilla
+          misma en vez de por márgenes, así que los grupos forman una tabla
+          continua y no cinco tarjetas flotando. Es el recurso más suizo de la
+          página y no cuesta un solo borde extra.
+        */}
+        {skills.groups.map((group, index) => {
+          const tone = GROUP_TONES[index % GROUP_TONES.length]
+          return (
+            <Reveal key={group.label.es} delayMs={index * 70} className="bg-surface">
+              <div className="h-full p-5 sm:p-6">
+                <div className="flex items-center gap-2.5">
+                  <span aria-hidden="true" className={`h-2 w-2 shrink-0 ${TONE_DOT[tone]}`} />
+                  <h3
+                    className={`font-mono text-[0.65rem] font-bold uppercase tracking-spec ${TONE_TEXT[tone]}`}
                   >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        ))}
+                    {group.label[locale]}
+                  </h3>
+                </div>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {group.items[locale].map((item) => (
+                    <li
+                      key={item}
+                      className={`border border-hairline-strong bg-surface-subtle px-3 py-1.5 font-mono text-xs text-ink transition-colors duration-200 ${TONE_HOVER_BORDER[tone]}`}
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          )
+        })}
+
+        {/*
+          Relleno de la última celda.
+
+          La rejilla dibuja sus separadores con `gap-px` sobre un fondo
+          `hairline`: lo que se ve como línea es el contenedor asomando entre
+          celdas. Con un número impar de grupos queda un hueco sin celda, y ahí
+          el contenedor se ve entero, como un bloque gris que parece un error de
+          maquetación. Esto lo tapa. Solo aplica a partir de `sm`, que es donde
+          hay dos columnas; en móvil la rejilla es de una sola y nunca sobra.
+        */}
+        {skills.groups.length % 2 === 1 && (
+          <div aria-hidden="true" className="hidden bg-surface sm:block" />
+        )}
       </div>
 
       <Reveal delayMs={140}>
-        <h3 className="mt-12 text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
+        <h3 className="mt-14 border-b border-hairline pb-3 font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
           {skills.certificationsHeading[locale]}
         </h3>
-        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+        <ul className="mt-6 grid gap-x-8 sm:grid-cols-2">
           {skills.certifications[locale].map((certification) => (
             <li
               key={certification}
-              className="card-surface rounded-xl border border-hairline px-4 py-3 text-base leading-relaxed text-ink transition-colors duration-200 hover:border-hairline-strong"
+              className="flex gap-3 border-b border-hairline py-3 text-base leading-relaxed text-ink"
             >
+              <span aria-hidden="true" className="shrink-0 font-mono text-deco">
+                +
+              </span>
               {certification}
             </li>
           ))}

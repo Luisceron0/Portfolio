@@ -27,7 +27,7 @@ function LanguageSwitch({ locale }: { locale: Locale }) {
     <div
       role="group"
       aria-label={nav.language.label[locale]}
-      className="flex items-center rounded-full border border-hairline p-0.5"
+      className="flex items-center border border-hairline"
     >
       {LOCALES.map((candidate) => {
         const isActive = candidate === locale
@@ -39,9 +39,9 @@ function LanguageSwitch({ locale }: { locale: Locale }) {
             // `aria-current` es lo que anuncia "estás en esta versión". El
             // color por sí solo no es información accesible.
             aria-current={isActive ? 'true' : undefined}
-            className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-widest2 transition-colors ${
+            className={`px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-widest2 transition-colors ${
               isActive
-                ? 'bg-accent text-surface-card'
+                ? 'bg-accent text-surface'
                 : 'text-ink-muted hover:bg-surface-subtle hover:text-ink'
             }`}
           >
@@ -62,10 +62,10 @@ export function SiteNav({ locale }: { locale: Locale }) {
       aria-label={locale === 'es' ? 'Secciones de la página' : 'Page sections'}
       className="sticky top-3 z-40 mx-auto mb-2 mt-3 w-[calc(100%-1.5rem)] max-w-content sm:top-4 sm:mt-4"
     >
-      <div className="flex items-center justify-between gap-3 rounded-full border border-hairline bg-surface-card/85 px-3 py-2 shadow-[0_1px_2px_rgba(33,29,22,0.04)] backdrop-blur-md sm:px-5">
+      <div className="flex items-center justify-between gap-3 border border-hairline bg-surface/85 px-3 py-2 backdrop-blur-md sm:px-5">
         <a
           href="#contenido"
-          className="shrink-0 rounded-full px-1 text-sm font-bold tracking-widest2 text-ink"
+          className="shrink-0 px-1 font-mono text-sm font-bold tracking-widest2 text-ink"
         >
           {nav.brand}
         </a>
@@ -75,7 +75,7 @@ export function SiteNav({ locale }: { locale: Locale }) {
             <li key={item.href}>
               <a
                 href={item.href}
-                className="group relative inline-block whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm font-medium text-ink-muted transition-colors hover:bg-surface-subtle hover:text-ink sm:px-3"
+                className="group relative inline-block whitespace-nowrap px-2.5 py-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-ink sm:px-3"
               >
                 {item.label[locale]}
                 <span

@@ -10,6 +10,11 @@ import { ProfileIcon } from '@/components/icons'
  * El resumen y los datos salen del YAML del CV del dueño, sin reescribir: si
  * el CV cambia, este bloque cambia. Es lo que impide que la página y el CV se
  * contradigan, que es un criterio de aceptación explícito (§9 de la SRS).
+ *
+ * La ficha de datos es una `<dl>` de verdad, y aquí sí corresponde: cada par
+ * es literalmente término y definición ("Ubicación" / "Pasto, Colombia"). Se
+ * presenta como tabla de especificaciones, en monoespaciada y con una regla
+ * entre filas.
  */
 export function Profile({ locale }: { locale: Locale }) {
   return (
@@ -22,13 +27,13 @@ export function Profile({ locale }: { locale: Locale }) {
         icon={<ProfileIcon />}
       />
 
-      <div className="mt-10 grid gap-10 md:grid-cols-[1.5fr_1fr]">
+      <div className="mt-12 grid gap-12 md:grid-cols-[1.5fr_1fr]">
         <Reveal>
           <p className="text-lg leading-relaxed text-ink-muted sm:text-xl">
             {profile.summary[locale]}
           </p>
 
-          <ul className="mt-6 flex flex-wrap gap-3">
+          <ul className="mt-8 flex flex-wrap gap-3">
             {profile.links.map((link) => {
               const href = resolved(linkHref(link, locale))
               if (!href) return null
@@ -38,7 +43,7 @@ export function Profile({ locale }: { locale: Locale }) {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-[44px] items-center rounded-full border border-accent px-4 py-2 text-sm font-semibold text-accent transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-subtle"
+                    className="inline-flex min-h-[44px] items-center border border-hairline-strong px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest2 text-ink transition-colors duration-200 hover:border-accent hover:text-accent"
                   >
                     {link.label[locale]}
                     <span className="sr-only">{projectsSection.labels.newTab[locale]}</span>
@@ -50,16 +55,16 @@ export function Profile({ locale }: { locale: Locale }) {
         </Reveal>
 
         <Reveal delayMs={90}>
-          <dl className="card-surface rounded-2xl border border-hairline p-5 sm:p-6">
+          <dl className="crop-marks border border-hairline">
             {profile.facts.map((fact, index) => (
               <div
                 key={fact.label[locale]}
-                className={index > 0 ? 'mt-4 border-t border-hairline pt-4' : undefined}
+                className={`px-5 py-4 ${index > 0 ? 'border-t border-hairline' : ''}`}
               >
-                <dt className="text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
+                <dt className="font-mono text-[0.65rem] uppercase tracking-spec text-ink-muted">
                   {fact.label[locale]}
                 </dt>
-                <dd className="mt-1.5 text-base leading-relaxed text-ink">
+                <dd className="mt-2 text-base leading-relaxed text-ink">
                   {fact.value[locale]}
                 </dd>
               </div>

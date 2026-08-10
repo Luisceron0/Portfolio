@@ -1,32 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="LC">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <!--
-    Favicon. Sustituye al monograma "LC" plano sobre índigo, que era el
-    resultado por defecto de cualquier generador.
-
-    Dos ideas, no una:
-      - La forma es un ESCUDO, no un cuadrado: es lo que distingue este
-        portafolio (ingeniería con foco en seguridad) de otro cualquiera.
-      - El relleno recorre los cuatro tonos reales de la paleta del sitio
-        (índigo, verde azulado, ciruela, terracota), así que el icono y la
-        página hablan el mismo idioma cromático.
-
-    La "L" calada deja ver el papel del lienzo a través del escudo, en vez de
-    pintarse encima. A 16 px se lee como una marca sólida con un corte claro.
+    Favicon en clave suiza: rectángulo, sin curvas, con las cinco bandas de tono
+    de la paleta y un monograma calado. Coherente con el lienzo oscuro del
+    sitio, así que en una pestaña oscura no se ve como un recorte blanco.
+    Sin recursos externos: lo sirve la convención de App Router.
   -->
-  <defs>
-    <linearGradient id="lc" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#322d84"/>
-      <stop offset="0.42" stop-color="#0f6459"/>
-      <stop offset="0.72" stop-color="#6d2a63"/>
-      <stop offset="1" stop-color="#9c3f2a"/>
-    </linearGradient>
-  </defs>
-
-  <!-- Escudo, con la "L" calada mediante regla de relleno par-impar. -->
-  <path
-    fill="url(#lc)"
-    fill-rule="evenodd"
-    d="M16 1.6 4.6 5.4v10.9c0 6.6 4.6 11.5 11.4 14.1 6.8-2.6 11.4-7.5 11.4-14.1V5.4L16 1.6Z
-       M12.4 8.8h3.5v10.6h5.2v3.4h-8.7V8.8Z"
-  />
+  <rect width="64" height="64" fill="#0b0b0c"/>
+  <rect x="0" y="0" width="12.8" height="5" fill="#a29cf2"/>
+  <rect x="12.8" y="0" width="12.8" height="5" fill="#4fd6c4"/>
+  <rect x="25.6" y="0" width="12.8" height="5" fill="#f0b93d"/>
+  <rect x="38.4" y="0" width="12.8" height="5" fill="#e08fd6"/>
+  <rect x="51.2" y="0" width="12.8" height="5" fill="#f2896a"/>
+  <path d="M16 18 H24 V40 H38 V48 H16 Z" fill="#ededea"/>
+  <rect x="42" y="18" width="6" height="6" fill="#a29cf2"/>
 </svg>

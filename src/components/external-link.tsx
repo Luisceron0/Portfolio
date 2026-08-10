@@ -9,11 +9,17 @@ import { PendingNote } from '@/components/pending'
 
 type Variant = 'primary' | 'secondary'
 
+/*
+ * Botones rectangulares, no píldoras: el ángulo recto es parte del lenguaje
+ * suizo y `tailwind.config.ts` fuerza radio 0 en todo el sistema.
+ *
+ * El primario va INVERTIDO respecto a la versión clara: sobre lienzo oscuro el
+ * relleno es el color claro y la letra es el propio lienzo (`text-surface`).
+ * Medido en `check:contrast` como "surface sobre accent".
+ */
 const VARIANTS: Record<Variant, string> = {
-  primary:
-    'bg-accent text-surface-card hover:bg-accent-hover border border-transparent hover:-translate-y-0.5',
-  secondary:
-    'bg-surface-card text-accent hover:bg-surface-subtle border border-accent hover:-translate-y-0.5',
+  primary: 'bg-accent text-surface hover:bg-accent-hover border border-accent',
+  secondary: 'bg-transparent text-ink hover:bg-surface-subtle border border-hairline-strong hover:border-accent',
 }
 
 /**
@@ -51,7 +57,7 @@ export function ExternalLinkButton({
         ? {}
         : { target: '_blank', rel: 'noopener noreferrer' })}
       {...(isDownload ? { download } : {})}
-      className={`inline-flex min-h-[44px] items-center justify-center rounded-full px-6 py-2.5 text-base font-semibold transition-all duration-200 ${VARIANTS[variant]}`}
+      className={`inline-flex min-h-[44px] items-center justify-center px-6 py-2.5 text-sm font-bold uppercase tracking-widest2 transition-colors duration-200 ${VARIANTS[variant]}`}
     >
       {link.label[locale]}
       {!isInternalAnchor && !isDownload && (

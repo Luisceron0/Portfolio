@@ -24,21 +24,21 @@ function Entry({
 }) {
   return (
     <li className="group relative pl-8 sm:pl-10">
-      {/* Punto sobre la línea vertical. Decorativo. */}
+      {/* Marca cuadrada sobre la línea vertical. Decorativa. */}
       <span
         aria-hidden="true"
-        className="absolute left-0 top-1.5 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-tone-teal bg-surface transition-all duration-300 group-hover:scale-125 group-hover:bg-tone-teal"
+        className="absolute left-0 top-1.5 h-2.5 w-2.5 -translate-x-1/2 border border-tone-teal bg-surface transition-colors duration-300 group-hover:bg-tone-teal"
       />
 
       <Reveal delayMs={index * 70}>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span className="rounded-full border border-hairline-strong bg-surface-card/60 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-widest2 text-ink-muted">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-widest2">
+          <span className="border border-hairline-strong px-2.5 py-0.5 font-bold text-ink-muted">
             {timeline.kinds[entry.kind][locale]}
           </span>
-          <span className="text-sm font-medium text-ink-muted">{entry.period[locale]}</span>
+          <span className="text-ink-muted">{entry.period[locale]}</span>
         </div>
 
-        <h3 className="mt-3 text-xl font-bold tracking-tight sm:text-2xl">
+        <h3 className="mt-3 text-2xl font-bold tracking-tighter sm:text-3xl">
           {entry.title[locale]}
         </h3>
 
@@ -55,7 +55,7 @@ function Entry({
             >
               <span
                 aria-hidden="true"
-                className="absolute left-0 top-[0.6em] h-1.5 w-1.5 rounded-full bg-hairline-strong"
+                className="absolute left-0 top-[0.6em] h-1.5 w-1.5 bg-hairline-strong"
               />
               {highlight}
             </li>

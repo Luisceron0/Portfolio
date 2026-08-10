@@ -17,7 +17,6 @@ import {
   TONE_DOT,
   TONE_HOVER_BORDER,
   TONE_TEXT,
-  TONE_TEXT_BRIGHT,
   type Tone,
 } from '@/components/section'
 import { ProjectsIcon } from '@/components/icons'
@@ -49,7 +48,7 @@ function ProjectScreenshot({ project, locale }: { project: Project; locale: Loca
   // gris que parezca contenido real.
   if (!src) {
     return (
-      <div className="flex aspect-[16/10] w-full items-center justify-center rounded-2xl border border-dashed border-warn-border bg-warn-surface p-4 text-center">
+      <div className="flex aspect-[16/10] w-full items-center justify-center border border-dashed border-warn-border bg-warn-surface p-4 text-center">
         <PendingNote value={project.screenshot.src} />
       </div>
     )
@@ -61,7 +60,7 @@ function ProjectScreenshot({ project, locale }: { project: Project; locale: Loca
       alt={alt}
       width={1280}
       height={577}
-      className="w-full rounded-2xl border border-hairline transition-transform duration-500 hover:scale-[1.015]"
+      className="w-full border border-hairline"
       sizes="(min-width: 768px) 50vw, 100vw"
     />
   )
@@ -79,11 +78,13 @@ function ProjectCard({
   const headingId = `proyecto-${project.id}`
   const imageFirst = index % 2 === 0
   const tone = PROJECT_TONES[index % PROJECT_TONES.length]
+  // Referencia de ficha técnica: PRJ-01, PRJ-02... Decorativa, va aria-hidden.
+  const ref = `PRJ-${String(index + 1).padStart(2, '0')}`
 
   return (
     <article
       aria-labelledby={headingId}
-      className={`card-surface rounded-3xl border border-hairline p-5 transition-colors duration-300 sm:p-8 ${TONE_HOVER_BORDER[tone]}`}
+      className={`card-surface crop-marks border border-hairline p-5 transition-colors duration-300 sm:p-8 ${TONE_HOVER_BORDER[tone]}`}
     >
       <div className="grid items-start gap-8 lg:grid-cols-2">
         {/* `order` solo en pantallas grandes: en móvil el orden es siempre el
@@ -98,15 +99,25 @@ function ProjectCard({
         </Reveal>
 
         <Reveal delayMs={80} className={imageFirst ? 'lg:order-2' : 'lg:order-1'}>
+          <div className="flex items-center gap-3">
+            <span
+              aria-hidden="true"
+              className={`font-mono text-[0.65rem] uppercase tracking-spec ${TONE_TEXT[tone]}`}
+            >
+              {ref}
+            </span>
+            <span aria-hidden="true" className={`h-px w-8 ${TONE_DOT[tone]}`} />
+          </div>
+
           <p
-            className={`text-xs font-semibold uppercase tracking-widest2 ${TONE_TEXT[tone]}`}
+            className={`mt-3 font-mono text-[0.7rem] uppercase tracking-spec ${TONE_TEXT[tone]}`}
           >
             {project.kicker[locale]}
           </p>
 
           <h3
             id={headingId}
-            className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl"
+            className="mt-3 text-3xl font-bold tracking-tighter sm:text-4xl"
           >
             {project.name}
           </h3>
@@ -117,12 +128,12 @@ function ProjectCard({
 
           <ul
             aria-label={projectsSection.labels.technologies[locale]}
-            className="mt-5 flex flex-wrap gap-2"
+            className="mt-6 flex flex-wrap gap-2"
           >
             {project.stack.map((tech) => (
               <li
                 key={tech}
-                className={`rounded-full border border-hairline-strong bg-surface px-2.5 py-1 text-xs font-medium text-ink transition-colors duration-200 ${TONE_HOVER_BORDER[tone]}`}
+                className={`border border-hairline bg-surface-subtle px-2.5 py-1 font-mono text-[0.7rem] uppercase tracking-widest2 text-ink-muted transition-colors duration-200 ${TONE_HOVER_BORDER[tone]}`}
               >
                 {tech}
               </li>
@@ -130,32 +141,31 @@ function ProjectCard({
           </ul>
 
           {/*
-            RF-110: único momento oscuro del sitio, a propósito. El ángulo de
-            seguridad es el dato que más distingue a cada proyecto, así que se
-            presenta como una terminal, no como una caja de texto más. El tono
-            del proyecto sigue presente en el encabezado y los "puntos" de la
-            barra superior: no es un color nuevo, es el mismo con más contraste.
+            Panel de especificación del ángulo de seguridad.
+
+            En la versión clara esto era una tarjeta "terminal" oscura, que
+            funcionaba porque era el único bloque oscuro de una página clara.
+            Con el sitio entero en oscuro ese truco deja de distinguir nada, así
+            que el énfasis pasa a la estructura: bloque hundido, regla superior
+            del color del proyecto, etiqueta en monoespaciada y el texto también
+            monoespaciado. Sigue leyéndose como una lectura de instrumento, que
+            es el registro que le corresponde.
           */}
-          <div className="mt-6 overflow-hidden rounded-2xl bg-console-bg">
-            <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
-              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-white/15" />
-              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-white/15" />
-              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-white/15" />
-              <h4
-                className={`ml-2 text-xs font-semibold uppercase tracking-widest2 ${TONE_TEXT_BRIGHT[tone]}`}
-              >
+          <div className="mt-6 border-t-2 border-hairline bg-surface-subtle">
+            <div
+              className={`flex items-center gap-2 border-b border-hairline px-4 py-2.5 ${TONE_TEXT[tone]}`}
+            >
+              <span aria-hidden="true" className={`h-1.5 w-1.5 ${TONE_DOT[tone]}`} />
+              <h4 className="font-mono text-[0.65rem] font-bold uppercase tracking-spec">
                 {projectsSection.labels.securityAngle[locale]}
               </h4>
             </div>
-            <p className="px-4 py-4 font-mono text-sm leading-relaxed text-console-text sm:text-[0.95rem]">
-              <span aria-hidden="true" className={TONE_TEXT_BRIGHT[tone]}>
-                ${' '}
-              </span>
+            <p className="px-4 py-4 font-mono text-sm leading-relaxed text-ink">
               {project.security[locale]}
             </p>
           </div>
 
-          <ul className="mt-5 space-y-2">
+          <ul className="mt-6 space-y-2">
             {project.highlights[locale].map((highlight) => (
               <li
                 key={highlight}
@@ -163,14 +173,14 @@ function ProjectCard({
               >
                 <span
                   aria-hidden="true"
-                  className={`absolute left-0 top-[0.6em] h-1.5 w-1.5 rounded-full ${TONE_DOT[tone]}`}
+                  className={`absolute left-0 top-[0.6em] h-1.5 w-1.5 ${TONE_DOT[tone]}`}
                 />
                 {highlight}
               </li>
             ))}
           </ul>
 
-          <ul className="mt-6 flex flex-wrap gap-3">
+          <ul className="mt-7 flex flex-wrap gap-3">
             {project.links.map((link) => {
               const target = linkHref(link, locale)
               const href = resolved(target)
@@ -181,7 +191,7 @@ function ProjectCard({
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-subtle ${TONE_BORDER_SOLID[tone]} ${TONE_TEXT[tone]}`}
+                      className={`inline-flex min-h-[44px] items-center border px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest2 transition-colors duration-200 hover:bg-surface-subtle ${TONE_BORDER_SOLID[tone]} ${TONE_TEXT[tone]}`}
                     >
                       {link.label[locale]}
                       <span className="sr-only">

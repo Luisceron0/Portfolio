@@ -30,9 +30,9 @@ function contrastRatio(hexA, hexB) {
 /**
  * Compone un color semitransparente sobre un fondo y devuelve el hex efectivo.
  *
- * Hace falta porque `.card-surface` (RF-110) no es opaca: es blanco cálido al
- * 82% sobre el lienzo de papel. Medir el contraste contra el hex nominal daría
- * un número que no es el que ve nadie. Esto calcula el color real resultante.
+ * Hace falta porque `.card-surface` no es opaca: es la superficie de tarjeta al
+ * 72% sobre el lienzo. Medir el contraste contra el hex nominal daría un número
+ * que no ve nadie. Esto calcula el color real resultante.
  */
 function over(foregroundHex, backgroundHex, alpha) {
   const channel = (hex, index) => parseInt(hex.slice(index, index + 2), 16)
@@ -48,58 +48,47 @@ function over(foregroundHex, backgroundHex, alpha) {
 // aquí, este script deja de reflejar la realidad — es la razón por la que
 // tailwind.config.ts enlaza a este archivo en su comentario.
 const PALETTE = {
-  ink: '#211d16',
-  inkMuted: '#6b6255',
-  accent: '#322d84',
-  accentHover: '#26215f',
-  surface: '#f7f2ea',
-  surfaceCard: '#fffdfa',
-  surfaceSubtle: '#efe6d8',
-  warn: '#854d0e',
-  warnSurface: '#fdf3e0',
-  // RF-110: tonos de sección y de proyecto. No son decorativos: llevan texto.
-  toneTeal: '#0f6459',
-  tonePlum: '#6d2a63',
-  toneRust: '#9c3f2a',
-  toneOchre: '#8a5310',
-  // RF-110: superficie "consola" (tarjeta oscura de ángulo de seguridad) y sus
-  // variantes claras de tono, pensadas específicamente para ese fondo oscuro.
-  consoleBg: '#211d16',
-  consoleText: '#efe6d5',
-  consoleMuted: '#b8ab93',
-  toneBrightIndigo: '#a29cf2',
-  toneBrightTeal: '#4fd6c4',
-  toneBrightPlum: '#e08fd6',
-  toneBrightRust: '#f2896a',
-  toneBrightOchre: '#f0b93d',
+  ink: '#ededea',
+  inkMuted: '#9c9c98',
+  surface: '#0b0b0c',
+  surfaceCard: '#131315',
+  surfaceSubtle: '#1a1a1d',
+  accent: '#a29cf2',
+  accentHover: '#b8b3f6',
+  warn: '#f0b93d',
+  warnSurface: '#241d0c',
+  // Tonos de sección y de proyecto. No son decorativos: llevan texto.
+  toneIndigo: '#a29cf2',
+  toneTeal: '#4fd6c4',
+  tonePlum: '#e08fd6',
+  toneRust: '#f2896a',
+  toneOchre: '#f0b93d',
 }
 
 /**
- * Color REAL de una tarjeta: `.card-surface` es blanco cálido al 82% sobre el
- * lienzo (RF-110), no un color sólido. Se compone aquí para medir lo que de
+ * `deco` (#55555a) NO se mide aquí, y es intencionado: no alcanza 4.5:1 contra
+ * ningún fondo del sitio. Solo se usa en la rejilla del lienzo, el ASCII art y
+ * las marcas de corte, todo `aria-hidden` y sin una sola letra de contenido.
+ * Para texto secundario el token es `ink.muted`, que sí se mide abajo.
+ */
+
+/**
+ * Color REAL de una tarjeta: `.card-surface` es la superficie de tarjeta al 72%
+ * sobre el lienzo, no un color sólido. Se compone aquí para medir lo que de
  * verdad ve un visitante, no el hex nominal.
  */
-const CARD_EFFECTIVE = over(PALETTE.surfaceCard, PALETTE.surface, 0.82)
+const CARD_EFFECTIVE = over(PALETTE.surfaceCard, PALETTE.surface, 0.72)
+
+const TONE_KEYS = ['toneIndigo', 'toneTeal', 'tonePlum', 'toneRust', 'toneOchre']
 
 /** Cada par que el sitio realmente usa como texto sobre fondo. */
 const PAIRS = [
   { label: 'ink sobre surface (texto principal, lienzo)', fg: PALETTE.ink, bg: PALETTE.surface, min: 4.5 },
   { label: 'ink sobre surface-card (texto en tarjetas)', fg: PALETTE.ink, bg: PALETTE.surfaceCard, min: 4.5 },
+  { label: 'ink sobre surface-subtle (paneles de spec, entradas)', fg: PALETTE.ink, bg: PALETTE.surfaceSubtle, min: 4.5 },
   {
-    label: `ink sobre tarjeta REAL compuesta al 82% (${CARD_EFFECTIVE})`,
+    label: `ink sobre tarjeta REAL compuesta al 72% (${CARD_EFFECTIVE})`,
     fg: PALETTE.ink,
-    bg: CARD_EFFECTIVE,
-    min: 4.5,
-  },
-  {
-    label: 'ink-muted sobre tarjeta REAL compuesta al 82%',
-    fg: PALETTE.inkMuted,
-    bg: CARD_EFFECTIVE,
-    min: 4.5,
-  },
-  {
-    label: 'accent sobre tarjeta REAL compuesta al 82%',
-    fg: PALETTE.accent,
     bg: CARD_EFFECTIVE,
     min: 4.5,
   },
@@ -110,28 +99,40 @@ const PAIRS = [
     min: 4.5,
   },
   {
-    label: 'ink-muted sobre surface-subtle (CV, footer)',
+    label: 'ink-muted sobre tarjeta REAL compuesta al 72%',
+    fg: PALETTE.inkMuted,
+    bg: CARD_EFFECTIVE,
+    min: 4.5,
+  },
+  {
+    label: 'ink-muted sobre surface-subtle (pistas, metadatos)',
     fg: PALETTE.inkMuted,
     bg: PALETTE.surfaceSubtle,
     min: 4.5,
   },
-  { label: 'accent sobre surface (enlaces, botón secundario)', fg: PALETTE.accent, bg: PALETTE.surface, min: 4.5 },
+  { label: 'accent sobre surface (enlaces)', fg: PALETTE.accent, bg: PALETTE.surface, min: 4.5 },
   {
-    label: 'accent sobre surface-card (enlaces en tarjetas)',
+    label: 'accent sobre tarjeta REAL compuesta al 72%',
     fg: PALETTE.accent,
-    bg: PALETTE.surfaceCard,
+    bg: CARD_EFFECTIVE,
     min: 4.5,
   },
-  { label: 'blanco cálido sobre accent (botón primario)', fg: PALETTE.surfaceCard, bg: PALETTE.accent, min: 4.5 },
-  { label: 'blanco cálido sobre accent-hover (botón primario, hover)', fg: PALETTE.surfaceCard, bg: PALETTE.accentHover, min: 4.5 },
+  /*
+   * Botón primario invertido: sobre lienzo oscuro el relleno es el color claro
+   * y la letra es el propio lienzo. Es la inversión que impone el tema oscuro.
+   */
+  { label: 'surface sobre accent (botón primario, letra oscura)', fg: PALETTE.surface, bg: PALETTE.accent, min: 4.5 },
+  { label: 'surface sobre accent-hover (botón primario, hover)', fg: PALETTE.surface, bg: PALETTE.accentHover, min: 4.5 },
   { label: 'warn sobre warn-surface (aviso [PENDIENTE])', fg: PALETTE.warn, bg: PALETTE.warnSurface, min: 4.5 },
+  { label: 'ink sobre warn-surface (cuerpo del aviso)', fg: PALETTE.ink, bg: PALETTE.warnSurface, min: 4.5 },
 
   /*
-   * RF-110: los tonos de sección y de proyecto NO son decorativos, llevan
-   * texto (números de sección, kickers, encabezados de grupo, enlaces). Cada
-   * uno se mide sobre los dos fondos donde realmente aparece.
+   * Los tonos de sección y de proyecto NO son decorativos, llevan texto
+   * (números de sección, kickers, encabezados de grupo, enlaces). Cada uno se
+   * mide sobre los tres fondos donde realmente aparece, más el caso invertido
+   * de botón relleno.
    */
-  ...["toneTeal", "tonePlum", "toneRust", "toneOchre"].flatMap((key) => [
+  ...TONE_KEYS.flatMap((key) => [
     {
       label: `${key} sobre surface (número de sección, viñetas)`,
       fg: PALETTE[key],
@@ -144,20 +145,19 @@ const PAIRS = [
       bg: CARD_EFFECTIVE,
       min: 4.5,
     },
+    {
+      label: `${key} sobre surface-subtle (panel de spec)`,
+      fg: PALETTE[key],
+      bg: PALETTE.surfaceSubtle,
+      min: 4.5,
+    },
+    {
+      label: `surface sobre ${key} (botón relleno, letra oscura)`,
+      fg: PALETTE.surface,
+      bg: PALETTE[key],
+      min: 4.5,
+    },
   ]),
-
-  /*
-   * RF-110: superficie "consola" — tarjeta oscura del ángulo de seguridad.
-   * Bloque aparte porque el fondo no es ninguno de los anteriores.
-   */
-  { label: 'console-text sobre console-bg (cuerpo de la terminal)', fg: PALETTE.consoleText, bg: PALETTE.consoleBg, min: 4.5 },
-  { label: 'console-muted sobre console-bg (prompt, metadatos)', fg: PALETTE.consoleMuted, bg: PALETTE.consoleBg, min: 4.5 },
-  ...["toneBrightIndigo", "toneBrightTeal", "toneBrightPlum", "toneBrightRust", "toneBrightOchre"].map((key) => ({
-    label: `${key} sobre console-bg (encabezado de terminal)`,
-    fg: PALETTE[key],
-    bg: PALETTE.consoleBg,
-    min: 4.5,
-  })),
 ]
 
 let failed = false
@@ -173,4 +173,4 @@ if (failed) {
   console.error('\ncheck:contrast — al menos un par no alcanza 4.5:1. Corrígelo antes de afirmarlo.')
   process.exit(1)
 }
-console.log('\ncheck:contrast — todos los pares cumplen AA.')
+console.log(`\ncheck:contrast — ${PAIRS.length} pares, todos cumplen AA.`)

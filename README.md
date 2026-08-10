@@ -70,6 +70,24 @@ visible en lugar de renderizar un enlace roto, y `npm run check:pending` los
 enumera. **Nunca se rellenan con valores inventados**: ese es exactamente el
 fallo que el mecanismo previene.
 
+## Aspecto visual
+
+Sistema oscuro, estilo suizo y registro de ficha técnica. Sin tema claro y sin
+conmutador: es una decisión de diseño, no una preferencia del visitante, y
+tratarla como preferencia obligaría a mantener y medir dos paletas.
+
+Ángulo recto en todo (el override de `borderRadius` en `tailwind.config.ts`
+impide que un `rounded-*` olvidado reintroduzca una curva), tipografía
+Helvetica/Arial y monoespaciada, ambas **del sistema**: cero descargas, cero
+ampliación de `font-src`. El ASCII art de `src/components/ascii.tsx` se genera
+con una función pura de la posición, sin `Math.random` (sería un error de
+hidratación) y sin texto (sería copy sin traducir en un sitio bilingüe).
+
+`npm run check:contrast` mide los 33 pares de color reales, incluidos los
+invertidos y el color compuesto de las superficies semitransparentes. El token
+`deco` es el único que no cumple AA y por eso su nombre dice que es decoración:
+no debe llevar texto nunca.
+
 ## Seguridad
 
 - **CSP** con directivas explícitas y nonce por petición

@@ -5,16 +5,25 @@
 @layer base {
   :root {
     /*
-     * Stack de fuentes del sistema. Decisión consciente: no usamos next/font
-     * con Google Fonts porque obligaría a una descarga externa en build y a
-     * ampliar font-src. Cero bytes de fuente = mejor Performance en Lighthouse.
+     * Dos stacks, ambos 100% del sistema. Decisión consciente: no usamos
+     * next/font con Google Fonts porque obligaría a una descarga externa en
+     * build y a ampliar font-src en la CSP. Cero bytes de fuente = mejor
+     * Performance en Lighthouse (restricción D-05 de tasks/plan.md).
+     *
+     * El stack sans arranca en Helvetica a propósito: es la familia del estilo
+     * suizo y está instalada de serie en macOS. En Windows y Linux cae en
+     * Arial y en su clon métrico, que mantienen la misma silueta.
      */
-    --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-      'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    --font-sans: 'Helvetica Neue', Helvetica, Arial, ui-sans-serif, system-ui,
+      sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+      'Liberation Mono', monospace;
   }
 
   html {
     scroll-behavior: smooth;
+    /* Que los controles nativos (scrollbar, autocompletado) nazcan en oscuro. */
+    color-scheme: dark;
   }
 
   /* Respeta a quien pide menos animación (WCAG 2.3.3). */
@@ -33,42 +42,41 @@
   }
 
   /*
-   * RF-110 — dinamismo visual.
+   * RF-110 v2 — el lienzo.
    *
-   * Se sustituyó la malla de puntos original: era la textura más genérica
-   * posible, la que trae de serie cualquier plantilla. En su lugar, dos ideas
-   * que sí dicen algo del sitio.
+   * Fuera la trama diagonal y los cuatro halos cálidos de la versión clara.
+   * En su lugar, dos capas que sostienen el lenguaje de ficha técnica:
    *
-   *   1. CAMPOS DE COLOR. Cuatro lavados amplísimos con los tonos reales de la
-   *      paleta (índigo, verde azulado, ciruela, terracota), colocados de forma
-   *      asimétrica y a opacidad muy baja. Como van `fixed`, no acompañan al
-   *      scroll: el lienzo pasa de frío a cálido según por dónde vas, sin
-   *      animar un solo píxel. Movimiento aparente a coste cero, y nada que
-   *      pueda marear a quien pide `prefers-reduced-motion`.
+   *   1. REJILLA DE DIBUJO. Líneas verticales y horizontales cada 80px, a una
+   *      opacidad tan baja que no se "ve" pero se nota: da la sensación de
+   *      papel milimetrado y de que todo está alineado a algo. Es la rejilla
+   *      del estilo suizo hecha literal. Va `fixed`, así que el contenido se
+   *      desplaza sobre ella en vez de arrastrarla.
    *
-   *   2. TRAMA DIAGONAL. Líneas finísimas a 45 grados en vez de puntos: se lee
-   *      como papel técnico, no como fondo de plantilla. Va con el scroll para
-   *      que se note que es material del lienzo y no una capa flotando encima.
+   *   2. DOS RESPLANDORES DE TONO. Índigo y verde azulado, enormes y casi
+   *      invisibles, para que el negro no sea plano. Dos y no cuatro: en un
+   *      lienzo oscuro el color se lee mucho antes que sobre papel.
    *
-   * Todo en CSS puro: cero peticiones de red, cero imágenes, cero fuentes. Es
-   * la restricción que fija la propia RF-110 para no pagarlo en Lighthouse.
+   * Todo en CSS puro: cero peticiones de red, cero imágenes. Nada anima, así
+   * que no hay nada que desactivar bajo `prefers-reduced-motion`.
    */
   body {
     @apply bg-surface text-ink antialiased;
     font-family: var(--font-sans);
     background-image:
-      radial-gradient(48rem 38rem at 82% -6%, rgba(50, 45, 132, 0.1), transparent 65%),
-      radial-gradient(42rem 34rem at 2% 30%, rgba(15, 100, 89, 0.09), transparent 62%),
-      radial-gradient(46rem 36rem at 92% 62%, rgba(109, 42, 99, 0.08), transparent 64%),
-      radial-gradient(40rem 32rem at 8% 92%, rgba(156, 63, 42, 0.08), transparent 62%),
+      radial-gradient(60rem 45rem at 78% -8%, rgba(162, 156, 242, 0.07), transparent 60%),
+      radial-gradient(52rem 40rem at 4% 68%, rgba(79, 214, 196, 0.05), transparent 58%),
       repeating-linear-gradient(
-        45deg,
-        rgba(33, 29, 22, 0.028) 0,
-        rgba(33, 29, 22, 0.028) 1px,
-        transparent 1px,
-        transparent 9px
+        90deg,
+        rgba(237, 237, 234, 0.024) 0 1px,
+        transparent 1px 80px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(237, 237, 234, 0.016) 0 1px,
+        transparent 1px 80px
       );
-    background-attachment: fixed, fixed, fixed, fixed, scroll;
+    background-attachment: fixed, fixed, fixed, fixed;
   }
 
   /* Foco siempre visible y con contraste suficiente: navegación por teclado. */
@@ -93,7 +101,7 @@
    * ningún estilo: el contenido es visible. Ocultarlo es una decisión que toma
    * el cliente, solo para lo que está por debajo del pliegue. Así, si el
    * JavaScript no corre o el observer no dispara, el peor caso es que no haya
-   * animación — nunca que no haya contenido.
+   * animación, nunca que no haya contenido.
    *
    * Solo se animan opacidad y desplazamiento: no cambia el tamaño de nada, así
    * que no genera Cumulative Layout Shift (métrica de Lighthouse).
@@ -122,38 +130,65 @@
   }
 
   /*
-   * RF-110 — superficie de tarjeta.
+   * Superficie de tarjeta.
    *
-   * Semitransparente a propósito: deja pasar los halos y la textura del fondo,
-   * así que una tarjeta al principio de la página y otra al final no tienen
-   * exactamente el mismo tono. Es lo que evita que ocho bloques idénticos se
-   * lean como una hoja de cálculo.
-   *
-   * El desenfoque va detrás del contenido, nunca sobre el texto: el contraste
-   * medido en `npm run check:contrast` sigue siendo el del par sólido.
+   * Semitransparente a propósito: deja pasar la rejilla y los resplandores del
+   * lienzo, así que una tarjeta arriba y otra abajo no tienen exactamente el
+   * mismo tono. El desenfoque va detrás del contenido, nunca sobre el texto:
+   * el contraste medido en `npm run check:contrast` sigue siendo el del par
+   * sólido, que es el caso peor.
    */
   .card-surface {
-    background-color: rgb(255 253 250 / 0.82);
-    backdrop-filter: blur(6px);
+    background-color: rgb(19 19 21 / 0.72);
+    backdrop-filter: blur(8px);
   }
 
   /*
-   * RF-110 — firma de marca.
-   *
-   * Una franja de 3px con los cinco tonos reales de la paleta, fija en el
-   * borde superior. Es la versión más comprimida posible del sistema de
-   * orientación por color que ya usan los números de sección y las tarjetas:
-   * aquí no orienta, se declara. Puramente decorativa (`aria-hidden` en el
-   * marcado) y a coste cero: un gradiente CSS, ninguna imagen.
+   * Marcas de corte en las esquinas, como en un pliego de imprenta o en un
+   * plano acotado. Es el detalle que más empuja el conjunto hacia "ficha
+   * técnica" y cuesta un pseudo-elemento, sin marcado extra ni imágenes.
+   */
+  .crop-marks {
+    position: relative;
+  }
+
+  .crop-marks::before,
+  .crop-marks::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    border-color: theme('colors.hairline.strong');
+  }
+
+  .crop-marks::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+  }
+
+  .crop-marks::after {
+    right: -1px;
+    bottom: -1px;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+  }
+
+  /*
+   * Firma de marca: franja de 3px con los cinco tonos, fija arriba del todo.
+   * Sobre lienzo oscuro pesa mucho más que sobre papel, así que es lo único
+   * saturado que hay en pantalla de forma permanente.
    */
   .tone-strip {
     background-image: linear-gradient(
       90deg,
-      #322d84 0% 20%,
-      #0f6459 20% 40%,
-      #8a5310 40% 60%,
-      #6d2a63 60% 80%,
-      #9c3f2a 80% 100%
+      #a29cf2 0% 20%,
+      #4fd6c4 20% 40%,
+      #f0b93d 40% 60%,
+      #e08fd6 60% 80%,
+      #f2896a 80% 100%
     );
   }
 }

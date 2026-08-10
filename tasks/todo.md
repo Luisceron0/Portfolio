@@ -71,6 +71,58 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 3f: Rediseño oscuro, suizo y de ficha técnica (2026-08-10)
+> Cuarta petición del dueño, y la primera que da una dirección estética
+> concreta en vez de referencias sueltas: "colores oscuros, ascii art, estilo
+> swiss style, contraste y tech spec". Las tres rondas anteriores fueron
+> retoques incrementales sobre un lienzo claro y ninguna terminó de convencer,
+> así que esta vez se cambia el sistema entero en lugar de ajustarlo.
+- [x] **Inversión completa a oscuro.** El lienzo de papel cálido desaparece.
+      No hay tema claro, ni conmutador, ni consulta a `prefers-color-scheme`:
+      es una decisión de diseño, y tratarla como preferencia obligaría a
+      mantener y medir DOS paletas. `color-scheme: dark` y `themeColor` para
+      que el navegador pinte también sus propios cromos
+- [x] Los nombres de token NO cambiaron (`ink`, `surface`, `hairline`, `tone`,
+      `accent`, `warn`), solo sus valores: la inversión es un cambio de paleta
+      y no una reescritura componente a componente
+- [x] Desaparece el mapa `TONE_TEXT_BRIGHT` y los tokens `console.*` /
+      `toneBright.*` de la fase anterior: sobre lienzo oscuro los tonos ya son
+      las variantes claras, así que un solo juego sirve para todo
+- [x] **Contraste medido ANTES de aplicar nada**, no después: 33 pares en
+      verde, incluidos los casos invertidos (letra oscura sobre relleno claro
+      en botones) y el color REAL compuesto de las tarjetas semitransparentes
+      (`#111112`). El token `deco` se documenta explícitamente como
+      decorativo-y-solo-decorativo porque no alcanza AA, y se detectó y
+      corrigió un uso indebido suyo en el pie antes de commitear
+- [x] **Estilo suizo:** ángulo recto en todo el sistema (el override de
+      `borderRadius` en el tema invalida cualquier `rounded-*` olvidado),
+      Helvetica/Arial como familia (100% del sistema, D-05 intacta, cero
+      descargas), jerarquía de cartel con contraste extremo de escala, y la
+      rejilla de habilidades dibujada con `gap-px` sobre fondo `hairline`
+- [x] **Ficha técnica:** monoespaciada del sistema para etiquetas, datos y
+      chips; referencias `PRJ-01`; marcas de corte en las esquinas
+      (`.crop-marks`, un pseudo-elemento, sin marcado extra); rejilla de dibujo
+      en el lienzo; la tabla de datos del perfil como `<dl>` real
+- [x] **ASCII art generativo** (`src/components/ascii.tsx`): campo de densidad
+      calculado con una función pura de la posición. Sin `Math.random`, que
+      sería un error de hidratación; sin texto, que sería copy sin traducir en
+      un sitio bilingüe; `aria-hidden`, porque para un lector de pantalla una
+      retícula de bloques Unicode es ruido. Oculto por debajo de `lg` para no
+      gastar el presupuesto de RF-101
+- [x] El panel de ángulo de seguridad deja de ser una "tarjeta terminal": ese
+      recurso funcionaba por ser el único bloque oscuro de una página clara y
+      con el sitio entero en oscuro ya no distingue nada. El énfasis pasa a la
+      estructura (bloque hundido, regla de tono, monoespaciada)
+- [x] Favicon rehecho en clave suiza, sobre fondo oscuro, para que en una
+      pestaña oscura no se vea como un recorte blanco
+- [x] Un defecto de maquetación encontrado y corregido en la verificación
+      visual, no después: con 5 grupos en una rejilla de 2 columnas quedaba una
+      celda vacía donde se veía el fondo del contenedor como un bloque gris
+      suelto. Relleno condicional y documentado
+- [x] 132 tests en verde (RF-101 a 375px incluido, que era el riesgo real de
+      subir el tamaño del titular), Lighthouse 98-100/100 Performance y
+      100/100 Accessibility en 3 corridas
+
 ## Phase 3e: Tercera ronda de referencias visuales (2026-08-10)
 > El dueño trajo 3 referencias nuevas (Shelby Kay, Impossible Foods, Cake
 > Equity), cada una con su DESIGN.md. Síntesis, no copia: se extrajeron
