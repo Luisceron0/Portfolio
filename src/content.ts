@@ -760,13 +760,13 @@ export const cv = {
     {
       language: 'es',
       label: { es: 'CV en español (PDF)', en: 'CV in Spanish (PDF)' },
-      href: '[PENDIENTE: añadir /cv/luis-ceron-cv-es.pdf generado con RenderCV]',
+      href: '/cv/luis-ceron-cv-es.pdf',
       fileName: 'luis-ceron-cv-es.pdf',
     },
     {
       language: 'en',
       label: { es: 'CV en inglés (PDF)', en: 'CV in English (PDF)' },
-      href: '[PENDIENTE: añadir /cv/luis-ceron-cv-en.pdf generado con RenderCV]',
+      href: '/cv/luis-ceron-cv-en.pdf',
       fileName: 'luis-ceron-cv-en.pdf',
     },
   ] satisfies readonly CvDownload[],

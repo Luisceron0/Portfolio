@@ -14,9 +14,9 @@
   the target later
 - [x] **(añadido)** Copiar la captura de CareLink a `public/proyectos/` →
   **completo (2026-08-08)**, ver Phase 3
-- [ ] **(añadido)** Aportar `luis-ceron-cv-es.pdf` y `luis-ceron-cv-en.pdf` en
-  `public/cv/` — RF-103 no cierra con un botón que apunta a un 404. El dueño
-  confirmó que los aportará cuando estén actualizados
+- [x] **(añadido)** Aportar `luis-ceron-cv-es.pdf` y `luis-ceron-cv-en.pdf` en
+  `public/cv/` → **completo (2026-08-10)**, generados con RenderCV desde
+  `cv/*.yaml`, ver Phase 4c
 - [x] **(añadido)** Bandeja de destino del formulario (`CONTACT_TO_EMAIL`) →
   confirmada por el dueño: `luiscerontrabajos@gmail.com`. Pendiente solo
   configurarla en Vercel (ver Phase 4)
@@ -70,6 +70,32 @@
 - [x] **(añadido)** Lighthouse CI, gate ≥95/≥95: medido 100/100, 99/100, 99/100
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
+
+## Phase 4c: PDFs del CV generados con RenderCV (2026-08-10)
+- [x] RenderCV instalado (`pip install "rendercv[full]"`, v2.8) y validado
+      contra los dos YAML en `cv/`. No es un CMS ni una función del sitio en
+      tiempo de ejecución: es una herramienta de código abierto corrida una
+      vez para producir un archivo estático, exactamente lo que RF-006 de la
+      SRS del portafolio describe ("generated from the RenderCV YAML")
+- [x] Dos defectos reales de maquetación encontrados y corregidos ANTES de
+      dar los PDF por buenos, no después:
+      - Columna "Ingeniería"/"Especialización" demasiado angosta, el texto se
+        cortaba letra por letra → `design.entries.degree_width: 2.6cm`
+      - El PDF en inglés mostraba "3 months"/"3 years 6 months" bajo las
+        fechas y el español no: el default de RenderCV busca una sección
+        llamada "Experience" para calcular la duración, y solo coincidía con
+        el título en inglés → `design.sections.show_time_spans_in: []`
+        explícito en ambos, para que el comportamiento sea idéntico
+- [x] `luis-ceron-cv-es.pdf` y `luis-ceron-cv-en.pdf` en `public/cv/`,
+      verificados con firma binaria `%PDF` y peso real (no un archivo vacío)
+- [x] `src/content.ts`: los dos `[PENDIENTE]` de RF-103 resueltos con las
+      rutas reales. Solo queda 1 de los 3 originales: el dominio
+- [x] **(añadido)** Test nuevo para el criterio literal de RF-103 ("ambos PDF
+      abren/descargan sin un enlace roto"): HTTP 200, `Content-Type:
+      application/pdf`, firma `%PDF`, y el botón de la página apuntando a la
+      ruta exacta. No existía ningún test que lo comprobara hasta ahora
+- [x] 132 tests en verde (antes 128), Lighthouse 98-99/100 y 100/100 con los
+      PDF reales servidos
 
 ## Phase 3d: Paleta multicolor y CV actualizado (2026-08-09)
 - [x] Contenido actualizado desde el PDF del CV nuevo: grupos de habilidades

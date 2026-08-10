@@ -1,5 +1,31 @@
 # Lessons learned
 
+## 2026-08-10 — RenderCV: mismo nombre de salida en dos renders se sobrescribe, y `show_time_spans_in` depende del título literal de la sección
+**Contexto:** al generar los dos PDF del CV con RenderCV, dos gotchas que
+costaron una vuelta cada una.
+**Gotcha 1 — salida con el mismo nombre.** `rendercv render es.yaml` y
+`rendercv render en.yaml` escriben ambos a
+`rendercv_output/{cv.name}_CV.pdf` por defecto. Como el nombre de la persona
+es igual en los dos YAML, el segundo render sobrescribió al primero sin
+avisar. **Solución:** `--pdf-path` con el nombre final exacto en cada
+render, y ojo con `--dont-generate-typst`: deshabilita el PDF también
+("Disabling Typst generation implicitly disables PDF and PNG"), así que ese
+flag no se puede usar si se quiere el PDF.
+**Gotcha 2 — `design.sections.show_time_spans_in` no es un booleano global.**
+Por defecto vale `['experience']` y compara contra el TÍTULO LITERAL de la
+sección. La sección en inglés se llama "Experience" (coincide, muestra "3
+months" bajo las fechas); la española se llama "Experiencia" (no coincide,
+no muestra nada). Sin fijarlo a mano, los dos PDF quedan con maquetación
+distinta sin que nada lo declare. **Solución:** `show_time_spans_in: []`
+explícito en el bloque `design` de ambos YAML, para que el comportamiento
+sea idéntico independientemente del idioma del título de sección.
+**Regla para el futuro:** al generar contenido en dos idiomas con la misma
+herramienta, cualquier opción de diseño que dependa de coincidir con un
+título de sección hay que fijarla a mano en ambos, no confiar en el default:
+el default puede depender del idioma del propio título, no ser realmente
+neutral.
+**Tags:** #rendercv #cv #falso-verde
+
 ## 2026-08-09 — `reuseExistingServer` convierte un servidor zombi en un falso verde
 **Contexto:** tras el refactor bilingüe, la suite reportó `93 passed` en 8,4
 minutos. Antes eran `114 passed` en 1,3 minutos. Menos tests de los que había,

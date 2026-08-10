@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { LOCALES, nav, projects, skills, timeline, type Locale } from '@/content'
+import { cv, LOCALES, nav, projects, skills, timeline, type Locale } from '@/content'
 
 /**
  * Criterios de aceptación de RF-102 (4 proyectos), RF-106 (perfil y
@@ -313,5 +313,41 @@ test.describe('Animaciones', () => {
     }
 
     await context.close()
+  })
+})
+
+test.describe('RF-103 — descarga del CV', () => {
+  /**
+   * El criterio de aceptación es literal: "ambos PDF abren/descargan sin un
+   * enlace roto". Un href con buena pinta no es lo mismo que un archivo que
+   * responde 200 con el tipo de contenido correcto. Generados con RenderCV a
+   * partir de cv/luis-ceron-cv-es.yaml y cv/luis-ceron-cv-en.yaml.
+   */
+  test('ambos PDF del CV responden 200 con Content-Type de PDF', async ({ page, request }) => {
+    for (const download of cv.downloads) {
+      const response = await request.get(download.href)
+      expect(response.status(), `${download.fileName} debe responder 200`).toBe(200)
+      expect(response.headers()['content-type']).toContain('application/pdf')
+
+      // Un PDF real pesa varias decenas de KB; un archivo vacío o un 404
+      // disfrazado no lo haría.
+      const body = await response.body()
+      expect(body.byteLength, `${download.fileName} no puede estar vacío`).toBeGreaterThan(10_000)
+      // Firma binaria %PDF: confirma que es un PDF de verdad, no HTML de error.
+      expect(body.subarray(0, 4).toString('latin1')).toBe('%PDF')
+    }
+
+    // Y que el botón en la página apunta exactamente a esas rutas.
+    await page.goto('/')
+    for (const download of cv.downloads) {
+      const link = page.getByRole('link', { name: download.label.es })
+      await expect(link).toHaveAttribute('href', download.href)
+    }
+  })
+
+  test('los nombres de archivo son descriptivos, no genéricos', async () => {
+    for (const download of cv.downloads) {
+      expect(download.fileName).toMatch(/^luis-ceron-cv-(es|en)\.pdf$/)
+    }
   })
 })
