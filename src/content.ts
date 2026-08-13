@@ -164,8 +164,8 @@ export const site = {
     en: 'Luis Alejandro Cerón Muñoz, Full-Stack Software Engineer',
   } satisfies Localized,
   description: {
-    es: 'Ingeniero de software full-stack. Construyo aplicaciones web completas y las diseño para que sean seguras desde el primer día.',
-    en: 'Full-stack software engineer. I build complete web applications and design them to be secure from day one.',
+    es: 'Ingeniero de software full-stack.Diseño y desarrollo full-stack de aplicaciones web, con arquitectura pensada para escalar y seguridad incorporada desde el diseño, no añadida al final. El resultado: sistemas en producción, sostenibles en el tiempo y sin una deuda de seguridad oculta detrás.',
+    en: 'Full-stack software engineer. Full-stack design and development of web applications, with architecture built to scale and security engineered in from the start , not bolted on at the end. The result: production systems that hold up over time, with no hidden security debt left behind.',
   } satisfies Localized,
 } as const
 
@@ -247,23 +247,37 @@ export const hero = {
 export const profile = {
   heading: { es: 'Perfil', en: 'Profile' } satisfies Localized,
   /**
-   * Un único párrafo, por decisión del dueño. Antes eran cuatro: el resumen
-   * literal del CV más tres párrafos de `approach` sobre la forma de trabajar.
+   * Tres párrafos, por decisión del dueño: los tres ángulos (desarrollo,
+   * arquitectura, seguridad), la estructura antes del código, y la seguridad
+   * pensada desde el diseño. Antes fue el resumen literal del CV, luego el
+   * resumen más un bloque DEV/ARCH/SEC, luego un único párrafo largo.
    *
    * OJO, esto cambia una garantía anterior: el resumen YA NO es la copia
-   * literal del "Perfil Profesional" del YAML del CV. Página y PDF siguen sin
-   * CONTRADECIRSE (mismos hechos: full-stack, DevSecOps y AppSec, el mismo
-   * stack, inglés C1), pero ya no son el mismo texto, y eso es deliberado: un
-   * resumen de CV y la entradilla de un sitio no tienen por qué sonar igual.
-   * Si alguna vez cambian los HECHOS de uno, hay que tocar el otro.
+   * literal del "Perfil Profesional" del YAML del CV, ni repite el stack ni el
+   * nivel de inglés. Página y PDF siguen sin CONTRADECIRSE (los hechos del CV
+   * están en `facts` y en el resto de secciones), pero ya no son el mismo
+   * texto, y eso es deliberado: un resumen de CV y la entradilla de un sitio no
+   * tienen por qué sonar igual. Si cambian los HECHOS de uno, revisar el otro.
    *
    * La disponibilidad para relocalización salió de aquí a propósito: ya está en
    * `hero.availability`, y repetirla restaba en vez de sumar.
+   *
+   * El texto habla del trabajo, no en primera persona: es una elección de tono
+   * del dueño, no un descuido. Si se vuelve a primera persona, hay que cambiar
+   * los tres párrafos y los dos idiomas a la vez.
    */
   summary: {
-    es: 'Ingeniero de software full-stack bilingüe (inglés C1), especializado en DevSecOps y seguridad de aplicaciones, con experiencia en React, Spring Boot y Django, despliegue en AWS y Docker, y automatización CI/CD. Trabajo de punta a punta: la interfaz, la API, el modelo de datos y el despliegue son partes del mismo encargo y no cuatro conversaciones distintas, así que las decisiones que cruzan capas (dónde vive un permiso, qué se valida y de qué lado, qué se puede cachear) se toman una sola vez y con toda la información delante. Antes del primer archivo decido la estructura: dónde van los límites entre módulos, qué contratos de datos tienen que aguantar y qué debe poder cambiar el mes que viene sin obligar a reescribir lo de hoy, que es la diferencia entre un proyecto que crece y uno que hay que rehacer cuando llega el segundo requisito grande. Y la seguridad no la añado al final: modelo qué puede salir mal y pongo cada control donde de verdad se sostiene, los permisos en la base de datos, la verificación en el servidor, las cabeceras en el borde. Cuando algo falla, falla cerrado, porque un control que se abre ante la duda no es un control.',
-    en: "Full-stack software engineer, bilingual (English C1), specialized in DevSecOps and application security, with experience across React, Spring Boot and Django, deployment on AWS and Docker, and CI/CD automation. I work end to end: the interface, the API, the data model and the deployment are parts of the same job rather than four separate conversations, so the decisions that cross layers (where a permission lives, what gets validated and on which side, what can be cached) are made once and with the whole picture in view. Before the first file I decide the structure: where the boundaries between modules go, which data contracts have to hold, and what must be able to change next month without forcing a rewrite of today's work, which is the difference between a project that grows and one that has to be redone when the second large requirement arrives. And security is not something I add at the end: I model what can go wrong and put each control where it actually holds, permissions in the database, verification on the server, headers at the edge. When something fails, it fails closed, because a control that opens when in doubt is not a control.",
-  } satisfies Localized,
+    es: [
+      'El trabajo combina desarrollo full-stack con arquitectura de software y arquitectura de seguridad: no son etapas separadas, sino la misma decisión vista desde tres ángulos distintos. La interfaz, la lógica que no se ve, y la puesta en producción están conectadas, y las decisiones que cruzan esas capas se toman mejor viendo el conjunto completo.',
+      'Antes de la primera línea de código se define la estructura: dónde van los límites entre las partes del sistema, qué debe mantenerse estable y qué debe poder cambiar más adelante sin rehacer lo que ya funciona. Esa decisión temprana es la diferencia entre un producto que evoluciona junto al negocio y uno que hay que reconstruir cada vez que llega un requisito grande.',
+      'La arquitectura de seguridad no se agrega al final, como un parche: se piensa desde el diseño, identificando qué puede salir mal y ubicando cada control donde realmente sostiene. Ante una falla, el sistema prioriza fallar de forma segura antes que dejar una puerta abierta "por si acaso": un control que se salta ante la duda no protege nada.',
+    ],
+    en: [
+      "The work combines full-stack development with software architecture and security architecture: these aren't separate stages, but the same decision seen from three angles. The interface, the logic behind it, and the path to production are connected, and the decisions that cross those layers are made better when the full picture is visible.",
+      "Before the first line of code, the structure gets defined: where the boundaries between the system's parts go, what needs to stay stable, and what must be able to change later without rebuilding what already works. That early decision separates a product that evolves with the business from one that has to be rebuilt every time a major requirement arrives.",
+      'Security architecture is not added at the end, like a patch: it is considered from the design stage, identifying what could go wrong and placing each control where it actually holds. When something fails, the system is built to fail safely rather than leave a door open "just in case": a control that gets bypassed under doubt protects nothing.',
+    ],
+  } satisfies LocalizedList,
   facts: [
     {
       label: { es: 'Ubicación', en: 'Location' },
@@ -355,6 +369,34 @@ export const timeline = {
       },
     },
     {
+      /*
+       * ElevaForge aparece dos veces en la página, y es a propósito: aquí como
+       * el puesto (cofundador, desde jun 2025) y en `projects` como el sistema
+       * construido. Si cambia el nombre o las fechas, hay que tocar los dos.
+       */
+      id: 'elevaforge',
+      kind: 'trabajo',
+      title: {
+        es: 'Cofundador e Ingeniero de Software',
+        en: 'Co-Founder and Software Engineer',
+      },
+      organization: 'ElevaForge',
+      location: { es: 'Remoto', en: 'Remote' },
+      period: { es: 'Jun 2025 a la actualidad', en: 'Jun 2025 to present' },
+      highlights: {
+        es: [
+          'Cofundé un estudio de software de tres ingenieros. Construimos elevaforge.com y su vertical de demostración KOA (landing y e-commerce).',
+          'Apliqué un estándar de seguridad en CI en cada despliegue: CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI.',
+          'Responsable de las decisiones de arquitectura en la migración de Angular a Next.js 14, documentadas mediante ADRs versionados.',
+        ],
+        en: [
+          'Co-founded a three engineer software studio. We built elevaforge.com and its KOA demo vertical (landing and e-commerce).',
+          'Enforced a CI security baseline across every deploy: CodeQL, custom Semgrep rules, audit-ci and Lighthouse CI gates.',
+          'Owned the architecture decisions across the Angular to Next.js 14 migration, documented through versioned ADRs.',
+        ],
+      },
+    },
+    {
       id: 'universidad',
       kind: 'estudio',
       title: { es: 'Ingeniería de Software', en: 'Software Engineering' },
@@ -387,13 +429,15 @@ export const timeline = {
           'Trabajo desarrollado en modalidad de medio tiempo, en paralelo a la carrera universitaria y, posteriormente, a la práctica en la Alcaldía de Pasto.',
           'Ejecución de migraciones de datos hacia SAP y Oracle NetSuite para clientes PYME, aplicando cifrado y copias de seguridad.',
           'Despliegue de soluciones CRM personalizadas (Salesforce, HubSpot) para e-commerce, optimizando flujos de trabajo y aplicando controles de acceso estrictos.',
-          'Desarrollo de sistemas de reportes automatizados con Odoo, Python y PostgreSQL, procesando grandes volúmenes de datos de forma segura en tiempo real.',
+          'Desarrollo de sistemas de reportes automatizados con Odoo, Python y PostgreSQL, con generación periódica de reportes para análisis de negocio.',
+          'Este trabajo independiente sentó las bases de la disciplina de producto que luego formalicé al cofundar ElevaForge, a mediados de 2025.',
         ],
         en: [
           'Part-time work carried out alongside my degree and, later, alongside the internship at Alcaldía de Pasto.',
           'Data migrations to SAP and Oracle NetSuite for SME clients, applying encryption and backups.',
           'Custom CRM deployments (Salesforce, HubSpot) for e-commerce, streamlining workflows and applying strict access controls.',
-          'Automated reporting systems built with Odoo, Python and PostgreSQL, processing large volumes of data securely in real time.',
+          'Automated reporting systems built with Odoo, Python and PostgreSQL, generating periodic reports for business analysis.',
+          'This independent work laid the product discipline I later formalised by co-founding ElevaForge in mid 2025.',
         ],
       },
     },
@@ -679,9 +723,17 @@ export const skills = {
       label: { es: 'Frameworks', en: 'Frameworks' },
       items: {
         /*
-         * Cada meta-framework va detrás de su base (Next.js tras React, Nuxt
-         * tras Vue.js): el orden comunica la relación entre ambos, que es
-         * información gratis para quien lee la lista por encima.
+         * Cada meta-framework va detrás de su base (Next.js tras React): el
+         * orden comunica la relación entre ambos, que es información gratis
+         * para quien lee la lista por encima.
+         *
+         * Nuxt salió cuando el dueño lo quitó del CV, y no vuelve salvo que
+         * haya un proyecto en esta misma página que lo use. Next.js SÍ se queda
+         * aunque el CV ya no lo liste en "Desarrollo": lo respaldan la entrada
+         * de ElevaForge (migración de Angular a Next.js 14), el stack del
+         * proyecto ElevaForge y este propio sitio. Regla 3: lo que se afirma
+         * aquí tiene respaldo visible, y quitarlo dejaría la lista contradiciendo
+         * a la trayectoria.
          */
         es: [
           'Spring Boot',
@@ -689,7 +741,6 @@ export const skills = {
           'React',
           'Next.js',
           'Vue.js',
-          'Nuxt',
           'Angular',
           'Astro',
           'Bootstrap',
@@ -701,7 +752,6 @@ export const skills = {
           'React',
           'Next.js',
           'Vue.js',
-          'Nuxt',
           'Angular',
           'Astro',
           'Bootstrap',

@@ -7,18 +7,23 @@ import { ProfileIcon } from '@/components/icons'
 /**
  * RF-106 — perfil profesional.
  *
- * El resumen y los datos salen del YAML del CV del dueño, sin reescribir: si
- * el CV cambia, este bloque cambia. Es lo que impide que la página y el CV se
- * contradigan, que es un criterio de aceptación explícito (§9 de la SRS).
+ * Los datos de la ficha salen del CV del dueño; el resumen ya no es su copia
+ * literal (ver la nota en `profile.summary`). Lo que no puede pasar es que la
+ * página y el CV se CONTRADIGAN, que es un criterio de aceptación explícito
+ * (§9 de la SRS).
  *
  * La ficha de datos es una `<dl>` de verdad, y aquí sí corresponde: cada par
  * es literalmente término y definición ("Ubicación" / "Pasto, Colombia"). Se
  * presenta como tabla de especificaciones, en monoespaciada y con una regla
  * entre filas.
  *
- * El perfil es UN solo párrafo. Pasó por tres formas antes de esta: el resumen
- * del CV a secas, luego el resumen más un bloque etiquetado DEV/ARCH/SEC, y
- * luego el resumen más tres párrafos de prosa. Se unificó a petición del dueño.
+ * El perfil son TRES párrafos (desarrollo/arquitectura/seguridad, la estructura
+ * antes del código, y la seguridad desde el diseño). Pasó por varias formas
+ * antes: el resumen del CV a secas, el resumen más un bloque DEV/ARCH/SEC, el
+ * resumen más prosa, y un único párrafo largo. El número de párrafos lo manda
+ * `profile.summary`, no este componente: si el dueño añade o quita uno, aquí no
+ * hay nada que tocar. La regla vertical del acento envuelve el bloque entero
+ * para que no se corte entre párrafo y párrafo.
  */
 export function Profile({ locale }: { locale: Locale }) {
   return (
@@ -33,9 +38,13 @@ export function Profile({ locale }: { locale: Locale }) {
 
       <div className="mt-12 grid gap-12 md:grid-cols-[1.5fr_1fr]">
         <Reveal>
-          <p className="border-l-2 border-accent pl-5 text-lg leading-relaxed text-ink">
-            {profile.summary[locale]}
-          </p>
+          <div className="space-y-5 border-l-2 border-accent pl-5">
+            {profile.summary[locale].map((paragraph) => (
+              <p key={paragraph} className="text-lg leading-relaxed text-ink">
+                {paragraph}
+              </p>
+            ))}
+          </div>
 
           <ul className="mt-10 flex flex-wrap gap-3">
             {profile.links.map((link) => {

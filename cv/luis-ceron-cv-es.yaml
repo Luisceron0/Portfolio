@@ -8,7 +8,7 @@ cv:
     - network: LinkedIn
       username: luis-ceronmunoz
     - network: GitHub
-      username: luisceron0
+      username: Luisceron0
   sections:
     Perfil Profesional:
       - Ingeniero de Software Full-Stack con experiencia en desarrollo de aplicaciones web escalables (React, Vue, Spring Boot, Django), integración de protocolos de seguridad (RBAC, JWT) y despliegue en la nube (AWS, Docker). Egresado de la Universidad Cooperativa de Colombia, actualmente cursando una especialización en Seguridad de la Información en el Politécnico Grancolombiano. Bilingüe (inglés C1), con disponibilidad para relocalización.
@@ -23,6 +23,14 @@ cv:
           - Desarrollé un sistema full-stack de gestión de mantenimientos para una entidad pública, construyendo la interfaz de usuario y la lógica backend.
           - Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas para prevenir inyecciones SQL y ataques XSS.
           - Optimicé consultas de base de datos y arquitectura backend para mejorar los tiempos de respuesta del sistema.
+      - company: ElevaForge
+        position: Cofundador e Ingeniero de Software
+        location: Remoto
+        start_date: 2025-06
+        end_date: present
+        highlights:
+          - 'Cofundé un estudio de software de 3 ingenieros; construimos elevaforge.com y su vertical de demostración KOA (landing + e-commerce), aplicando un estándar de seguridad en CI en cada despliegue: CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI.'
+          - 'Responsable de las decisiones de arquitectura en la migración de Angular a Next.js 14, documentadas mediante ADRs versionados.'
       - company: Freelance
         position: Desarrollador de Software Full-Stack
         location: Remoto
@@ -32,7 +40,8 @@ cv:
           - 'Trabajo desarrollado en modalidad de medio tiempo, en paralelo a la carrera universitaria y, posteriormente, a la práctica en la Alcaldía de Pasto.'
           - 'Ejecución de migraciones de datos hacia SAP y Oracle NetSuite, aplicando cifrado y respaldo de información.'
           - 'Implementación de soluciones CRM personalizadas (Salesforce, HubSpot) para negocios de e-commerce, incluyendo configuración de controles de acceso.'
-          - 'Desarrollo de sistemas de reportes automatizados con Odoo, Python y PostgreSQL para procesamiento de datos en tiempo real.'
+          - 'Desarrollo de sistemas de reportes automatizados con Odoo, Python y PostgreSQL, con generación periódica de reportes para análisis de negocio.'
+          - 'Este trabajo independiente sentó las bases de la disciplina de producto que luego formalicé al cofundar ElevaForge, a mediados de 2025.'
 
     Educación:
       - institution: Universidad Cooperativa de Colombia
@@ -63,7 +72,7 @@ cv:
 
     Habilidades:
       - label: Desarrollo
-        details: React, Next.js, Vue.js, Nuxt, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
+        details: React, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
       - label: Seguridad y DevOps
         details: RBAC, JWT, Prácticas de Código Seguro, Docker, AWS (EC2, S3), CI/CD, Seguridad de Redes
       - label: Bases de Datos
