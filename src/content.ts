@@ -163,11 +163,24 @@ export interface NavItem {
 
 export const site = {
   /**
-   * Dominio propio. T-104: cualquier URL absoluta del servidor sale de aquí,
-   * JAMÁS del header `Host`. Mientras esté [PENDIENTE], `metadataBase` queda
-   * sin definir en lugar de inventarse un dominio.
+   * Origen del sitio. T-104: cualquier URL absoluta del servidor sale de AQUÍ,
+   * JAMÁS del header `Host`. Es la única línea que hay que tocar el día que
+   * exista un dominio propio: `metadataBase`, la canónica, los `hreflang` y la
+   * URL de Open Graph se derivan todas de este valor.
+   *
+   * Es la URL de Vercel, no un dominio propio, y es la estrategia acordada en
+   * `tasks/todo.md` (Fase 0): desplegar primero, registrar el dominio con la
+   * URL real ya funcionando, apuntar el DNS después. Estuvo como [PENDIENTE]
+   * mientras no había NINGUNA URL verificada; ahora sí la hay (HTTP 200
+   * comprobado), y dejarla como pendiente significaba emitir metadatos con
+   * URLs relativas y ningún canónico absoluto en un sitio que ya está en
+   * producción, que es peor que declarar el origen que de verdad sirve la
+   * página.
+   *
+   * Sin barra final: `new URL()` la añade donde hace falta, y duplicarla
+   * genera canónicas con `//`.
    */
-  url: '[PENDIENTE: dominio propio, pendiente de registrar]' as MaybePending,
+  url: 'https://portfolio-eta-steel-27.vercel.app' as MaybePending,
   title: {
     es: 'Luis Alejandro Cerón Muñoz, Ingeniero de Software Full-Stack',
     en: 'Luis Alejandro Cerón Muñoz, Full-Stack Software Engineer',
@@ -372,7 +385,7 @@ export const timeline = {
         ],
         en: [
           'Built the maintenance management system of a public sector entity end to end, covering the user interface, the backend logic and the data model, and delivered it in operation within the three months of the internship.',
-          'Implemented Role-Based Access Control (RBAC) and server-side input sanitisation on a system holding public sector data, closing the SQL injection and XSS paths before it went into production.',
+          'Implemented Role-Based Access Control (RBAC) and server-side input sanitisation on a system holding government records, closing the SQL injection and XSS paths before it went into production.',
           'Restructured the data access layer and optimised queries once response times became the bottleneck, reducing latency on the most heavily used query screens.',
         ],
       },

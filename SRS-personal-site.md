@@ -223,7 +223,7 @@ is not retained.
 | Resend | Contact form delivery | Form silently fails — must degrade to visible error (RF-104) |
 | Turnstile | Spam protection | Form should fail closed (block submit) if the token never arrives, not fail open |
 | Hosting (Vercel, matching the rest of the portfolio) | Deploy | Standard — no special handling needed |
-| Domain registrar | `[PENDIENTE: domain name]` | Blocks RF-105 acceptance criteria until resolved |
+| Domain registrar | Not contracted yet. The site serves from its Vercel URL, declared in `site.url` | Not blocking: absolute URLs resolve against `site.url`, so the day a domain exists only that line changes |
 
 ## 9. Testing plan
 
@@ -249,9 +249,12 @@ is not retained.
 
 ## 12. Pending items
 
-- `[PENDIENTE: domain name]` — needs a personal domain (not `elevaforge.com` — this
-  site is Luis individually, not the studio). Suggest checking availability of
-  something short tied to his name before starting RF-105/deploy config.
+- ~~`[PENDIENTE: domain name]`~~ — **closed as a blocker (2026-08-18).** The site
+  is live on its Vercel URL and `site.url` now declares it, so every absolute URL
+  the server emits has a real origin behind it. A personal domain (not
+  `elevaforge.com` — this site is Luis individually, not the studio) is still
+  wanted, but it is now an upgrade and not a precondition: registering it means
+  changing one line in `src/content.ts` and pointing DNS.
 - `[PENDIENTE: KOA live screenshot]` — needs to be captured for RF-102 (CareLink's
   already exists in `docs/portfolio/screenshots/`).
 

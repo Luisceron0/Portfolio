@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { cv, LOCALES, nav, projects, skills, timeline, type Locale } from '@/content'
+import { cv, LOCALES, nav, projects, resolved, site, skills, timeline, type Locale } from '@/content'
 
 /**
  * Criterios de aceptación de RF-102 (5 proyectos), RF-106 (perfil y
@@ -128,6 +128,56 @@ test.describe('RF-109 — bilingüe', () => {
   }) => {
     await gotoLocale(page, 'en')
     expect(new URL(page.url()).pathname).toBe('/')
+  })
+
+  /*
+   * Este test existe por un fallo real que fue invisible hasta que se declaró
+   * el origen en `site.url`. Con `metadataBase` puesto, Next resuelve las URLs
+   * de metadatos y, cuando el pathname es "/" (aquí SIEMPRE lo es: una sola
+   * página), devuelve el origen pelado y se come el `?lang=`. Resultado: los
+   * dos idiomas declaraban la misma canónica y el mismo hreflang, que le dice
+   * a un buscador justo lo contrario de lo que se pretende.
+   *
+   * Lo que se fija aquí no es la implementación sino la promesa: cada idioma
+   * tiene SU URL, absoluta y distinta de la del otro. Si alguien vuelve a
+   * añadir `metadataBase`, esto se pone rojo.
+   */
+  test('cada idioma declara su propia URL canónica, absoluta y distinta', async ({
+    page,
+  }) => {
+    const origin = resolved(site.url)
+    expect(origin, 'site.url debe estar resuelto para poder emitir URLs absolutas').toBeTruthy()
+
+    const canonicals: Record<string, string> = {}
+
+    for (const locale of LOCALES) {
+      await gotoLocale(page, locale)
+
+      const canonical = await page.locator('link[rel="canonical"]').getAttribute('href')
+      expect(canonical, `falta la canónica en ${locale}`).toBeTruthy()
+      expect(canonical!.startsWith(`${origin}`), `la canónica de ${locale} no es absoluta`).toBe(
+        true
+      )
+      canonicals[locale] = canonical!
+
+      // El hreflang de cada idioma apunta a la URL de ESE idioma.
+      for (const other of LOCALES) {
+        const alternate = await page
+          .locator(`link[rel="alternate"][hreflang="${other}"]`)
+          .getAttribute('href')
+        expect(alternate, `falta el hreflang ${other} en la página ${locale}`).toBeTruthy()
+        expect(alternate!.startsWith(`${origin}`)).toBe(true)
+        if (other !== 'es') {
+          expect(alternate, `el hreflang ${other} perdió el parámetro de idioma`).toContain(
+            `lang=${other}`
+          )
+        }
+      }
+    }
+
+    // Dos idiomas, dos URLs: si son iguales, el hreflang no dice nada.
+    expect(new Set(Object.values(canonicals)).size).toBe(LOCALES.length)
+    expect(canonicals.en).toContain('lang=en')
   })
 })
 

@@ -42,9 +42,11 @@ cv:
         end_date: present
         highlights:
           - 'Atendí clientes a medio tiempo en paralelo a la carrera universitaria y, después, a la práctica en la Alcaldía de Pasto, hasta formalizar esa disciplina de producto cofundando ElevaForge a mediados de 2025.'
+          - 'Asumí encargos de alcance distinto según el cliente: interfaces de frontend, servicios de backend, desarrollos completos desde la interfaz hasta el despliegue, automatización de procesos internos y auditorías de seguridad sobre aplicaciones ya en operación.'
           - 'Ejecuté migraciones de datos hacia SAP y Oracle NetSuite aplicando cifrado y respaldos previos, de modo que cada corte tuviera un punto de retorno antes de mover el primer registro.'
           - 'Implementé soluciones CRM a medida (Salesforce, HubSpot) para negocios de e-commerce, incluyendo la configuración de controles de acceso por rol para que cada usuario opere solo sobre la cartera que le corresponde.'
           - 'Desarrollé sistemas de reportes automatizados con Odoo, Python y PostgreSQL que sustituyeron la consolidación manual de datos por una generación periódica para análisis de negocio.'
+          - 'Parte de este trabajo está cubierta por acuerdos de confidencialidad, así que cada encargo se describe por su tipo de trabajo y su stack, nunca por el cliente ni por sus datos.'
 
     Educación:
       - institution: Universidad Cooperativa de Colombia

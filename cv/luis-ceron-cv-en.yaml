@@ -12,7 +12,7 @@ cv:
       username: Luisceron0
   sections:
     Professional Profile:
-      - 'Full-Stack Software Engineer focused on software architecture and application security. I design systems end to end (React, Angular, Vue.js, Spring Boot, Django, PostgreSQL), defining the structure before the first file: module boundaries, data contracts, and decisions recorded in versioned ADRs. I build security in from the design stage (RBAC, JWT, threat modelling, SAST and SCA in the pipeline) and deploy on AWS and Docker with CI/CD. Software Engineering graduate of Universidad Cooperativa de Colombia, currently pursuing a postgraduate specialization in Information Security at Politécnico Grancolombiano. Bilingual (English C1, EF SET), open to relocation.'
+      - 'Full-Stack Software Engineer focused on software architecture and application security. I design systems end to end (React, Angular, Vue.js, Spring Boot, Django, PostgreSQL), defining the structure before the first line of code: module boundaries, data contracts, and decisions recorded in versioned ADRs. I build security in from the design stage (RBAC, JWT, threat modelling, SAST and SCA in the pipeline) and deploy on AWS and Docker with CI/CD. Software Engineering graduate of Universidad Cooperativa de Colombia, currently pursuing a postgraduate specialization in Information Security at Politécnico Grancolombiano. Bilingual (English C1, EF SET), open to relocation.'
 
     Experience:
       - company: Alcaldía de Pasto (City Government)
@@ -22,7 +22,7 @@ cv:
         end_date: 2025-12
         highlights:
           - 'Built the maintenance-management system of a public-sector entity end to end, covering the user interface, the backend logic and the data model, and delivered it in operation within the three months of the internship.'
-          - 'Implemented Role-Based Access Control (RBAC) and server-side input sanitization on a system holding public-sector data, closing the SQL injection and XSS paths before it went into production.'
+          - 'Implemented Role-Based Access Control (RBAC) and server-side input sanitization on a system holding government records, closing the SQL injection and XSS paths before it went into production.'
           - 'Restructured the data access layer and optimized queries once response times became the bottleneck, reducing latency on the most heavily used query screens.'
       - company: ElevaForge
         position: Co-Founder and Software Engineer
@@ -42,9 +42,11 @@ cv:
         end_date: present
         highlights:
           - 'Served clients part-time alongside my degree and, later, alongside the internship at Alcaldía de Pasto, until I formalized that product discipline by co-founding ElevaForge in mid-2025.'
-          - 'Executed data migrations to SAP and Oracle NetSuite applying encryption and prior backups, so every cutover had a point of return before the first record moved.'
+          - 'Took on engagements of different scope depending on the client: frontend interfaces, backend services, complete builds from the interface through to deployment, internal process automation, and security audits of applications already in operation.'
+          - 'Executed data migrations to SAP and Oracle NetSuite applying encryption and prior backups, so every cutover had a tested rollback path before the first record moved.'
           - 'Implemented custom CRM solutions (Salesforce, HubSpot) for e-commerce businesses, including role-based access control configuration so each user works only on the accounts assigned to them.'
           - 'Built automated reporting systems with Odoo, Python and PostgreSQL that replaced manual data consolidation with periodic report generation for business analysis.'
+          - 'Part of this work is covered by confidentiality agreements, so each engagement is described by its type of work and its stack, never by the client or its data.'
 
     Education:
       - institution: Universidad Cooperativa de Colombia

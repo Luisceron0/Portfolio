@@ -3,10 +3,12 @@
 **Goal:** deploy a working single-page site meeting RF-101 through RF-105 of the SRS.
 
 ## Phase 0: Unblock pending items
-- [ ] Resolve `[PENDIENTE: domain name]` — **estrategia acordada (2026-08-08):
-  desplegar primero en Vercel, registrar el dominio con la URL real como
-  referencia, apuntar DNS después.** El sitio ya está desplegado (ver Phase 4);
-  falta que el dueño registre el dominio y lo conecte en el dashboard de Vercel
+- [x] Resolve `[PENDIENTE: domain name]` → **cerrado como bloqueante
+  (2026-08-18)**: `site.url` declara la URL de Vercel que ya sirve el sitio, así
+  que no queda ningún `[PENDIENTE]` en `content.ts` y `check:pending` pasa en
+  verde. La estrategia acordada el 2026-08-08 se cumple tal cual: desplegar
+  primero, registrar el dominio después. Registrarlo es cambiar UNA línea de
+  `content.ts` y apuntar el DNS; ya no bloquea nada
 - [x] Capture KOA live screenshot for RF-102 (CareLink's already exists) →
   **completo (2026-08-08)**, ver Phase 3
 - [ ] Confirm portfolio-wide RF-001–003 (GitHub unification, renames, READMEs) are
@@ -70,6 +72,28 @@
 - [x] **(añadido)** Lighthouse CI, gate ≥95/≥95: medido 100/100, 99/100, 99/100
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
+
+## Phase 4e: Origen declarado y portafolio funcional (2026-08-18)
+- [x] `site.url` = la URL de Vercel (verificada con HTTP 200). Cierra el último
+      `[PENDIENTE]`: `check:pending` pasa en verde por primera vez
+- [x] **Fallo real encontrado al cerrarlo:** con el origen declarado, Next se
+      comía el `?lang=en` de la canónica y del hreflang, y los dos idiomas
+      pasaban a declarar la misma URL. Causa y solución en `tasks/lessons.md`;
+      fijado con un test nuevo en `e2e/content.spec.ts`
+- [x] Canónica, hreflang y `og:url` verificados en el HTML emitido, en los dos
+      idiomas, contra el build de producción y no en teoría
+- [x] Calcos del inglés corregidos en el CV ("before the first file",
+      "point of return", "public-sector data") y viñeta de alcance genérico en
+      Freelance: frontend, backend, desarrollos completos, procesos internos y
+      auditorías de seguridad, con la confidencialidad dicha en voz alta en vez
+      de dejar la generalidad sin explicar
+- [x] Dos palabras clave que se partían solas al final de línea ("full-stack",
+      "end-to-end") reescritas sin compuesto: la palabra ya está en el cargo y
+      en las habilidades, así que la viñeta no pierde nada
+- [ ] **Solo lo puede hacer el dueño:** las cinco variables de entorno del panel
+      de Vercel. Comprobado en la URL en vivo: sin
+      `NEXT_PUBLIC_TURNSTILE_SITE_KEY` el formulario se renderiza deshabilitado
+      con el aviso de verificación no disponible
 
 ## Phase 4d: CV en formato Harvard, optimizado para ATS (2026-08-18)
 - [x] Diagnóstico ANTES de tocar nada: texto extraído de los dos PDF con
@@ -480,8 +504,16 @@
       entregada en el chat
 - [ ] Configurar `CONTACT_TO_EMAIL=luiscerontrabajos@gmail.com` en Vercel
       (confirmado por el dueño, no es secreto)
-- [ ] Registrar el dominio una vez exista la URL de Vercel; conectar dominio
-      personalizado; actualizar `site.url` en `src/content.ts`
+- [x] `site.url` apuntando a la URL de Vercel (2026-08-18), verificada con
+      HTTP 200. Con esto `metadataBase`, la canónica, los `hreflang` y la URL de
+      Open Graph dejan de ser relativas
+- [ ] Registrar el dominio propio y conectarlo en Vercel; después, cambiar
+      `site.url`. Mejora, ya no bloqueante
+- [ ] **Solo lo puede hacer el dueño:** las cinco variables de entorno en el
+      panel de Vercel. Sin `NEXT_PUBLIC_TURNSTILE_SITE_KEY` el formulario de
+      contacto se renderiza deshabilitado en producción, con el aviso de
+      "verificación antifraude no disponible" (comprobado en la URL en vivo el
+      2026-08-18). Las cinco están listadas en `.env.example`
 
 ## Completion criteria
 - [ ] All RF-101–105 acceptance criteria closed

@@ -1,5 +1,36 @@
 # Lessons learned
 
+## 2026-08-18 — Declarar el dominio rompió el hreflang, y el fallo solo existía CON el dominio puesto
+**Contexto:** al cerrar el `[PENDIENTE]` de `site.url` con la URL de Vercel, las
+etiquetas canónicas y de idioma pasaron de correctas a rotas. Antes, sin origen
+declarado, Next emitía `<link rel="canonical" href="/?lang=en">` y un hreflang
+por idioma, todo relativo pero correcto. Al declarar el origen, los dos idiomas
+empezaron a declarar EXACTAMENTE la misma URL.
+**Causa, en el código de Next, no en el nuestro:** con `metadataBase` puesto,
+toda URL de metadatos pasa por `resolveAbsoluteUrlWithPathname`
+(`next/dist/lib/metadata/resolvers/resolve-url.js`), que termina en:
+
+    resolvedUrl = result.pathname === "/" ? result.origin : result.href
+
+Este sitio es UNA sola página, así que el pathname es siempre `/`, y esa rama
+devuelve el origen pelado: el `?lang=en` desaparece. Pasar la URL ya absoluta no
+sirve de nada, porque el resolvedor se ejecuta igual.
+**Solución:** no declarar `metadataBase` y resolver las URLs a mano con
+`new URL(path, siteUrl)`. Sin `metadataBase`, Next deja pasar la cadena tal cual
+y el parámetro sobrevive. `metadataBase` solo hace falta para resolver imágenes
+relativas de Open Graph, y aquí no hay ninguna.
+**Lo que esto enseña, que es lo que importa:** resolver un `[PENDIENTE]` no es
+rellenar un hueco, es **activar** todo el código que estaba en la rama "todavía
+no hay dato". Ese código nunca se había ejecutado, así que nunca se había
+probado. Un valor por defecto que parece inofensivo (`metadataBase` ausente)
+puede estar tapando el fallo que aparece justo el día que se pone el valor real.
+Al cerrar un pendiente hay que verificar la SALIDA, no el hecho de haberlo
+rellenado: aquí, mirar el HTML emitido en los dos idiomas.
+Queda fijado en `e2e/content.spec.ts` con un test que compara las dos canónicas
+y exige que sean distintas: si alguien vuelve a añadir `metadataBase`, se pone
+rojo.
+**Tags:** #nextjs #seo #pendientes #verificacion #falso-verde
+
 ## 2026-08-18 — Un PDF de CV se ve perfecto y se extrae roto: mirarlo no es verificarlo
 **Contexto:** al adaptar el CV a formato Harvard optimizado para ATS, la
 pregunta no era de diseño sino de mecanismo: un ATS no ve el PDF, extrae su

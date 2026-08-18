@@ -111,8 +111,12 @@ cinco proyectos, perfil y trayectoria, bilingüe ES/EN) y desplegadas en GitHub
 con CI en verde ([Actions](https://github.com/Luisceron0/Portfolio/actions)):
 128 tests de Playwright, Semgrep y ESLint validados contra fixtures vulnerables
 propios, Lighthouse CI en el gate ≥95/≥95, todo verificado en un run real de
-GitHub Actions y no solo en local. Falta 1 dato del dueño: el dominio propio
-(los dos PDF del CV ya están, generados con RenderCV desde `cv/*.yaml`). Conectar el repo a Vercel es un paso manual pendiente (ver
+GitHub Actions y no solo en local. Ya no falta ningún dato del dueño: los dos
+PDF del CV están generados con RenderCV desde `cv/*.yaml`, y `site.url` declara
+la URL de Vercel que sirve el sitio hoy. Lo único que queda para que el
+formulario de contacto funcione en producción son las cinco variables de
+entorno del panel de Vercel (ver `.env.example`), que solo puede poner el
+dueño porque son sus credenciales. Conectar el repo a Vercel es un paso manual pendiente (ver
 `tasks/todo.md`, Fase 4b): requiere la sesión autenticada del dueño. Ver
 [tasks/todo.md](tasks/todo.md) y [tasks/plan.md](tasks/plan.md) para el
 detalle y qué lo bloquea.
