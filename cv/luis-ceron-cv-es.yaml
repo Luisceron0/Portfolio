@@ -1,9 +1,10 @@
 cv:
   name: Luis Alejandro Cerón Muñoz
-  headline: Ingeniero de Software Full-Stack
+  headline: Ingeniero de Software Full-Stack | Arquitectura de Software y Seguridad de Aplicaciones
   location: Pasto, Nariño, Colombia (disponibilidad de relocalización)
   email: luiscerontrabajos@gmail.com
   phone: "+57 314 4087963"
+  website: https://portfolio-eta-steel-27.vercel.app/
   social_networks:
     - network: LinkedIn
       username: luis-ceronmunoz
@@ -11,7 +12,7 @@ cv:
       username: Luisceron0
   sections:
     Perfil Profesional:
-      - Ingeniero de Software Full-Stack con experiencia en desarrollo de aplicaciones web escalables (React, Vue, Spring Boot, Django), integración de protocolos de seguridad (RBAC, JWT) y despliegue en la nube (AWS, Docker). Egresado de la Universidad Cooperativa de Colombia, actualmente cursando una especialización en Seguridad de la Información en el Politécnico Grancolombiano. Bilingüe (inglés C1), con disponibilidad para relocalización.
+      - 'Ingeniero de Software Full-Stack orientado a arquitectura de software y seguridad de aplicaciones. Diseño sistemas de punta a punta (React, Angular, Vue.js, Spring Boot, Django, PostgreSQL) definiendo la estructura antes del primer archivo: límites entre módulos, contratos de datos y decisiones registradas en ADRs versionados. Incorporo la seguridad desde el diseño (RBAC, JWT, modelado de amenazas, SAST y SCA en el pipeline) y despliego en AWS y Docker con CI/CD. Egresado de Ingeniería de Software de la Universidad Cooperativa de Colombia y cursando una Especialización en Seguridad de la Información en el Politécnico Grancolombiano. Bilingüe (inglés C1, EF SET), con disponibilidad para relocalización.'
 
     Experiencia:
       - company: Alcaldía de Pasto
@@ -20,38 +21,42 @@ cv:
         start_date: 2025-10
         end_date: 2025-12
         highlights:
-          - Desarrollé un sistema full-stack de gestión de mantenimientos para una entidad pública, construyendo la interfaz de usuario y la lógica backend.
-          - Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas para prevenir inyecciones SQL y ataques XSS.
-          - Optimicé consultas de base de datos y arquitectura backend para mejorar los tiempos de respuesta del sistema.
+          - 'Desarrollé de punta a punta el sistema de gestión de mantenimientos de una entidad pública, construyendo la interfaz de usuario, la lógica de backend y el modelo de datos, y lo entregué operativo dentro de los tres meses de la práctica.'
+          - 'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas del lado del servidor sobre un sistema que gestiona información de una entidad pública, cerrando las vías de inyección SQL y de XSS antes de la puesta en producción.'
+          - 'Reestructuré la capa de acceso a datos y optimicé las consultas cuando los tiempos de respuesta se convirtieron en el cuello de botella del sistema, reduciendo la latencia de las pantallas de consulta más usadas.'
       - company: ElevaForge
         position: Cofundador e Ingeniero de Software
         location: Remoto
         start_date: 2025-06
         end_date: present
         highlights:
-          - 'Cofundé un estudio de software de 3 ingenieros; construimos elevaforge.com y su vertical de demostración KOA (landing + e-commerce), aplicando un estándar de seguridad en CI en cada despliegue: CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI.'
-          - 'Responsable de las decisiones de arquitectura en la migración de Angular a Next.js 14, documentadas mediante ADRs versionados.'
+          - 'Cofundé un estudio de software de 3 ingenieros y asumí las decisiones de arquitectura del producto: definí los límites entre módulos y los contratos de datos, y dejé cada decisión y sus alternativas descartadas en ADRs versionados, de modo que el equipo puede revisarlas sin depender de mí.'
+          - 'Dirigí la migración del sitio corporativo de Angular a Next.js 14, planificada por capas para que la estructura nueva absorbiera el contenido existente sin rehacerlo.'
+          - 'Diseñé el modelo de autorización de la plataforma como deny-by-default: Row Level Security activa y sin ninguna política para el rol anónimo ni el autenticado, con todo el acceso a datos pasando por el servidor, así que la clave pública que viaja al navegador no habilita ninguna consulta.'
+          - 'Establecí un estándar de seguridad en CI que corre en cada despliegue (CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI), de forma que un hallazgo detiene la entrega en lugar de descubrirse en producción.'
+          - 'Construí elevaforge.com y la vertical de demostración KOA (landing y e-commerce) con un panel de administración multi-cuenta, con el que el equipo edita paquetes, proyectos y contenido sin un despliegue de por medio.'
       - company: Freelance
         position: Desarrollador de Software Full-Stack
         location: Remoto
         start_date: 2023-03
         end_date: present
         highlights:
-          - 'Trabajo desarrollado en modalidad de medio tiempo, en paralelo a la carrera universitaria y, posteriormente, a la práctica en la Alcaldía de Pasto.'
-          - 'Ejecución de migraciones de datos hacia SAP y Oracle NetSuite, aplicando cifrado y respaldo de información.'
-          - 'Implementación de soluciones CRM personalizadas (Salesforce, HubSpot) para negocios de e-commerce, incluyendo configuración de controles de acceso.'
-          - 'Desarrollo de sistemas de reportes automatizados con Odoo, Python y PostgreSQL, con generación periódica de reportes para análisis de negocio.'
-          - 'Este trabajo independiente sentó las bases de la disciplina de producto que luego formalicé al cofundar ElevaForge, a mediados de 2025.'
+          - 'Atendí clientes a medio tiempo en paralelo a la carrera universitaria y, después, a la práctica en la Alcaldía de Pasto, hasta formalizar esa disciplina de producto cofundando ElevaForge a mediados de 2025.'
+          - 'Ejecuté migraciones de datos hacia SAP y Oracle NetSuite aplicando cifrado y respaldos previos, de modo que cada corte tuviera un punto de retorno antes de mover el primer registro.'
+          - 'Implementé soluciones CRM a medida (Salesforce, HubSpot) para negocios de e-commerce, incluyendo la configuración de controles de acceso por rol para que cada usuario opere solo sobre la cartera que le corresponde.'
+          - 'Desarrollé sistemas de reportes automatizados con Odoo, Python y PostgreSQL que sustituyeron la consolidación manual de datos por una generación periódica para análisis de negocio.'
 
     Educación:
       - institution: Universidad Cooperativa de Colombia
+        # Sin `degree`: el locale espanol compone "DEGREE en AREA", y con
+        # degree "Ingenieria" la linea quedaba "Ingenieria en Ingenieria de
+        # Software". La especializacion SI lo lleva, porque ahi compone bien.
         area: Ingeniería de Software
-        degree: Ingeniería
         location: Pasto, Colombia
         start_date: 2022-02
         end_date: 2025-12
         highlights:
-          - 'Proyecto de grado: API REST para gestión de espacios físicos utilizando IA, con autenticación JWT y gestión segura de secretos.'
+          - 'Proyecto de grado: API REST para gestión de espacios físicos con apoyo de IA, con autenticación JWT y gestión segura de secretos.'
           - 'Cursos relevantes: Arquitectura de Sistemas Escalables, Desarrollo Back-End, Metodologías Ágiles (Scrum), Ciberseguridad, Seguridad de Redes.'
       - institution: Politécnico Grancolombiano
         area: Seguridad de la Información
@@ -71,11 +76,89 @@ cv:
       - 'Certificaciones en IA y Productividad, Microsoft & LinkedIn (Feb 2025)'
 
     Habilidades:
+      - label: Arquitectura
+        details: Diseño de sistemas escalables, Arquitectura hexagonal, Separación por capas, Diseño de APIs REST, Modelado de datos, ADRs, Aislamiento multi-tenant
       - label: Desarrollo
-        details: React, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
+        details: React, Next.js, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
       - label: Seguridad y DevOps
-        details: RBAC, JWT, Prácticas de Código Seguro, Docker, AWS (EC2, S3), CI/CD, Seguridad de Redes
+        details: RBAC, JWT, Modelado de amenazas, Prácticas de código seguro, SAST y SCA en CI (CodeQL, Semgrep), Docker, AWS (EC2, S3), CI/CD, Seguridad de redes
       - label: Bases de Datos
-        details: PostgreSQL, MySQL, MongoDB
+        details: PostgreSQL, MySQL, MongoDB, Migraciones versionadas (Flyway)
       - label: Idiomas
         details: Español (Nativo), Inglés (Avanzado C1, EF SET Certified)
+
+# ---------------------------------------------------------------------------
+# Diseno: formato Harvard, legible por un ATS.
+#
+# Cada opcion de aqui corrige un defecto MEDIDO extrayendo el texto del PDF
+# anterior con pypdf, que es como lee un ATS. No son preferencias esteticas:
+#
+#  - theme: harvard          El tema clasico partia la entrada en columnas y el
+#                            texto salia desordenado: primero las vinetas y
+#                            DESPUES la empresa, el lugar y las fechas. Un
+#                            parser que asocia fechas por proximidad las pega a
+#                            la entrada equivocada. El tema harvard pone
+#                            empresa, cargo, lugar y fecha en una sola linea,
+#                            antes de las vinetas.
+#  - alignment: left         El texto justificado activaba la particion de
+#                            palabras de Typst: "inte-grating", "verti-cal",
+#                            "peri-odic", "formal-ice". Una palabra clave
+#                            partida por un guion no la encuentra ningun ATS.
+#                            Alineado a la izquierda no hay guiones: medido, 0.
+#  - phone_number_format     El formato "national" IMPRIMIA el numero sin el
+#    international           +57. El PDF anterior decia "314 4087963", sin pais,
+#                            en un CV que ofrece relocalizacion.
+#  - display_urls_...: true  Antes ponia "luis-ceronmunoz" a secas junto a un
+#                            icono; el icono no deja texto al extraer, asi que
+#                            no habia forma de saber que eso era LinkedIn. Ahora
+#                            imprime linkedin.com/in/... y github.com/...
+#  - show_icons: false       Mismo motivo: un icono es un glifo sin texto.
+#  - show_footer / top_note  El pie "Nombre - 1/2" y la nota "Ultima
+#    en false                actualizacion" se colaban EN MEDIO del texto
+#                            extraido, partiendo la seccion de Educacion.
+#  - show_time_spans_in: []  Su valor por defecto es ['experience'] y compara
+#                            contra el titulo LITERAL de la seccion: casaba con
+#                            "Experience" y no con "Experiencia", asi que el PDF
+#                            en ingles mostraba "3 months" bajo cada fecha y el
+#                            espanol no. Dos CV con maquetacion distinta sin que
+#                            nada lo declarara. Ya paso una vez y esta anotado en
+#                            tasks/lessons.md; vuelve a pasar si se quita.
+#  - degree_column: null     El titulo iba en una columna estrecha propia y
+#                            Typst lo partia en vertical: el ingles extraia
+#                            "Post-grad-uate Spe-cial-iza-tion" con guiones
+#                            blandos, y el espanol pegaba "IngenieriaUniversidad"
+#                            sin espacio. Ahora el titulo va en la misma linea
+#                            que la institucion.
+#  - size: a4                Estandar fuera de EE. UU. y 50pt mas de alto util
+#                            que us-letter, que es el valor por defecto.
+#
+# Si tocas algo de aqui, vuelve a extraer el texto del PDF y comprueba que
+# sigue saliendo limpio. El PDF se ve bien en pantalla aunque el texto
+# extraido este roto: mirarlo no es verificarlo.
+# ---------------------------------------------------------------------------
+design:
+  theme: harvard
+  page:
+    size: a4
+    show_footer: false
+    show_top_note: false
+  typography:
+    alignment: left
+  header:
+    connections:
+      show_icons: false
+      display_urls_instead_of_usernames: true
+      phone_number_format: international
+  sections:
+    show_time_spans_in: []
+    # Una seccion no se parte entre paginas: antes la pagina 2 empezaba con la
+    # segunda entrada de Educacion, con su titulo de seccion abandonado en la
+    # pagina 1, y quien abre por la 2 no sabe que esta leyendo. Ahora el corte
+    # cae entre secciones: pagina 1 perfil y experiencia, pagina 2 el resto.
+    allow_page_break: false
+  templates:
+    education_entry:
+      degree_column: null
+
+locale:
+  language: spanish

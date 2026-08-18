@@ -366,14 +366,14 @@ export const timeline = {
       period: { es: 'Oct 2025 a Dic 2025', en: 'Oct 2025 to Dec 2025' },
       highlights: {
         es: [
-          'Desarrollé un sistema full-stack de gestión de mantenimientos para una entidad pública, construyendo la interfaz de usuario y la lógica backend.',
-          'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas para prevenir inyecciones SQL y ataques XSS.',
-          'Optimicé consultas de base de datos y arquitectura backend para mejorar los tiempos de respuesta del sistema.',
+          'Desarrollé de punta a punta el sistema de gestión de mantenimientos de una entidad pública, construyendo la interfaz de usuario, la lógica de backend y el modelo de datos, y lo entregué operativo dentro de los tres meses de la práctica.',
+          'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas del lado del servidor sobre un sistema que gestiona información de una entidad pública, cerrando las vías de inyección SQL y de XSS antes de la puesta en producción.',
+          'Reestructuré la capa de acceso a datos y optimicé las consultas cuando los tiempos de respuesta se convirtieron en el cuello de botella del sistema, reduciendo la latencia de las pantallas de consulta más usadas.',
         ],
         en: [
-          'Built a full-stack maintenance management system for a public sector entity, covering both the user interface and the backend logic.',
-          'Implemented Role-Based Access Control (RBAC) and input sanitisation to prevent SQL injection and XSS attacks.',
-          'Optimised database queries and backend architecture to improve system response times.',
+          'Built the maintenance management system of a public sector entity end to end, covering the user interface, the backend logic and the data model, and delivered it in operation within the three months of the internship.',
+          'Implemented Role-Based Access Control (RBAC) and server-side input sanitisation on a system holding public sector data, closing the SQL injection and XSS paths before it went into production.',
+          'Restructured the data access layer and optimised queries once response times became the bottleneck, reducing latency on the most heavily used query screens.',
         ],
       },
     },
@@ -394,14 +394,18 @@ export const timeline = {
       period: { es: 'Jun 2025 a la actualidad', en: 'Jun 2025 to present' },
       highlights: {
         es: [
-          'Cofundé un estudio de software de tres ingenieros. Construimos elevaforge.com y su vertical de demostración KOA (landing y e-commerce).',
-          'Apliqué un estándar de seguridad en CI en cada despliegue: CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI.',
-          'Responsable de las decisiones de arquitectura en la migración de Angular a Next.js 14, documentadas mediante ADRs versionados.',
+          'Cofundé un estudio de software de tres ingenieros y asumí las decisiones de arquitectura del producto: definí los límites entre módulos y los contratos de datos, y dejé cada decisión y sus alternativas descartadas en ADRs versionados, de modo que el equipo puede revisarlas sin depender de mí.',
+          'Dirigí la migración del sitio corporativo de Angular a Next.js 14, planificada por capas para que la estructura nueva absorbiera el contenido existente sin rehacerlo.',
+          'Diseñé el modelo de autorización de la plataforma como deny-by-default: Row Level Security activa y sin ninguna política para el rol anónimo ni el autenticado, con todo el acceso a datos pasando por el servidor.',
+          'Establecí un estándar de seguridad en CI que corre en cada despliegue (CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI), de forma que un hallazgo detiene la entrega en lugar de descubrirse en producción.',
+          'Construí elevaforge.com y la vertical de demostración KOA (landing y e-commerce) con un panel de administración multi-cuenta, con el que el equipo edita paquetes, proyectos y contenido sin un despliegue de por medio.',
         ],
         en: [
-          'Co-founded a three engineer software studio. We built elevaforge.com and its KOA demo vertical (landing and e-commerce).',
-          'Enforced a CI security baseline across every deploy: CodeQL, custom Semgrep rules, audit-ci and Lighthouse CI gates.',
-          'Owned the architecture decisions across the Angular to Next.js 14 migration, documented through versioned ADRs.',
+          'Co-founded a three engineer software studio and owned the product architecture decisions: I defined the module boundaries and the data contracts, and recorded every decision and its discarded alternatives in versioned ADRs, so the team can review them without depending on me.',
+          'Led the migration of the corporate site from Angular to Next.js 14, planned layer by layer so the new structure absorbed the existing content instead of rebuilding it.',
+          'Designed the platform authorisation model as deny-by-default: Row Level Security enabled with no policy at all for the anonymous or the authenticated role, and all data access routed through the server.',
+          'Established a CI security baseline that runs on every deploy (CodeQL, custom Semgrep rules, audit-ci and Lighthouse CI gates), so a finding stops the delivery instead of surfacing in production.',
+          'Built elevaforge.com and the KOA demo vertical (landing and e-commerce) with a multi-account admin panel the team uses to edit packages, projects and content without a deploy in between.',
         ],
       },
     },
@@ -435,18 +439,16 @@ export const timeline = {
       period: { es: 'Mar 2023 a la actualidad', en: 'Mar 2023 to present' },
       highlights: {
         es: [
-          'Trabajo desarrollado en modalidad de medio tiempo, en paralelo a la carrera universitaria y, posteriormente, a la práctica en la Alcaldía de Pasto.',
-          'Ejecución de migraciones de datos hacia SAP y Oracle NetSuite para clientes PYME, aplicando cifrado y copias de seguridad.',
-          'Despliegue de soluciones CRM personalizadas (Salesforce, HubSpot) para e-commerce, optimizando flujos de trabajo y aplicando controles de acceso estrictos.',
-          'Desarrollo de sistemas de reportes automatizados con Odoo, Python y PostgreSQL, con generación periódica de reportes para análisis de negocio.',
-          'Este trabajo independiente sentó las bases de la disciplina de producto que luego formalicé al cofundar ElevaForge, a mediados de 2025.',
+          'Atendí clientes a medio tiempo en paralelo a la carrera universitaria y, después, a la práctica en la Alcaldía de Pasto, hasta formalizar esa disciplina de producto cofundando ElevaForge a mediados de 2025.',
+          'Ejecuté migraciones de datos hacia SAP y Oracle NetSuite aplicando cifrado y respaldos previos, de modo que cada corte tuviera un punto de retorno antes de mover el primer registro.',
+          'Implementé soluciones CRM a medida (Salesforce, HubSpot) para negocios de e-commerce, incluyendo la configuración de controles de acceso por rol para que cada usuario opere solo sobre la cartera que le corresponde.',
+          'Desarrollé sistemas de reportes automatizados con Odoo, Python y PostgreSQL que sustituyeron la consolidación manual de datos por una generación periódica para análisis de negocio.',
         ],
         en: [
-          'Part-time work carried out alongside my degree and, later, alongside the internship at Alcaldía de Pasto.',
-          'Data migrations to SAP and Oracle NetSuite for SME clients, applying encryption and backups.',
-          'Custom CRM deployments (Salesforce, HubSpot) for e-commerce, streamlining workflows and applying strict access controls.',
-          'Automated reporting systems built with Odoo, Python and PostgreSQL, generating periodic reports for business analysis.',
-          'This independent work laid the product discipline I later formalised by co-founding ElevaForge in mid 2025.',
+          'Served clients part-time alongside my degree and, later, alongside the internship at Alcaldía de Pasto, until I formalised that product discipline by co-founding ElevaForge in mid 2025.',
+          'Executed data migrations to SAP and Oracle NetSuite applying encryption and prior backups, so every cutover had a point of return before the first record moved.',
+          'Implemented custom CRM solutions (Salesforce, HubSpot) for e-commerce businesses, including role-based access control configuration so each user works only on the accounts assigned to them.',
+          'Built automated reporting systems with Odoo, Python and PostgreSQL that replaced manual data consolidation with periodic report generation for business analysis.',
         ],
       },
     },
@@ -783,6 +785,34 @@ export const skills = {
   } satisfies Localized,
   groups: [
     {
+      /*
+       * Grupo nuevo, y va PRIMERO a propósito: es el eje del CV desde que el
+       * dueño lo giró hacia arquitectura, y el orden de esta lista es lo
+       * primero que lee alguien que la escanea por encima.
+       */
+      label: { es: 'Arquitectura', en: 'Architecture' },
+      items: {
+        es: [
+          'Diseño de sistemas escalables',
+          'Arquitectura hexagonal',
+          'Separación por capas',
+          'Diseño de APIs REST',
+          'Modelado de datos',
+          'ADRs',
+          'Aislamiento multi-tenant',
+        ],
+        en: [
+          'Scalable system design',
+          'Hexagonal architecture',
+          'Layered separation',
+          'REST API design',
+          'Data modelling',
+          'ADRs',
+          'Multi-tenant isolation',
+        ],
+      },
+    },
+    {
       label: { es: 'Lenguajes', en: 'Languages' },
       items: {
         es: ['Java', 'Python', 'C#', 'C++', 'JavaScript', 'TypeScript', 'Dart', 'HTML5', 'CSS3'],
@@ -838,6 +868,8 @@ export const skills = {
           'Git',
           'CI/CD Pipelines',
           'Pruebas de penetración',
+          'Modelado de amenazas',
+          'SAST y SCA en CI (CodeQL, Semgrep)',
           'Seguridad de redes',
           'RBAC',
           'JWT',
@@ -849,6 +881,8 @@ export const skills = {
           'Git',
           'CI/CD pipelines',
           'Penetration testing',
+          'Threat modelling',
+          'SAST and SCA in CI (CodeQL, Semgrep)',
           'Network security',
           'RBAC',
           'JWT',

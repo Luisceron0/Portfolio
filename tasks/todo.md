@@ -71,6 +71,39 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 4d: CV en formato Harvard, optimizado para ATS (2026-08-18)
+- [x] Diagnóstico ANTES de tocar nada: texto extraído de los dos PDF con
+      `pypdf`, que es como lo lee un ATS. Seis defectos reales, ninguno visible
+      abriendo el PDF (palabras clave partidas por la justificación, orden de
+      lectura invertido, título de grado partido en vertical, teléfono sin
+      `+57`, contactos sin texto, pie de página dentro del contenido).
+      Detalle completo en `tasks/lessons.md`
+- [x] Bloque `design` en ambos YAML, comentado opción por opción con el defecto
+      que corrige cada una: tema `harvard`, `alignment: left`,
+      `phone_number_format: international`, `display_urls_instead_of_usernames`,
+      sin pie ni nota superior, `degree_column: null`, `allow_page_break: false`
+- [x] `show_time_spans_in: []` de vuelta: había regresado a su valor por defecto
+      y los dos PDF volvían a tener maquetación distinta (el inglés mostraba
+      "3 months" y el español no). Misma lección del 2026-08-10, repetida
+- [x] `locale` explícito por idioma: el PDF en español imprimía los meses en
+      inglés ("Oct 2025 – Dec 2025") y "present" en vez de "presente"
+- [x] Contenido reescrito con método STAR (situación, acción y resultado en cada
+      viñeta), girado hacia arquitectura de software por decisión del dueño, con
+      el titular y el perfil cargados de las palabras clave del puesto objetivo
+- [x] **Sin cifras inventadas**, por decisión explícita del dueño: solo lo ya
+      documentado (3 ingenieros, los 4 gates de CI, los tres meses de la
+      práctica, C1 EF SET). El resto de resultados van en cualitativo concreto
+- [x] Enlace al portafolio (`portfolio-eta-steel-27.vercel.app`) en la cabecera
+      de ambos CV, verificado con HTTP 200
+- [x] Grupo "Arquitectura" nuevo en habilidades, y de vuelta Next.js, que el CV
+      había perdido mientras la trayectoria seguía hablando de la migración a
+      Next.js 14
+- [x] Trayectoria y habilidades del sitio sincronizadas con las viñetas nuevas
+      (RF-106: si el CV cambia, `content.ts` cambia)
+- [ ] **Pendiente de decisión del dueño:** el `[PENDIENTE]` de `site.url` sigue
+      abierto. La URL de Vercel ya existe y está en el CV, pero no es el dominio
+      propio que ese marcador espera
+
 ## Phase 3j: Quinto proyecto (Tributary) y sincronización con el CV (2026-08-18)
 - [x] Perfil reescrito a tres párrafos (los tres ángulos, la estructura antes del
       código, la seguridad desde el diseño). `profile.summary` pasa de

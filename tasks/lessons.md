@@ -1,5 +1,48 @@
 # Lessons learned
 
+## 2026-08-18 — Un PDF de CV se ve perfecto y se extrae roto: mirarlo no es verificarlo
+**Contexto:** al adaptar el CV a formato Harvard optimizado para ATS, la
+pregunta no era de diseño sino de mecanismo: un ATS no ve el PDF, extrae su
+capa de texto. Los dos PDF anteriores se veían impecables en pantalla y el
+texto extraído con `pypdf` estaba lleno de defectos que nadie habría visto
+abriéndolos.
+**Lo que salía roto, todo medido, no supuesto:**
+- **Palabras clave partidas por la justificación.** Typst justificaba y
+  activaba partición: el texto extraído decía `inte-grating`, `verti-cal`,
+  `peri-odic`, `formal-icé`. Una palabra clave partida no la encuentra ningún
+  buscador. `typography.alignment: left` lo deja en cero.
+- **Orden de lectura invertido.** El tema `classic` maqueta la entrada en dos
+  columnas, y el texto salía con las viñetas PRIMERO y la empresa, el lugar y
+  las fechas DESPUÉS. Un parser que asocia fechas por proximidad se las pega a
+  la entrada equivocada. El tema `harvard` pone todo eso en una sola línea
+  antes de las viñetas.
+- **El título de grado partido en vertical.** Iba en una columna estrecha
+  propia: el inglés extraía `Post­grad­uate Spe­cial­iza­tion` con guiones
+  blandos, y el español pegaba `IngenieríaUniversidad` sin espacio.
+  `templates.education_entry.degree_column: null` lo mete en la misma línea.
+- **El teléfono sin país.** `phone_number_format` vale `national` por defecto
+  y el PDF imprimía `314 4087963`, sin el `+57`, en un CV que ofrece
+  relocalización. Sale en el PDF, no solo en la extracción.
+- **Iconos en vez de texto.** Los iconos de contacto no dejan texto al
+  extraer, así que `luis-ceronmunoz` aparecía suelto sin nada que dijera que
+  era LinkedIn. Con `display_urls_instead_of_usernames` sale el dominio.
+- **El pie de página colándose dentro del contenido.** `Nombre – 1/2` aparecía
+  EN MEDIO del texto extraído, partiendo la sección de Educación en dos.
+**Regla para el futuro:** un artefacto que otra máquina va a leer se verifica
+leyéndolo como esa máquina, no mirándolo. El comando es
+`python3 -c "from pypdf import PdfReader; print('\n'.join(p.extract_text() for p in PdfReader('public/cv/luis-ceron-cv-es.pdf').pages))"`
+y lo que hay que comprobar es: cero `\u00ad` (guión blando), cero `-\n` sobre
+una palabra clave, el `+57` presente, y empresa/cargo/fechas en la misma línea
+que precede a sus viñetas. Es el mismo principio que ya aplicamos a las reglas
+de Semgrep: una comprobación que nunca se ha visto fallar no demuestra nada.
+**Segundo hallazgo, el mismo de siempre:** `show_time_spans_in` había vuelto a
+su valor por defecto (`['experience']`) al quedarse los YAML sin bloque
+`design`, así que el PDF en inglés mostraba "3 months" bajo cada fecha y el
+español no. Es exactamente la lección del 2026-08-10, repetida. Ahora el
+bloque `design` vive dentro de cada YAML y está comentado opción por opción,
+que es la única forma de que no se caiga otra vez sin que nadie lo note.
+**Tags:** #cv #ats #rendercv #verificacion #falso-verde
+
 ## 2026-08-10 — RenderCV: mismo nombre de salida en dos renders se sobrescribe, y `show_time_spans_in` depende del título literal de la sección
 **Contexto:** al generar los dos PDF del CV con RenderCV, dos gotchas que
 costaron una vuelta cada una.

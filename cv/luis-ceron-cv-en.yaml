@@ -1,9 +1,10 @@
 cv:
   name: Luis Alejandro Cerón Muñoz
-  headline: Full-Stack Software Engineer
+  headline: Full-Stack Software Engineer | Software Architecture and Application Security
   location: Pasto, Nariño, Colombia (open to relocation)
   email: luiscerontrabajos@gmail.com
   phone: "+57 314 4087963"
+  website: https://portfolio-eta-steel-27.vercel.app/
   social_networks:
     - network: LinkedIn
       username: luis-ceronmunoz
@@ -11,7 +12,7 @@ cv:
       username: Luisceron0
   sections:
     Professional Profile:
-      - Full-Stack Software Engineer with experience building scalable web applications (React, Vue, Spring Boot, Django), integrating security protocols (RBAC, JWT), and deploying to the cloud (AWS, Docker). Graduate of Universidad Cooperativa de Colombia, currently pursuing a postgraduate specialization in Information Security at Politécnico Grancolombiano. Bilingual (English C1), open to relocation.
+      - 'Full-Stack Software Engineer focused on software architecture and application security. I design systems end to end (React, Angular, Vue.js, Spring Boot, Django, PostgreSQL), defining the structure before the first file: module boundaries, data contracts, and decisions recorded in versioned ADRs. I build security in from the design stage (RBAC, JWT, threat modelling, SAST and SCA in the pipeline) and deploy on AWS and Docker with CI/CD. Software Engineering graduate of Universidad Cooperativa de Colombia, currently pursuing a postgraduate specialization in Information Security at Politécnico Grancolombiano. Bilingual (English C1, EF SET), open to relocation.'
 
     Experience:
       - company: Alcaldía de Pasto (City Government)
@@ -20,28 +21,30 @@ cv:
         start_date: 2025-10
         end_date: 2025-12
         highlights:
-          - Built a full-stack maintenance-management system for a public-sector entity, covering both the user interface and secure backend logic.
-          - Implemented Role-Based Access Control (RBAC) and input sanitization to prevent SQL injection and XSS attacks.
-          - Optimized database queries and backend architecture to improve system response times.
+          - 'Built the maintenance-management system of a public-sector entity end to end, covering the user interface, the backend logic and the data model, and delivered it in operation within the three months of the internship.'
+          - 'Implemented Role-Based Access Control (RBAC) and server-side input sanitization on a system holding public-sector data, closing the SQL injection and XSS paths before it went into production.'
+          - 'Restructured the data access layer and optimized queries once response times became the bottleneck, reducing latency on the most heavily used query screens.'
       - company: ElevaForge
-        position: Co-Founder & Software Engineer
+        position: Co-Founder and Software Engineer
         location: Remote
         start_date: 2025-06
         end_date: present
         highlights:
-          - 'Co-founded a 3-engineer software studio building elevaforge.com and its KOA demo vertical (landing + e-commerce), enforcing a CI security baseline across every deploy: CodeQL, custom Semgrep rules, audit-ci, and Lighthouse CI gates.'
-          - 'Owned architecture decisions across the Angular-to-Next.js 14 migration, documented via versioned ADRs.'
+          - 'Co-founded a 3-engineer software studio and owned the product architecture decisions: I defined the module boundaries and the data contracts, and recorded every decision and its discarded alternatives in versioned ADRs, so the team can review them without depending on me.'
+          - 'Led the migration of the corporate site from Angular to Next.js 14, planned layer by layer so the new structure absorbed the existing content instead of rebuilding it.'
+          - 'Designed the platform authorization model as deny-by-default: Row Level Security enabled with no policy at all for the anonymous or the authenticated role, and all data access routed through the server, so the public key shipped to the browser enables no query.'
+          - 'Established a CI security baseline that runs on every deploy (CodeQL, custom Semgrep rules, audit-ci and Lighthouse CI gates), so a finding stops the delivery instead of surfacing in production.'
+          - 'Built elevaforge.com and the KOA demo vertical (landing and e-commerce) with a multi-account admin panel the team uses to edit packages, projects and content without a deploy in between.'
       - company: Freelance
         position: Full-Stack Software Developer
         location: Remote
         start_date: 2023-03
         end_date: present
         highlights:
-          - 'Carried out part-time, in parallel with university studies and, later, the internship at Alcaldía de Pasto.'
-          - 'Executed data migrations to SAP and Oracle NetSuite, applying encryption and data backup practices.'
-          - 'Implemented custom CRM solutions (Salesforce, HubSpot) for e-commerce businesses, including access-control configuration.'
-          - 'Built automated reporting systems with Odoo, Python, and PostgreSQL, generating periodic reports for business analysis.'
-          - 'This independent work laid the product discipline I later formalized by co-founding ElevaForge in mid-2025.'
+          - 'Served clients part-time alongside my degree and, later, alongside the internship at Alcaldía de Pasto, until I formalized that product discipline by co-founding ElevaForge in mid-2025.'
+          - 'Executed data migrations to SAP and Oracle NetSuite applying encryption and prior backups, so every cutover had a point of return before the first record moved.'
+          - 'Implemented custom CRM solutions (Salesforce, HubSpot) for e-commerce businesses, including role-based access control configuration so each user works only on the accounts assigned to them.'
+          - 'Built automated reporting systems with Odoo, Python and PostgreSQL that replaced manual data consolidation with periodic report generation for business analysis.'
 
     Education:
       - institution: Universidad Cooperativa de Colombia
@@ -51,7 +54,7 @@ cv:
         start_date: 2022-02
         end_date: 2025-12
         highlights:
-          - 'Capstone project: REST API for physical space management using AI, with JWT authentication and secure secrets management.'
+          - 'Capstone project: REST API for physical space management with AI support, using JWT authentication and secure secrets management.'
           - 'Relevant coursework: Scalable Systems Architecture, Back-End Development, Agile Methodologies (Scrum), Cybersecurity, Network Security.'
       - institution: Politécnico Grancolombiano
         area: Information Security
@@ -71,11 +74,89 @@ cv:
       - 'AI and Productivity Certifications, Microsoft & LinkedIn (Feb 2025)'
 
     Skills:
+      - label: Architecture
+        details: Scalable system design, Hexagonal architecture, Layered separation, REST API design, Data modelling, ADRs, Multi-tenant isolation
       - label: Development
-        details: React, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
+        details: React, Next.js, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
       - label: Security & DevOps
-        details: RBAC, JWT, Secure Coding Practices, Docker, AWS (EC2, S3), CI/CD, Network Security
+        details: RBAC, JWT, Threat modelling, Secure coding practices, SAST and SCA in CI (CodeQL, Semgrep), Docker, AWS (EC2, S3), CI/CD, Network security
       - label: Databases
-        details: PostgreSQL, MySQL, MongoDB
+        details: PostgreSQL, MySQL, MongoDB, Versioned migrations (Flyway)
       - label: Languages
         details: Spanish (Native), English (Advanced C1, EF SET Certified)
+
+# ---------------------------------------------------------------------------
+# Diseno: formato Harvard, legible por un ATS.
+#
+# Cada opcion de aqui corrige un defecto MEDIDO extrayendo el texto del PDF
+# anterior con pypdf, que es como lee un ATS. No son preferencias esteticas:
+#
+#  - theme: harvard          El tema clasico partia la entrada en columnas y el
+#                            texto salia desordenado: primero las vinetas y
+#                            DESPUES la empresa, el lugar y las fechas. Un
+#                            parser que asocia fechas por proximidad las pega a
+#                            la entrada equivocada. El tema harvard pone
+#                            empresa, cargo, lugar y fecha en una sola linea,
+#                            antes de las vinetas.
+#  - alignment: left         El texto justificado activaba la particion de
+#                            palabras de Typst: "inte-grating", "verti-cal",
+#                            "peri-odic", "formal-ice". Una palabra clave
+#                            partida por un guion no la encuentra ningun ATS.
+#                            Alineado a la izquierda no hay guiones: medido, 0.
+#  - phone_number_format     El formato "national" IMPRIMIA el numero sin el
+#    international           +57. El PDF anterior decia "314 4087963", sin pais,
+#                            en un CV que ofrece relocalizacion.
+#  - display_urls_...: true  Antes ponia "luis-ceronmunoz" a secas junto a un
+#                            icono; el icono no deja texto al extraer, asi que
+#                            no habia forma de saber que eso era LinkedIn. Ahora
+#                            imprime linkedin.com/in/... y github.com/...
+#  - show_icons: false       Mismo motivo: un icono es un glifo sin texto.
+#  - show_footer / top_note  El pie "Nombre - 1/2" y la nota "Ultima
+#    en false                actualizacion" se colaban EN MEDIO del texto
+#                            extraido, partiendo la seccion de Educacion.
+#  - show_time_spans_in: []  Su valor por defecto es ['experience'] y compara
+#                            contra el titulo LITERAL de la seccion: casaba con
+#                            "Experience" y no con "Experiencia", asi que el PDF
+#                            en ingles mostraba "3 months" bajo cada fecha y el
+#                            espanol no. Dos CV con maquetacion distinta sin que
+#                            nada lo declarara. Ya paso una vez y esta anotado en
+#                            tasks/lessons.md; vuelve a pasar si se quita.
+#  - degree_column: null     El titulo iba en una columna estrecha propia y
+#                            Typst lo partia en vertical: el ingles extraia
+#                            "Post-grad-uate Spe-cial-iza-tion" con guiones
+#                            blandos, y el espanol pegaba "IngenieriaUniversidad"
+#                            sin espacio. Ahora el titulo va en la misma linea
+#                            que la institucion.
+#  - size: a4                Estandar fuera de EE. UU. y 50pt mas de alto util
+#                            que us-letter, que es el valor por defecto.
+#
+# Si tocas algo de aqui, vuelve a extraer el texto del PDF y comprueba que
+# sigue saliendo limpio. El PDF se ve bien en pantalla aunque el texto
+# extraido este roto: mirarlo no es verificarlo.
+# ---------------------------------------------------------------------------
+design:
+  theme: harvard
+  page:
+    size: a4
+    show_footer: false
+    show_top_note: false
+  typography:
+    alignment: left
+  header:
+    connections:
+      show_icons: false
+      display_urls_instead_of_usernames: true
+      phone_number_format: international
+  sections:
+    show_time_spans_in: []
+    # Una seccion no se parte entre paginas: antes la pagina 2 empezaba con la
+    # segunda entrada de Educacion, con su titulo de seccion abandonado en la
+    # pagina 1, y quien abre por la 2 no sabe que esta leyendo. Ahora el corte
+    # cae entre secciones: pagina 1 perfil y experiencia, pagina 2 el resto.
+    allow_page_break: false
+  templates:
+    education_entry:
+      degree_column: null
+
+locale:
+  language: english
