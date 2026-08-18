@@ -180,7 +180,7 @@ export const site = {
    * Sin barra final: `new URL()` la añade donde hace falta, y duplicarla
    * genera canónicas con `//`.
    */
-  url: 'https://portfolio-eta-steel-27.vercel.app' as MaybePending,
+  url: 'https://portfolio-luisceron.vercel.app' as MaybePending,
   title: {
     es: 'Luis Alejandro Cerón Muñoz, Ingeniero de Software Full-Stack',
     en: 'Luis Alejandro Cerón Muñoz, Full-Stack Software Engineer',

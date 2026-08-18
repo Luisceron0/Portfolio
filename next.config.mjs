@@ -32,7 +32,14 @@ const BASELINE_SECURITY_HEADERS = [
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+    /*
+     * `interest-cohort=()` era el opt-out de FLoC. Google retiró FLoC y Chrome
+     * ya no reconoce la directiva: en vez de proteger de nada, imprime
+     * "Unrecognized feature: 'interest-cohort'" en la consola de cada visitante.
+     * Una cabecera que solo produce ruido no es defensa en profundidad, es una
+     * pista falsa para quien depure otra cosa en esa consola. Fuera.
+     */
+    value: 'camera=(), microphone=(), geolocation=()',
   },
   {
     key: 'Strict-Transport-Security',

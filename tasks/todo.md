@@ -73,6 +73,20 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 4f: URL del despliegue cambiada y ruido en consola (2026-08-18)
+- [x] El alias de Vercel pasa a `portfolio-luisceron.vercel.app`. El anterior
+      devuelve **404**, así que `site.url` y el enlace de los dos CV apuntaban a
+      una URL muerta. Actualizado en `content.ts`, en los dos YAML y en los dos
+      PDF regenerados
+- [x] Eso explica el `110200` de Turnstile: el widget tenía permitido el alias
+      viejo y el navegador cargaba el nuevo. Se comprobó midiendo, no
+      suponiendo: desde fuera, el alias viejo NO daba 110200
+- [x] `interest-cohort=()` fuera de `Permissions-Policy`: FLoC ya no existe y
+      Chrome imprime "Unrecognized feature" en la consola de cada visitante. Una
+      cabecera que solo genera ruido despista a quien depura otra cosa
+- [ ] **Pendiente del dueño en Cloudflare:** añadir `portfolio-luisceron.vercel.app`
+      a Hostname Management del widget de Turnstile
+
 ## Phase 4e: Origen declarado y portafolio funcional (2026-08-18)
 - [x] `site.url` = la URL de Vercel (verificada con HTTP 200). Cierra el último
       `[PENDIENTE]`: `check:pending` pasa en verde por primera vez
@@ -117,7 +131,7 @@
 - [x] **Sin cifras inventadas**, por decisión explícita del dueño: solo lo ya
       documentado (3 ingenieros, los 4 gates de CI, los tres meses de la
       práctica, C1 EF SET). El resto de resultados van en cualitativo concreto
-- [x] Enlace al portafolio (`portfolio-eta-steel-27.vercel.app`) en la cabecera
+- [x] Enlace al portafolio (`portfolio-luisceron.vercel.app`) en la cabecera
       de ambos CV, verificado con HTTP 200
 - [x] Grupo "Arquitectura" nuevo en habilidades, y de vuelta Next.js, que el CV
       había perdido mientras la trayectoria seguía hablando de la migración a
