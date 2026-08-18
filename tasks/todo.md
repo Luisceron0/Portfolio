@@ -71,6 +71,34 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 3j: Quinto proyecto (Tributary) y sincronización con el CV (2026-08-18)
+- [x] Perfil reescrito a tres párrafos (los tres ángulos, la estructura antes del
+      código, la seguridad desde el diseño). `profile.summary` pasa de
+      `Localized` a `LocalizedList` y el componente renderiza un `<p>` por
+      párrafo; el número de párrafos lo manda el contenido, no el componente
+- [x] Página sincronizada con los cambios del dueño en `cv/*.yaml`: ElevaForge
+      entra en la trayectoria como puesto (cofundador, jun 2025 a la actualidad),
+      el bullet de reportes de Freelance deja de decir "tiempo real", y Nuxt sale
+      de habilidades. **Next.js se queda** aunque el CV ya no lo liste en
+      "Desarrollo": lo respaldan la entrada de ElevaForge, el stack del proyecto
+      y este mismo sitio, y quitarlo dejaría la lista contradiciendo la trayectoria
+- [x] Los dos PDF de `public/cv/` regenerados con RenderCV desde los YAML nuevos
+      (son los que descarga el visitante: un CV sin ElevaForge servido desde una
+      página que sí lo muestra es la contradicción que RF-106 prohíbe)
+- [x] **RF-102 de 4 a 5 proyectos: entra Tributary** (motor de facturación
+      electrónica multi-régimen, CO/ES/DE), contenido escrito contra el README y
+      `docs/portfolio.md` del repo, ambas URL verificadas con HTTP 200. SRS
+      actualizada a v1.3 ANTES de tocar el contenido
+- [x] Captura tomada de la evidencia del propio repo (`docs/evidence/chain-broken.png`),
+      la única del sitio que no mide 1280x577 → `ProjectImage` acepta `width`/`height`
+      opcionales en vez de recortar la evidencia para que encaje
+- [x] Quinto tono de proyecto (`rust`): la paleta tiene exactamente cinco, así que
+      cinco proyectos siguen sin repetir color
+- [x] Es el primer proyecto **sin URL en vivo y sin intención de tenerla** (su
+      propio ADR-011). El criterio de aceptación de RF-102 deja de leerse como
+      "todo proyecto tiene demo", y la tarjeta lo dice en una viñeta en vez de
+      dejar el hueco sin explicar
+
 ## Phase 3i: Perfil unificado en un solo párrafo (2026-08-10)
 - [x] Los cuatro párrafos del perfil (resumen del CV más los tres de forma de
       trabajar) fundidos en uno solo, reescrito y comprimido en vez de

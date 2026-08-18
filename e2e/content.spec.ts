@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { cv, LOCALES, nav, projects, skills, timeline, type Locale } from '@/content'
 
 /**
- * Criterios de aceptación de RF-102 (4 proyectos), RF-106 (perfil y
+ * Criterios de aceptación de RF-102 (5 proyectos), RF-106 (perfil y
  * trayectoria), RF-107 (habilidades), RF-108 (navegación interna) y RF-109
  * (bilingüe).
  *
@@ -131,11 +131,11 @@ test.describe('RF-109 — bilingüe', () => {
   })
 })
 
-test.describe('RF-102 — cuatro proyectos', () => {
-  test('los cuatro proyectos se renderizan con nombre y captura', async ({ page }) => {
+test.describe('RF-102 — cinco proyectos', () => {
+  test('los cinco proyectos se renderizan con nombre y captura', async ({ page }) => {
     await page.goto('/')
 
-    expect(projects, 'la SRS v1.1 pide cuatro proyectos').toHaveLength(4)
+    expect(projects, 'la SRS v1.3 pide cinco proyectos').toHaveLength(5)
 
     for (const project of projects) {
       const article = page.locator(`article[aria-labelledby="proyecto-${project.id}"]`)

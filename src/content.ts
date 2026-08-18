@@ -99,6 +99,15 @@ export interface ProjectImage {
   src: MaybePending
   /** Texto alternativo descriptivo. Requisito de accesibilidad WCAG AA. */
   alt: Localized
+  /**
+   * Dimensiones reales del archivo. Solo hace falta declararlas cuando NO son
+   * las 1280x577 del resto de capturas: el componente reserva el espacio con
+   * estos números, así que un valor que no coincide con el PNG produce un salto
+   * de maquetación al cargar la imagen (CLS), que es justo lo que Lighthouse CI
+   * mide en el gate. Si recortas una captura, actualiza esto en el mismo commit.
+   */
+  width?: number
+  height?: number
 }
 
 export interface Project {
@@ -467,8 +476,8 @@ export const timeline = {
 export const projectsSection = {
   heading: { es: 'Proyectos', en: 'Projects' } satisfies Localized,
   intro: {
-    es: 'Cuatro sistemas que construí de principio a fin. Cada uno enlaza a su código y, cuando existe, al sitio en vivo: nada de lo que afirmo aquí queda sin respaldo.',
-    en: 'Four systems I built end to end. Each one links to its code and, where it exists, to the live site: nothing I claim here is left unbacked.',
+    es: 'Cinco sistemas que construí de principio a fin. Cada uno enlaza a su código y, cuando existe, al sitio en vivo: nada de lo que afirmo aquí queda sin respaldo.',
+    en: 'Five systems I built end to end. Each one links to its code and, where it exists, to the live site: nothing I claim here is left unbacked.',
   } satisfies Localized,
   /** Etiquetas reutilizadas dentro de cada tarjeta. */
   labels: {
@@ -537,6 +546,67 @@ export const projects: readonly Project[] = [
       {
         label: { es: 'Código en GitHub', en: 'Code on GitHub' },
         href: 'https://github.com/Luisceron0/CareLink',
+      },
+    ],
+  },
+  {
+    id: 'tributary',
+    name: 'Tributary',
+    kicker: {
+      es: 'Motor de facturación electrónica multi-régimen, implementación de referencia',
+      en: 'Multi-regime e-invoicing engine, reference implementation',
+    },
+    // Fuente: README y docs/portfolio.md de github.com/Luisceron0/Tributary.
+    problem: {
+      es: 'Una sola venta transfronteriza genera obligaciones fiscales en países cuyos modelos técnicos son incompatibles entre sí: Colombia valida la factura ante la DIAN antes de que exista legalmente, España exige una cadena de registros enlazados por hash que custodia el emisor, y Alemania exige un documento estructurado que se entrega al comprador. Lo habitual es modelar el dominio según el primer régimen que se implementó y tratar los demás como casos especiales, y el segundo régimen siempre delata cuál fue el primero. Es una implementación de referencia contra especificaciones públicas: no está certificada bajo ningún régimen ni sirve para emitir en producción, y eso lo dice el propio repositorio antes de que nadie pregunte.',
+      en: 'A single cross-border sale creates tax obligations in countries whose technical models are incompatible with each other: Colombia clears the invoice with the tax authority before it legally exists, Spain requires a hash-chained record kept by the issuer, and Germany requires a structured document handed to the buyer. The usual outcome is a domain modelled after whichever regime was built first, with the rest bolted on as special cases, and the second regime always reveals which one that was. This is a reference implementation built against public specifications: it is not certified under any regime and cannot be used to issue in production, and the repository itself says so before anyone asks.',
+    },
+    stack: ['Java 21', 'Spring Boot', 'PostgreSQL 16', 'Flyway', 'React 19', 'Testcontainers', 'Docker'],
+    security: {
+      es: 'Que un registro fiscal no se pueda alterar es una garantía de la base de datos, no una promesa de la aplicación. Un trigger de PostgreSQL rechaza cualquier UPDATE y cualquier DELETE sobre los registros fiscales y sobre la bitácora de auditoría, así que la regla se cumple igual ante una sesión de psql con credenciales válidas y cero código de aplicación por medio: una corrección es una fila nueva que referencia a la anterior, nunca una edición. Y si alguien con permiso para desactivar el trigger lo desactiva y altera una fila igualmente, el verificador del propio sistema recalcula la cadena de hashes y nombra el registro exacto donde deja de cuadrar, que es lo que muestra la captura.',
+      en: 'That a fiscal record cannot be altered is a database guarantee, not an application promise. A PostgreSQL trigger rejects every UPDATE and every DELETE on fiscal records and on the audit log, so the rule holds even against a psql session with valid credentials and zero application code in the path: a correction is a new row referencing the previous one, never an edit. And if someone with the privilege to disable the trigger disables it and tampers with a row anyway, the system’s own verifier recomputes the hash chain and names the exact record where it stops matching, which is what the screenshot shows.',
+    },
+    highlights: {
+      es: [
+        'El hecho de negocio se modela una sola vez sobre EN 16931, la norma europea de facturación, incluso para el régimen colombiano que no la exige. Cada país es un adaptador delgado en el borde, así que añadir un cuarto régimen es escribir un adaptador contra un puerto que ya existe, no tocar el modelo del que dependen los otros tres. ArchUnit rompe la compilación si el dominio llega a importar Spring, Jackson o JDBC.',
+        'Idempotencia por clave determinista derivada de la propia venta, con una consulta de reconciliación obligatoria antes de cualquier reintento. Una respuesta perdida después de una emisión real no se arregla reintentando (duplica un documento legal) ni dejando de reintentar (pierde uno legítimo). Verificado matando el proceso a mitad de una emisión contra el sandbox real y comprobando al reiniciar que existe exactamente un documento.',
+        'Crypto-shredding para conciliar dos obligaciones que se contradicen sobre la misma fila, el borrado del RGPD y la retención fiscal: los datos personales se cifran con una clave por titular, y borrar destruye la clave, no la fila. El registro fiscal sigue íntegro y verificable, y el dato personal queda como texto cifrado irrecuperable.',
+        'El adaptador español construye y encadena los registros y genera el QR del RD 1007/2023, pero no remite nada a la AEAT, porque eso exige un certificado cualificado que este proyecto no tiene. El QR apunta al verificador del propio sistema, y un test comprueba que ningún host de la AEAT aparece jamás en el QR generado: nada de lo que produce el sistema afirma un envío que no ocurrió.',
+        'Trece controles de seguridad, cada uno con su herramienta, su comando y un criterio binario de aprobado o fallado: sqlmap contra una instancia real, XXE rechazado en el único sitio del proyecto donde se instancia un parser de XML, tokens con alg none y tokens HS256 firmados con los bytes de la clave pública RSA rechazados con 401, y el validador oficial alemán anclado por checksum antes de desempaquetarlo. En CI son cuatro gates independientes, incluido gitleaks sobre todo el historial y no solo sobre el diff.',
+        'No hay demo público, y es una decisión registrada, no un cabo suelto: la infraestructura de producción está construida y verificada (Caddy con TLS automático, unidades systemd, rotación de claves programada), simplemente no está corriendo en ningún sitio. Un demo caído o dormido cuando alguien lo abre es peor que un repositorio honesto sobre no tener uno, y el quickstart levanta el stack completo con Docker Compose en menos de tres minutos.',
+      ],
+      en: [
+        'The business fact is modelled once on EN 16931, the European invoicing standard, even for the Colombian regime, which does not require it. Each country is a thin adapter at the edge, so adding a fourth regime means writing an adapter against a port that already exists, not touching the model the other three depend on. ArchUnit fails the build if the domain ever imports Spring, Jackson or JDBC.',
+        'Idempotency through a deterministic key derived from the sale itself, with a mandatory reconciliation query before any retry. A response lost after a real issuance cannot be fixed by retrying (it duplicates a legal document) or by not retrying (it loses a legitimate one). Verified by killing the process mid-issuance against the real sandbox and confirming on restart that exactly one document exists.',
+        'Crypto-shredding to reconcile two obligations that contradict each other on the same row, GDPR erasure and fiscal retention: personal data is encrypted under a per-subject key, and erasing destroys the key, not the row. The fiscal record stays intact and verifiable, and the personal data becomes unrecoverable ciphertext.',
+        'The Spanish adapter builds and chains the records and generates the regulator’s QR code, but submits nothing to the tax authority, because that requires a qualified certificate this project does not hold. The QR points at the system’s own verifier, and a test asserts that no tax-authority hostname ever appears in the generated QR: nothing the system produces claims a submission that did not happen.',
+        'Thirteen security controls, each with its tool, its command and a binary pass or fail criterion: sqlmap against a real running instance, XXE rejected in the single place in the project where an XML parser is instantiated, alg none tokens and HS256 tokens signed with the RSA public key’s own bytes both rejected with 401, and the official German validator pinned by checksum before it is ever unpacked. In CI that is four independent gates, including gitleaks across the full history and not just the diff.',
+        'There is no public demo, and that is a recorded decision rather than a loose end: the production infrastructure is built and verified (Caddy with automatic TLS, systemd units, scheduled key rotation), it is simply not running anywhere. A demo that is down or cold-starting when someone opens it is worse than a repository that is honest about not having one, and the quickstart brings the whole stack up with Docker Compose in under three minutes.',
+      ],
+    },
+    screenshot: {
+      // Del repo público de Tributary (docs/evidence/chain-broken.png). Es la
+      // única captura del sitio que no mide 1280x577, y por eso declara su
+      // tamaño: recortarla al formato de las demás cortaba la evidencia.
+      src: '/proyectos/tributary.png',
+      width: 1280,
+      height: 1000,
+      alt: {
+        es: 'Interfaz de Tributary verificando una cadena fiscal: el resultado es BROKEN, nombra el registro roto y muestra el hash almacenado junto al recalculado.',
+        en: 'Tributary interface verifying a fiscal chain: the result is BROKEN, it names the broken record and shows the stored hash next to the recomputed one.',
+      },
+    },
+    links: [
+      {
+        label: {
+          es: 'Leer el resumen técnico',
+          en: 'Read the technical writeup',
+        },
+        href: 'https://github.com/Luisceron0/Tributary/blob/main/docs/portfolio.md',
+      },
+      {
+        label: { es: 'Código en GitHub', en: 'Code on GitHub' },
+        href: 'https://github.com/Luisceron0/Tributary',
       },
     ],
   },

@@ -51,23 +51,31 @@ what does he build, why does security matter in his work, and how do I reach him
   - [ ] Readable and understood without scrolling on a 375px viewport.
   - [ ] No jargon that a non-technical recruiter has to look up.
 
-### RF-102: Project highlights (4)
-- **Description:** ElevaForge, CareLink, KOA Landing and KOA Store, each with a
-  blurb, a screenshot, a technology list, and links to the live site and/or the
-  repository.
+### RF-102: Project highlights (5)
+- **Description:** CareLink, Tributary, ElevaForge, KOA Landing and KOA Store,
+  each with a blurb, a screenshot, a technology list, and links to the live site
+  and/or the repository.
 - **Scope change (v1.1, 2026-08-09):** was "2 max" (CareLink + a single combined
   ElevaForge/KOA entry). The owner asked for the four projects to be shown
   separately, since KOA Landing and KOA Store are distinct deliverables with
   distinct live URLs, and ElevaForge is the studio itself. Widening this is a
   deliberate scope decision, not scope creep — recorded here before building.
+- **Scope change (v1.3, 2026-08-18):** Tributary added at the owner's request, so
+  the count goes from four to five. It is the first project with **no live URL at
+  all and no intention of having one** (its own ADR-011 explains why), which the
+  acceptance criteria below now account for: the "every live link resolves"
+  criterion cannot be read as "every project has a live link".
 - **Precondition:** the unified GitHub account (portfolio SRS RF-001) exists, since
   both project links ultimately point there.
 - **Acceptance criteria:**
   - [ ] Each project answers "what problem, what stack, what's the security angle" in
     the blurb.
-  - [ ] Screenshot present for all four, captured against the real live site (or,
-    for CareLink which has no public deploy, from its own repo's screenshots doc).
-  - [ ] Every live/demo link resolves (HTTP 200), verified — not assumed.
+  - [ ] Screenshot present for all five, captured against the real live site (or,
+    for CareLink and Tributary, which have no public deploy, from their own repo's
+    evidence/screenshots docs).
+  - [ ] Every live/demo link that exists resolves (HTTP 200), verified — not
+    assumed. A project without a live URL links only to its repository; it never
+    gets a placeholder or a dead demo link.
   - [ ] No claim on this page that isn't backed by the linked repo or demo.
 
 ### RF-106: Professional profile and career timeline
@@ -254,3 +262,4 @@ is not retained.
 | 1.0 | 2026-08-07 | Arch-Sentinel + Luis | Initial version, split from the portfolio-wide SRS per user request |
 | 1.1 | 2026-08-09 | Luis | Scope widened at the owner's request: RF-102 goes from 2 to 4 projects (ElevaForge, CareLink, KOA Landing, KOA Store shown separately); new RF-106 (profile + career timeline), RF-107 (skills), RF-108 (in-page nav). Still one page, still no CMS, still no routes — §3's out-of-scope list is unchanged. |
 | 1.2 | 2026-08-09 | Luis | RF-109 (bilingüe ES/EN por query param, sin rutas nuevas) y RF-110 (dinamismo visual) añadidos a petición del dueño. El toggle multilingüe sale de la lista de fuera de alcance del §3. |
+| 1.3 | 2026-08-18 | Luis | RF-102 pasa de 4 a 5 proyectos: entra Tributary (motor de facturación electrónica multi-régimen), a petición del dueño. Es el primer proyecto sin URL en vivo y sin intención de tenerla, así que el criterio de aceptación de los enlaces deja de asumir que todo proyecto tiene demo. Sigue siendo una sola página, sin CMS y sin rutas nuevas. |

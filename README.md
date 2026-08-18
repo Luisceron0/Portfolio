@@ -107,12 +107,12 @@ no debe llevar texto nunca.
 ## Estado
 
 Fases 1-3 completas (andamiaje, formulario de contacto, contenido real de los
-cuatro proyectos, perfil y trayectoria, bilingüe ES/EN) y desplegadas en GitHub
+cinco proyectos, perfil y trayectoria, bilingüe ES/EN) y desplegadas en GitHub
 con CI en verde ([Actions](https://github.com/Luisceron0/Portfolio/actions)):
 128 tests de Playwright, Semgrep y ESLint validados contra fixtures vulnerables
 propios, Lighthouse CI en el gate ≥95/≥95, todo verificado en un run real de
-GitHub Actions y no solo en local. Faltan 3 datos del dueño: dominio propio y
-los dos PDF del CV. Conectar el repo a Vercel es un paso manual pendiente (ver
+GitHub Actions y no solo en local. Falta 1 dato del dueño: el dominio propio
+(los dos PDF del CV ya están, generados con RenderCV desde `cv/*.yaml`). Conectar el repo a Vercel es un paso manual pendiente (ver
 `tasks/todo.md`, Fase 4b): requiere la sesión autenticada del dueño. Ver
 [tasks/todo.md](tasks/todo.md) y [tasks/plan.md](tasks/plan.md) para el
 detalle y qué lo bloquea.

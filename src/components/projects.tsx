@@ -22,14 +22,18 @@ import {
 import { ProjectsIcon } from '@/components/icons'
 
 /**
- * RF-110: un tono por proyecto. Cuatro tarjetas del mismo color se leen como
- * una lista; con un tono cada una, se leen como cuatro trabajos distintos.
+ * RF-110: un tono por proyecto. Cinco tarjetas del mismo color se leen como
+ * una lista; con un tono cada una, se leen como cinco trabajos distintos.
  * El orden sigue al de `projects` en content.ts.
+ *
+ * Son exactamente los cinco tonos de la paleta, uno por proyecto. Un sexto
+ * proyecto obligaría a repetir tono (el módulo lo hace solo, sin romperse) o a
+ * ampliar la paleta en `section.tsx`, que es la decisión de diseño real.
  */
-const PROJECT_TONES: readonly Tone[] = ['indigo', 'ochre', 'teal', 'plum']
+const PROJECT_TONES: readonly Tone[] = ['indigo', 'ochre', 'teal', 'plum', 'rust']
 
 /**
- * RF-102 — cuatro proyectos destacados.
+ * RF-102 — cinco proyectos destacados.
  *
  * Cada bloque responde las tres preguntas del criterio de aceptación (qué
  * problema, qué stack, cuál es el ángulo de seguridad) y añade viñetas
@@ -37,7 +41,7 @@ const PROJECT_TONES: readonly Tone[] = ['indigo', 'ochre', 'teal', 'plum']
  * aquí no se escribe ni una frase de contenido.
  *
  * Las tarjetas alternan el lado de la imagen en escritorio: rompe la
- * monotonía de una rejilla de cuatro bloques idénticos.
+ * monotonía de una rejilla de bloques idénticos.
  */
 
 function ProjectScreenshot({ project, locale }: { project: Project; locale: Locale }) {
@@ -54,12 +58,18 @@ function ProjectScreenshot({ project, locale }: { project: Project; locale: Loca
     )
   }
 
+  /*
+   * El tamaño por defecto es el de las capturas del propio sitio (1280x577).
+   * Una captura con otras dimensiones las declara en content.ts: si estos
+   * números no coinciden con el archivo, el navegador reserva un hueco de la
+   * altura equivocada y la página salta al cargar la imagen.
+   */
   return (
     <Image
       src={src}
       alt={alt}
-      width={1280}
-      height={577}
+      width={project.screenshot.width ?? 1280}
+      height={project.screenshot.height ?? 577}
       className="w-full border border-hairline"
       sizes="(min-width: 768px) 50vw, 100vw"
     />
