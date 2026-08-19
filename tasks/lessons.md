@@ -31,6 +31,44 @@ y exige que sean distintas: si alguien vuelve a añadir `metadataBase`, se pone
 rojo.
 **Tags:** #nextjs #seo #pendientes #verificacion #falso-verde
 
+## 2026-08-19 — La nav ocultaba dos enlaces en móvil desde hace tres commits, y ninguna prueba lo veía
+**Contexto:** el dueño reportó "el responsive se corta y oculta contenido" tras
+probar el sitio en el navegador. Antes de tocar nada se midió, no se supuso:
+un barrido por DOM en 320/375/390/414/768/1024px que busca cualquier elemento
+con `scrollWidth > clientWidth` bajo `overflow-x: auto|scroll` (contenido
+deslizable sin aviso) y cualquier `overflow: hidden` con `scrollHeight` mayor
+que su caja (texto recortado sin `line-clamp`). Resultado: un único elemento
+en toda la página, en los cuatro anchos móviles — el `<ul>` de `SiteNav`.
+**El fallo:** a 375px, "Proyectos" se veía cortado a mitad de letra en "Proye"
+y "Habilidades"/"Contacto" quedaban completamente fuera de pantalla. El `<ul>`
+SÍ tenía `overflow-x-auto` (deliberado, confirmado por `git log -p` desde el
+commit de 4 proyectos) y arrastrándolo se llega a los enlaces ocultos — no
+estaba roto, estaba **indescubrible**: nada en pantalla sugiere que hay más
+menú, así que se lee como contenido cortado, no como una lista deslizable.
+**Primera pista falsa, y vale la pena anotarla:** una captura `fullPage` de
+22541px de alto pareció "vacía" al verla reducida — no era un bug, era la
+página real de esa altura vista en miniatura. Una captura muy alta hay que
+trocearla antes de mirarla, o el ojo (humano o mío) la lee como espacio en
+blanco.
+**Segunda pista falsa:** medir `naturalWidth` de las imágenes de proyecto sin
+haber hecho scroll hasta ellas dio `0` en las cuatro últimas tarjetas. No
+estaban rotas: son `loading="lazy"` y el script las consultó antes de que el
+IntersectionObserver del navegador las cargara. Confirmado repitiendo la
+medición con un scroll incremental primero.
+**La solución:** un `mask-image: linear-gradient(...)` de 20px en cada borde
+del `<ul>`. No cambia el scroll (ya funcionaba) ni añade JavaScript: solo
+convierte el corte a lo bruto en un difuminado, que es la señal visual
+estándar de "esto se desliza". El hueco de padding de cada enlace (`px-2.5`)
+absorbe el difuminado cuando los cinco caben sin scroll (desktop), así que no
+se nota donde no hace falta.
+**Regla para el futuro:** un elemento con `overflow-x-auto` deliberado sigue
+siendo un fallo de UX si no tiene ninguna señal visual de que hay más
+contenido. "Es técnicamente alcanzable deslizando" no es lo mismo que "se ve
+alcanzable". El barrido DOM de arriba es reutilizable: cualquier lista
+horizontal nueva (chips de stack, por ejemplo) debería pasarlo antes de darse
+por buena en móvil.
+**Tags:** #responsive #ux #verificacion #falso-negativo
+
 ## 2026-08-18 — Un PDF de CV se ve perfecto y se extrae roto: mirarlo no es verificarlo
 **Contexto:** al adaptar el CV a formato Harvard optimizado para ATS, la
 pregunta no era de diseño sino de mecanismo: un ATS no ve el PDF, extrae su

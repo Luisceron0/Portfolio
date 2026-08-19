@@ -60,6 +60,46 @@ test.describe('RF-108 — navegación interna', () => {
     await expect(skipLink).toHaveText(/Saltar al contenido/)
     await expect(skipLink).toBeVisible()
   })
+
+  /*
+   * Fallo real reportado en producción: en viewports estrechos, los cinco
+   * enlaces no caben junto a la marca y el selector de idioma. La lista tiene
+   * `overflow-x-auto` a propósito y SÍ es deslizable, pero sin el borde en
+   * degradado el corte se veía como contenido roto ("Proyectos" cortado a
+   * mitad de letra en "Proye"), no como una lista con más por deslizar.
+   *
+   * Este test no mide el degradado (es CSS puramente decorativo, no hay nada
+   * que aserte ahí) sino la promesa real: el último enlace tiene que poder
+   * alcanzarse y ser pulsable, aunque no quepa en pantalla sin deslizar.
+   */
+  test('en un viewport estrecho, el último enlace de la nav se alcanza deslizando', async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== 'mobile', 'el fallo solo se da cuando la nav no cabe')
+
+    await page.goto('/')
+
+    const lastItem = nav.items[nav.items.length - 1]
+    const lastLink = page.locator('nav ul a', { hasText: lastItem.label.es })
+
+    // Antes de deslizar, no cabe en el viewport (si cupiera, este test no
+    // estaría probando nada real).
+    const list = page.locator('nav ul')
+    const beforeBox = await lastLink.boundingBox()
+    const viewportWidth = page.viewportSize()!.width
+    expect(
+      beforeBox!.x + beforeBox!.width,
+      'este test asume que el último enlace NO cabe sin deslizar en este viewport'
+    ).toBeGreaterThan(viewportWidth)
+
+    await list.evaluate((el) => {
+      el.scrollLeft = el.scrollWidth
+    })
+
+    await expect(lastLink).toBeInViewport()
+    await lastLink.click()
+    await expect(page).toHaveURL(new RegExp(`${lastItem.href}$`))
+  })
 })
 
 test.describe('RF-109 — bilingüe', () => {

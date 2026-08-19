@@ -70,7 +70,23 @@ export function SiteNav({ locale }: { locale: Locale }) {
           {nav.brand}
         </a>
 
-        <ul className="flex min-w-0 items-center gap-0.5 overflow-x-auto sm:gap-2">
+        {/*
+          En viewports estrechos (comprobado hasta 414px) los cinco enlaces no
+          caben junto a la marca y el selector de idioma: "Proyectos" se veía
+          cortado a mitad de letra en "Proye" y "Habilidades"/"Contacto"
+          quedaban fuera de pantalla. El scroll horizontal (`overflow-x-auto`)
+          ya los alcanza arrastrando, pero sin ninguna pista de que hay más
+          menú se lee como contenido roto, no como una lista deslizable.
+
+          La máscara no recorta nada nuevo: solo difumina los 20px del borde
+          por los que el `<ul>` ya cortaba antes a lo bruto, así que la letra
+          cortada se lee como "hay más aquí" en vez de como un fallo visual.
+          En desktop, donde los cinco enlaces caben sin scroll, el hueco de
+          `px-2.5`/`px-3` de cada enlace absorbe el difuminado y no se nota.
+        */}
+        <ul
+          className="flex min-w-0 items-center gap-0.5 overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_20px,black_calc(100%-20px),transparent)] sm:gap-2"
+        >
           {nav.items.map((item, index) => (
             <li key={item.href}>
               <a

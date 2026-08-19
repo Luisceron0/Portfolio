@@ -73,6 +73,24 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 4g: Nav movil ocultaba enlaces sin aviso (2026-08-19)
+- [x] Reportado por el dueño ("el responsive se corta y oculta contenido") tras
+      probar en navegador real. Medido con un barrido DOM en 320–1024px antes
+      de tocar nada: un único elemento afectado en toda la página, en los
+      cuatro anchos móviles — el `<ul>` de `SiteNav`
+- [x] "Proyectos" se veía cortado a "Proye" y "Habilidades"/"Contacto" quedaban
+      fuera de pantalla. El scroll horizontal ya existía y funcionaba
+      (`overflow-x-auto`, deliberado desde el commit de 4 proyectos); lo que
+      faltaba era una señal de que había más menú
+- [x] Arreglado con `mask-image` en los bordes del `<ul>` (difuminado, no
+      recorte a lo bruto). CSS puro, sin JavaScript, sin tocar el scroll
+- [x] Test de regresión en `e2e/content.spec.ts`: en móvil, el último enlace de
+      la nav debe alcanzarse deslizando y ser pulsable. Se salta en escritorio,
+      donde los cinco enlaces caben sin scroll
+- [x] Barrido de todo el DOM en 320/375/390/414/768/1024px confirmando que no
+      hay NINGÚN otro elemento con contenido oculto sin aviso en el resto de la
+      página (imágenes de proyecto, chips de stack, etc.)
+
 ## Phase 4f: URL del despliegue cambiada y ruido en consola (2026-08-18)
 - [x] El alias de Vercel pasa a `portfolio-luisceron.vercel.app`. El anterior
       devuelve **404**, así que `site.url` y el enlace de los dos CV apuntaban a
