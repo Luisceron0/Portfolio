@@ -31,6 +31,52 @@ y exige que sean distintas: si alguien vuelve a añadir `metadataBase`, se pone
 rojo.
 **Tags:** #nextjs #seo #pendientes #verificacion #falso-verde
 
+## 2026-08-19 — Un primer arreglo de la nav creó un fallo peor, en un caso más extremo
+**Contexto:** tras el commit anterior (mask-image en el `<ul>` de enlaces), el
+dueño reportó que el texto seguía cortándose, con una captura de un viewport
+mucho más estrecho que 375px. Medido: por debajo de ~200px de ancho, `ul`
+llegaba a **0px de ancho real** (`clientWidth: 0`), porque tenía `min-w-0` y
+sus dos hermanos en el flex row (`marca`, `selector de idioma`) eran
+`shrink-0` y nunca cedían espacio. La nav entera desaparecía.
+**El primer intento de arreglo, y por qué era peor:** ponerle `min-w-[44px]`
+al `<ul>` sí evitaba que llegara a 0, pero por debajo de ~200px empujaba al
+**selector de idioma** (el otro hermano `shrink-0`, sin overflow propio) fuera
+del borde derecho de la barra. Medido con
+`document.scrollingElement.scrollLeft = 9999` seguido de leer el valor
+resultante: se quedaba en `0`. El navegador reportaba
+`documentElement.scrollWidth > clientWidth` (parecía "scrolleable"), pero el
+scroll de página NO era funcional. El selector de idioma quedaba invisible y
+**sin ninguna forma real de alcanzarlo** — peor que el fallo original, que al
+menos tenía el `<ul>` con su propio `overflow-x-auto` que sí funcionaba.
+**La causa de fondo:** dos mecanismos de scroll independientes compitiendo por
+el mismo espacio (`<ul>` con su propio scroll interno; selector de idioma
+fuera de él, dependiendo de un scroll de página que resultó no ser
+funcional). Cualquier arreglo que solo tocara UNO de los dos (como el
+`min-w-[44px]`) solo desplazaba el punto de fallo al otro.
+**La solución correcta:** un único `overflow-x-auto` que envuelve TANTO los
+enlaces de sección COMO el selector de idioma (la marca queda fuera, fija).
+Verificado con `scroller.scrollLeft = scroller.scrollWidth` seguido de
+comprobar que el enlace `en` cae dentro del viewport: cierto en 150, 160, 180,
+200, 240, 280, 320, 375, 414, 768 y 1280px, sin excepción.
+**Un efecto colateral medido y descartado, no ignorado:** con la estructura
+anidada (`overflow-x-auto` dentro de un flex item, dentro de otro flex row),
+`document.body.scrollWidth` volvió a reportar overflow en anchos donde antes
+no lo hacía (173px de "sobra" a 375px, por ejemplo). Antes de darlo por bueno
+se comprobó si era real: `document.scrollingElement.scrollLeft = 9999` seguido
+de leer el valor. Se quedó en `0`. Es un artefacto de cómo el motor de
+render calcula el overflow de un ancestro cuando el descendiente que scrollea
+es a la vez un flex item con `min-width: 0` — no un scroll de página real, no
+tiene scrollbar, no se puede activar con ningún gesto, no afecta a nada
+visible (confirmado con captura).
+**Regla para el futuro, más afilada que la de la vuelta anterior:** cuando un
+arreglo de layout introduce una MÉTRICA que parece indicar un problema
+(`scrollWidth > clientWidth`, en cualquier elemento, a cualquier nivel), no
+basta con mirar el número: hay que comprobar si esa "sobra" es alcanzable de
+verdad (`scrollLeft` se mueve) antes de decidir si es un fallo o un artefacto
+de medición. Y cuando dos elementos comparten limitación de espacio, dales
+UN solo mecanismo de resolución, no dos que compiten.
+**Tags:** #responsive #ux #verificacion #falso-negativo #falso-positivo
+
 ## 2026-08-19 — La nav ocultaba dos enlaces en móvil desde hace tres commits, y ninguna prueba lo veía
 **Contexto:** el dueño reportó "el responsive se corta y oculta contenido" tras
 probar el sitio en el navegador. Antes de tocar nada se midió, no se supuso:

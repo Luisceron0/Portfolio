@@ -73,6 +73,37 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 4h: El primer arreglo de la nav creaba un fallo peor (2026-08-19)
+- [x] El dueño reportó que el corte seguía, con un viewport más estrecho que el
+      probado antes. Medido: por debajo de ~200px, `<ul>` llegaba a 0px de
+      ancho real y la nav entera desaparecía (marca y selector de idioma
+      seguían visibles, los cinco enlaces no)
+- [x] Primer intento (`min-w-[44px]` en el `<ul>`) evitaba el 0px pero
+      trasladaba el problema: empujaba al SELECTOR DE IDIOMA fuera de la barra
+      por debajo de ~200px, y el scroll de página que en teoría lo alcanzaba
+      no era funcional (`scrollLeft` medía siempre 0 tras forzarlo). Descartado
+      antes de comprometerlo
+- [x] Causa raíz: dos mecanismos de scroll independientes (el del `<ul>`, que
+      funcionaba; el implícito de la página, que no) compitiendo por el mismo
+      espacio. Arreglo real: un único `overflow-x-auto` que envuelve enlaces de
+      sección Y selector de idioma juntos, con la marca como único elemento fijo
+- [x] Verificado en 150/160/180/200/240/280/320/375/414/768/1280px: el
+      selector de idioma es alcanzable con el mismo scroll en todos, sin
+      excepción
+- [x] Efecto colateral medido y descartado: `document.body.scrollWidth`
+      reporta overflow en anchos donde antes no (artefacto del motor de
+      render con overflow anidado en flex), pero `scrollLeft` no se mueve —
+      no es scroll real, no tiene efecto visible ni funcional
+- [x] Los dos tests de regresión de la vuelta anterior actualizados: el
+      elemento con scroll cambió de sitio en la nueva estructura. Añadido un
+      tercer test para el caso extremo (180px) que cubre específicamente que
+      el selector de idioma nunca vuelva a quedar inalcanzable
+- [x] **Fallo preexistente encontrado por el camino, confirmado AJENO a este
+      trabajo:** 6 tests de `contact-form.spec.ts` fallan en mobile
+      ("intercepts pointer events" en el textarea al hacer click en enviar).
+      Verificado que falla igual en el commit de ANTES de tocar `nav.tsx` hoy
+      → no es una regresión de este cambio, queda fuera de alcance
+
 ## Phase 4g: Nav movil ocultaba enlaces sin aviso (2026-08-19)
 - [x] Reportado por el dueño ("el responsive se corta y oculta contenido") tras
       probar en navegador real. Medido con un barrido DOM en 320–1024px antes
