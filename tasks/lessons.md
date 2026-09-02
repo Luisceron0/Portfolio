@@ -31,6 +31,38 @@ y exige que sean distintas: si alguien vuelve a añadir `metadataBase`, se pone
 rojo.
 **Tags:** #nextjs #seo #pendientes #verificacion #falso-verde
 
+## 2026-08-19 — `allow_page_break: false` era la solución de un problema que ya no existía
+**Contexto:** al añadir la cuarta entrada de Experiencia (E.D.S. Kennedy),
+respaldada por una constancia laboral real, el CV en español pasó de 2 a 3
+páginas. Medido antes de tocar nada: la página 1 quedaba casi vacía (solo el
+encabezado y el Perfil Profesional, 12 líneas) y toda la sección Experiencia
+(4 puestos completos) se apilaba entera en la página 2.
+**La causa:** `sections.allow_page_break: false`, fijado el 2026-08-10 para
+evitar que Educación se partiera con su encabezado huérfano en una página y
+el resto en la siguiente. Ese ajuste no distingue POR QUÉ sección se activa:
+aplica a TODAS, y con Experiencia ahora demasiado larga para caber en lo que
+quedaba de la página 1, `false` obligaba a mover la sección COMPLETA (no
+partirla) a la página 2, dejando un vacío enorme atrás y forzando una tercera
+página para el resto del contenido.
+**La verificación, antes de decidir:** se probó revertir a `allow_page_break:
+true` (el valor por defecto) y se renderizaron las páginas para inspeccionar
+el corte real, no solo contar páginas. Resultado: el corte cayó EXACTAMENTE
+entre la entrada de E.D.S. Kennedy (cierra la página 1) y Freelance (abre la
+página 2) — ninguna entrada partida a la mitad, ningún encabezado huérfano, en
+ninguna de las dos secciones (Experiencia y Educación). Con `true`, Typst
+parte ENTRE entradas cuando hace falta, nunca A MITAD de una: es justo la
+granularidad que faltaba.
+**Regla para el futuro, y es la misma lección de fondo que la de la nav de
+hoy:** un ajuste que arregla un síntoma concreto con una palanca demasiado
+gruesa (`false` a nivel de TODAS las secciones, para un problema de UNA
+sección con UNA cantidad de contenido) se vuelve el problema cuando el
+contexto cambia. La solución correcta actuaba sobre la granularidad correcta
+(entre entradas) desde el principio; lo que hacía falta en 2026-08-10 no era
+prohibir el corte de sección, era el corte YA correcto que Typst da por
+defecto, con el contenido de entonces simplemente no lo necesitaba tanto como
+para notarlo.
+**Tags:** #cv #rendercv #paginacion #verificacion #falso-positivo
+
 ## 2026-08-19 — Un primer arreglo de la nav creó un fallo peor, en un caso más extremo
 **Contexto:** tras el commit anterior (mask-image en el `<ul>` de enlaces), el
 dueño reportó que el texto seguía cortándose, con una captura de un viewport

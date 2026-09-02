@@ -35,6 +35,15 @@ cv:
           - 'Designed the platform authorization model as deny-by-default: Row Level Security enabled with no policy at all for the anonymous or the authenticated role, and all data access routed through the server, so the public key shipped to the browser enables no query.'
           - 'Established a CI security baseline that runs on every deploy (CodeQL, custom Semgrep rules, audit-ci and Lighthouse CI gates), so a finding stops the delivery instead of surfacing in production.'
           - 'Built elevaforge.com and the KOA demo vertical (landing and e-commerce) with a multi-account admin panel the team uses to edit packages, projects and content without a deploy in between.'
+      - company: Estación de Servicio Kennedy
+        position: IT and Systems Contractor
+        location: Pasto, Colombia
+        start_date: 2023-03
+        end_date: 2026-03
+        highlights:
+          - 'IT contractor for three consecutive years, responsible for the development, implementation and maintenance of the information systems of an operating fuel station.'
+          - 'Managed the business databases and optimised the inventory and sales control tools, the day to day operation the till and fuel supply depended on.'
+          - 'Was the standing technical point of contact: support for operational and administrative processes, and incident resolution on the company management systems as they came up, not under a fixed-hours contract.'
       - company: Freelance
         position: Full-Stack Software Developer
         location: Remote
@@ -155,7 +164,17 @@ design:
     # segunda entrada de Educacion, con su titulo de seccion abandonado en la
     # pagina 1, y quien abre por la 2 no sabe que esta leyendo. Ahora el corte
     # cae entre secciones: pagina 1 perfil y experiencia, pagina 2 el resto.
-    allow_page_break: false
+    # Estuvo en `false` (ver tasks/lessons.md, 2026-08-10): forzaba a toda una
+    # sección a moverse en bloque en vez de partirse a mitad de entrada. Con el
+    # CV de hoy ese candado hacia dano en vez de ayudar: al crecer Experiencia
+    # a 4 puestos, "false" empujaba la seccion ENTERA a la pagina 2, dejando la
+    # pagina 1 casi vacia y forzando una tercera pagina. El valor por defecto
+    # (`true`, permite partir ENTRE entradas, nunca a mitad de una) da un corte
+    # limpio: cada entrada de Experiencia y de Educacion queda intacta, nunca
+    # con su encabezado huerfano en una pagina y el resto en la siguiente.
+    # Verificar visualmente tras cualquier cambio de contenido: el ajuste
+    # correcto depende de cuanto texto haya, no es una constante fija.
+    allow_page_break: true
   templates:
     education_entry:
       degree_column: null

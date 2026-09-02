@@ -441,6 +441,37 @@ export const timeline = {
       },
     },
     {
+      /*
+       * Entrada respaldada por una constancia laboral formal del negocio
+       * (2026-08-28), a diferencia de "freelance", cuyo texto es deliberadamente
+       * genérico porque cubre OTROS clientes bajo confidencialidad. Esta sí
+       * tiene nombre y fechas exactas porque hay un documento firmado detrás.
+       * Va justo antes de "freelance" (mismo mes de inicio, mismo tipo de
+       * trabajo independiente) y no reordena el resto de la trayectoria.
+       */
+      id: 'eds-kennedy',
+      kind: 'trabajo',
+      title: {
+        es: 'Contratista de TI y Sistemas',
+        en: 'IT and Systems Contractor',
+      },
+      organization: 'Estación de Servicio Kennedy',
+      location: { es: 'Pasto, Colombia', en: 'Pasto, Colombia' },
+      period: { es: 'Mar 2023 a Mar 2026', en: 'Mar 2023 to Mar 2026' },
+      highlights: {
+        es: [
+          'Contratista de TI durante tres años consecutivos, responsable del desarrollo, la implementación y el mantenimiento de los sistemas informáticos de una estación de servicio en funcionamiento.',
+          'Administré las bases de datos del negocio y optimicé las herramientas de control de inventario y ventas, la operación diaria de la que dependía la caja y el abastecimiento.',
+          'Fui el punto de contacto técnico permanente: soporte a los procesos operativos y administrativos, y resolución de incidencias sobre los sistemas de gestión de la empresa según iban apareciendo, no bajo un contrato de horas fijas.',
+        ],
+        en: [
+          'IT contractor for three consecutive years, responsible for the development, implementation and maintenance of the information systems of an operating fuel station.',
+          'Managed the business databases and optimised the inventory and sales control tools, the day to day operation the till and fuel supply depended on.',
+          'Was the standing technical point of contact: support for operational and administrative processes, and incident resolution on the company management systems as they came up, not under a fixed-hours contract.',
+        ],
+      },
+    },
+    {
       id: 'freelance',
       kind: 'trabajo',
       title: {

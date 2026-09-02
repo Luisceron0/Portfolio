@@ -73,6 +73,28 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 4i: Entrada de Experiencia respaldada por constancia laboral (2026-08-19)
+- [x] Dueño aportó `CONSTANCIA LABORAL.pdf` (E.D.S. Kennedy, contratista de TI y
+      sistemas, Mar 2023 – Mar 2026, firmada 2026-08-28). Analizada antes de
+      escribir nada: funciones formales del documento reescritas en 3 viñetas
+      concretas por idioma, sin inventar cifras que el documento no da
+- [x] Decisión del dueño: entrada PROPIA, separada de "Freelance" (que sigue
+      cubriendo otros clientes bajo confidencialidad, sin solaparse). Cargo:
+      "Contratista de TI y Sistemas" / "IT and Systems Contractor"
+- [x] Insertada junto a "Freelance" (mismo mes de inicio, mismo tipo de trabajo
+      independiente) en los 2 YAML del CV y en `timeline.entries` de
+      `content.ts`, sin reordenar el resto de la trayectoria
+- [x] **Encontrado al regenerar:** el CV en español pasó a 3 páginas.
+      `allow_page_break: false` (fijado 2026-08-10 para otro problema) empujaba
+      TODA la sección Experiencia, ahora de 4 puestos, a la página 2 en bloque,
+      dejando la página 1 casi vacía. Revertido a `true` (el valor por
+      defecto) en los DOS idiomas tras verificar visualmente que el corte cae
+      limpio entre entradas, nunca a mitad de una. Detalle en `tasks/lessons.md`
+- [x] Los dos PDF regenerados: 2 páginas cada uno, cero guiones blandos, cero
+      cortes de palabra, la entrada nueva presente y legible por un ATS
+- [x] `typecheck`, `lint`, `check:pending`, `check:secrets`, `build` y la suite
+      de Playwright de `content.spec.ts` en verde
+
 ## Phase 4h: El primer arreglo de la nav creaba un fallo peor (2026-08-19)
 - [x] El dueño reportó que el corte seguía, con un viewport más estrecho que el
       probado antes. Medido: por debajo de ~200px, `<ul>` llegaba a 0px de

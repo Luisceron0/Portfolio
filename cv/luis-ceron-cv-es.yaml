@@ -35,6 +35,15 @@ cv:
           - 'Diseñé el modelo de autorización de la plataforma como deny-by-default: Row Level Security activa y sin ninguna política para el rol anónimo ni el autenticado, con todo el acceso a datos pasando por el servidor, así que la clave pública que viaja al navegador no habilita ninguna consulta.'
           - 'Establecí un estándar de seguridad en CI que corre en cada despliegue (CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI), de forma que un hallazgo detiene la entrega en lugar de descubrirse en producción.'
           - 'Construí elevaforge.com y la vertical de demostración KOA (landing y e-commerce) con un panel de administración multi-cuenta, con el que el equipo edita paquetes, proyectos y contenido sin un despliegue de por medio.'
+      - company: Estación de Servicio Kennedy
+        position: Contratista de TI y Sistemas
+        location: Pasto, Colombia
+        start_date: 2023-03
+        end_date: 2026-03
+        highlights:
+          - 'Contratista de TI durante tres años consecutivos, responsable del desarrollo, la implementación y el mantenimiento de los sistemas informáticos de una estación de servicio en funcionamiento.'
+          - 'Administré las bases de datos del negocio y optimicé las herramientas de control de inventario y ventas, la operación diaria de la que dependía la caja y el abastecimiento.'
+          - 'Fui el punto de contacto técnico permanente: soporte a los procesos operativos y administrativos, y resolución de incidencias sobre los sistemas de gestión de la empresa según iban apareciendo, no bajo un contrato de horas fijas.'
       - company: Freelance
         position: Desarrollador de Software Full-Stack
         location: Remoto
@@ -157,7 +166,17 @@ design:
     # segunda entrada de Educacion, con su titulo de seccion abandonado en la
     # pagina 1, y quien abre por la 2 no sabe que esta leyendo. Ahora el corte
     # cae entre secciones: pagina 1 perfil y experiencia, pagina 2 el resto.
-    allow_page_break: false
+    # Estuvo en `false` (ver tasks/lessons.md, 2026-08-10): forzaba a toda una
+    # sección a moverse en bloque en vez de partirse a mitad de entrada. Con el
+    # CV de hoy ese candado hacia dano en vez de ayudar: al crecer Experiencia
+    # a 4 puestos, "false" empujaba la seccion ENTERA a la pagina 2, dejando la
+    # pagina 1 casi vacia y forzando una tercera pagina. El valor por defecto
+    # (`true`, permite partir ENTRE entradas, nunca a mitad de una) da un corte
+    # limpio: cada entrada de Experiencia y de Educacion queda intacta, nunca
+    # con su encabezado huerfano en una pagina y el resto en la siguiente.
+    # Verificar visualmente tras cualquier cambio de contenido: el ajuste
+    # correcto depende de cuanto texto haya, no es una constante fija.
+    allow_page_break: true
   templates:
     education_entry:
       degree_column: null
