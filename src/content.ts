@@ -186,8 +186,8 @@ export const site = {
     en: 'Luis Alejandro Cerón Muñoz, Full-Stack Software Engineer',
   } satisfies Localized,
   description: {
-    es: 'Ingeniero de software full-stack.Diseño y desarrollo full-stack de aplicaciones web, con arquitectura pensada para escalar y seguridad incorporada desde el diseño, no añadida al final. El resultado: sistemas en producción, sostenibles en el tiempo y sin una deuda de seguridad oculta detrás.',
-    en: 'Full-stack software engineer. Full-stack design and development of web applications, with architecture built to scale and security engineered in from the start , not bolted on at the end. The result: production systems that hold up over time, with no hidden security debt left behind.',
+    es: 'Ingeniero de software full-stack especializado en arquitectura y seguridad de aplicaciones. Diseño y desarrollo de aplicaciones web con arquitectura preparada para escalar y seguridad incorporada desde el diseño, no añadida al final. El resultado: sistemas en producción, sostenibles en el tiempo, sin deuda de seguridad oculta.',
+    en: 'Full-stack software engineer specialised in application architecture and security. Design and development of web applications with architecture built to scale and security engineered in from the start, not added at the end. The result: production systems that hold up over time, with no hidden security debt.',
   } satisfies Localized,
 } as const
 
@@ -239,8 +239,8 @@ export const hero = {
    * entre en 375x667. Si alargas esto, ese test falla. Es intencionado.
    */
   pitch: {
-    es: 'Construyo aplicaciones web completas y las diseño desde el principio para que resistan a quien intente romperlas. Entrego producto que funciona, sin dejarte un problema de seguridad detrás.',
-    en: 'I build complete web applications and design them from the start to hold up against anyone trying to break them. I deliver working product, without leaving a security problem behind.',
+    es: 'Diseño y desarrollo aplicaciones web completas, resistentes desde el principio a quien intente vulnerarlas. Entrego software funcional, sin dejar deuda de seguridad oculta.',
+    en: 'I design and develop complete web applications, built from the outset to withstand attempts to breach them. I deliver working software, with no hidden security debt.',
   } satisfies Localized,
   location: {
     es: 'Pasto, Nariño, Colombia',
@@ -256,7 +256,7 @@ export const hero = {
     href: 'https://github.com/Luisceron0',
   } satisfies ExternalLink,
   contactCta: {
-    label: { es: 'Escríbeme', en: 'Get in touch' },
+    label: { es: 'Escríbame', en: 'Get in touch' },
     /** Ancla interna a la sección de contacto. Una sola página (regla 1). */
     href: '#contacto',
   } satisfies ExternalLink,
@@ -290,14 +290,14 @@ export const profile = {
    */
   summary: {
     es: [
-      'El trabajo combina desarrollo full-stack con arquitectura de software y arquitectura de seguridad: no son etapas separadas, sino la misma decisión vista desde tres ángulos distintos. La interfaz, la lógica que no se ve, y la puesta en producción están conectadas, y las decisiones que cruzan esas capas se toman mejor viendo el conjunto completo.',
-      'Antes de la primera línea de código se define la estructura: dónde van los límites entre las partes del sistema, qué debe mantenerse estable y qué debe poder cambiar más adelante sin rehacer lo que ya funciona. Esa decisión temprana es la diferencia entre un producto que evoluciona junto al negocio y uno que hay que reconstruir cada vez que llega un requisito grande.',
-      'La arquitectura de seguridad no se agrega al final, como un parche: se piensa desde el diseño, identificando qué puede salir mal y ubicando cada control donde realmente sostiene. Ante una falla, el sistema prioriza fallar de forma segura antes que dejar una puerta abierta "por si acaso": un control que se salta ante la duda no protege nada.',
+      'El trabajo combina desarrollo full-stack con arquitectura de software y arquitectura de seguridad: no son etapas independientes, sino una misma decisión abordada desde tres ángulos. La interfaz, la lógica de negocio y la puesta en producción están interconectadas, y las decisiones que cruzan esas capas se resuelven mejor con una visión de conjunto.',
+      'La estructura se define antes de la primera línea de código: los límites entre los componentes del sistema, qué debe permanecer estable y qué debe poder modificarse sin reconstruir lo que ya funciona. Esta decisión temprana determina si el producto evoluciona junto al negocio o si requiere reconstrucción ante cada requisito de envergadura.',
+      'La arquitectura de seguridad se define desde el diseño, no se incorpora al final: cada control se ubica en la capa donde efectivamente sostiene, a partir de un análisis explícito de qué puede fallar. Ante un fallo, el sistema prioriza el cierre seguro sobre la disponibilidad: ningún control se desactiva ante la duda.',
     ],
     en: [
-      "The work combines full-stack development with software architecture and security architecture: these aren't separate stages, but the same decision seen from three angles. The interface, the logic behind it, and the path to production are connected, and the decisions that cross those layers are made better when the full picture is visible.",
-      "Before the first line of code, the structure gets defined: where the boundaries between the system's parts go, what needs to stay stable, and what must be able to change later without rebuilding what already works. That early decision separates a product that evolves with the business from one that has to be rebuilt every time a major requirement arrives.",
-      'Security architecture is not added at the end, like a patch: it is considered from the design stage, identifying what could go wrong and placing each control where it actually holds. When something fails, the system is built to fail safely rather than leave a door open "just in case": a control that gets bypassed under doubt protects nothing.',
+      'The work combines full-stack development with software architecture and security architecture: these are not independent stages, but a single decision approached from three angles. The interface, the business logic and the path to production are interconnected, and the decisions that cross those layers are resolved better with a complete view of the system.',
+      'The structure is defined before the first line of code: the boundaries between system components, what must remain stable, and what must be able to change without rebuilding what already works. This early decision determines whether the product evolves with the business or requires reconstruction with every major requirement.',
+      'Security architecture is defined at the design stage, not added at the end: each control is placed at the layer where it actually holds, based on an explicit analysis of what could fail. On failure, the system prioritises secure closure over availability: no control is disabled under uncertainty.',
     ],
   } satisfies LocalizedList,
   facts: [
@@ -343,8 +343,8 @@ export const profile = {
 export const timeline = {
   heading: { es: 'Trayectoria', en: 'Career' } satisfies Localized,
   intro: {
-    es: 'Experiencia y formación, en orden cronológico inverso. Todo lo de aquí sale del mismo CV que puedes descargar más abajo.',
-    en: 'Experience and education, most recent first. Everything here comes from the same CV you can download below.',
+    es: 'Experiencia y formación, en orden cronológico inverso. El contenido proviene del mismo currículum disponible para descarga más abajo.',
+    en: 'Experience and education, most recent first, drawn from the same CV available for download below.',
   } satisfies Localized,
   /** Etiquetas de tipo de entrada. */
   kinds: {
@@ -407,14 +407,14 @@ export const timeline = {
       period: { es: 'Jun 2025 a la actualidad', en: 'Jun 2025 to present' },
       highlights: {
         es: [
-          'Cofundé un estudio de software de tres ingenieros y asumí las decisiones de arquitectura del producto: definí los límites entre módulos y los contratos de datos, y dejé cada decisión y sus alternativas descartadas en ADRs versionados, de modo que el equipo puede revisarlas sin depender de mí.',
+          'Cofundé un estudio de software de tres ingenieros, con responsabilidad sobre las decisiones de arquitectura del producto: límites entre módulos, contratos de datos y alternativas descartadas, documentadas en ADRs versionados que el equipo consulta de forma independiente.',
           'Dirigí la migración del sitio corporativo de Angular a Next.js 14, planificada por capas para que la estructura nueva absorbiera el contenido existente sin rehacerlo.',
           'Diseñé el modelo de autorización de la plataforma como deny-by-default: Row Level Security activa y sin ninguna política para el rol anónimo ni el autenticado, con todo el acceso a datos pasando por el servidor.',
           'Establecí un estándar de seguridad en CI que corre en cada despliegue (CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI), de forma que un hallazgo detiene la entrega en lugar de descubrirse en producción.',
           'Construí elevaforge.com y la vertical de demostración KOA (landing y e-commerce) con un panel de administración multi-cuenta, con el que el equipo edita paquetes, proyectos y contenido sin un despliegue de por medio.',
         ],
         en: [
-          'Co-founded a three engineer software studio and owned the product architecture decisions: I defined the module boundaries and the data contracts, and recorded every decision and its discarded alternatives in versioned ADRs, so the team can review them without depending on me.',
+          'Co-founded a three engineer software studio, with responsibility for the product architecture decisions: module boundaries, data contracts and discarded alternatives, documented in versioned ADRs the team consults independently.',
           'Led the migration of the corporate site from Angular to Next.js 14, planned layer by layer so the new structure absorbed the existing content instead of rebuilding it.',
           'Designed the platform authorisation model as deny-by-default: Row Level Security enabled with no policy at all for the anonymous or the authenticated role, and all data access routed through the server.',
           'Established a CI security baseline that runs on every deploy (CodeQL, custom Semgrep rules, audit-ci and Lighthouse CI gates), so a finding stops the delivery instead of surfacing in production.',
@@ -549,13 +549,13 @@ export const projects: readonly Project[] = [
     },
     // Fuente: README de github.com/Luisceron0/CareLink (repo público).
     problem: {
-      es: 'Un hospital lleva historia clínica, triage y coordinación entre especialistas sobre los mismos datos. Guardarlos es la parte fácil. Lo difícil son dos garantías que no admiten excepciones: que un registro firmado no se pueda alterar después, ni siquiera por un administrador con acceso directo a la base, y que ningún profesional vea el historial de un paciente que no está a su cargo.',
-      en: 'A hospital keeps clinical records, triage and coordination between specialists on the same data. Storing it is the easy part. The hard part is two guarantees that admit no exceptions: that a signed record cannot be altered afterwards, not even by an administrator with direct database access, and that no clinician sees the history of a patient who is not in their care.',
+      es: 'CareLink gestiona historia clínica, triage y coordinación entre especialistas sobre una misma base de datos, con dos garantías sin excepción: la inmutabilidad de todo registro firmado, incluso frente a un administrador con acceso directo a la base de datos, y la restricción del historial clínico al personal a cargo de cada paciente.',
+      en: 'CareLink manages clinical history, triage and coordination between specialists on a shared database, under two guarantees with no exceptions: the immutability of every signed record, even against an administrator with direct database access, and the restriction of clinical history to the staff responsible for each patient.',
     },
     stack: ['Java', 'Spring Boot', 'PostgreSQL 16', 'React 18', 'Vite', 'Docker', 'Flyway'],
     security: {
-      es: 'La inmutabilidad no se delega a la capa de aplicación. Un trigger de PostgreSQL rechaza cualquier UPDATE sobre un encuentro ya firmado, así que la regla se cumple igual si alguien entra por fuera de la API, con un cliente SQL o con una migración mal escrita. Poner el control en la capa que nadie puede saltarse es la diferencia entre una regla de negocio y una garantía. La captura muestra el intento rechazado con un 409.',
-      en: 'Immutability is not delegated to the application layer. A PostgreSQL trigger rejects any UPDATE on an already signed encounter, so the rule holds even if someone comes in outside the API, with a SQL client or through a badly written migration. Putting the control at the layer nobody can bypass is the difference between a business rule and a guarantee. The screenshot shows the attempt rejected with a 409.',
+      es: 'La inmutabilidad se aplica en la base de datos, no en la capa de aplicación: un trigger de PostgreSQL rechaza cualquier UPDATE sobre un encuentro ya firmado, incluso si el acceso ocurre fuera de la API, mediante un cliente SQL o una migración. El control queda así en la capa que ningún camino de acceso puede evitar. La captura documenta el intento rechazado con un código 409.',
+      en: 'Immutability is enforced at the database layer, not in the application: a PostgreSQL trigger rejects any UPDATE on an already signed encounter, regardless of whether access occurs outside the API, through a SQL client or a migration. The control therefore sits at the layer no access path can bypass. The screenshot documents the rejected attempt with a 409 status code.',
     },
     highlights: {
       es: [
@@ -604,13 +604,13 @@ export const projects: readonly Project[] = [
     },
     // Fuente: README y docs/portfolio.md de github.com/Luisceron0/Tributary.
     problem: {
-      es: 'Una sola venta transfronteriza genera obligaciones fiscales en países cuyos modelos técnicos son incompatibles entre sí: Colombia valida la factura ante la DIAN antes de que exista legalmente, España exige una cadena de registros enlazados por hash que custodia el emisor, y Alemania exige un documento estructurado que se entrega al comprador. Lo habitual es modelar el dominio según el primer régimen que se implementó y tratar los demás como casos especiales, y el segundo régimen siempre delata cuál fue el primero. Es una implementación de referencia contra especificaciones públicas: no está certificada bajo ningún régimen ni sirve para emitir en producción, y eso lo dice el propio repositorio antes de que nadie pregunte.',
-      en: 'A single cross-border sale creates tax obligations in countries whose technical models are incompatible with each other: Colombia clears the invoice with the tax authority before it legally exists, Spain requires a hash-chained record kept by the issuer, and Germany requires a structured document handed to the buyer. The usual outcome is a domain modelled after whichever regime was built first, with the rest bolted on as special cases, and the second regime always reveals which one that was. This is a reference implementation built against public specifications: it is not certified under any regime and cannot be used to issue in production, and the repository itself says so before anyone asks.',
+      es: 'Tributary resuelve la incompatibilidad técnica entre los regímenes fiscales que activa una venta transfronteriza: Colombia valida la factura ante la DIAN antes de que exista legalmente, España exige una cadena de registros enlazados por hash que custodia el emisor, y Alemania exige un documento estructurado entregado al comprador. El dominio se modela una sola vez, de forma neutral a los tres regímenes, en lugar de adaptarse al primero implementado y tratar los demás como casos especiales. Es una implementación de referencia contra especificaciones públicas: no está certificada bajo ningún régimen ni habilitada para emisión en producción, condición declarada explícitamente en el repositorio.',
+      en: 'Tributary resolves the technical incompatibility between the fiscal regimes triggered by a single cross-border sale: Colombia clears the invoice with the tax authority before it legally exists, Spain requires a hash-chained record kept by the issuer, and Germany requires a structured document handed to the buyer. The domain is modelled once, neutral to all three regimes, rather than shaped around whichever was implemented first with the rest treated as special cases. This is a reference implementation built against public specifications: it is not certified under any regime and is not enabled for production issuance, a condition stated explicitly in the repository.',
     },
     stack: ['Java 21', 'Spring Boot', 'PostgreSQL 16', 'Flyway', 'React 19', 'Testcontainers', 'Docker'],
     security: {
-      es: 'Que un registro fiscal no se pueda alterar es una garantía de la base de datos, no una promesa de la aplicación. Un trigger de PostgreSQL rechaza cualquier UPDATE y cualquier DELETE sobre los registros fiscales y sobre la bitácora de auditoría, así que la regla se cumple igual ante una sesión de psql con credenciales válidas y cero código de aplicación por medio: una corrección es una fila nueva que referencia a la anterior, nunca una edición. Y si alguien con permiso para desactivar el trigger lo desactiva y altera una fila igualmente, el verificador del propio sistema recalcula la cadena de hashes y nombra el registro exacto donde deja de cuadrar, que es lo que muestra la captura.',
-      en: 'That a fiscal record cannot be altered is a database guarantee, not an application promise. A PostgreSQL trigger rejects every UPDATE and every DELETE on fiscal records and on the audit log, so the rule holds even against a psql session with valid credentials and zero application code in the path: a correction is a new row referencing the previous one, never an edit. And if someone with the privilege to disable the trigger disables it and tampers with a row anyway, the system’s own verifier recomputes the hash chain and names the exact record where it stops matching, which is what the screenshot shows.',
+      es: 'La inmutabilidad de un registro fiscal es una garantía de la base de datos, no una promesa de la aplicación. Un trigger de PostgreSQL rechaza cualquier UPDATE y cualquier DELETE sobre los registros fiscales y la bitácora de auditoría, de modo que la regla se cumple incluso ante una sesión de psql con credenciales válidas y sin código de aplicación involucrado: una corrección es una fila nueva que referencia a la anterior, nunca una edición sobre la existente. Ante la desactivación del trigger y la alteración de una fila, el verificador del sistema recalcula la cadena de hashes e identifica el registro exacto donde la verificación falla, condición documentada en la captura.',
+      en: 'The immutability of a fiscal record is a database guarantee, not an application promise. A PostgreSQL trigger rejects every UPDATE and DELETE on fiscal records and the audit log, so the rule holds even against a psql session with valid credentials and no application code involved: a correction is a new row referencing the previous one, never an edit to the existing record. Should the trigger be disabled and a row altered regardless, the system’s verifier recomputes the hash chain and identifies the exact record where verification fails, a condition documented in the screenshot.',
     },
     highlights: {
       es: [
@@ -665,13 +665,13 @@ export const projects: readonly Project[] = [
     },
     // Fuente: README de github.com/Luisceron0/ElevaForge y el sitio en vivo.
     problem: {
-      es: 'Una agencia necesita captar clientes y poder editar el contenido de su propio sitio (paquetes, proyectos, equipo) sin llamar a un desarrollador por cada cambio de texto. El reto real no es el panel de administración: es dar esa autonomía sin que el panel se convierta en la puerta de entrada más fácil al sitio.',
-      en: 'An agency needs to capture clients and edit its own site content (packages, projects, team) without calling a developer for every copy change. The real challenge is not the admin panel: it is granting that autonomy without turning the panel into the easiest way into the site.',
+      es: 'Una agencia de software necesita captar clientes y editar el contenido de su propio sitio (paquetes, proyectos, equipo) sin depender de un desarrollador para cada cambio de texto. El panel de administración debe conceder esa autonomía sin convertirse en la vía de acceso más vulnerable del sitio.',
+      en: 'A software agency needs to capture clients and edit its own site content (packages, projects, team) without depending on a developer for every copy change. The admin panel must grant that autonomy without becoming the site’s most vulnerable access path.',
     },
     stack: ['Next.js 14', 'TypeScript', 'Tailwind CSS', 'Supabase', 'PostgreSQL', 'Vercel'],
     security: {
-      es: 'Las tablas de Supabase van con Row Level Security activada y sin una sola policy para el rol anónimo ni para el autenticado. Eso es deny-by-default de verdad, y no una lista de permisos con huecos: lo que no está explícitamente concedido, no existe. Todo el acceso a datos pasa por el servidor, así que la clave pública que viaja al navegador no abre nada, porque no hay ninguna policy que la habilite.',
-      en: 'The Supabase tables run with Row Level Security enabled and not a single policy for the anonymous or the authenticated role. That is deny-by-default in the real sense, not an allow list with gaps: what is not explicitly granted does not exist. All data access goes through the server, so the public key shipped to the browser opens nothing, because no policy enables it.',
+      es: 'Las tablas de Supabase operan con Row Level Security activada y sin ninguna policy para el rol anónimo ni el autenticado, un esquema deny-by-default en sentido estricto: lo que no está explícitamente concedido no existe. Todo el acceso a datos se canaliza a través del servidor, de modo que la clave pública expuesta al navegador no habilita ninguna operación.',
+      en: 'The Supabase tables operate with Row Level Security enabled and no policy for either the anonymous or the authenticated role, a strict deny-by-default scheme: what is not explicitly granted does not exist. All data access is routed through the server, so the public key exposed to the browser enables no operation.',
     },
     highlights: {
       es: [
@@ -714,13 +714,13 @@ export const projects: readonly Project[] = [
     },
     // Fuente: README de github.com/luisCeron0Portfolio/koa-landing y el sitio en vivo.
     problem: {
-      es: 'Captar la lista de espera de un lanzamiento con un formulario público, que es exactamente el tipo de endpoint que los bots encuentran solos. Sin control, se convierte en dos problemas a la vez: una lista llena de direcciones basura que ya no sirve para medir interés, y una vía barata para inundar la bandeja del equipo.',
-      en: 'Capture the waitlist for a launch through a public form, which is exactly the kind of endpoint bots find on their own. Left uncontrolled it becomes two problems at once: a list full of junk addresses that no longer measures interest, and a cheap way to flood the team inbox.',
+      es: 'KOA Landing capta la lista de espera de un lanzamiento de producto mediante un formulario público, el tipo de endpoint que los sistemas automatizados detectan sin intervención humana. Sin control, esto genera dos problemas: una lista de direcciones no verificadas que deja de medir interés real, y una vía de bajo costo para saturar la bandeja de entrada del equipo.',
+      en: 'KOA Landing captures a product launch waitlist through a public form, the type of endpoint automated systems find without human involvement. Left uncontrolled, this creates two problems: a list of unverified addresses that stops measuring genuine interest, and a low-cost route to flood the team’s inbox.',
     },
     stack: ['Astro 7', 'React', 'TypeScript', 'Neon Postgres', 'Resend', 'Upstash', 'Turnstile'],
     security: {
-      es: 'El envío queda bloqueado hasta que Cloudflare Turnstile confirma que hay una persona detrás, y el servidor vuelve a verificar ese token aunque el cliente afirme que todo está en orden: el navegador no es una fuente de verdad. Es el mismo patrón fail-closed que reutilicé en el formulario de este sitio, y llegó aquí después de corregir una condición de carrera real en la que el botón se podía pulsar antes de que el token existiera.',
-      en: 'Submission stays blocked until Cloudflare Turnstile confirms there is a person behind it, and the server verifies that token again even when the client claims everything is fine: the browser is not a source of truth. It is the same fail-closed pattern I reused in this site’s contact form, and it got here after fixing a real race condition where the button could be pressed before the token existed.',
+      es: 'El envío permanece bloqueado hasta que Cloudflare Turnstile confirma la presencia de una persona, y el servidor verifica ese token de forma independiente, sin asumir la validez de lo que reporta el cliente. Es el mismo patrón fail-closed empleado en el formulario de este sitio, incorporado tras corregir una condición de carrera en la que el botón podía pulsarse antes de que el token existiera.',
+      en: 'Submission remains blocked until Cloudflare Turnstile confirms a human presence, and the server verifies that token independently, without assuming the validity of what the client reports. This is the same fail-closed pattern used in this site’s contact form, adopted after fixing a race condition where the button could be pressed before the token existed.',
     },
     highlights: {
       es: [
@@ -764,13 +764,13 @@ export const projects: readonly Project[] = [
     },
     // Fuente: README de github.com/luisCeron0Portfolio/koa-store y el sitio en vivo.
     problem: {
-      es: 'Mostrar un catálogo completo en dos idiomas con un flujo de compra realista de principio a fin, pero sin cobrar un solo pago real ni quedarse con los datos de nadie. La exigencia está en esa mezcla: tiene que comportarse como una tienda de verdad, no limitarse a parecerlo, y a la vez no crear ninguna obligación de custodiar información personal.',
-      en: 'Show a complete catalogue in two languages with a realistic end to end purchase flow, while charging no real payment and keeping nobody’s data. The demand is in that mix: it has to behave like a real store rather than merely look like one, and at the same time create no obligation to safeguard personal information.',
+      es: 'KOA Store presenta un catálogo completo en dos idiomas con un flujo de compra realista de principio a fin, sin procesar pagos reales ni retener datos personales. El sistema debe comportarse como una tienda funcional, no simularla, y a la vez no generar ninguna obligación de custodia de información personal.',
+      en: 'KOA Store presents a complete catalogue in two languages with a realistic end-to-end purchase flow, without processing real payments or retaining personal data. The system must function as an operating store rather than simulate one, while creating no obligation to safeguard personal information.',
     },
     stack: ['Astro', 'TypeScript', 'Content Collections', 'PostgreSQL', 'Vitest', 'Vercel'],
     security: {
-      es: 'El precio se recalcula en el servidor a partir del catálogo: lo que llega desde el carrito del navegador se trata como una propuesta, nunca como un dato de confianza. Es el fallo clásico de una tienda, y no se evita validando mejor en el cliente sino no confiando en él. El carrito es anónimo y de sesión, y hay una vía explícita de borrado de datos en vez de dejar la retención al azar.',
-      en: 'The price is recalculated on the server from the catalogue: whatever arrives from the browser cart is treated as a proposal, never as trusted data. This is the classic storefront flaw, and it is not avoided by validating better on the client but by not trusting it at all. The cart is anonymous and session based, and there is an explicit data erasure path instead of leaving retention to chance.',
+      es: 'El precio se recalcula en el servidor a partir del catálogo: los datos recibidos desde el carrito del navegador se tratan como una propuesta, nunca como información de confianza. Este control evita el fallo clásico de una tienda, no mediante mejor validación en el cliente, sino mediante la ausencia total de confianza en él. El carrito es anónimo y limitado a la sesión, con una vía explícita de borrado de datos en lugar de una retención indefinida.',
+      en: 'The price is recalculated server-side from the catalogue: data received from the browser cart is treated as a proposal, never as trusted information. This control avoids the classic storefront flaw, not through better client-side validation, but through the complete absence of trust in the client. The cart is anonymous and session-scoped, with an explicit data erasure path rather than indefinite retention.',
     },
     highlights: {
       es: [
@@ -1005,10 +1005,10 @@ export const cv = {
 // ---------------------------------------------------------------------------
 
 export const contact = {
-  heading: { es: 'Hablemos', en: 'Let’s talk' } satisfies Localized,
+  heading: { es: 'Contacto', en: 'Contact' } satisfies Localized,
   intro: {
-    es: 'Cuéntame qué necesitas y te respondo. No guardo tus datos: el mensaje llega a mi correo y nada más.',
-    en: 'Tell me what you need and I will reply. I do not store your data: the message reaches my inbox and nothing else.',
+    es: 'Escríbame para contarme qué necesita; le responderé a la brevedad. No se almacenan datos: el mensaje llega directamente a mi correo.',
+    en: 'Write to me about your project or enquiry; I will reply promptly. No data is stored: the message is delivered directly to my inbox.',
   } satisfies Localized,
   labels: {
     name: { es: 'Nombre', en: 'Name' } satisfies Localized,
@@ -1029,12 +1029,12 @@ export const contact = {
    */
   captcha: {
     pending: {
-      es: 'Comprobando que no eres un robot. El botón se activa al terminar.',
-      en: 'Checking that you are not a robot. The button activates when it finishes.',
+      es: 'Verificando que no se trata de un robot. El botón se activará al completarse la comprobación.',
+      en: 'Verifying that this is not a robot. The button will activate once the check completes.',
     } satisfies Localized,
     unavailable: {
-      es: 'La verificación antifraude no está disponible ahora mismo, así que el formulario está deshabilitado. Escríbeme por GitHub mientras tanto.',
-      en: 'The anti-fraud check is unavailable right now, so the form is disabled. Reach me through GitHub in the meantime.',
+      es: 'La verificación antifraude no está disponible en este momento, por lo que el formulario permanece deshabilitado. Contácteme por GitHub mientras tanto.',
+      en: 'The anti-fraud check is currently unavailable, so the form has been disabled. Please reach me through GitHub in the meantime.',
     } satisfies Localized,
   },
   /**
@@ -1042,26 +1042,26 @@ export const contact = {
    * nada de lo que el visitante haya escrito.
    */
   successMessage: {
-    es: 'Mensaje enviado. Te responderé al correo que indicaste.',
-    en: 'Message sent. I will reply to the address you gave.',
+    es: 'Mensaje enviado. Le responderé al correo indicado.',
+    en: 'Message sent. I will reply to the address provided.',
   } satisfies Localized,
   /** Un código de error del servidor a un texto. El motivo técnico no se expone. */
   errors: {
     VALIDATION: {
-      es: 'Revisa los campos marcados y vuelve a intentarlo.',
-      en: 'Check the highlighted fields and try again.',
+      es: 'Revise los campos marcados y vuelva a intentarlo.',
+      en: 'Please check the highlighted fields and try again.',
     },
     CAPTCHA: {
-      es: 'No se pudo completar la verificación antifraude. Recarga la página e inténtalo otra vez.',
-      en: 'The anti-fraud check could not be completed. Reload the page and try again.',
+      es: 'No se pudo completar la verificación antifraude. Recargue la página e inténtelo nuevamente.',
+      en: 'The anti-fraud check could not be completed. Please reload the page and try again.',
     },
     RATE_LIMITED: {
-      es: 'Has enviado varios mensajes seguidos. Espera unos minutos antes de volver a intentarlo.',
-      en: 'You have sent several messages in a row. Wait a few minutes before trying again.',
+      es: 'Se han enviado varios mensajes de forma consecutiva. Espere unos minutos antes de volver a intentarlo.',
+      en: 'Several messages have been sent in quick succession. Please wait a few minutes before trying again.',
     },
     SEND_FAILED: {
-      es: 'No se pudo enviar el mensaje. Vuelve a intentarlo o escríbeme directamente por GitHub.',
-      en: 'The message could not be sent. Try again or reach me directly through GitHub.',
+      es: 'No se pudo enviar el mensaje. Vuelva a intentarlo o contácteme directamente por GitHub.',
+      en: 'The message could not be sent. Please try again or reach me directly through GitHub.',
     },
   } satisfies Readonly<Record<string, Localized>>,
   /** Un código de validación a un texto. Nunca se repite lo que escribió el visitante. */
@@ -1082,8 +1082,8 @@ export const contact = {
 
 export const footer = {
   note: {
-    es: 'Sitio propio, sin cookies de terceros ni analítica que te siga.',
-    en: 'My own site, with no third-party cookies and no analytics following you.',
+    es: 'Sitio propio, sin cookies de terceros ni analítica de seguimiento.',
+    en: 'Independently operated site, with no third-party cookies and no tracking analytics.',
   } satisfies Localized,
   skipToContent: {
     es: 'Saltar al contenido',

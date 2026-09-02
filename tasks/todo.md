@@ -73,6 +73,44 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 4j: Tono formal y estructura directa en todo el sitio (2026-08-19)
+- [x] Decisiones del dueño (con previews antes/después para cada eje):
+      registro "usted" formal pleno en todo el sitio; párrafos de proyecto
+      (problema, ángulo de seguridad) reescritos sin gancho narrativo,
+      abriendo con la conclusión; alcance: Hero, Perfil, Proyectos,
+      Trayectoria/Contacto/Pie
+- [x] Registro "usted": convertidos todos los "tú" del sitio (botón
+      "Escríbeme"→"Escríbame", intro y errores del formulario de contacto,
+      captcha, mensaje de éxito, pie de página). Las viñetas de proyectos y de
+      trayectoria ya eran impersonales/técnicas y no llevaban "tú": sin cambios
+      ahí. La cita literal del titular de ElevaForge ("tu empresa", dentro de
+      un `alt` que describe la captura) se deja intacta a propósito
+- [x] Proyectos: los 10 párrafos de `problem`/`security` (5 proyectos × 2
+      campos) reescritos en los 2 idiomas para abrir con la conclusión en vez
+      del planteamiento-resolución ("Guardarlos es la parte fácil. Lo difícil
+      es..."). Los `highlights` (viñetas técnicas) quedan fuera de este ajuste,
+      por decisión explícita del dueño
+- [x] Perfil: los tres párrafos pierden las figuras retóricas ("como un
+      parche", "por si acaso" entre comillas, el cierre aforístico) sin perder
+      ningún hecho técnico
+- [x] Hero: `pitch` reescrito sin la construcción "dejarte" (tú); verificado
+      que sigue cumpliendo RF-101 (cabe en 375x667 sin scroll,
+      `e2e/landing.spec.ts` en verde)
+- [x] Contacto: heading "Hablemos"→"Contacto" (coherente con la nav, que ya
+      decía "Contacto"); intro y los 4 códigos de error a usted
+- [x] De paso, dos erratas reales corregidas en `site.description`: un punto
+      sin espacio ("full-stack.Diseño") y un espacio de más antes de una coma
+      en inglés ("start , not")
+- [x] `e2e/landing.spec.ts` actualizado: dependía del texto literal del botón
+      ("Escríbeme") y de la primera frase del pitch, ambos cambiados
+- [x] `typecheck`, `lint`, `build`, `check:pending`, `check:secrets` y las
+      suites de `content.spec.ts` + `landing.spec.ts` en verde. Verificado
+      visualmente en navegador real (hero, perfil, contacto, tarjeta de
+      CareLink) antes de dar el trabajo por terminado
+- [ ] **Fuera de alcance, explícito:** los YAML del CV (`cv/*.yaml`) no se
+      tocaron. El pedido fue sobre "el contenido del portafolio" (el sitio);
+      el CV tiene su propio formato ATS ya cerrado en una vuelta anterior
+
 ## Phase 4i: Entrada de Experiencia respaldada por constancia laboral (2026-08-19)
 - [x] Dueño aportó `CONSTANCIA LABORAL.pdf` (E.D.S. Kennedy, contratista de TI y
       sistemas, Mar 2023 – Mar 2026, firmada 2026-08-28). Analizada antes de

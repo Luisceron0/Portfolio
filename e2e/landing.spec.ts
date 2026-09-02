@@ -48,8 +48,8 @@ test.describe('Landing', () => {
     // pantalla: es el criterio literal de RF-101 y de RF-105.
     for (const locator of [
       page.getByRole('heading', { level: 1 }),
-      page.getByText(/Construyo aplicaciones web completas/),
-      heroSection.getByRole('link', { name: /Escríbeme/ }),
+      page.getByText(/Diseño y desarrollo aplicaciones web completas/),
+      heroSection.getByRole('link', { name: /Escríbame/ }),
       heroSection.getByRole('link', { name: /Ver mi perfil de GitHub/ }),
     ]) {
       const box = await locator.boundingBox()
