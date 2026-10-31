@@ -73,6 +73,37 @@
       en 3 corridas contra el build real; mecanismo de aserción verificado en
       rojo con un umbral imposible antes de confiar en el verde
 
+## Phase 5: Rediseño Persona (P5R + P3R) y experiencia en I.P.S. San José (2026-10-31)
+- [x] Experiencia nueva: Ingeniero de Software en I.P.S. San José
+      (Villagarzón, Putumayo), 21 sep a 16 nov 2026. Cargo y funciones
+      dictados por el dueño (las de E.D.S. Kennedy más gestor de inventario,
+      automatizaciones y el desarrollo temprano de un TAC). Periodo escrito
+      con su fecha de cierre ("Sep 2026 a Nov 2026") y no "a la actualidad",
+      para que no quede desactualizado al terminar el contrato
+- [x] Añadida en `content.ts` y en los dos YAML; PDF regenerados con RenderCV
+      2.8 (venv aislado): siguen en 2 páginas, corte limpio entre E.D.S.
+      Kennedy y Freelance, verificado con `pypdf`
+- [x] "TAC" resuelto con el dueño (2026-10-31): es un visor de imágenes
+      médicas DICOM. Descrito como objetivo del desarrollo (MPR 2D/3D, fusión
+      PET-CT, cliente PACS), no como funciones entregadas, porque está en
+      etapa temprana. PDF regenerados: siguen en 2 páginas
+- [x] RF-110 v3: sistema visual Persona. Tokens nuevos (rojo `blood` de
+      relleno y `tone.red` de texto, `midnight` P3R), rótulos en Arial Black
+      cursiva (sin descarga de fuentes, D-05 intacta), formas inclinadas con
+      la forma en `::before` para no recortar el anillo de foco
+- [x] Movimiento: cortina de entrada azul+roja, nombre en "nota de rescate",
+      menú de pausa P3R con cursor que viaja y rebota, agua animada y
+      fragmentos en las bandas azules, parallax por puntero en el hero,
+      entradas de trayectoria que se invierten a blanco (LOAD DATA de P3R),
+      capturas que se descubren con un tajo, chips escalonados, glitch en
+      títulos, números ligados al scroll y barra de progreso
+      (`animation-timeline`, mejora progresiva). Todo se apaga con
+      `prefers-reduced-motion`
+- [x] `check:contrast` reescrito para la paleta nueva: 46 pares, todos AA
+- [x] 136/136 tests en verde (6 omitidos por proyecto, como antes). Incluye
+      el arreglo de un test que ya fallaba desde `f6834aa` (ver lessons.md)
+- [ ] Lighthouse no se corrió en esta fase: pendiente antes de desplegar
+
 ## Phase 4j: Tono formal y estructura directa en todo el sitio (2026-08-19)
 - [x] Decisiones del dueño (con previews antes/después para cada eje):
       registro "usted" formal pleno en todo el sitio; párrafos de proyecto

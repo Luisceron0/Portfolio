@@ -590,4 +590,47 @@ patrón de pkill equivocado, y ahora caché del navegador): la captura es la
 última comprobación, nunca la única.
 **Tags:** #agent-browser #falso-negativo #verificacion
 
+## 2026-10-31 — `skewX` en la animación de aparición abría scroll horizontal en móvil
+**Contexto:** el rediseño Persona añadió `skewX(-6deg)` al estado oculto de
+`.reveal`. A 375px la página tenía 107px de scroll horizontal.
+**Error a evitar:** buscar el culpable en el maquetado de cada componente. Los
+bloques estaban bien; el sesgo de un bloque alto sobresale por los dos lados
+(tan 6° x media altura, ~50px en una tarjeta de proyecto), y los bloques bajo
+el pliegue se quedan en ese estado hasta que se llega a ellos.
+**Corrección:** el estado oculto solo se desplaza (`translateX`), sin sesgo.
+Se encontró con un script que lista los elementos cuyo borde derecho supera el
+viewport sin un ancestro que los recorte.
+**Regla para el futuro:** en un estado de animación que puede durar (lo oculto
+bajo el pliegue), nada de `skew`/`rotate`/`scale` sobre bloques grandes: solo
+desplazamientos hacia dentro de la pantalla. Y medir `scrollWidth` en móvil
+tras cualquier cambio de animación.
+**Tags:** #animacion #movil #rf-110
+
+## 2026-10-31 — Un `::before` con z-index negativo se pinta ENCIMA del fondo de su padre transformado
+**Contexto:** el cursor del menú de pausa era un rojo de fondo con una punta
+blanca en `::before` y `z-index: -1`, pensada para quedar detrás. Salía
+delante y tapaba el texto elegido (blanco sobre blanco).
+**Causa:** el elemento tiene `transform`, así que crea su propio contexto de
+apilamiento, y dentro de él el fondo del propio elemento se pinta antes que
+los hijos con z-index negativo.
+**Corrección:** las dos capas en pseudo-elementos (`::before` blanco y
+`::after` rojo), sin fondo en el elemento. El orden de pintado es el del DOM.
+**Regla para el futuro:** si una capa tiene que ir detrás del fondo de su
+padre, no puede ser hija de ese padre cuando este crea contexto de
+apilamiento. Las capas hermanas se ordenan solas.
+**Tags:** #css #apilamiento
+
+## 2026-10-31 — Un cambio de copy dejó un test fallando sin que se notara
+**Contexto:** `f6834aa` cambió el mensaje de rate limit de "varios mensajes
+seguidos" a "varios mensajes de forma consecutiva". El test de rate limit
+seguía buscando la frase vieja y falló en la primera ejecución completa
+posterior.
+**Error a evitar:** atribuirlo al cambio en curso (el rediseño) o al rate
+limit. El servidor registró `RATE_LIMITED` y mostró el mensaje: el
+comportamiento era correcto, solo la aserción estaba desactualizada.
+**Corrección:** la aserción usa la frase nueva.
+**Regla para el futuro:** un cambio de tono en `content.ts` corre la suite
+completa antes de darse por cerrado: los tests de e2e citan copy literal.
+**Tags:** #testing #copy
+
 <!-- New entries go above this line, most recent first. -->

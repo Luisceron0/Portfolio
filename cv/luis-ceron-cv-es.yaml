@@ -15,6 +15,16 @@ cv:
       - 'Ingeniero de Software Full-Stack orientado a arquitectura de software y seguridad de aplicaciones. Diseño sistemas de punta a punta (React, Angular, Vue.js, Spring Boot, Django, PostgreSQL) definiendo la estructura antes del primer archivo: límites entre módulos, contratos de datos y decisiones registradas en ADRs versionados. Incorporo la seguridad desde el diseño (RBAC, JWT, modelado de amenazas, SAST y SCA en el pipeline) y despliego en AWS y Docker con CI/CD. Egresado de Ingeniería de Software de la Universidad Cooperativa de Colombia y cursando una Especialización en Seguridad de la Información en el Politécnico Grancolombiano. Bilingüe (inglés C1, EF SET), con disponibilidad para relocalización.'
 
     Experiencia:
+      - company: I.P.S. San José
+        position: Ingeniero de Software
+        location: Villagarzón, Putumayo, Colombia
+        start_date: 2026-09
+        end_date: 2026-11
+        highlights:
+          - 'Responsable del desarrollo, la implementación y el mantenimiento de los sistemas informáticos de una institución prestadora de servicios de salud, incluida la administración de sus bases de datos.'
+          - 'Desarrollé un gestor de inventario y automatizaciones de procesos internos de la institución.'
+          - 'Inicié el desarrollo de un visor de imágenes médicas DICOM para la institución, orientado a la reconstrucción multiplanar 2D/3D (MPR), la fusión de estudios PET-CT y la conexión como cliente PACS.'
+          - 'Di soporte técnico y resolución de incidencias a los procesos operativos y administrativos.'
       - company: Alcaldía de Pasto
         position: Practicante de Ingeniería de Software Full-Stack
         location: Pasto, Colombia

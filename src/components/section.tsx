@@ -1,91 +1,74 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 
+import { ShardField, VerticalWatermark } from '@/components/persona'
 import { Reveal } from '@/components/reveal'
 
 /**
- * RF-110: cada sección tiene su propio tono. El color deja de ser decoración y
- * pasa a ser orientación, dice en qué parte de la página estás.
+ * RF-110: cada sección tiene su propio tono. El color es orientación: dice en
+ * qué parte de la página estás.
  *
  * Las clases se escriben completas y no se componen con plantillas
  * (`text-tone-${x}`): Tailwind analiza el código como texto plano y una clase
- * construida en tiempo de ejecución nunca llega al CSS final. Es un error
- * clásico que se manifiesta como "el color no se aplica" sin ningún aviso.
+ * construida en tiempo de ejecución nunca llega al CSS final.
  *
- * Al pasar el sitio a fondo oscuro, los tonos de `tailwind.config.ts` ya son
- * las variantes claras, así que el antiguo mapa `TONE_TEXT_BRIGHT` desapareció:
- * un solo juego de tonos sirve para todo.
+ * `TONE_HEX` existe porque algunos efectos (la sombra sólida del título, el
+ * `drop-shadow` de las tarjetas) leen el tono desde la variable CSS `--tone`,
+ * y una variable no puede apuntar a una clase de Tailwind.
  */
-export type Tone = 'indigo' | 'teal' | 'ochre' | 'plum' | 'rust'
+export type Tone = 'red' | 'cyan' | 'gold' | 'blue' | 'pink'
+
+export const TONE_HEX: Record<Tone, string> = {
+  red: '#ff4552',
+  cyan: '#4fe0ff',
+  gold: '#ffd23f',
+  blue: '#7ea6ff',
+  pink: '#ff7ab0',
+}
+
+/** Estilo en línea que expone el tono a los efectos de globals.css. */
+export function toneVar(tone: Tone): CSSProperties {
+  return { '--tone': TONE_HEX[tone] } as CSSProperties
+}
 
 export const TONE_TEXT: Record<Tone, string> = {
-  indigo: 'text-tone-indigo',
-  teal: 'text-tone-teal',
-  ochre: 'text-tone-ochre',
-  plum: 'text-tone-plum',
-  rust: 'text-tone-rust',
+  red: 'text-tone-red',
+  cyan: 'text-tone-cyan',
+  gold: 'text-tone-gold',
+  blue: 'text-tone-blue',
+  pink: 'text-tone-pink',
 }
 
-export const TONE_RULE: Record<Tone, string> = {
-  indigo: 'from-tone-indigo/55',
-  teal: 'from-tone-teal/55',
-  ochre: 'from-tone-ochre/55',
-  plum: 'from-tone-plum/55',
-  rust: 'from-tone-rust/55',
-}
-
-/** Cuadrado, no círculo: en este lenguaje visual no hay curvas. */
-export const TONE_DOT: Record<Tone, string> = {
-  indigo: 'bg-tone-indigo',
-  teal: 'bg-tone-teal',
-  ochre: 'bg-tone-ochre',
-  plum: 'bg-tone-plum',
-  rust: 'bg-tone-rust',
+export const TONE_BG: Record<Tone, string> = {
+  red: 'bg-tone-red',
+  cyan: 'bg-tone-cyan',
+  gold: 'bg-tone-gold',
+  blue: 'bg-tone-blue',
+  pink: 'bg-tone-pink',
 }
 
 export const TONE_BORDER: Record<Tone, string> = {
-  indigo: 'border-tone-indigo/35',
-  teal: 'border-tone-teal/35',
-  ochre: 'border-tone-ochre/35',
-  plum: 'border-tone-plum/35',
-  rust: 'border-tone-rust/35',
-}
-
-export const TONE_WASH: Record<Tone, string> = {
-  indigo: 'bg-tone-indigo/[0.06]',
-  teal: 'bg-tone-teal/[0.06]',
-  ochre: 'bg-tone-ochre/[0.06]',
-  plum: 'bg-tone-plum/[0.06]',
-  rust: 'bg-tone-rust/[0.06]',
-}
-
-/** Borde a plena opacidad: para botones, donde un 35% se ve desvaído. */
-export const TONE_BORDER_SOLID: Record<Tone, string> = {
-  indigo: 'border-tone-indigo',
-  teal: 'border-tone-teal',
-  ochre: 'border-tone-ochre',
-  plum: 'border-tone-plum',
-  rust: 'border-tone-rust',
+  red: 'border-tone-red',
+  cyan: 'border-tone-cyan',
+  gold: 'border-tone-gold',
+  blue: 'border-tone-blue',
+  pink: 'border-tone-pink',
 }
 
 export const TONE_HOVER_BORDER: Record<Tone, string> = {
-  indigo: 'hover:border-tone-indigo',
-  teal: 'hover:border-tone-teal',
-  ochre: 'hover:border-tone-ochre',
-  plum: 'hover:border-tone-plum',
-  rust: 'hover:border-tone-rust',
+  red: 'hover:border-tone-red',
+  cyan: 'hover:border-tone-cyan',
+  gold: 'hover:border-tone-gold',
+  blue: 'hover:border-tone-blue',
+  pink: 'hover:border-tone-pink',
 }
 
 /**
- * Cabecera de sección en clave de ficha técnica.
- *
- * La jerarquía es la del cartel suizo: una línea de datos diminuta en
- * monoespaciada y mayúsculas muy espaciadas, una regla que cruza todo el ancho,
- * y debajo el título grande en Helvetica con el tracking cerrado. El contraste
- * de escala entre esas dos cosas es el efecto.
+ * Cabecera de sección en clave de menú de P5R: el número enorme, relleno e
+ * inclinado, y el título en una caja blanca torcida con sombra sólida del tono
+ * de la sección. Debajo, una regla roja que se corta en diagonal.
  *
  * El número es decorativo (`aria-hidden`): un lector de pantalla ya anuncia el
- * orden de los encabezados, así que leer "cero uno" antes de cada título sería
- * ruido, no información.
+ * orden de los encabezados.
  */
 export function SectionHeading({
   id,
@@ -104,54 +87,86 @@ export function SectionHeading({
 }) {
   return (
     <Reveal>
-      <div className="flex items-center gap-3 border-b border-hairline pb-3">
-        <span aria-hidden="true" className={`h-2 w-2 shrink-0 ${TONE_DOT[tone]}`} />
-
+      <div className="relative flex items-end gap-4 sm:gap-6" style={toneVar(tone)}>
         <span
           aria-hidden="true"
-          className={`font-mono text-[0.7rem] uppercase tracking-spec ${TONE_TEXT[tone]}`}
+          className={`p-display p-parallax -mb-2 select-none text-7xl leading-none sm:text-8xl md:text-9xl ${TONE_TEXT[tone]}`}
         >
           {number}
         </span>
 
-        <span
-          aria-hidden="true"
-          className={`h-px flex-1 bg-gradient-to-r to-transparent ${TONE_RULE[tone]}`}
-        />
-
-        {icon && (
-          <span className={`shrink-0 ${TONE_TEXT[tone]}`} aria-hidden="true">
-            {icon}
-          </span>
-        )}
+        <div className="min-w-0 pb-1">
+          {icon && (
+            <span
+              aria-hidden="true"
+              className={`mb-3 inline-flex h-8 w-8 items-center justify-center border-2 ${TONE_BORDER[tone]} ${TONE_TEXT[tone]} -rotate-6`}
+            >
+              {icon}
+            </span>
+          )}
+          <h2
+            id={id}
+            className="p-display text-3xl leading-none sm:text-5xl md:text-6xl"
+          >
+            <span className="p-title-box">{title}</span>
+          </h2>
+        </div>
       </div>
 
-      <h2
-        id={id}
-        className="mt-6 text-4xl font-bold leading-[0.95] tracking-tighter sm:text-5xl md:text-6xl"
-      >
-        {title}
-      </h2>
+      <div aria-hidden="true" className="mt-6 flex h-1.5 gap-1.5">
+        <span className="w-24 -skew-x-[30deg] bg-blood" />
+        <span className={`w-6 -skew-x-[30deg] ${TONE_BG[tone]}`} />
+        <span className="flex-1 -skew-x-[30deg] bg-hairline" />
+      </div>
 
       {intro && (
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-muted">{intro}</p>
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">{intro}</p>
       )}
     </Reveal>
   )
 }
 
-/** Contenedor de sección con el ancho y el ritmo vertical del sitio. */
+/**
+ * Contenedor de sección.
+ *
+ * `band="midnight"` saca la sección a sangre sobre el azul de P3R, con cortes
+ * diagonales arriba y abajo; el contenido sigue centrado al ancho del sitio.
+ * El `<section>` es SIEMPRE el elemento con `id` y `aria-labelledby`, con o
+ * sin banda: los tests y las anclas de la nav no dependen del estilo.
+ */
 export function Section({
   id,
   labelledBy,
   className = '',
+  band,
+  watermark,
   children,
 }: {
   id: string
   labelledBy: string
   className?: string
+  band?: 'midnight'
+  /** Rótulo vertical gigante del borde de la banda (solo con `band`). */
+  watermark?: string
   children: ReactNode
 }) {
+  if (band === 'midnight') {
+    return (
+      <section
+        id={id}
+        aria-labelledby={labelledBy}
+        className={`p-band relative my-8 bg-midnight ${className}`}
+      >
+        {/* Agua P3R en movimiento, fragmentos flotando y el rótulo vertical.
+            Todo decorativo y detrás del contenido. */}
+        <div aria-hidden="true" className="p-water pointer-events-none absolute inset-0" />
+        <ShardField className="opacity-60" />
+        {watermark && <VerticalWatermark text={watermark} />}
+        <div className="relative mx-auto max-w-content px-5 sm:px-8">{children}</div>
+      </section>
+    )
+  }
+
   return (
     <section
       id={id}

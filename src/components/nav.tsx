@@ -1,15 +1,14 @@
 import { HTML_LANG, LOCALES, nav, type Locale } from '@/content'
 import { localeHref } from '@/lib/locale'
-import { TONE_DOT, type Tone } from '@/components/section'
+import { NavLinks } from '@/components/nav-links'
+import { TONE_BG, type Tone } from '@/components/section'
 
 /**
  * RF-110: el orden de `nav.items` es el mismo que el de las secciones
- * numeradas (01 Perfil … 05 Contacto), así que el subrayado en hover usa el
- * tono de la sección a la que apunta cada enlace. No es un color nuevo: es el
- * mismo sistema de orientación por color que ya usan los números y las
- * tarjetas, aplicado a la navegación.
+ * numeradas (01 Perfil … 05 Contacto), así que el cursor de la sección activa
+ * usa el tono de la sección a la que apunta cada enlace.
  */
-const NAV_TONES: readonly Tone[] = ['indigo', 'teal', 'ochre', 'plum', 'rust']
+const NAV_TONES: readonly Tone[] = ['red', 'cyan', 'gold', 'blue', 'pink']
 
 /**
  * RF-108 (navegación interna) + RF-109 (selector de idioma).
@@ -27,7 +26,7 @@ function LanguageSwitch({ locale }: { locale: Locale }) {
     <div
       role="group"
       aria-label={nav.language.label[locale]}
-      className="flex items-center border border-hairline"
+      className="flex -skew-x-[10deg] items-center border-2 border-ink"
     >
       {LOCALES.map((candidate) => {
         const isActive = candidate === locale
@@ -41,7 +40,7 @@ function LanguageSwitch({ locale }: { locale: Locale }) {
             aria-current={isActive ? 'true' : undefined}
             className={`px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-widest2 transition-colors ${
               isActive
-                ? 'bg-accent text-surface'
+                ? 'bg-blood text-ink'
                 : 'text-ink-muted hover:bg-surface-subtle hover:text-ink'
             }`}
           >
@@ -62,10 +61,11 @@ export function SiteNav({ locale }: { locale: Locale }) {
       aria-label={locale === 'es' ? 'Secciones de la página' : 'Page sections'}
       className="sticky top-3 z-40 mx-auto mb-2 mt-3 w-[calc(100%-1.5rem)] max-w-content sm:top-4 sm:mt-4"
     >
-      <div className="flex items-center gap-3 border border-hairline bg-surface/85 px-3 py-2 backdrop-blur-md sm:px-5">
+      <div className="flex items-center gap-3 border-b-4 border-blood bg-surface/90 px-3 py-2 shadow-[6px_6px_0_rgba(26,84,209,0.55)] backdrop-blur-md sm:px-5">
+        {/* Marca: monograma en un recorte rojo girado, como la carta de aviso. */}
         <a
           href="#contenido"
-          className="shrink-0 px-1 font-mono text-sm font-bold tracking-widest2 text-ink"
+          className="p-display shrink-0 -rotate-6 bg-blood px-2 py-0.5 text-base text-ink transition-transform duration-200 hover:rotate-0 hover:scale-110"
         >
           {nav.brand}
         </a>
@@ -103,22 +103,10 @@ export function SiteNav({ locale }: { locale: Locale }) {
           el padding de cada enlace absorbe el difuminado y no se nota.
         */}
         <div className="flex min-w-0 flex-1 items-center justify-between gap-3 overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_20px,black_calc(100%-20px),transparent)]">
-          <ul className="flex shrink-0 items-center gap-0.5 sm:gap-2">
-            {nav.items.map((item, index) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  className="group relative inline-block whitespace-nowrap px-2.5 py-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-ink sm:px-3"
-                >
-                  {item.label[locale]}
-                  <span
-                    aria-hidden="true"
-                    className={`pointer-events-none absolute inset-x-2.5 bottom-0.5 h-0.5 origin-left scale-x-0 transition-transform duration-200 group-hover:scale-x-100 sm:inset-x-3 ${TONE_DOT[NAV_TONES[index % NAV_TONES.length]]}`}
-                  />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <NavLinks
+            items={nav.items.map((item) => ({ href: item.href, label: item.label[locale] }))}
+            tones={NAV_TONES.map((tone) => TONE_BG[tone])}
+          />
 
           <div className="shrink-0">
             <LanguageSwitch locale={locale} />

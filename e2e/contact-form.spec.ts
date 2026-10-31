@@ -243,7 +243,7 @@ test.describe('Rate limit', () => {
 
     const error = page.getByTestId('contact-error')
     await expect(error).toBeVisible({ timeout: 15_000 })
-    await expect(error).toContainText(/varios mensajes seguidos/i)
+    await expect(error).toContainText(/varios mensajes de forma consecutiva/i)
   })
 })
 

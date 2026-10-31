@@ -7,19 +7,21 @@ import {
 } from '@/content'
 import { PendingNote } from '@/components/pending'
 
-type Variant = 'primary' | 'secondary'
+type Variant = 'primary' | 'secondary' | 'dark'
 
 /*
- * Botones rectangulares, no píldoras: el ángulo recto es parte del lenguaje
- * suizo y `tailwind.config.ts` fuerza radio 0 en todo el sistema.
+ * Botones de P5R: un paralelogramo inclinado que se desplaza y deja ver una
+ * sombra sólida al pasar el ratón. La forma vive en `::before` (ver `.p-slant`
+ * en globals.css) y el enlace queda rectangular, así el anillo de foco no se
+ * recorta.
  *
- * El primario va INVERTIDO respecto a la versión clara: sobre lienzo oscuro el
- * relleno es el color claro y la letra es el propio lienzo (`text-surface`).
- * Medido en `check:contrast` como "surface sobre accent".
+ * Toda la letra es `ink` sobre rojo, negro o blanco: pares medidos en
+ * `check:contrast`. `dark` es para fondos rojos, donde el rojo no se vería.
  */
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-accent text-surface hover:bg-accent-hover border border-accent',
-  secondary: 'bg-transparent text-ink hover:bg-surface-subtle border border-hairline-strong hover:border-accent',
+  primary: 'p-btn--primary text-ink',
+  secondary: 'p-btn--secondary text-ink',
+  dark: 'p-btn--dark text-ink',
 }
 
 /**
@@ -57,7 +59,7 @@ export function ExternalLinkButton({
         ? {}
         : { target: '_blank', rel: 'noopener noreferrer' })}
       {...(isDownload ? { download } : {})}
-      className={`inline-flex min-h-[44px] items-center justify-center px-6 py-2.5 text-sm font-bold uppercase tracking-widest2 transition-colors duration-200 ${VARIANTS[variant]}`}
+      className={`p-slant p-btn p-display inline-flex min-h-[48px] items-center justify-center px-7 py-2.5 text-sm tracking-wide ${VARIANTS[variant]}`}
     >
       {link.label[locale]}
       {!isInternalAnchor && !isDownload && (
