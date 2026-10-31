@@ -15,14 +15,14 @@ import { Reveal } from '@/components/reveal'
  * `drop-shadow` de las tarjetas) leen el tono desde la variable CSS `--tone`,
  * y una variable no puede apuntar a una clase de Tailwind.
  */
-export type Tone = 'red' | 'cyan' | 'gold' | 'blue' | 'pink'
+export type Tone = 'violet' | 'green' | 'mint' | 'lilac' | 'silver'
 
 export const TONE_HEX: Record<Tone, string> = {
-  red: '#ff4552',
-  cyan: '#4fe0ff',
-  gold: '#ffd23f',
-  blue: '#7ea6ff',
-  pink: '#ff7ab0',
+  violet: '#b07cff',
+  green: '#a6f13c',
+  mint: '#5ef0a8',
+  lilac: '#d7c4ff',
+  silver: '#c3c0cf',
 }
 
 /** Estilo en línea que expone el tono a los efectos de globals.css. */
@@ -31,41 +31,41 @@ export function toneVar(tone: Tone): CSSProperties {
 }
 
 export const TONE_TEXT: Record<Tone, string> = {
-  red: 'text-tone-red',
-  cyan: 'text-tone-cyan',
-  gold: 'text-tone-gold',
-  blue: 'text-tone-blue',
-  pink: 'text-tone-pink',
+  violet: 'text-tone-violet',
+  green: 'text-tone-green',
+  mint: 'text-tone-mint',
+  lilac: 'text-tone-lilac',
+  silver: 'text-tone-silver',
 }
 
 export const TONE_BG: Record<Tone, string> = {
-  red: 'bg-tone-red',
-  cyan: 'bg-tone-cyan',
-  gold: 'bg-tone-gold',
-  blue: 'bg-tone-blue',
-  pink: 'bg-tone-pink',
+  violet: 'bg-tone-violet',
+  green: 'bg-tone-green',
+  mint: 'bg-tone-mint',
+  lilac: 'bg-tone-lilac',
+  silver: 'bg-tone-silver',
 }
 
 export const TONE_BORDER: Record<Tone, string> = {
-  red: 'border-tone-red',
-  cyan: 'border-tone-cyan',
-  gold: 'border-tone-gold',
-  blue: 'border-tone-blue',
-  pink: 'border-tone-pink',
+  violet: 'border-tone-violet',
+  green: 'border-tone-green',
+  mint: 'border-tone-mint',
+  lilac: 'border-tone-lilac',
+  silver: 'border-tone-silver',
 }
 
 export const TONE_HOVER_BORDER: Record<Tone, string> = {
-  red: 'hover:border-tone-red',
-  cyan: 'hover:border-tone-cyan',
-  gold: 'hover:border-tone-gold',
-  blue: 'hover:border-tone-blue',
-  pink: 'hover:border-tone-pink',
+  violet: 'hover:border-tone-violet',
+  green: 'hover:border-tone-green',
+  mint: 'hover:border-tone-mint',
+  lilac: 'hover:border-tone-lilac',
+  silver: 'hover:border-tone-silver',
 }
 
 /**
  * Cabecera de sección en clave de menú de P5R: el número enorme, relleno e
  * inclinado, y el título en una caja blanca torcida con sombra sólida del tono
- * de la sección. Debajo, una regla roja que se corta en diagonal.
+ * de la sección. Debajo, una regla violeta que se corta en diagonal.
  *
  * El número es decorativo (`aria-hidden`): un lector de pantalla ya anuncia el
  * orden de los encabezados.
@@ -114,7 +114,7 @@ export function SectionHeading({
       </div>
 
       <div aria-hidden="true" className="mt-6 flex h-1.5 gap-1.5">
-        <span className="w-24 -skew-x-[30deg] bg-blood" />
+        <span className="w-24 -skew-x-[30deg] bg-violet" />
         <span className={`w-6 -skew-x-[30deg] ${TONE_BG[tone]}`} />
         <span className="flex-1 -skew-x-[30deg] bg-hairline" />
       </div>
@@ -129,7 +129,7 @@ export function SectionHeading({
 /**
  * Contenedor de sección.
  *
- * `band="midnight"` saca la sección a sangre sobre el azul de P3R, con cortes
+ * `band="abyss"` saca la sección a sangre sobre el violeta abismo, con cortes
  * diagonales arriba y abajo; el contenido sigue centrado al ancho del sitio.
  * El `<section>` es SIEMPRE el elemento con `id` y `aria-labelledby`, con o
  * sin banda: los tests y las anclas de la nav no dependen del estilo.
@@ -145,17 +145,17 @@ export function Section({
   id: string
   labelledBy: string
   className?: string
-  band?: 'midnight'
+  band?: 'abyss'
   /** Rótulo vertical gigante del borde de la banda (solo con `band`). */
   watermark?: string
   children: ReactNode
 }) {
-  if (band === 'midnight') {
+  if (band === 'abyss') {
     return (
       <section
         id={id}
         aria-labelledby={labelledBy}
-        className={`p-band relative my-8 bg-midnight ${className}`}
+        className={`p-band relative my-8 bg-abyss ${className}`}
       >
         {/* Agua P3R en movimiento, fragmentos flotando y el rótulo vertical.
             Todo decorativo y detrás del contenido. */}

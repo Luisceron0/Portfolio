@@ -48,32 +48,31 @@ function over(foregroundHex, backgroundHex, alpha) {
 // aquí, este script deja de reflejar la realidad — es la razón por la que
 // tailwind.config.ts enlaza a este archivo en su comentario.
 const PALETTE = {
-  ink: '#f5f5f2',
-  inkMuted: '#a8a8b0',
-  surface: '#08080a',
-  surfaceCard: '#141418',
-  surfaceSubtle: '#1c1c22',
-  midnight: '#0b1430',
-  midnightCard: '#111d42',
-  blood: '#c8101b',
-  bloodHover: '#a80d16',
-  royal: '#1a54d1',
-  accent: '#ff4552',
+  ink: '#f5f3fa',
+  inkMuted: '#aaa6b8',
+  inkDim: '#3a3448',
+  surface: '#09080d',
+  surfaceCard: '#15121d',
+  surfaceSubtle: '#1d1a27',
+  abyss: '#130a26',
+  abyssCard: '#1e1238',
+  violet: '#7a1fff',
+  violetHover: '#6420cf',
   warn: '#ffd23f',
   warnSurface: '#241d0c',
-  toneRed: '#ff4552',
-  toneCyan: '#4fe0ff',
-  toneGold: '#ffd23f',
-  toneBlue: '#7ea6ff',
-  tonePink: '#ff7ab0',
+  toneViolet: '#b07cff',
+  toneGreen: '#a6f13c',
+  toneMint: '#5ef0a8',
+  toneLilac: '#d7c4ff',
+  toneSilver: '#c3c0cf',
 }
 
 /**
- * Fondos REALES compuestos. Las tarjetas de las bandas P3R son
- * `midnight-card` al 70-80% sobre `midnight`; se mide el caso al 70%, que es
+ * Fondos REALES compuestos. Las tarjetas de las bandas `abyss` son
+ * `abyss-card` al 70-80% sobre `abyss`; se mide el caso al 70%, que es
  * el que más se aleja del par sólido.
  */
-const MIDNIGHT_CARD_EFFECTIVE = over(PALETTE.midnightCard, PALETTE.midnight, 0.7)
+const ABYSS_CARD_EFFECTIVE = over(PALETTE.abyssCard, PALETTE.abyss, 0.7)
 
 /**
  * El emblema del hero va detrás del texto en móvil al 15% de opacidad. Su
@@ -83,7 +82,7 @@ const MIDNIGHT_CARD_EFFECTIVE = over(PALETTE.midnightCard, PALETTE.midnight, 0.7
 const EMBLEM_ALPHA = 0.15
 const HERO_WORST = over(PALETTE.ink, PALETTE.surface, EMBLEM_ALPHA)
 
-const TONE_KEYS = ['toneRed', 'toneCyan', 'toneGold', 'toneBlue', 'tonePink']
+const TONE_KEYS = ['toneViolet', 'toneGreen', 'toneMint', 'toneLilac', 'toneSilver']
 
 /** Cada par que el sitio realmente usa como texto sobre fondo. */
 const PAIRS = [
@@ -94,22 +93,22 @@ const PAIRS = [
   { label: 'ink-muted sobre surface-card', fg: PALETTE.inkMuted, bg: PALETTE.surfaceCard, min: 4.5 },
   { label: 'ink-muted sobre surface-subtle', fg: PALETTE.inkMuted, bg: PALETTE.surfaceSubtle, min: 4.5 },
 
-  // Bandas P3R (trayectoria, habilidades).
-  { label: 'ink sobre midnight', fg: PALETTE.ink, bg: PALETTE.midnight, min: 4.5 },
-  { label: 'ink-muted sobre midnight', fg: PALETTE.inkMuted, bg: PALETTE.midnight, min: 4.5 },
-  { label: `ink-muted sobre tarjeta midnight REAL (${MIDNIGHT_CARD_EFFECTIVE})`, fg: PALETTE.inkMuted, bg: MIDNIGHT_CARD_EFFECTIVE, min: 4.5 },
-  { label: 'ink-muted sobre midnight-card sólida', fg: PALETTE.inkMuted, bg: PALETTE.midnightCard, min: 4.5 },
+  // Bandas `abyss` (trayectoria, habilidades).
+  { label: 'ink sobre abyss', fg: PALETTE.ink, bg: PALETTE.abyss, min: 4.5 },
+  { label: 'ink-muted sobre abyss', fg: PALETTE.inkMuted, bg: PALETTE.abyss, min: 4.5 },
+  { label: `ink-muted sobre tarjeta abyss REAL (${ABYSS_CARD_EFFECTIVE})`, fg: PALETTE.inkMuted, bg: ABYSS_CARD_EFFECTIVE, min: 4.5 },
+  { label: 'ink-muted sobre abyss-card sólida', fg: PALETTE.inkMuted, bg: PALETTE.abyssCard, min: 4.5 },
 
   // Rellenos con letra encima: botones, etiquetas inclinadas, banda del CV.
-  { label: 'ink sobre blood (botón primario, banda del CV, etiquetas)', fg: PALETTE.ink, bg: PALETTE.blood, min: 4.5 },
-  { label: 'ink sobre blood-hover (botón primario en hover)', fg: PALETTE.ink, bg: PALETTE.bloodHover, min: 4.5 },
-  { label: 'ink sobre royal (etiquetas azules)', fg: PALETTE.ink, bg: PALETTE.royal, min: 4.5 },
+  { label: 'ink sobre violet (botón primario, banda del CV, etiquetas)', fg: PALETTE.ink, bg: PALETTE.violet, min: 4.5 },
+  { label: 'ink sobre violet-hover (botón primario en hover)', fg: PALETTE.ink, bg: PALETTE.violetHover, min: 4.5 },
+  { label: 'ink sobre violet en tarjeta abyss (etiqueta de trayectoria)', fg: PALETTE.ink, bg: PALETTE.violet, min: 4.5 },
   { label: 'surface sobre ink (botón secundario en hover, caja del título)', fg: PALETTE.surface, bg: PALETTE.ink, min: 4.5 },
   { label: 'ink-muted sobre surface-subtle (botón deshabilitado)', fg: PALETTE.inkMuted, bg: PALETTE.surfaceSubtle, min: 4.5 },
 
   // Entrada de trayectoria invertida a blanco al pasar el ratón (LOAD DATA de P3R).
-  { label: 'ink-dim sobre ink (texto secundario invertido)', fg: '#3d3d48', bg: PALETTE.ink, min: 4.5 },
-  { label: 'royal sobre ink (organización invertida)', fg: PALETTE.royal, bg: PALETTE.ink, min: 4.5 },
+  { label: 'ink-dim sobre ink (texto secundario invertido)', fg: PALETTE.inkDim, bg: PALETTE.ink, min: 4.5 },
+  { label: 'violet sobre ink (organización invertida)', fg: PALETTE.violet, bg: PALETTE.ink, min: 4.5 },
 
   // Hero con el emblema detrás (móvil).
   { label: `ink sobre hero con emblema detrás (${HERO_WORST}, caso peor)`, fg: PALETTE.ink, bg: HERO_WORST, min: 4.5 },
@@ -120,14 +119,14 @@ const PAIRS = [
 
   /*
    * Cada tono se usa como texto sobre negro, sobre tarjeta y sobre las bandas
-   * azules, y como relleno con letra `surface` encima (cursor de la nav,
-   * pestañas de fecha, etiquetas).
+   * `abyss`, y como relleno con letra `surface` encima (cursor de la nav,
+   * pestañas de fecha, etiquetas, nota de rescate verde).
    */
   ...TONE_KEYS.flatMap((key) => [
     { label: `${key} sobre surface`, fg: PALETTE[key], bg: PALETTE.surface, min: 4.5 },
     { label: `${key} sobre surface-card`, fg: PALETTE[key], bg: PALETTE.surfaceCard, min: 4.5 },
-    { label: `${key} sobre midnight`, fg: PALETTE[key], bg: PALETTE.midnight, min: 4.5 },
-    { label: `${key} sobre tarjeta midnight REAL`, fg: PALETTE[key], bg: MIDNIGHT_CARD_EFFECTIVE, min: 4.5 },
+    { label: `${key} sobre abyss`, fg: PALETTE[key], bg: PALETTE.abyss, min: 4.5 },
+    { label: `${key} sobre tarjeta abyss REAL`, fg: PALETTE[key], bg: ABYSS_CARD_EFFECTIVE, min: 4.5 },
     { label: `surface sobre ${key} (relleno, letra oscura)`, fg: PALETTE.surface, bg: PALETTE[key], min: 4.5 },
   ]),
 ]

@@ -8,7 +8,7 @@ import { TONE_BG, type Tone } from '@/components/section'
  * numeradas (01 Perfil … 05 Contacto), así que el cursor de la sección activa
  * usa el tono de la sección a la que apunta cada enlace.
  */
-const NAV_TONES: readonly Tone[] = ['red', 'cyan', 'gold', 'blue', 'pink']
+const NAV_TONES: readonly Tone[] = ['violet', 'green', 'mint', 'lilac', 'silver']
 
 /**
  * RF-108 (navegación interna) + RF-109 (selector de idioma).
@@ -40,7 +40,7 @@ function LanguageSwitch({ locale }: { locale: Locale }) {
             aria-current={isActive ? 'true' : undefined}
             className={`px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-widest2 transition-colors ${
               isActive
-                ? 'bg-blood text-ink'
+                ? 'bg-violet text-ink'
                 : 'text-ink-muted hover:bg-surface-subtle hover:text-ink'
             }`}
           >
@@ -61,11 +61,11 @@ export function SiteNav({ locale }: { locale: Locale }) {
       aria-label={locale === 'es' ? 'Secciones de la página' : 'Page sections'}
       className="sticky top-3 z-40 mx-auto mb-2 mt-3 w-[calc(100%-1.5rem)] max-w-content sm:top-4 sm:mt-4"
     >
-      <div className="flex items-center gap-3 border-b-4 border-blood bg-surface/90 px-3 py-2 shadow-[6px_6px_0_rgba(26,84,209,0.55)] backdrop-blur-md sm:px-5">
-        {/* Marca: monograma en un recorte rojo girado, como la carta de aviso. */}
+      <div className="flex items-center gap-3 border-b-4 border-violet bg-surface/90 px-3 py-2 shadow-[6px_6px_0_rgba(166,241,60,0.8)] backdrop-blur-md sm:px-5">
+        {/* Marca: monograma en un recorte violeta girado, como la carta de aviso. */}
         <a
           href="#contenido"
-          className="p-display shrink-0 -rotate-6 bg-blood px-2 py-0.5 text-base text-ink transition-transform duration-200 hover:rotate-0 hover:scale-110"
+          className="p-display shrink-0 -rotate-6 bg-violet px-2 py-0.5 text-base text-ink transition-transform duration-200 hover:rotate-0 hover:scale-110"
         >
           {nav.brand}
         </a>

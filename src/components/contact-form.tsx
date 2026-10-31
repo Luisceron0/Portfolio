@@ -58,7 +58,7 @@ function SubmitButton({ disabled, locale }: { disabled: boolean; locale: Locale 
     <button
       type="submit"
       disabled={disabled || pending}
-      className="p-slant p-btn p-btn--primary p-display inline-flex min-h-[48px] items-center justify-center self-start px-8 py-2.5 text-sm tracking-wide text-ink disabled:cursor-not-allowed disabled:text-ink-muted disabled:[--slant-bg:#1c1c22] disabled:hover:transform-none"
+      className="p-slant p-btn p-btn--primary p-display inline-flex min-h-[48px] items-center justify-center self-start px-8 py-2.5 text-sm tracking-wide text-ink disabled:cursor-not-allowed disabled:text-ink-muted disabled:[--slant-bg:#1d1a27] disabled:hover:transform-none"
     >
       {pending ? contact.labels.submitting[locale] : contact.labels.submit[locale]}
     </button>
@@ -146,7 +146,7 @@ export function ContactForm({
               autoComplete="name"
               aria-invalid={fieldErrors?.name ? true : undefined}
               aria-describedby={fieldErrors?.name ? 'contact-name-error' : undefined}
-              className="mt-1.5 block w-full border-2 border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink transition-colors duration-150 hover:border-ink-muted focus:border-tone-red"
+              className="mt-1.5 block w-full border-2 border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink transition-colors duration-150 hover:border-ink-muted focus:border-tone-violet"
             />
             <FieldError id="contact-name-error" code={fieldErrors?.name} locale={locale} />
           </div>
@@ -164,7 +164,7 @@ export function ContactForm({
               autoComplete="email"
               aria-invalid={fieldErrors?.email ? true : undefined}
               aria-describedby={fieldErrors?.email ? 'contact-email-error' : undefined}
-              className="mt-1.5 block w-full border-2 border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink transition-colors duration-150 hover:border-ink-muted focus:border-tone-red"
+              className="mt-1.5 block w-full border-2 border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink transition-colors duration-150 hover:border-ink-muted focus:border-tone-violet"
             />
             <FieldError id="contact-email-error" code={fieldErrors?.email} locale={locale} />
           </div>
@@ -184,7 +184,7 @@ export function ContactForm({
               aria-describedby={
                 fieldErrors?.message ? 'contact-message-error' : 'contact-message-hint'
               }
-              className="mt-1.5 block w-full border-2 border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink transition-colors duration-150 hover:border-ink-muted focus:border-tone-red"
+              className="mt-1.5 block w-full border-2 border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink transition-colors duration-150 hover:border-ink-muted focus:border-tone-violet"
             />
             <p id="contact-message-hint" className="mt-1 text-sm text-ink-muted">
               {contact.hints.message[locale]}
@@ -217,7 +217,7 @@ export function ContactForm({
           {state.status === 'success' && (
             <p
               data-testid="contact-success"
-              className="border-l-4 border-blood bg-surface-subtle px-4 py-3 text-base font-medium text-ink"
+              className="border-l-4 border-violet bg-surface-subtle px-4 py-3 text-base font-medium text-ink"
             >
               {contact.successMessage[locale]}
             </p>

@@ -15,8 +15,8 @@ type Variant = 'primary' | 'secondary' | 'dark'
  * en globals.css) y el enlace queda rectangular, así el anillo de foco no se
  * recorta.
  *
- * Toda la letra es `ink` sobre rojo, negro o blanco: pares medidos en
- * `check:contrast`. `dark` es para fondos rojos, donde el rojo no se vería.
+ * Toda la letra es `ink` sobre violeta, negro o blanco: pares medidos en
+ * `check:contrast`. `dark` es para fondos violeta, donde el violeta no se vería.
  */
 const VARIANTS: Record<Variant, string> = {
   primary: 'p-btn--primary text-ink',

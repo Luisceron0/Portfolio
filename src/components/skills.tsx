@@ -14,7 +14,7 @@ import {
 import { SkillsIcon } from '@/components/icons'
 
 /** RF-110: un tono por grupo, para que cinco tarjetas no se lean como una sola. */
-const GROUP_TONES: readonly Tone[] = ['cyan', 'red', 'gold', 'blue', 'pink']
+const GROUP_TONES: readonly Tone[] = ['green', 'violet', 'mint', 'lilac', 'silver']
 
 /**
  * RF-107 — habilidades y certificaciones.
@@ -28,7 +28,7 @@ export function Skills({ locale }: { locale: Locale }) {
     <Section
       id="habilidades"
       labelledBy="habilidades-title"
-      band="midnight"
+      band="abyss"
       watermark={skills.heading[locale]}
     >
       <SectionHeading
@@ -36,14 +36,14 @@ export function Skills({ locale }: { locale: Locale }) {
         number="04"
         title={skills.heading[locale]}
         intro={skills.intro[locale]}
-        tone="blue"
+        tone="lilac"
         icon={<SkillsIcon />}
       />
 
       {/*
         Cada grupo es un panel de menú de P3R: borde superior del tono, número
         de entrada hueco y chips inclinados. Rejilla con `gap` normal, no la
-        tabla continua de la v2: con fondo azul, las celdas sueltas respiran
+        tabla continua de la v2: con fondo abismo, las celdas sueltas respiran
         mejor y un número impar de grupos ya no deja un hueco que tapar.
       */}
       <div className="mt-12 grid gap-5 sm:grid-cols-2">
@@ -52,7 +52,7 @@ export function Skills({ locale }: { locale: Locale }) {
           return (
             <Reveal key={group.label.es} delayMs={index * 70}>
               <div
-                className={`group h-full border-t-4 bg-midnight-card/80 p-5 transition-transform duration-300 ease-out hover:-translate-y-1 sm:p-6 ${TONE_BORDER[tone]}`}
+                className={`group h-full border-t-4 bg-abyss-card/80 p-5 transition-transform duration-300 ease-out hover:-translate-y-1 sm:p-6 ${TONE_BORDER[tone]}`}
               >
                 <div className="flex items-center gap-3">
                   <span
@@ -88,7 +88,7 @@ export function Skills({ locale }: { locale: Locale }) {
 
       <Reveal delayMs={140}>
         <h3 className="mt-14">
-          <span className="p-slant p-display inline-block px-4 py-1 text-base text-surface [--slant-bg:#4fe0ff]">
+          <span className="p-slant p-display inline-block px-4 py-1 text-base text-surface [--slant-bg:#a6f13c]">
             {skills.certificationsHeading[locale]}
           </span>
         </h3>
@@ -96,9 +96,9 @@ export function Skills({ locale }: { locale: Locale }) {
           {skills.certifications[locale].map((certification) => (
             <li
               key={certification}
-              className="flex gap-3 border-b border-tone-cyan/25 py-3 text-base leading-relaxed text-ink"
+              className="flex gap-3 border-b border-tone-green/25 py-3 text-base leading-relaxed text-ink"
             >
-              <span aria-hidden="true" className="shrink-0 text-tone-gold">
+              <span aria-hidden="true" className="shrink-0 text-tone-mint">
                 ★
               </span>
               {certification}

@@ -49,11 +49,11 @@
   /*
    * RF-110 v3 — el lienzo Persona.
    *
-   *   1. TRAMA DE MEDIOS TONOS. Puntos rojos diminutos cada 7px, la textura de
+   *   1. TRAMA DE MEDIOS TONOS. Puntos violeta diminutos cada 7px, la textura de
    *      cómic impreso que recorre toda la interfaz de P5R. A una opacidad que
    *      se nota sin estorbar la lectura.
-   *   2. DOS RESPLANDORES. Rojo P5R arriba a la derecha y azul P3R abajo a la
-   *      izquierda: los dos juegos presentes desde el primer vistazo.
+   *   2. DOS RESPLANDORES. Violeta arriba a la derecha y verde tenue abajo a la
+   *      izquierda: los dos colores principales desde el primer vistazo.
    *
    * Todo `fixed`: el contenido se desliza por encima. CSS puro, cero imágenes.
    */
@@ -61,21 +61,21 @@
     @apply bg-surface text-ink antialiased;
     font-family: var(--font-sans);
     background-image:
-      radial-gradient(48rem 36rem at 92% -6%, rgba(200, 16, 27, 0.22), transparent 62%),
-      radial-gradient(44rem 34rem at -6% 78%, rgba(26, 84, 209, 0.16), transparent 60%),
-      radial-gradient(rgba(255, 69, 82, 0.09) 1px, transparent 1.4px);
+      radial-gradient(48rem 36rem at 92% -6%, rgba(122, 31, 255, 0.22), transparent 62%),
+      radial-gradient(44rem 34rem at -6% 78%, rgba(166, 241, 60, 0.07), transparent 60%),
+      radial-gradient(rgba(176, 124, 255, 0.09) 1px, transparent 1.4px);
     background-size: auto, auto, 7px 7px;
     background-attachment: fixed, fixed, fixed;
   }
 
   ::selection {
-    background: #c8101b;
-    color: #f5f5f2;
+    background: #7a1fff;
+    color: #f5f3fa;
   }
 
   /* Foco siempre visible y con contraste suficiente: navegación por teclado. */
   :focus-visible {
-    @apply outline-none ring-2 ring-tone-gold ring-offset-2 ring-offset-surface;
+    @apply outline-none ring-2 ring-tone-green ring-offset-2 ring-offset-surface;
   }
 
   [id] {
@@ -118,7 +118,7 @@
     position: relative;
     display: inline-block;
     padding: 0.1em 0.45em 0.12em;
-    color: #08080a;
+    color: #09080d;
     isolation: isolate;
   }
 
@@ -127,9 +127,9 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: #f5f5f2;
+    background: #f5f3fa;
     transform: skewX(-12deg) rotate(-1.5deg);
-    box-shadow: 0.32em 0.22em 0 var(--tone, #c8101b);
+    box-shadow: 0.32em 0.22em 0 var(--tone, #7a1fff);
   }
 
   /*
@@ -146,27 +146,27 @@
   }
 
   .p-ransom:nth-child(4n + 1) {
-    background: #f5f5f2;
-    color: #08080a;
+    background: #f5f3fa;
+    color: #09080d;
     transform: rotate(-2.5deg);
   }
 
   .p-ransom:nth-child(4n + 2) {
-    background: #c8101b;
-    color: #f5f5f2;
+    background: #7a1fff;
+    color: #f5f3fa;
     transform: rotate(1.8deg) translateY(0.04em);
   }
 
   .p-ransom:nth-child(4n + 3) {
-    background: #08080a;
-    color: #f5f5f2;
-    box-shadow: inset 0 0 0 0.06em #f5f5f2;
+    background: #09080d;
+    color: #f5f3fa;
+    box-shadow: inset 0 0 0 0.06em #f5f3fa;
     transform: rotate(-1deg);
   }
 
   .p-ransom:nth-child(4n + 4) {
-    background: #1a54d1;
-    color: #f5f5f2;
+    background: #a6f13c;
+    color: #09080d;
     transform: rotate(2.4deg) translateY(-0.03em);
   }
 
@@ -205,7 +205,7 @@
 
   /* Botones de llamada a la acción. */
   .p-btn {
-    --slant-bg: #c8101b;
+    --slant-bg: #7a1fff;
     transition:
       color 0.18s ease,
       transform 0.22s var(--ease-snap);
@@ -217,7 +217,7 @@
 
   .p-btn:hover::before {
     transform: skewX(-14deg) scaleX(1.04);
-    box-shadow: -5px 5px 0 #f5f5f2;
+    box-shadow: -5px 5px 0 #f5f3fa;
   }
 
   .p-btn:disabled:hover {
@@ -230,35 +230,35 @@
   }
 
   .p-btn--primary:hover {
-    --slant-bg: #a80d16;
+    --slant-bg: #6420cf;
   }
 
   .p-btn--secondary {
-    --slant-bg: #08080a;
-    --slant-border: 2px solid #f5f5f2;
+    --slant-bg: #09080d;
+    --slant-border: 2px solid #f5f3fa;
   }
 
   .p-btn--secondary:hover {
-    --slant-bg: #f5f5f2;
-    color: #08080a;
+    --slant-bg: #f5f3fa;
+    color: #09080d;
   }
 
   .p-btn--secondary:hover::before {
-    box-shadow: -5px 5px 0 #c8101b;
+    box-shadow: -5px 5px 0 #7a1fff;
   }
 
-  /* Variante para fondos rojos (banda del CV): negro sólido. */
+  /* Variante para fondos violeta (banda del CV): negro sólido. */
   .p-btn--dark {
-    --slant-bg: #08080a;
+    --slant-bg: #09080d;
   }
 
   .p-btn--dark:hover {
-    --slant-bg: #f5f5f2;
-    color: #08080a;
+    --slant-bg: #f5f3fa;
+    color: #09080d;
   }
 
   .p-btn--dark:hover::before {
-    box-shadow: -5px 5px 0 #08080a;
+    box-shadow: -5px 5px 0 #09080d;
   }
 
   /*
@@ -279,7 +279,7 @@
 
   .p-lift:hover {
     transform: translate(4px, -4px);
-    filter: drop-shadow(-8px 8px 0 var(--tone, #c8101b));
+    filter: drop-shadow(-8px 8px 0 var(--tone, #7a1fff));
   }
 
   /*
@@ -293,7 +293,7 @@
 
   /* Trama de medios tonos local, para paneles que la quieran más marcada. */
   .p-halftone {
-    background-image: radial-gradient(rgba(245, 245, 242, 0.08) 1px, transparent 1.4px);
+    background-image: radial-gradient(rgba(245, 243, 250, 0.08) 1px, transparent 1.4px);
     background-size: 6px 6px;
   }
 
@@ -302,19 +302,19 @@
    * ------------------------------------------------------------------- */
 
   /*
-   * Cortina de entrada: una franja roja inclinada barre la pantalla una sola
+   * Cortina de entrada: una franja violeta inclinada barre la pantalla una sola
    * vez al cargar, como las transiciones entre menús de P5R. Es un
    * pseudo-elemento sin eventos de puntero, así que nunca bloquea un clic, y
    * bajo `prefers-reduced-motion` no existe.
    */
-  /* Primero entra el panel azul de P3R; el tajo rojo de P5R lo barre. */
+  /* Primero entra el panel abismo con su filo verde; el tajo violeta lo barre. */
   .p-curtain::before {
     content: '';
     position: fixed;
     inset: -10vh -40vw;
     z-index: 59;
     pointer-events: none;
-    background: linear-gradient(90deg, transparent 37%, #4fe0ff 37% 40%, #1a54d1 40%);
+    background: linear-gradient(90deg, transparent 37%, #a6f13c 37% 40%, #1e1238 40%);
     transform: skewX(14deg) translateX(-130%);
     animation: p-curtain-blue 0.7s var(--ease-snap) both;
   }
@@ -335,7 +335,7 @@
     z-index: 60;
     pointer-events: none;
     background:
-      linear-gradient(90deg, #c8101b 0 72%, #08080a 72% 80%, #f5f5f2 80% 82%, transparent 82%);
+      linear-gradient(90deg, #7a1fff 0 72%, #09080d 72% 80%, #f5f3fa 80% 82%, transparent 82%);
     transform: skewX(-18deg) translateX(130%);
     animation: p-curtain 0.85s var(--ease-snap) 0.12s both;
   }
@@ -452,10 +452,10 @@
   .tone-strip {
     background-image: repeating-linear-gradient(
       -45deg,
-      #c8101b 0 14px,
-      #08080a 14px 18px,
-      #1a54d1 18px 32px,
-      #08080a 32px 36px
+      #7a1fff 0 14px,
+      #09080d 14px 18px,
+      #a6f13c 18px 32px,
+      #09080d 32px 36px
     );
   }
 
@@ -506,7 +506,7 @@
 
   /*
    * Dos capas en pseudo-elementos, en este orden de pintado: primero la punta
-   * blanca (`::before`), encima el rojo (`::after`). Con el rojo como fondo
+   * blanca (`::before`), encima el violeta (`::after`). Con el violeta como fondo
    * del propio elemento, un `::before` con z-index negativo se pinta ENCIMA
    * del fondo (el elemento crea su contexto de apilamiento al transformarse) y
    * tapaba el texto elegido. La punta blanca solo asoma por la derecha y por
@@ -520,13 +520,13 @@
 
   .p-menu-cursor__shape::before {
     inset: -10px -34px 35% 70%;
-    background: #f5f5f2;
+    background: #f5f3fa;
     clip-path: polygon(0 100%, 100% 0, 78% 100%);
   }
 
   .p-menu-cursor__shape::after {
     inset: 0;
-    background: #c8101b;
+    background: #7a1fff;
   }
 
   /* Golpe al cambiar de elemento: se estira y vuelve. */
@@ -558,9 +558,9 @@
     position: absolute;
     inset: -40%;
     background:
-      radial-gradient(18rem 12rem at 30% 30%, rgba(79, 224, 255, 0.22), transparent 70%),
-      radial-gradient(22rem 14rem at 70% 60%, rgba(26, 84, 209, 0.45), transparent 70%),
-      radial-gradient(14rem 10rem at 55% 20%, rgba(126, 166, 255, 0.18), transparent 70%);
+      radial-gradient(18rem 12rem at 30% 30%, rgba(166, 241, 60, 0.22), transparent 70%),
+      radial-gradient(22rem 14rem at 70% 60%, rgba(122, 31, 255, 0.4), transparent 70%),
+      radial-gradient(14rem 10rem at 55% 20%, rgba(215, 196, 255, 0.18), transparent 70%);
     animation: p-water-drift 18s ease-in-out infinite alternate;
   }
 
@@ -571,7 +571,7 @@
     background: repeating-linear-gradient(
       100deg,
       transparent 0 60px,
-      rgba(79, 224, 255, 0.07) 60px 74px,
+      rgba(166, 241, 60, 0.07) 60px 74px,
       transparent 74px 150px
     );
     animation: p-water-rays 9s ease-in-out infinite alternate;
@@ -638,7 +638,7 @@
   .p-vertical {
     writing-mode: vertical-rl;
     color: transparent;
-    -webkit-text-stroke: 1.5px rgba(79, 224, 255, 0.16);
+    -webkit-text-stroke: 1.5px rgba(166, 241, 60, 0.16);
   }
 
   .p-vertical-track {
@@ -715,7 +715,7 @@
 
   /*
    * Glitch de color en los títulos de proyecto al pasar por la tarjeta:
-   * separación roja/cian con saltos en escalón, unas pocas décimas.
+   * separación violeta/verde con saltos en escalón, unas pocas décimas.
    */
   .group:hover .p-glitch {
     animation: p-glitch 0.45s steps(2, end) 2;
@@ -723,15 +723,15 @@
 
   @keyframes p-glitch {
     0% {
-      text-shadow: 3px 0 #ff4552, -3px 0 #4fe0ff;
+      text-shadow: 3px 0 #b07cff, -3px 0 #a6f13c;
       transform: translateX(0);
     }
     33% {
-      text-shadow: -3px 1px #ff4552, 3px -1px #4fe0ff;
+      text-shadow: -3px 1px #b07cff, 3px -1px #a6f13c;
       transform: translateX(2px) skewX(-6deg);
     }
     66% {
-      text-shadow: 2px -1px #ff4552, -2px 1px #4fe0ff;
+      text-shadow: 2px -1px #b07cff, -2px 1px #a6f13c;
       transform: translateX(-2px);
     }
     100% {
@@ -763,7 +763,7 @@
       }
     }
 
-    /* Barra de progreso de lectura: la franja roja crece con el scroll. */
+    /* Barra de progreso de lectura: la franja verde crece con el scroll. */
     .p-progress {
       transform-origin: left;
       animation: p-progress linear both;

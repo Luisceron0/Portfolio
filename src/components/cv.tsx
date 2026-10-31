@@ -14,7 +14,7 @@ import { SlashRule } from '@/components/persona'
  * Los PDF los genera RenderCV en otro repo (RF-006 de la SRS del portafolio);
  * este sitio solo enlaza a los archivos ya generados.
  *
- * Es la banda roja a sangre de P5R. Sobre rojo TODO el texto es `ink`: el gris
+ * Es la banda violeta a sangre. Sobre violeta TODO el texto es `ink`: el gris
  * secundario no llega a 4.5:1 ahí, y los botones usan la variante `dark`.
  */
 export function CvDownloads({ locale }: { locale: Locale }) {
@@ -22,7 +22,7 @@ export function CvDownloads({ locale }: { locale: Locale }) {
     <section
       aria-labelledby="cv-title"
       id="cv"
-      className="p-band p-halftone relative my-8 overflow-hidden bg-blood"
+      className="p-band p-halftone relative my-8 overflow-hidden bg-violet"
     >
       {/* Tajos negros decorativos que cruzan la banda. */}
       <div

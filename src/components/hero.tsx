@@ -51,7 +51,7 @@ export function Hero({ locale }: { locale: Locale }) {
 
       <div className="relative">
         <p
-          className="p-enter p-slant inline-block px-4 py-1 font-mono text-[0.68rem] font-bold uppercase tracking-widest2 text-ink [--slant-bg:#c8101b]"
+          className="p-enter p-slant inline-block px-4 py-1 font-mono text-[0.68rem] font-bold uppercase tracking-widest2 text-ink [--slant-bg:#7a1fff]"
           style={delay(0)}
         >
           {hero.role[locale]}
@@ -78,7 +78,7 @@ export function Hero({ locale }: { locale: Locale }) {
         </h1>
 
         <p
-          className="p-enter mt-5 max-w-2xl border-l-4 border-blood pl-4 text-lg leading-relaxed text-ink sm:mt-7 sm:text-xl"
+          className="p-enter mt-5 max-w-2xl border-l-4 border-violet pl-4 text-lg leading-relaxed text-ink sm:mt-7 sm:text-xl"
           style={delay(380)}
         >
           {hero.pitch[locale]}
@@ -97,26 +97,26 @@ export function Hero({ locale }: { locale: Locale }) {
           className="p-enter mt-8 flex flex-wrap items-center gap-3 font-mono text-xs font-bold uppercase tracking-widest2"
           style={delay(560)}
         >
-          <span className="p-slant px-3 py-1 text-ink [--slant-bg:#1a54d1]">
+          <span className="p-slant px-3 py-1 text-ink [--slant-bg:#7a1fff]">
             {hero.location[locale]}
           </span>
-          <span className="p-slant px-3 py-1 text-surface [--slant-bg:#ffd23f]">
+          <span className="p-slant px-3 py-1 text-surface [--slant-bg:#a6f13c]">
             {hero.availability[locale]}
           </span>
         </p>
       </div>
 
-      {/* Panel del menú de pausa P3R: agua azul en movimiento, fragmentos
+      {/* Panel del menú de pausa P3R: agua violeta en movimiento, fragmentos
           flotando y el rótulo "MENU" vertical deslizándose por el borde. */}
       <div
-        className="p-enter relative overflow-hidden border-l-4 border-tone-cyan bg-midnight px-6 py-7 shadow-[10px_10px_0_#c8101b] sm:px-10"
+        className="p-enter relative overflow-hidden border-l-4 border-tone-green bg-abyss px-6 py-7 shadow-[10px_10px_0_#7a1fff] sm:px-10"
         style={delay(640)}
       >
         <div aria-hidden="true" className="p-water pointer-events-none absolute inset-0" />
         <ShardField />
         <span
           aria-hidden="true"
-          className="p-display p-outline pointer-events-none absolute -left-3 top-0 select-none text-7xl leading-none text-tone-cyan/40 [writing-mode:vertical-rl]"
+          className="p-display p-outline pointer-events-none absolute -left-3 top-0 select-none text-7xl leading-none text-tone-green/40 [writing-mode:vertical-rl]"
         >
           {hero.menu.title[locale]}
         </span>

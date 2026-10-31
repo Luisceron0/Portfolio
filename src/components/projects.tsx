@@ -32,7 +32,7 @@ import { ProjectsIcon } from '@/components/icons'
  * proyecto obligaría a repetir tono (el módulo lo hace solo, sin romperse) o a
  * ampliar la paleta en `section.tsx`, que es la decisión de diseño real.
  */
-const PROJECT_TONES: readonly Tone[] = ['red', 'gold', 'cyan', 'pink', 'blue']
+const PROJECT_TONES: readonly Tone[] = ['violet', 'mint', 'green', 'silver', 'lilac']
 
 /**
  * RF-102 — cinco proyectos destacados.
@@ -250,7 +250,7 @@ export function Projects({ locale }: { locale: Locale }) {
         number="03"
         title={projectsSection.heading[locale]}
         intro={projectsSection.intro[locale]}
-        tone="gold"
+        tone="mint"
         icon={<ProjectsIcon />}
       />
 

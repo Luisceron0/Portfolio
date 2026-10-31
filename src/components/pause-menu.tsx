@@ -9,25 +9,25 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProp
  * crece y cambia de color.
  *
  * En el juego (y en la recreación de Ultipuk en Godot) el cursor son dos
- * polígonos, uno rojo y uno blanco, que se interpolan hacia el elemento. Aquí
+ * polígonos, uno violeta y uno blanco, que se interpolan hacia el elemento. Aquí
  * es lo mismo con dos capas CSS y una transición sobre `transform`, `width` y
  * `height`. La curva con sobrepaso (`--ease-spring`) es el rebote.
  *
  * Accesibilidad: son enlaces normales dentro de una lista. El cursor es
  * `aria-hidden` y sigue tanto al ratón como al foco del teclado. Sin
  * JavaScript, los enlaces funcionan igual y el cursor simplemente no aparece.
- * El texto elegido es `ink` sobre el rojo `blood` (5.4:1) y el resto son tonos
- * claros sobre `midnight`, todos medidos en `check:contrast`.
+ * El texto elegido es `ink` sobre el violeta de relleno (5.5:1) y el resto son tonos
+ * claros sobre `abyss`, todos medidos en `check:contrast`.
  */
 
 /** Giro, tamaño y tono de cada rótulo: la "pila desordenada" del menú. */
 const LAYOUT = [
-  { rotate: -7, size: 'text-3xl xl:text-4xl', tone: 'text-tone-cyan', indent: 'ml-2' },
-  { rotate: -4, size: 'text-2xl xl:text-3xl', tone: 'text-tone-blue', indent: 'ml-8' },
-  { rotate: -6, size: 'text-3xl xl:text-4xl', tone: 'text-tone-cyan', indent: 'ml-0' },
-  { rotate: -3, size: 'text-2xl xl:text-3xl', tone: 'text-tone-blue', indent: 'ml-6' },
-  { rotate: -8, size: 'text-3xl xl:text-4xl', tone: 'text-tone-cyan', indent: 'ml-1' },
-  { rotate: -5, size: 'text-2xl xl:text-3xl', tone: 'text-tone-blue', indent: 'ml-10' },
+  { rotate: -7, size: 'text-3xl xl:text-4xl', tone: 'text-tone-green', indent: 'ml-2' },
+  { rotate: -4, size: 'text-2xl xl:text-3xl', tone: 'text-tone-lilac', indent: 'ml-8' },
+  { rotate: -6, size: 'text-3xl xl:text-4xl', tone: 'text-tone-green', indent: 'ml-0' },
+  { rotate: -3, size: 'text-2xl xl:text-3xl', tone: 'text-tone-lilac', indent: 'ml-6' },
+  { rotate: -8, size: 'text-3xl xl:text-4xl', tone: 'text-tone-green', indent: 'ml-1' },
+  { rotate: -5, size: 'text-2xl xl:text-3xl', tone: 'text-tone-lilac', indent: 'ml-10' },
 ] as const
 
 interface Box {
@@ -109,13 +109,13 @@ export function PauseMenu({
     <div className="relative">
       <p
         aria-hidden="true"
-        className="p-display mb-2 text-sm tracking-[0.3em] text-tone-cyan"
+        className="p-display mb-2 text-sm tracking-[0.3em] text-tone-green"
       >
         {title}
       </p>
 
       <ul ref={listRef} aria-label={label} className="relative isolate flex flex-col items-start">
-        {/* Cursor: sombra blanca desplazada + paralelogramo rojo. */}
+        {/* Cursor: sombra blanca desplazada + paralelogramo violeta. */}
         <span
           aria-hidden="true"
           style={cursorStyle}

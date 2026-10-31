@@ -33,7 +33,7 @@ function absolute(path: string): string {
  * de `metadata` está deprecado y se ignora con un aviso en build.
  */
 export const viewport: Viewport = {
-  themeColor: '#08080a',
+  themeColor: '#09080d',
 }
 
 /**
@@ -100,12 +100,12 @@ export default function RootLayout({
   return (
     // El `lang` refleja el idioma realmente renderizado, resuelto en servidor.
     <html lang={HTML_LANG[locale]}>
-      {/* `p-curtain`: barrido rojo de entrada, una vez (ver globals.css). */}
+      {/* `p-curtain`: barrido violeta de entrada, una vez (ver globals.css). */}
       <body className="p-curtain">
         {/* Salto al contenido: primer elemento tabulable de la página (WCAG 2.4.1). */}
         <a
           href="#contenido"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-accent focus:px-4 focus:py-2 focus:font-bold focus:text-surface"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-tone-violet focus:px-4 focus:py-2 focus:font-bold focus:text-surface"
         >
           {footer.skipToContent[locale]}
         </a>

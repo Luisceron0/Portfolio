@@ -10,7 +10,7 @@ import { TimelineIcon } from '@/components/icons'
  * pantalla, "elemento 2 de 4" es información real sobre una cronología. La
  * línea vertical y los rombos son decorativos y van con `aria-hidden`.
  *
- * Vive sobre la banda azul de P3R: el periodo va arriba, en una pestaña
+ * Vive sobre la banda abismo: el periodo va arriba, en una pestaña
  * inclinada, como la fecha del calendario del juego, que es lo que marca el
  * paso del tiempo. Trabajo y estudio se distinguen por color Y por la
  * etiqueta escrita, nunca solo por color.
@@ -26,7 +26,7 @@ function Entry({ entry, locale }: { entry: TimelineEntry; locale: Locale }) {
       {/* Rombo sobre la línea vertical: se rellena y gira al pasar el ratón. */}
       <span
         aria-hidden="true"
-        className="absolute left-0 top-3 h-4 w-4 -translate-x-1/2 rotate-45 border-2 border-tone-cyan bg-midnight transition-all duration-300 group-hover:rotate-[135deg] group-hover:bg-tone-cyan"
+        className="absolute left-0 top-3 h-4 w-4 -translate-x-1/2 rotate-45 border-2 border-tone-green bg-abyss transition-all duration-300 group-hover:rotate-[135deg] group-hover:bg-tone-green"
       />
 
       {/* Sin retardo escalonado: las entradas están apiladas en vertical y
@@ -39,18 +39,18 @@ function Entry({ entry, locale }: { entry: TimelineEntry; locale: Locale }) {
           la izquierda por detrás del texto y cada color pasa a su par oscuro
           (medidos en `check:contrast` como "sobre ink").
         */}
-        <article className="relative isolate border-l-4 border-tone-cyan/0 bg-midnight-card/70 p-5 transition-all duration-300 ease-out group-hover:translate-x-2 group-hover:border-blood sm:p-7">
+        <article className="relative isolate border-l-4 border-tone-green/0 bg-abyss-card/70 p-5 transition-all duration-300 ease-out group-hover:translate-x-2 group-hover:border-violet sm:p-7">
           <span
             aria-hidden="true"
             className="absolute inset-0 -z-10 origin-left scale-x-0 bg-ink transition-transform duration-300 ease-out group-hover:scale-x-100"
           />
           <div className="flex flex-wrap items-center gap-3">
-            <span className="p-slant p-display px-3.5 py-1 text-sm text-surface [--slant-bg:#4fe0ff] sm:text-base">
+            <span className="p-slant p-display px-3.5 py-1 text-sm text-surface [--slant-bg:#a6f13c] sm:text-base">
               {entry.period[locale]}
             </span>
             <span
-              className={`p-slant px-2.5 py-0.5 font-mono text-[0.68rem] font-bold uppercase tracking-widest2 text-ink ${
-                isWork ? '[--slant-bg:#c8101b]' : '[--slant-bg:#1a54d1]'
+              className={`p-slant px-2.5 py-0.5 font-mono text-[0.68rem] font-bold uppercase tracking-widest2 ${
+                isWork ? 'text-ink [--slant-bg:#7a1fff]' : 'text-surface [--slant-bg:#d7c4ff]'
               }`}
             >
               {timeline.kinds[entry.kind][locale]}
@@ -61,7 +61,7 @@ function Entry({ entry, locale }: { entry: TimelineEntry; locale: Locale }) {
             {entry.title[locale]}
           </h3>
 
-          <p className="mt-1.5 text-base font-bold text-tone-cyan transition-colors duration-200 group-hover:text-royal">
+          <p className="mt-1.5 text-base font-bold text-tone-green transition-colors duration-200 group-hover:text-violet">
             {entry.organization}
             <span className="font-normal text-ink-muted transition-colors duration-200 group-hover:text-ink-dim">
               {' '}
@@ -77,7 +77,7 @@ function Entry({ entry, locale }: { entry: TimelineEntry; locale: Locale }) {
               >
                 <span
                   aria-hidden="true"
-                  className="absolute left-0 top-[0.55em] h-2 w-2 -skew-x-[20deg] bg-tone-cyan transition-colors duration-200 group-hover:bg-blood"
+                  className="absolute left-0 top-[0.55em] h-2 w-2 -skew-x-[20deg] bg-tone-green transition-colors duration-200 group-hover:bg-violet"
                 />
                 {highlight}
               </li>
@@ -94,7 +94,7 @@ export function Timeline({ locale }: { locale: Locale }) {
     <Section
       id="trayectoria"
       labelledBy="trayectoria-title"
-      band="midnight"
+      band="abyss"
       watermark={timeline.heading[locale]}
     >
       <SectionHeading
@@ -102,11 +102,11 @@ export function Timeline({ locale }: { locale: Locale }) {
         number="02"
         title={timeline.heading[locale]}
         intro={timeline.intro[locale]}
-        tone="cyan"
+        tone="green"
         icon={<TimelineIcon />}
       />
 
-      <ol className="relative mt-12 space-y-8 border-l-2 border-tone-cyan/40">
+      <ol className="relative mt-12 space-y-8 border-l-2 border-tone-green/40">
         {timeline.entries.map((entry) => (
           <Entry key={entry.id} entry={entry} locale={locale} />
         ))}

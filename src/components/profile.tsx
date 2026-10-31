@@ -32,18 +32,18 @@ export function Profile({ locale }: { locale: Locale }) {
         id="perfil-title"
         number="01"
         title={profile.heading[locale]}
-        tone="red"
+        tone="violet"
         icon={<ProfileIcon />}
       />
 
       <div className="mt-12 grid gap-12 md:grid-cols-[1.5fr_1fr]">
         <Reveal>
           {/* Panel de diálogo de P5R: negro, borde blanco grueso y una cuña
-              roja que asoma por la esquina. */}
-          <div className="relative border-2 border-ink bg-surface p-6 shadow-[8px_8px_0_#c8101b] sm:p-8">
+              violeta que asoma por la esquina. */}
+          <div className="relative border-2 border-ink bg-surface p-6 shadow-[8px_8px_0_#7a1fff] sm:p-8">
             <span
               aria-hidden="true"
-              className="absolute -left-3 -top-3 h-6 w-14 -skew-x-[20deg] bg-blood"
+              className="absolute -left-3 -top-3 h-6 w-14 -skew-x-[20deg] bg-violet"
             />
             <div className="space-y-5">
               {profile.summary[locale].map((paragraph) => (
@@ -82,11 +82,11 @@ export function Profile({ locale }: { locale: Locale }) {
             {profile.facts.map((fact, index) => (
               <div
                 key={fact.label[locale]}
-                className="group border-l-4 border-blood bg-surface-card/90 px-5 py-4 transition-transform duration-200 ease-out hover:translate-x-1.5"
+                className="group border-l-4 border-violet bg-surface-card/90 px-5 py-4 transition-transform duration-200 ease-out hover:translate-x-1.5"
               >
                 <dt
                   className={`p-slant inline-block px-2.5 py-0.5 font-mono text-[0.65rem] font-bold uppercase tracking-spec ${
-                    index % 2 === 0 ? 'text-ink [--slant-bg:#c8101b]' : 'text-surface [--slant-bg:#f5f5f2]'
+                    index % 2 === 0 ? 'text-ink [--slant-bg:#7a1fff]' : 'text-surface [--slant-bg:#f5f3fa]'
                   }`}
                 >
                   {fact.label[locale]}

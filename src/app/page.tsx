@@ -33,7 +33,7 @@ export default function HomePage() {
     <>
       <div aria-hidden="true" className="tone-strip fixed inset-x-0 top-0 z-50 h-[3px]" />
       {/* Progreso de lectura: crece con el scroll (solo con animation-timeline). */}
-      <div aria-hidden="true" className="p-progress fixed inset-x-0 top-[3px] z-50 h-[3px] scale-x-0 bg-tone-gold" />
+      <div aria-hidden="true" className="p-progress fixed inset-x-0 top-[3px] z-50 h-[3px] scale-x-0 bg-tone-green" />
 
       <SiteNav locale={locale} />
 

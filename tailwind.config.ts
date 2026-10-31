@@ -6,65 +6,64 @@ const config: Config = {
     extend: {
       colors: {
         /*
-         * RF-110 v3 — sistema Persona (P5R + P3R).
+         * RF-110 v4 — paleta EVA: dos colores principales sobre negro violáceo.
          *
-         * Dos juegos de color con un papel cada uno, igual que en los juegos:
-         *   - P5R (rojo sangre, negro, blanco): la identidad. Hero, perfil,
-         *     proyectos, la banda del CV y la tarjeta de contacto.
-         *   - P3R (azul medianoche y cian): lo que se recorre. Trayectoria y
-         *     habilidades viven sobre bandas `midnight`.
+         *   - Violeta eléctrico: la identidad. Botones, banda del CV, cursor
+         *     del menú, cuñas y reglas.
+         *   - Verde lima: el contrapunto. Pestañas de fecha, foco, progreso y
+         *     los acentos de las bandas `abyss` (trayectoria, habilidades).
          *
-         * Hay DOS rojos y no es redundancia: `tone.red` es rojo para TEXTO sobre
-         * negro (5.9:1) y `blood` es rojo de RELLENO con letra blanca encima
-         * (5.4:1). Un solo rojo no pasa las dos pruebas: el que se lee bien
-         * sobre negro es demasiado claro para llevar blanco encima.
+         * Los secundarios (`tone.lilac`, `tone.mint`, `tone.silver`) son tintes
+         * de esos dos y un gris frío: dan variedad a las tarjetas sin abrir una
+         * tercera familia de color. `warn` es la única excepción, y es de
+         * estado, no de marca.
+         *
+         * Hay DOS violetas y no es redundancia: `tone.violet` es violeta para
+         * TEXTO sobre negro (6.8:1) y `violet` es violeta de RELLENO con letra
+         * blanca encima (5.5:1). Un solo violeta no pasa las dos pruebas. El
+         * verde no tiene ese problema: es tan claro que vale como texto sobre
+         * negro y como relleno con letra `surface` encima.
          *
          * Los ratios se miden con `npm run check:contrast`, que falla por
          * debajo de 4.5:1. Si cambias un hex, cámbialo también en ese script.
          */
         ink: {
-          DEFAULT: '#f5f5f2', // blanco de cómic, apenas cálido
-          muted: '#a8a8b0', // gris frío para texto secundario
-          dim: '#3d3d48', // gris oscuro: texto secundario sobre fondo `ink`
+          DEFAULT: '#f5f3fa', // blanco con un punto de lila
+          muted: '#aaa6b8', // gris lavanda para texto secundario
+          dim: '#3a3448', // gris oscuro: texto secundario sobre fondo `ink`
         },
         surface: {
-          DEFAULT: '#08080a', // negro de tinta
-          card: '#141418',
-          subtle: '#1c1c22',
-          inverse: '#f5f5f2',
+          DEFAULT: '#09080d', // negro violáceo
+          card: '#15121d',
+          subtle: '#1d1a27',
+          inverse: '#f5f3fa',
         },
-        /** Fondo de las bandas P3R. Medido con texto encima. */
-        midnight: {
-          DEFAULT: '#0b1430',
-          card: '#111d42',
+        /** Fondo de las bandas de trayectoria y habilidades. Medido con texto encima. */
+        abyss: {
+          DEFAULT: '#130a26',
+          card: '#1e1238',
         },
         hairline: {
-          DEFAULT: '#2a2a32',
-          strong: '#45454f',
+          DEFAULT: '#2b2738',
+          strong: '#47405a',
         },
         /** SOLO decoración: no llega a 4.5:1. Para texto gris, `ink.muted`. */
-        deco: '#55555f',
-        /** Rojo de relleno (botones, banda del CV). Letra SIEMPRE `ink`. */
-        blood: {
-          DEFAULT: '#c8101b',
-          hover: '#a80d16',
-        },
-        /** Azul P3R de relleno. Letra SIEMPRE `ink`. */
-        royal: '#1a54d1',
-        accent: {
-          DEFAULT: '#ff4552', // rojo para texto y bordes sobre negro
-          hover: '#ff6b75',
+        deco: '#5a536b',
+        /** Violeta eléctrico de relleno (botones, banda del CV). Letra SIEMPRE `ink`. */
+        violet: {
+          DEFAULT: '#7a1fff',
+          hover: '#6420cf',
         },
         /**
          * Tonos de sección y de tarjeta, todos legibles como texto sobre negro
-         * y sobre `midnight`, y con letra `surface` encima cuando se rellenan.
+         * y sobre `abyss`, y con letra `surface` encima cuando se rellenan.
          */
         tone: {
-          red: '#ff4552',
-          cyan: '#4fe0ff',
-          gold: '#ffd23f',
-          blue: '#7ea6ff',
-          pink: '#ff7ab0',
+          violet: '#b07cff',
+          green: '#a6f13c',
+          mint: '#5ef0a8',
+          lilac: '#d7c4ff',
+          silver: '#c3c0cf',
         },
         warn: {
           DEFAULT: '#ffd23f',

@@ -3,7 +3,7 @@ import { SlashRule } from '@/components/persona'
 
 export function Footer({ locale }: { locale: Locale }) {
   return (
-    <footer className="border-t-4 border-blood bg-surface-card">
+    <footer className="border-t-4 border-violet bg-surface-card">
       <div className="mx-auto max-w-content px-5 py-10 sm:px-8">
         <SlashRule className="mb-6" />
         <div className="flex flex-col gap-2 font-mono text-xs uppercase tracking-widest2 text-ink-muted">

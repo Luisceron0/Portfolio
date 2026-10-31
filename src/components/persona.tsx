@@ -27,8 +27,8 @@ function burstPoints(cx: number, cy: number, spikes: number, outer: number, inne
 const BURST = burstPoints(200, 200, 14, 190, 120)
 
 /**
- * Emblema del hero: el estallido rojo de P5R girando muy despacio detrás de la
- * luna creciente azul de P3R, cruzados por dos tajos blancos.
+ * Emblema del hero: el estallido violeta de P5R girando muy despacio detrás de la
+ * luna creciente verde de P3R, cruzados por dos tajos blancos.
  *
  * El color blanco y el gris del texto que se lea encima están medidos en
  * `check:contrast` con la opacidad que el hero le da en móvil. Si cambias la
@@ -43,14 +43,14 @@ export function PersonaEmblem({ className = '' }: { className?: string }) {
       className={`pointer-events-none select-none ${className}`}
     >
       <g className="p-spin">
-        <polygon points={BURST} fill="#c8101b" />
+        <polygon points={BURST} fill="#7a1fff" />
       </g>
-      <polygon points="40,250 380,90 380,118 60,268" fill="#08080a" />
-      <circle cx="210" cy="205" r="104" fill="#1a54d1" />
-      <circle cx="248" cy="182" r="92" fill="#08080a" />
-      <circle cx="210" cy="205" r="104" fill="none" stroke="#4fe0ff" strokeWidth="3" />
-      <polygon points="10,330 390,150 392,162 14,346" fill="#f5f5f2" />
-      <polygon points="60,372 300,262 302,270 64,384" fill="#f5f5f2" />
+      <polygon points="40,250 380,90 380,118 60,268" fill="#09080d" />
+      <circle cx="210" cy="205" r="104" fill="#a6f13c" />
+      <circle cx="248" cy="182" r="92" fill="#09080d" />
+      <circle cx="210" cy="205" r="104" fill="none" stroke="#d7c4ff" strokeWidth="3" />
+      <polygon points="10,330 390,150 392,162 14,346" fill="#f5f3fa" />
+      <polygon points="60,372 300,262 302,270 64,384" fill="#f5f3fa" />
     </svg>
   )
 }
@@ -65,19 +65,19 @@ export function PersonaEmblem({ className = '' }: { className?: string }) {
  */
 export function Marquee({
   items,
-  variant = 'red',
+  variant = 'violet',
 }: {
   items: readonly string[]
-  variant?: 'red' | 'dark'
+  variant?: 'violet' | 'dark'
 }) {
   const sequence = [...items, ...items, ...items]
-  const isRed = variant === 'red'
+  const isViolet = variant === 'violet'
 
   return (
     <div
       aria-hidden="true"
-      className={`p-marquee ${isRed ? '' : 'p-marquee--reverse'} select-none overflow-hidden whitespace-nowrap py-2.5 ${
-        isRed ? 'bg-blood text-ink' : 'border-y-2 border-tone-cyan bg-surface text-tone-cyan'
+      className={`p-marquee ${isViolet ? '' : 'p-marquee--reverse'} select-none overflow-hidden whitespace-nowrap py-2.5 ${
+        isViolet ? 'bg-violet text-ink' : 'border-y-2 border-tone-green bg-surface text-tone-green'
       }`}
     >
       <div className="p-marquee__track">
@@ -100,15 +100,15 @@ export function Marquee({
 }
 
 /**
- * Las dos cintas cruzadas que separan el hero del resto: roja P5R y negra con
- * cian P3R, inclinadas en sentidos opuestos. El contenedor recorta lo que se
+ * Las dos cintas cruzadas que separan el hero del resto: violeta y negra con
+ * verde, inclinadas en sentidos opuestos. El contenedor recorta lo que se
  * sale al girar, así que no genera scroll horizontal.
  */
 export function CrossedMarquees({ items }: { items: readonly string[] }) {
   return (
     <div aria-hidden="true" className="relative overflow-hidden py-10 sm:py-14">
       <div className="-mx-8 -rotate-2">
-        <Marquee items={items} variant="red" />
+        <Marquee items={items} variant="violet" />
       </div>
       <div className="-mx-8 -mt-3 rotate-[1.5deg]">
         <Marquee items={items} variant="dark" />
@@ -126,14 +126,14 @@ export function CrossedMarquees({ items }: { items: readonly string[] }) {
  * valores en variables CSS y la animación `.p-shard` hace el resto.
  */
 const SHARDS = [
-  { x: 8, y: 14, s: 14, r: 20, d: 0, t: 9, c: '#4fe0ff' },
-  { x: 22, y: 70, s: 9, r: -30, d: 1.8, t: 11, c: '#ff7ab0' },
-  { x: 38, y: 30, s: 18, r: 45, d: 3.2, t: 13, c: '#7ea6ff' },
-  { x: 55, y: 82, s: 11, r: 10, d: 0.6, t: 10, c: '#f5f5f2' },
-  { x: 68, y: 12, s: 16, r: -15, d: 2.4, t: 12, c: '#ff4552' },
-  { x: 80, y: 55, s: 10, r: 60, d: 4, t: 9.5, c: '#4fe0ff' },
-  { x: 92, y: 26, s: 13, r: -45, d: 1.1, t: 14, c: '#ff7ab0' },
-  { x: 47, y: 52, s: 8, r: 30, d: 5.2, t: 8.5, c: '#f5f5f2' },
+  { x: 8, y: 14, s: 14, r: 20, d: 0, t: 9, c: '#a6f13c' },
+  { x: 22, y: 70, s: 9, r: -30, d: 1.8, t: 11, c: '#c3c0cf' },
+  { x: 38, y: 30, s: 18, r: 45, d: 3.2, t: 13, c: '#d7c4ff' },
+  { x: 55, y: 82, s: 11, r: 10, d: 0.6, t: 10, c: '#f5f3fa' },
+  { x: 68, y: 12, s: 16, r: -15, d: 2.4, t: 12, c: '#b07cff' },
+  { x: 80, y: 55, s: 10, r: 60, d: 4, t: 9.5, c: '#a6f13c' },
+  { x: 92, y: 26, s: 13, r: -45, d: 1.1, t: 14, c: '#5ef0a8' },
+  { x: 47, y: 52, s: 8, r: 30, d: 5.2, t: 8.5, c: '#f5f3fa' },
 ] as const
 
 export function ShardField({ className = '' }: { className?: string }) {
@@ -183,13 +183,13 @@ export function VerticalWatermark({ text }: { text: string }) {
   )
 }
 
-/** Regla cortada en diagonal: rojo, blanco y el resto en gris. */
+/** Regla cortada en diagonal: violeta, blanco, verde y el resto en gris. */
 export function SlashRule({ className = '' }: { className?: string }) {
   return (
     <div aria-hidden="true" className={`flex h-2 gap-1.5 ${className}`}>
-      <span className="w-16 -skew-x-[30deg] bg-blood" />
+      <span className="w-16 -skew-x-[30deg] bg-violet" />
       <span className="w-4 -skew-x-[30deg] bg-ink" />
-      <span className="w-8 -skew-x-[30deg] bg-royal" />
+      <span className="w-8 -skew-x-[30deg] bg-tone-green" />
       <span className="flex-1 -skew-x-[30deg] bg-hairline" />
     </div>
   )
