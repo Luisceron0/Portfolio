@@ -33,12 +33,25 @@ export function Contact({ locale }: { locale: Locale }) {
         number="05"
         title={contact.heading[locale]}
         intro={contact.intro[locale]}
-        tone="rust"
+        tone="pink"
         icon={<ContactIcon />}
       />
 
+      {/*
+        La "carta de aviso" de P5R: el formulario en un panel negro con borde
+        blanco, una cuña roja en la esquina y la sombra sólida roja. Es marco,
+        no control: nada aquí recorta el foco de los campos.
+      */}
       <Reveal>
-        <ContactForm sitekey={resolveSitekey()} locale={locale} />
+        <div className="relative mt-10 max-w-2xl border-2 border-ink bg-surface p-5 shadow-[10px_10px_0_#c8101b] sm:p-8">
+          <span
+            aria-hidden="true"
+            className="absolute -right-3 -top-4 rotate-6 bg-blood px-3 py-1 font-display text-xs font-black uppercase italic text-ink"
+          >
+            ★ ★ ★
+          </span>
+          <ContactForm sitekey={resolveSitekey()} locale={locale} />
+        </div>
       </Reveal>
     </Section>
   )

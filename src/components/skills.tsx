@@ -1,9 +1,12 @@
+import type { CSSProperties } from 'react'
+
 import { skills, type Locale } from '@/content'
 import { Reveal } from '@/components/reveal'
 import {
   Section,
   SectionHeading,
-  TONE_DOT,
+  TONE_BG,
+  TONE_BORDER,
   TONE_HOVER_BORDER,
   TONE_TEXT,
   type Tone,
@@ -11,7 +14,7 @@ import {
 import { SkillsIcon } from '@/components/icons'
 
 /** RF-110: un tono por grupo, para que cinco tarjetas no se lean como una sola. */
-const GROUP_TONES: readonly Tone[] = ['indigo', 'teal', 'rust', 'ochre', 'plum']
+const GROUP_TONES: readonly Tone[] = ['cyan', 'red', 'gold', 'blue', 'pink']
 
 /**
  * RF-107 — habilidades y certificaciones.
@@ -22,41 +25,56 @@ const GROUP_TONES: readonly Tone[] = ['indigo', 'teal', 'rust', 'ochre', 'plum']
  */
 export function Skills({ locale }: { locale: Locale }) {
   return (
-    <Section id="habilidades" labelledBy="habilidades-title">
+    <Section
+      id="habilidades"
+      labelledBy="habilidades-title"
+      band="midnight"
+      watermark={skills.heading[locale]}
+    >
       <SectionHeading
         id="habilidades-title"
         number="04"
         title={skills.heading[locale]}
         intro={skills.intro[locale]}
-        tone="plum"
+        tone="blue"
         icon={<SkillsIcon />}
       />
 
-      <div className="mt-12 grid gap-px border border-hairline bg-hairline sm:grid-cols-2">
-        {/*
-          `gap-px` sobre fondo `hairline`: las celdas se separan por la rejilla
-          misma en vez de por márgenes, así que los grupos forman una tabla
-          continua y no cinco tarjetas flotando. Es el recurso más suizo de la
-          página y no cuesta un solo borde extra.
-        */}
+      {/*
+        Cada grupo es un panel de menú de P3R: borde superior del tono, número
+        de entrada hueco y chips inclinados. Rejilla con `gap` normal, no la
+        tabla continua de la v2: con fondo azul, las celdas sueltas respiran
+        mejor y un número impar de grupos ya no deja un hueco que tapar.
+      */}
+      <div className="mt-12 grid gap-5 sm:grid-cols-2">
         {skills.groups.map((group, index) => {
           const tone = GROUP_TONES[index % GROUP_TONES.length]
           return (
-            <Reveal key={group.label.es} delayMs={index * 70} className="bg-surface">
-              <div className="h-full p-5 sm:p-6">
-                <div className="flex items-center gap-2.5">
-                  <span aria-hidden="true" className={`h-2 w-2 shrink-0 ${TONE_DOT[tone]}`} />
-                  <h3
-                    className={`font-mono text-[0.65rem] font-bold uppercase tracking-spec ${TONE_TEXT[tone]}`}
+            <Reveal key={group.label.es} delayMs={index * 70}>
+              <div
+                className={`group h-full border-t-4 bg-midnight-card/80 p-5 transition-transform duration-300 ease-out hover:-translate-y-1 sm:p-6 ${TONE_BORDER[tone]}`}
+              >
+                <div className="flex items-center gap-3">
+                  <span
+                    aria-hidden="true"
+                    className={`p-display p-outline text-3xl leading-none ${TONE_TEXT[tone]}`}
                   >
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className={`p-display text-base sm:text-lg ${TONE_TEXT[tone]}`}>
                     {group.label[locale]}
                   </h3>
+                  <span
+                    aria-hidden="true"
+                    className={`ml-auto h-1.5 w-10 -skew-x-[30deg] transition-all duration-300 group-hover:w-16 ${TONE_BG[tone]}`}
+                  />
                 </div>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {group.items[locale].map((item) => (
+                <ul className="mt-5 flex flex-wrap gap-2">
+                  {group.items[locale].map((item, itemIndex) => (
                     <li
                       key={item}
-                      className={`border border-hairline-strong bg-surface-subtle px-3 py-1.5 font-mono text-xs text-ink transition-colors duration-200 ${TONE_HOVER_BORDER[tone]}`}
+                      style={{ '--i': itemIndex } as CSSProperties}
+                      className={`p-chip border border-hairline-strong bg-surface px-3 py-1.5 font-mono text-xs text-ink ${TONE_HOVER_BORDER[tone]}`}
                     >
                       {item}
                     </li>
@@ -66,34 +84,22 @@ export function Skills({ locale }: { locale: Locale }) {
             </Reveal>
           )
         })}
-
-        {/*
-          Relleno de la última celda.
-
-          La rejilla dibuja sus separadores con `gap-px` sobre un fondo
-          `hairline`: lo que se ve como línea es el contenedor asomando entre
-          celdas. Con un número impar de grupos queda un hueco sin celda, y ahí
-          el contenedor se ve entero, como un bloque gris que parece un error de
-          maquetación. Esto lo tapa. Solo aplica a partir de `sm`, que es donde
-          hay dos columnas; en móvil la rejilla es de una sola y nunca sobra.
-        */}
-        {skills.groups.length % 2 === 1 && (
-          <div aria-hidden="true" className="hidden bg-surface sm:block" />
-        )}
       </div>
 
       <Reveal delayMs={140}>
-        <h3 className="mt-14 border-b border-hairline pb-3 font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
-          {skills.certificationsHeading[locale]}
+        <h3 className="mt-14">
+          <span className="p-slant p-display inline-block px-4 py-1 text-base text-surface [--slant-bg:#4fe0ff]">
+            {skills.certificationsHeading[locale]}
+          </span>
         </h3>
         <ul className="mt-6 grid gap-x-8 sm:grid-cols-2">
           {skills.certifications[locale].map((certification) => (
             <li
               key={certification}
-              className="flex gap-3 border-b border-hairline py-3 text-base leading-relaxed text-ink"
+              className="flex gap-3 border-b border-tone-cyan/25 py-3 text-base leading-relaxed text-ink"
             >
-              <span aria-hidden="true" className="shrink-0 font-mono text-deco">
-                +
+              <span aria-hidden="true" className="shrink-0 text-tone-gold">
+                ★
               </span>
               {certification}
             </li>

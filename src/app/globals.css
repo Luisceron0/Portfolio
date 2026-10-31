@@ -5,24 +5,29 @@
 @layer base {
   :root {
     /*
-     * Dos stacks, ambos 100% del sistema. Decisión consciente: no usamos
-     * next/font con Google Fonts porque obligaría a una descarga externa en
-     * build y a ampliar font-src en la CSP. Cero bytes de fuente = mejor
-     * Performance en Lighthouse (restricción D-05 de tasks/plan.md).
+     * Tres stacks, todos del sistema. No usamos next/font con Google Fonts:
+     * obligaría a una descarga en build y a ampliar font-src en la CSP. Cero
+     * bytes de fuente = mejor Performance en Lighthouse (D-05 de tasks/plan.md).
      *
-     * El stack sans arranca en Helvetica a propósito: es la familia del estilo
-     * suizo y está instalada de serie en macOS. En Windows y Linux cae en
-     * Arial y en su clon métrico, que mantienen la misma silueta.
+     * `--font-display` es la voz de Persona: rótulos en la letra más negra que
+     * trae el sistema, siempre en mayúsculas y en cursiva. Arial Black existe
+     * de serie en Windows y macOS.
      */
     --font-sans: 'Helvetica Neue', Helvetica, Arial, ui-sans-serif, system-ui,
       sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
       'Liberation Mono', monospace;
+    --font-display: 'Arial Black', 'Arial Bold', Gadget, 'Helvetica Neue',
+      Impact, sans-serif;
+
+    /* Curva "de golpe" de los menús de Persona: arranca rápida y frena seco. */
+    --ease-snap: cubic-bezier(0.2, 0.9, 0.1, 1);
+    /* Curva con sobrepaso: el rebote del cursor de P3R al llegar. */
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   html {
     scroll-behavior: smooth;
-    /* Que los controles nativos (scrollbar, autocompletado) nazcan en oscuro. */
     color-scheme: dark;
   }
 
@@ -42,84 +47,398 @@
   }
 
   /*
-   * RF-110 v2 — el lienzo.
+   * RF-110 v3 — el lienzo Persona.
    *
-   * Fuera la trama diagonal y los cuatro halos cálidos de la versión clara.
-   * En su lugar, dos capas que sostienen el lenguaje de ficha técnica:
+   *   1. TRAMA DE MEDIOS TONOS. Puntos rojos diminutos cada 7px, la textura de
+   *      cómic impreso que recorre toda la interfaz de P5R. A una opacidad que
+   *      se nota sin estorbar la lectura.
+   *   2. DOS RESPLANDORES. Rojo P5R arriba a la derecha y azul P3R abajo a la
+   *      izquierda: los dos juegos presentes desde el primer vistazo.
    *
-   *   1. REJILLA DE DIBUJO. Líneas verticales y horizontales cada 80px, a una
-   *      opacidad tan baja que no se "ve" pero se nota: da la sensación de
-   *      papel milimetrado y de que todo está alineado a algo. Es la rejilla
-   *      del estilo suizo hecha literal. Va `fixed`, así que el contenido se
-   *      desplaza sobre ella en vez de arrastrarla.
-   *
-   *   2. DOS RESPLANDORES DE TONO. Índigo y verde azulado, enormes y casi
-   *      invisibles, para que el negro no sea plano. Dos y no cuatro: en un
-   *      lienzo oscuro el color se lee mucho antes que sobre papel.
-   *
-   * Todo en CSS puro: cero peticiones de red, cero imágenes. Nada anima, así
-   * que no hay nada que desactivar bajo `prefers-reduced-motion`.
+   * Todo `fixed`: el contenido se desliza por encima. CSS puro, cero imágenes.
    */
   body {
     @apply bg-surface text-ink antialiased;
     font-family: var(--font-sans);
     background-image:
-      radial-gradient(60rem 45rem at 78% -8%, rgba(162, 156, 242, 0.07), transparent 60%),
-      radial-gradient(52rem 40rem at 4% 68%, rgba(79, 214, 196, 0.05), transparent 58%),
-      repeating-linear-gradient(
-        90deg,
-        rgba(237, 237, 234, 0.024) 0 1px,
-        transparent 1px 80px
-      ),
-      repeating-linear-gradient(
-        0deg,
-        rgba(237, 237, 234, 0.016) 0 1px,
-        transparent 1px 80px
-      );
-    background-attachment: fixed, fixed, fixed, fixed;
+      radial-gradient(48rem 36rem at 92% -6%, rgba(200, 16, 27, 0.22), transparent 62%),
+      radial-gradient(44rem 34rem at -6% 78%, rgba(26, 84, 209, 0.16), transparent 60%),
+      radial-gradient(rgba(255, 69, 82, 0.09) 1px, transparent 1.4px);
+    background-size: auto, auto, 7px 7px;
+    background-attachment: fixed, fixed, fixed;
+  }
+
+  ::selection {
+    background: #c8101b;
+    color: #f5f5f2;
   }
 
   /* Foco siempre visible y con contraste suficiente: navegación por teclado. */
   :focus-visible {
-    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-surface;
+    @apply outline-none ring-2 ring-tone-gold ring-offset-2 ring-offset-surface;
   }
 
-  /*
-   * Compensa la nav pegajosa al saltar a un ancla: sin esto, el título de la
-   * sección queda debajo de la barra.
-   */
   [id] {
     scroll-margin-top: 5rem;
   }
 }
 
 @layer components {
+  /* ---------------------------------------------------------------------
+   * Rótulos
+   * ------------------------------------------------------------------- */
+
+  .p-display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  /*
+   * Rótulo hueco, en contorno: referencias de proyecto, números de grupo y el
+   * "MENÚ" vertical. Decorativo: siempre va con `aria-hidden`. Los números de
+   * sección van RELLENOS a propósito, para que pesen más que todo lo demás.
+   */
+  .p-outline {
+    /* `text-fill-color` y no `color`: así el `text-tone-*` que lo acompaña
+       sigue dando el color del trazo (`currentColor`) y el relleno se vacía. */
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2px currentColor;
+    paint-order: stroke fill;
+  }
+
+  /*
+   * Título en caja blanca inclinada con sombra sólida del tono de la sección.
+   * El fondo se inclina en un pseudo-elemento y el texto NO: se lee recto.
+   * La sombra es un `box-shadow` (no `clip-path`), así que no recorta nada.
+   */
+  .p-title-box {
+    position: relative;
+    display: inline-block;
+    padding: 0.1em 0.45em 0.12em;
+    color: #08080a;
+    isolation: isolate;
+  }
+
+  .p-title-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #f5f5f2;
+    transform: skewX(-12deg) rotate(-1.5deg);
+    box-shadow: 0.32em 0.22em 0 var(--tone, #c8101b);
+  }
+
+  /*
+   * Nombre en "nota de rescate": cada palabra en su propio recorte, con giro y
+   * colores distintos, como las tarjetas de aviso de los Phantom Thieves. La
+   * versión legible del nombre va en un `sr-only` aparte (ver hero.tsx).
+   */
+  .p-ransom {
+    display: inline-block;
+    padding: 0.02em 0.22em 0.06em;
+    margin: 0.06em 0.06em;
+    line-height: 1;
+    animation: p-ransom-in 0.6s var(--ease-snap) both;
+  }
+
+  .p-ransom:nth-child(4n + 1) {
+    background: #f5f5f2;
+    color: #08080a;
+    transform: rotate(-2.5deg);
+  }
+
+  .p-ransom:nth-child(4n + 2) {
+    background: #c8101b;
+    color: #f5f5f2;
+    transform: rotate(1.8deg) translateY(0.04em);
+  }
+
+  .p-ransom:nth-child(4n + 3) {
+    background: #08080a;
+    color: #f5f5f2;
+    box-shadow: inset 0 0 0 0.06em #f5f5f2;
+    transform: rotate(-1deg);
+  }
+
+  .p-ransom:nth-child(4n + 4) {
+    background: #1a54d1;
+    color: #f5f5f2;
+    transform: rotate(2.4deg) translateY(-0.03em);
+  }
+
+  @keyframes p-ransom-in {
+    from {
+      opacity: 0;
+      transform: translateX(-0.6em) scale(1.25) rotate(-8deg);
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+   * Formas anguladas
+   *
+   * En elementos interactivos NUNCA se recorta el propio elemento con
+   * `clip-path`: recortaría también el anillo de foco. La forma inclinada va en
+   * un `::before` y el elemento queda rectangular para el foco.
+   * ------------------------------------------------------------------- */
+
+  .p-slant {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .p-slant::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--slant-bg, transparent);
+    border: var(--slant-border, 0 solid transparent);
+    transform: skewX(-14deg);
+    transition:
+      background-color 0.18s ease,
+      transform 0.22s var(--ease-snap);
+  }
+
+  /* Botones de llamada a la acción. */
+  .p-btn {
+    --slant-bg: #c8101b;
+    transition:
+      color 0.18s ease,
+      transform 0.22s var(--ease-snap);
+  }
+
+  .p-btn:hover {
+    transform: translate(3px, -2px);
+  }
+
+  .p-btn:hover::before {
+    transform: skewX(-14deg) scaleX(1.04);
+    box-shadow: -5px 5px 0 #f5f5f2;
+  }
+
+  .p-btn:disabled:hover {
+    transform: none;
+  }
+
+  .p-btn:disabled:hover::before {
+    transform: skewX(-14deg);
+    box-shadow: none;
+  }
+
+  .p-btn--primary:hover {
+    --slant-bg: #a80d16;
+  }
+
+  .p-btn--secondary {
+    --slant-bg: #08080a;
+    --slant-border: 2px solid #f5f5f2;
+  }
+
+  .p-btn--secondary:hover {
+    --slant-bg: #f5f5f2;
+    color: #08080a;
+  }
+
+  .p-btn--secondary:hover::before {
+    box-shadow: -5px 5px 0 #c8101b;
+  }
+
+  /* Variante para fondos rojos (banda del CV): negro sólido. */
+  .p-btn--dark {
+    --slant-bg: #08080a;
+  }
+
+  .p-btn--dark:hover {
+    --slant-bg: #f5f5f2;
+    color: #08080a;
+  }
+
+  .p-btn--dark:hover::before {
+    box-shadow: -5px 5px 0 #08080a;
+  }
+
+  /*
+   * Tarjeta con la esquina inferior derecha cortada. Aquí SÍ se usa
+   * `clip-path`: es un contenedor, no un control, y el corte es de 28px, lejos
+   * de cualquier enlace. La sombra va en el envoltorio con `drop-shadow`,
+   * porque `clip-path` se come el `box-shadow` del propio elemento.
+   */
+  .p-notch {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%);
+  }
+
+  .p-lift {
+    transition:
+      transform 0.3s var(--ease-snap),
+      filter 0.3s ease;
+  }
+
+  .p-lift:hover {
+    transform: translate(4px, -4px);
+    filter: drop-shadow(-8px 8px 0 var(--tone, #c8101b));
+  }
+
+  /*
+   * Banda a sangre con cortes diagonales arriba y abajo: el "panel" de P3R que
+   * entra de lado. Contenedor, no control: el `clip-path` es seguro aquí.
+   */
+  .p-band {
+    clip-path: polygon(0 3.5vw, 100% 0, 100% calc(100% - 3.5vw), 0 100%);
+    padding-block: calc(3.5vw + 3rem);
+  }
+
+  /* Trama de medios tonos local, para paneles que la quieran más marcada. */
+  .p-halftone {
+    background-image: radial-gradient(rgba(245, 245, 242, 0.08) 1px, transparent 1.4px);
+    background-size: 6px 6px;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Movimiento
+   * ------------------------------------------------------------------- */
+
+  /*
+   * Cortina de entrada: una franja roja inclinada barre la pantalla una sola
+   * vez al cargar, como las transiciones entre menús de P5R. Es un
+   * pseudo-elemento sin eventos de puntero, así que nunca bloquea un clic, y
+   * bajo `prefers-reduced-motion` no existe.
+   */
+  /* Primero entra el panel azul de P3R; el tajo rojo de P5R lo barre. */
+  .p-curtain::before {
+    content: '';
+    position: fixed;
+    inset: -10vh -40vw;
+    z-index: 59;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent 37%, #4fe0ff 37% 40%, #1a54d1 40%);
+    transform: skewX(14deg) translateX(-130%);
+    animation: p-curtain-blue 0.7s var(--ease-snap) both;
+  }
+
+  @keyframes p-curtain-blue {
+    from {
+      transform: skewX(14deg) translateX(10%);
+    }
+    to {
+      transform: skewX(14deg) translateX(-130%);
+    }
+  }
+
+  .p-curtain::after {
+    content: '';
+    position: fixed;
+    inset: -10vh -40vw;
+    z-index: 60;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, #c8101b 0 72%, #08080a 72% 80%, #f5f5f2 80% 82%, transparent 82%);
+    transform: skewX(-18deg) translateX(130%);
+    animation: p-curtain 0.85s var(--ease-snap) 0.12s both;
+  }
+
+  @keyframes p-curtain {
+    from {
+      transform: skewX(-18deg) translateX(-10%);
+    }
+    to {
+      transform: skewX(-18deg) translateX(130%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .p-curtain::before,
+    .p-curtain::after {
+      display: none;
+    }
+  }
+
+  /* Entrada escalonada de los bloques del hero. */
+  .p-enter {
+    animation: p-enter 0.55s var(--ease-snap) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  @keyframes p-enter {
+    from {
+      opacity: 0;
+      transform: translateX(-28px) skewX(-8deg);
+    }
+  }
+
+  /*
+   * Cinta de texto en bucle. Igual que el ASCII anterior: dos copias seguidas
+   * y un desplazamiento del 50%, así que el final encaja con el principio.
+   * Solo se anima `transform`.
+   */
+  .p-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: p-marquee 28s linear infinite;
+  }
+
+  .p-marquee--reverse .p-marquee__track {
+    animation-direction: reverse;
+  }
+
+  @keyframes p-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .p-marquee__track,
+    .p-ransom,
+    .p-enter,
+    .p-spin {
+      animation: none;
+    }
+  }
+
+  /* En SVG, `fill-box` hace que el centro sea el de la figura, no el del lienzo. */
+  .p-spin {
+    animation: p-spin 40s linear infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @keyframes p-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   /*
    * Aparición al hacer scroll — ver src/components/reveal.tsx.
    *
-   * El estado por defecto (`.reveal` sin `data-reveal="hidden"`) NO lleva
-   * ningún estilo: el contenido es visible. Ocultarlo es una decisión que toma
-   * el cliente, solo para lo que está por debajo del pliegue. Así, si el
-   * JavaScript no corre o el observer no dispara, el peor caso es que no haya
-   * animación, nunca que no haya contenido.
-   *
-   * Solo se animan opacidad y desplazamiento: no cambia el tamaño de nada, así
-   * que no genera Cumulative Layout Shift (métrica de Lighthouse).
+   * El estado por defecto NO lleva estilo: el contenido es visible. Ocultarlo
+   * lo decide el cliente, solo bajo el pliegue. Entra deslizándose desde la
+   * izquierda con un leve sesgo, que es el gesto de los menús de Persona.
+   * Solo opacidad y transform: cero Cumulative Layout Shift.
+   */
+  /*
+   * Solo desplazamiento, SIN sesgo. Con `skewX` un bloque alto sobresale por
+   * los dos lados (tan 6° x media altura: ~50px en una tarjeta de proyecto) y,
+   * mientras espera oculto bajo el pliegue, abría scroll horizontal en móvil.
+   * Medido: 107px de desborde a 375px. El sesgo queda para piezas pequeñas.
    */
   .reveal[data-reveal='hidden'] {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateX(-32px);
   }
 
   .reveal[data-reveal='shown'] {
     opacity: 1;
     transform: none;
     transition:
-      opacity 0.5s ease-out,
-      transform 0.5s ease-out;
+      opacity 0.45s ease-out,
+      transform 0.6s var(--ease-snap);
   }
 
-  /* Respeta a quien pide menos animación (WCAG 2.3.3): aparece, sin moverse. */
   @media (prefers-reduced-motion: reduce) {
     .reveal[data-reveal='hidden'],
     .reveal[data-reveal='shown'] {
@@ -129,119 +448,373 @@
     }
   }
 
-  /*
-   * Superficie de tarjeta.
+  /* Franja superior fija: firma de color de los dos juegos. */
+  .tone-strip {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      #c8101b 0 14px,
+      #08080a 14px 18px,
+      #1a54d1 18px 32px,
+      #08080a 32px 36px
+    );
+  }
+
+  /* =====================================================================
+   * MOVIMIENTO P3R / P5R
    *
-   * Semitransparente a propósito: deja pasar la rejilla y los resplandores del
-   * lienzo, así que una tarjeta arriba y otra abajo no tienen exactamente el
-   * mismo tono. El desenfoque va detrás del contenido, nunca sobre el texto:
-   * el contraste medido en `npm run check:contrast` sigue siendo el del par
-   * sólido, que es el caso peor.
-   */
-  .card-surface {
-    background-color: rgb(19 19 21 / 0.72);
-    backdrop-filter: blur(8px);
+   * Todo lo que sigue anima solo `transform`, `opacity` o `clip-path` (que la
+   * GPU compone sin recalcular layout), y todo se apaga bajo
+   * `prefers-reduced-motion` en el bloque del final.
+   * =================================================================== */
+
+  /* ---------------------------------------------------------------------
+   * Menú de pausa (pause-menu.tsx)
+   * ------------------------------------------------------------------- */
+
+  .p-menu-item {
+    transform: rotate(var(--r, 0deg));
+    transform-origin: left center;
+    transition:
+      transform 0.35s var(--ease-spring),
+      color 0.15s ease;
+  }
+
+  .p-menu-item.is-selected {
+    transform: rotate(var(--r, 0deg)) translateX(10px) scale(1.12);
   }
 
   /*
-   * Marcas de corte en las esquinas, como en un pliego de imprenta o en un
-   * plano acotado. Es el detalle que más empuja el conjunto hacia "ficha
-   * técnica" y cuesta un pseudo-elemento, sin marcado extra ni imágenes.
+   * El cursor viaja: se interpolan posición, giro y tamaño a la vez, con
+   * rebote. `width`/`height` sí recalculan layout, pero de UN elemento
+   * absoluto y sin hijos en flujo: el coste es despreciable.
    */
-  .crop-marks {
-    position: relative;
+  .p-menu-cursor {
+    transition:
+      transform 0.42s var(--ease-spring),
+      width 0.42s var(--ease-spring),
+      height 0.42s var(--ease-spring),
+      opacity 0.2s ease;
   }
 
-  .crop-marks::before,
-  .crop-marks::after {
+  .p-menu-cursor__shape {
+    position: relative;
+    transform: skewX(-18deg);
+    animation:
+      p-cursor-hit 0.4s var(--ease-snap),
+      p-cursor-breathe 2.4s ease-in-out 0.4s infinite;
+  }
+
+  /*
+   * Dos capas en pseudo-elementos, en este orden de pintado: primero la punta
+   * blanca (`::before`), encima el rojo (`::after`). Con el rojo como fondo
+   * del propio elemento, un `::before` con z-index negativo se pinta ENCIMA
+   * del fondo (el elemento crea su contexto de apilamiento al transformarse) y
+   * tapaba el texto elegido. La punta blanca solo asoma por la derecha y por
+   * arriba, fuera de la caja del rótulo: nunca queda letra blanca sobre blanco.
+   */
+  .p-menu-cursor__shape::before,
+  .p-menu-cursor__shape::after {
     content: '';
     position: absolute;
-    width: 10px;
-    height: 10px;
-    pointer-events: none;
-    border-color: theme('colors.hairline.strong');
   }
 
-  .crop-marks::before {
-    top: -1px;
-    left: -1px;
-    border-top: 1px solid;
-    border-left: 1px solid;
+  .p-menu-cursor__shape::before {
+    inset: -10px -34px 35% 70%;
+    background: #f5f5f2;
+    clip-path: polygon(0 100%, 100% 0, 78% 100%);
   }
 
-  .crop-marks::after {
-    right: -1px;
-    bottom: -1px;
-    border-right: 1px solid;
-    border-bottom: 1px solid;
+  .p-menu-cursor__shape::after {
+    inset: 0;
+    background: #c8101b;
   }
 
-  /*
-   * Fondo ASCII animado — ver src/components/ascii.tsx.
-   *
-   * El campo se genera con un periodo vertical exacto y se dibujan dos
-   * periodos seguidos, así que desplazarlo un 50% de su propia altura equivale
-   * a un periodo completo: el bucle no tiene costura. Solo se anima
-   * `transform`, que compone la GPU y no fuerza recálculo de layout.
-   *
-   * `letter-spacing` estira el campo horizontalmente para que 150 columnas
-   * cubran una pantalla ancha sin generar más caracteres de los necesarios:
-   * cada columna extra es peso real en el HTML.
-   */
-  .ascii-backdrop__field {
-    position: absolute;
-    inset-inline-start: 0;
-    top: 0;
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    line-height: 1.55;
-    letter-spacing: 0.28em;
-    white-space: pre;
-    /*
-     * La opacidad NO es libre: el texto del hero se lee ENCIMA de esto, así que
-     * este color decide el fondo efectivo. El par
-     * "ink-muted sobre el fondo con el ASCII más denso encima" está medido en
-     * `npm run check:contrast`. Si lo subes, vuelve a medirlo.
-     */
-    color: rgba(162, 156, 242, 0.13);
-    animation: ascii-drift 48s linear infinite;
-  }
-
-  @keyframes ascii-drift {
+  /* Golpe al cambiar de elemento: se estira y vuelve. */
+  @keyframes p-cursor-hit {
     from {
-      transform: translateY(0);
+      transform: skewX(-18deg) scaleX(0.2);
+      opacity: 0.4;
     }
+  }
+
+  /* "Respira" mientras está quieto, como el pulso del cursor del juego. */
+  @keyframes p-cursor-breathe {
+    50% {
+      transform: skewX(-18deg) scale(1.04, 1.12);
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+   * Agua de P3R: manchas de luz que derivan y rayos que laten. Dos capas,
+   * ambas solo `transform`/`opacity`.
+   * ------------------------------------------------------------------- */
+
+  .p-water {
+    overflow: hidden;
+  }
+
+  .p-water::before {
+    content: '';
+    position: absolute;
+    inset: -40%;
+    background:
+      radial-gradient(18rem 12rem at 30% 30%, rgba(79, 224, 255, 0.22), transparent 70%),
+      radial-gradient(22rem 14rem at 70% 60%, rgba(26, 84, 209, 0.45), transparent 70%),
+      radial-gradient(14rem 10rem at 55% 20%, rgba(126, 166, 255, 0.18), transparent 70%);
+    animation: p-water-drift 18s ease-in-out infinite alternate;
+  }
+
+  .p-water::after {
+    content: '';
+    position: absolute;
+    inset: -20% -50%;
+    background: repeating-linear-gradient(
+      100deg,
+      transparent 0 60px,
+      rgba(79, 224, 255, 0.07) 60px 74px,
+      transparent 74px 150px
+    );
+    animation: p-water-rays 9s ease-in-out infinite alternate;
+  }
+
+  @keyframes p-water-drift {
+    to {
+      transform: translate(8%, -6%) rotate(8deg) scale(1.08);
+    }
+  }
+
+  @keyframes p-water-rays {
+    from {
+      transform: translateX(-6%) skewX(-6deg);
+      opacity: 0.6;
+    }
+    to {
+      transform: translateX(6%) skewX(6deg);
+      opacity: 1;
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+   * Fragmentos flotantes (ShardField)
+   * ------------------------------------------------------------------- */
+
+  .p-shard {
+    position: absolute;
+    clip-path: polygon(50% 0, 100% 40%, 60% 100%, 0 70%);
+    opacity: 0.7;
+    animation: p-shard-float 10s ease-in-out infinite;
+  }
+
+  @keyframes p-shard-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(var(--r, 0deg));
+      opacity: 0.25;
+    }
+    50% {
+      transform: translateY(-34px) rotate(calc(var(--r, 0deg) + 160deg));
+      opacity: 0.85;
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+   * Profundidad con el puntero (PointerParallax publica --mx/--my)
+   * ------------------------------------------------------------------- */
+
+  .p-depth-1 {
+    transform: translate(calc(var(--mx, 0) * -18px), calc(var(--my, 0) * -14px));
+    transition: transform 0.6s var(--ease-snap);
+  }
+
+  .p-depth-2 {
+    transform: translate(calc(var(--mx, 0) * 34px), calc(var(--my, 0) * 26px));
+    transition: transform 0.8s var(--ease-snap);
+  }
+
+  /* ---------------------------------------------------------------------
+   * Rótulo vertical deslizante (VerticalWatermark)
+   * ------------------------------------------------------------------- */
+
+  .p-vertical {
+    writing-mode: vertical-rl;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(79, 224, 255, 0.16);
+  }
+
+  .p-vertical-track {
+    animation: p-vertical 40s linear infinite;
+  }
+
+  @keyframes p-vertical {
     to {
       transform: translateY(-50%);
     }
   }
 
-  /*
-   * Bajo `prefers-reduced-motion` el campo se queda quieto, pero sigue ahí: es
-   * textura, no información, y detenerlo no le quita nada. La regla global de
-   * `@layer base` dejaría la animación en 0.01ms, que la congelaría en una
-   * posición arbitraria; esto la para en la inicial, que es la buena.
-   */
-  @media (prefers-reduced-motion: reduce) {
-    .ascii-backdrop__field {
-      animation: none;
+  /* ---------------------------------------------------------------------
+   * Entradas al hacer scroll (sobre el `.reveal` de reveal.tsx)
+   * ------------------------------------------------------------------- */
+
+  /* El título de sección "golpea": la caja blanca se despliega desde la
+     izquierda y el texto llega con un sobrepaso. */
+  .reveal[data-reveal='shown'] .p-title-box::before {
+    transform-origin: left;
+    animation: p-box-unfold 0.5s var(--ease-snap) 0.1s both;
+  }
+
+  .reveal[data-reveal='shown'] .p-title-box {
+    animation: p-title-slam 0.6s var(--ease-spring) 0.15s both;
+  }
+
+  @keyframes p-box-unfold {
+    from {
+      transform: skewX(-12deg) rotate(-1.5deg) scaleX(0);
     }
   }
 
+  @keyframes p-title-slam {
+    from {
+      opacity: 0;
+      transform: scale(1.5) rotate(-6deg);
+    }
+  }
+
+  /* Capturas de proyecto: se descubren con un tajo diagonal. */
+  .reveal[data-reveal='hidden'] .p-wipe {
+    clip-path: polygon(0 0, 0 0, -30% 100%, -30% 100%);
+  }
+
+  .reveal[data-reveal='shown'] .p-wipe {
+    clip-path: polygon(0 0, 130% 0, 100% 100%, -30% 100%);
+    transition: clip-path 0.9s var(--ease-snap) 0.15s;
+  }
+
+  /* Chips de tecnología: saltan uno detrás de otro (--i = posición). */
+  .p-chip {
+    transform: skewX(-10deg);
+    transition:
+      transform 0.25s var(--ease-spring),
+      border-color 0.2s ease;
+  }
+
+  .reveal[data-reveal='hidden'] .p-chip {
+    opacity: 0;
+    transform: translateY(12px) skewX(-10deg) scale(0.6);
+  }
+
+  .reveal[data-reveal='shown'] .p-chip {
+    transition:
+      opacity 0.3s ease calc(var(--i, 0) * 40ms + 0.15s),
+      transform 0.45s var(--ease-spring) calc(var(--i, 0) * 40ms + 0.15s),
+      border-color 0.2s ease;
+  }
+
+  .p-chip:hover {
+    transform: skewX(-10deg) translateY(-3px) scale(1.06);
+  }
+
   /*
-   * Firma de marca: franja de 3px con los cinco tonos, fija arriba del todo.
-   * Sobre lienzo oscuro pesa mucho más que sobre papel, así que es lo único
-   * saturado que hay en pantalla de forma permanente.
+   * Glitch de color en los títulos de proyecto al pasar por la tarjeta:
+   * separación roja/cian con saltos en escalón, unas pocas décimas.
    */
-  .tone-strip {
-    background-image: linear-gradient(
-      90deg,
-      #a29cf2 0% 20%,
-      #4fd6c4 20% 40%,
-      #f0b93d 40% 60%,
-      #e08fd6 60% 80%,
-      #f2896a 80% 100%
-    );
+  .group:hover .p-glitch {
+    animation: p-glitch 0.45s steps(2, end) 2;
+  }
+
+  @keyframes p-glitch {
+    0% {
+      text-shadow: 3px 0 #ff4552, -3px 0 #4fe0ff;
+      transform: translateX(0);
+    }
+    33% {
+      text-shadow: -3px 1px #ff4552, 3px -1px #4fe0ff;
+      transform: translateX(2px) skewX(-6deg);
+    }
+    66% {
+      text-shadow: 2px -1px #ff4552, -2px 1px #4fe0ff;
+      transform: translateX(-2px);
+    }
+    100% {
+      text-shadow: none;
+      transform: none;
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+   * Ligado al scroll (solo navegadores con `animation-timeline`)
+   *
+   * Mejora progresiva: donde no hay soporte, simplemente no se mueve. No hay
+   * JavaScript de scroll que mantener.
+   * ------------------------------------------------------------------- */
+
+  @supports (animation-timeline: view()) {
+    /* El número gigante de cada sección se desliza mientras la cruzas. */
+    .p-parallax {
+      animation: p-parallax linear both;
+      animation-timeline: view();
+    }
+
+    @keyframes p-parallax {
+      from {
+        transform: translateX(-24px) skewX(6deg);
+      }
+      to {
+        transform: translateX(24px) skewX(-6deg);
+      }
+    }
+
+    /* Barra de progreso de lectura: la franja roja crece con el scroll. */
+    .p-progress {
+      transform-origin: left;
+      animation: p-progress linear both;
+      animation-timeline: scroll(root);
+    }
+
+    @keyframes p-progress {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+   * Menos movimiento: todo lo anterior se queda quieto y visible.
+   * ------------------------------------------------------------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    .p-menu-cursor__shape,
+    .p-water::before,
+    .p-water::after,
+    .p-shard,
+    .p-vertical-track,
+    .p-parallax,
+    .reveal .p-title-box,
+    .reveal .p-title-box::before,
+    .group:hover .p-glitch {
+      animation: none !important;
+    }
+
+    .p-menu-cursor,
+    .p-menu-item,
+    .p-depth-1,
+    .p-depth-2 {
+      transition: none;
+    }
+
+    .reveal[data-reveal='hidden'] .p-wipe {
+      clip-path: none;
+    }
+
+    .reveal[data-reveal='hidden'] .p-chip {
+      opacity: 1;
+      transform: skewX(-10deg);
+    }
+
+    .p-progress {
+      display: none;
+    }
   }
 }

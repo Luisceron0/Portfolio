@@ -15,6 +15,16 @@ cv:
       - 'Full-Stack Software Engineer focused on software architecture and application security. I design systems end to end (React, Angular, Vue.js, Spring Boot, Django, PostgreSQL), defining the structure before the first line of code: module boundaries, data contracts, and decisions recorded in versioned ADRs. I build security in from the design stage (RBAC, JWT, threat modelling, SAST and SCA in the pipeline) and deploy on AWS and Docker with CI/CD. Software Engineering graduate of Universidad Cooperativa de Colombia, currently pursuing a postgraduate specialization in Information Security at Politécnico Grancolombiano. Bilingual (English C1, EF SET), open to relocation.'
 
     Experience:
+      - company: I.P.S. San José
+        position: Software Engineer
+        location: Villagarzón, Putumayo, Colombia
+        start_date: 2026-09
+        end_date: 2026-11
+        highlights:
+          - 'Responsible for the development, implementation and maintenance of the information systems of a healthcare provider institution, including the administration of its databases.'
+          - 'Built an inventory manager and automations for the internal processes of the institution.'
+          - 'Started the development of a DICOM medical imaging viewer for the institution, aimed at 2D/3D multiplanar reconstruction (MPR), PET-CT study fusion and connection as a PACS client.'
+          - 'Provided technical support and incident resolution for operational and administrative processes.'
       - company: Alcaldía de Pasto (City Government)
         position: Full-Stack Software Engineering Intern
         location: Pasto, Colombia

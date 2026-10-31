@@ -260,6 +260,17 @@ export const hero = {
     /** Ancla interna a la sección de contacto. Una sola página (regla 1). */
     href: '#contacto',
   } satisfies ExternalLink,
+  /**
+   * Menú de pausa del hero, al estilo de P3R. Son las mismas anclas de la nav
+   * más la del CV: no introduce destinos nuevos (regla 1). Va DEBAJO de los
+   * CTA, así que no consume el presupuesto vertical de RF-101.
+   */
+  menu: {
+    title: { es: 'Menú', en: 'Menu' } satisfies Localized,
+    label: { es: 'Ir a una sección', en: 'Jump to a section' } satisfies Localized,
+    extra: { label: { es: 'CV', en: 'CV' }, href: '#cv' } satisfies NavItem,
+    hint: { es: 'Elige una sección', en: 'Choose a section' } satisfies Localized,
+  },
 } as const
 
 // ---------------------------------------------------------------------------
@@ -352,6 +363,40 @@ export const timeline = {
     estudio: { es: 'Estudio', en: 'Education' } satisfies Localized,
   },
   entries: [
+    {
+      /*
+       * Contrato de duración fija (21 sep a 16 nov 2026). El periodo se escribe
+       * con su fecha de cierre y no como "a la actualidad": así no queda
+       * desactualizado el día que termina. Cargo y funciones, por indicación
+       * del dueño (2026-10-31): las de E.D.S. Kennedy más los proyectos
+       * concretos que desarrolló aquí. El visor DICOM está en desarrollo
+       * temprano: sus capacidades se escriben como objetivo ("orientado a"),
+       * no como funciones ya entregadas. Sin cifras que no tengan respaldo.
+       */
+      id: 'ips-san-jose',
+      kind: 'trabajo',
+      title: { es: 'Ingeniero de Software', en: 'Software Engineer' },
+      organization: 'I.P.S. San José',
+      location: {
+        es: 'Villagarzón, Putumayo, Colombia',
+        en: 'Villagarzón, Putumayo, Colombia',
+      },
+      period: { es: 'Sep 2026 a Nov 2026', en: 'Sep 2026 to Nov 2026' },
+      highlights: {
+        es: [
+          'Responsable del desarrollo, la implementación y el mantenimiento de los sistemas informáticos de una institución prestadora de servicios de salud, incluida la administración de sus bases de datos.',
+          'Desarrollé un gestor de inventario y automatizaciones de procesos internos de la institución.',
+          'Inicié el desarrollo de un visor de imágenes médicas DICOM para la institución, orientado a la reconstrucción multiplanar 2D/3D (MPR), la fusión de estudios PET-CT y la conexión como cliente PACS.',
+          'Di soporte técnico y resolución de incidencias a los procesos operativos y administrativos.',
+        ],
+        en: [
+          'Responsible for the development, implementation and maintenance of the information systems of a healthcare provider institution, including the administration of its databases.',
+          'Built an inventory manager and automations for the internal processes of the institution.',
+          'Started the development of a DICOM medical imaging viewer for the institution, aimed at 2D/3D multiplanar reconstruction (MPR), PET-CT study fusion and connection as a PACS client.',
+          'Provided technical support and incident resolution for operational and administrative processes.',
+        ],
+      },
+    },
     {
       id: 'especializacion',
       kind: 'estudio',

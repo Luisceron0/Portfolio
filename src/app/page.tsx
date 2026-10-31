@@ -2,11 +2,13 @@ import { Contact } from '@/components/contact'
 import { CvDownloads } from '@/components/cv'
 import { Footer } from '@/components/footer'
 import { Hero } from '@/components/hero'
+import { CrossedMarquees } from '@/components/persona'
 import { SiteNav } from '@/components/nav'
 import { Profile } from '@/components/profile'
 import { Projects } from '@/components/projects'
 import { Skills } from '@/components/skills'
 import { Timeline } from '@/components/timeline'
+import { hero } from '@/content'
 import { getLocale } from '@/lib/locale'
 
 /**
@@ -30,11 +32,20 @@ export default function HomePage() {
   return (
     <>
       <div aria-hidden="true" className="tone-strip fixed inset-x-0 top-0 z-50 h-[3px]" />
+      {/* Progreso de lectura: crece con el scroll (solo con animation-timeline). */}
+      <div aria-hidden="true" className="p-progress fixed inset-x-0 top-[3px] z-50 h-[3px] scale-x-0 bg-tone-gold" />
 
       <SiteNav locale={locale} />
 
       <main id="contenido">
         <Hero locale={locale} />
+        {/* Las disciplinas del rol, en las cintas cruzadas que cierran el hero. */}
+        <CrossedMarquees
+          items={hero.role[locale]
+            .split(/[·]/)
+            .map((part) => part.trim())
+            .filter(Boolean)}
+        />
         <Profile locale={locale} />
         <Timeline locale={locale} />
         <Projects locale={locale} />
