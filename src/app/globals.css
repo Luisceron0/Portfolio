@@ -448,17 +448,6 @@
     }
   }
 
-  /* Franja superior fija: firma de color de los dos juegos. */
-  .tone-strip {
-    background-image: repeating-linear-gradient(
-      -45deg,
-      #7a1fff 0 14px,
-      #09080d 14px 18px,
-      #a6f13c 18px 32px,
-      #09080d 32px 36px
-    );
-  }
-
   /* =====================================================================
    * MOVIMIENTO P3R / P5R
    *

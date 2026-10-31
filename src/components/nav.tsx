@@ -59,60 +59,42 @@ export function SiteNav({ locale }: { locale: Locale }) {
   return (
     <nav
       aria-label={locale === 'es' ? 'Secciones de la página' : 'Page sections'}
-      className="sticky top-3 z-40 mx-auto mb-2 mt-3 w-[calc(100%-1.5rem)] max-w-content sm:top-4 sm:mt-4"
+      className="sticky top-0 z-40 border-b-2 border-violet bg-surface/95 backdrop-blur-md"
     >
-      <div className="flex items-center gap-3 border-b-4 border-violet bg-surface/90 px-3 py-2 shadow-[6px_6px_0_rgba(166,241,60,0.8)] backdrop-blur-md sm:px-5">
+      {/*
+        Header acoplado a todo el ancho, no una tarjeta flotante: nada que se
+        corte en los bordes ni scroll horizontal propio. Los enlaces van en
+        línea desde `lg`; por debajo se pliegan tras el botón de menú (ver
+        nav-links.tsx) y el selector de idioma queda siempre a la vista. Por
+        debajo de 260px (zoom de accesibilidad alto) la marca se oculta para
+        que idioma y menú sigan cabiendo.
+      */}
+      <div className="relative mx-auto flex h-16 max-w-content items-center gap-3 px-3 sm:px-8 lg:gap-6">
         {/* Marca: monograma en un recorte violeta girado, como la carta de aviso. */}
         <a
           href="#contenido"
-          className="p-display shrink-0 -rotate-6 bg-violet px-2 py-0.5 text-base text-ink transition-transform duration-200 hover:rotate-0 hover:scale-110"
+          className="p-display shrink-0 -rotate-6 bg-violet px-2 py-0.5 text-base text-ink transition-transform duration-200 hover:rotate-0 hover:scale-110 max-[259px]:hidden"
         >
           {nav.brand}
         </a>
 
-        {/*
-          Enlaces de sección Y selector de idioma comparten UN solo contenedor
-          deslizable. No siempre fue así, y el porqué es un fallo real que
-          costó dos vueltas:
-          1ª vuelta: solo el `<ul>` de enlaces tenía `overflow-x-auto`, con el
-          selector de idioma como hermano `shrink-0` aparte. En viewports
-          estrechos (comprobado hasta 414px) los cinco enlaces no cabían y el
-          `<ul>` se encogía hasta 0px de ancho REAL (medido): "Proyectos" se
-          veía cortado a mitad de letra en "Proye" y "Habilidades"/"Contacto"
-          quedaban fuera de pantalla, sin ninguna pista de que había más.
-          2ª vuelta: se le puso un `min-w-[44px]` al `<ul>` para que nunca
-          llegara a 0. Pero por debajo de ~200px eso empujaba al selector de
-          idioma (el otro hermano `shrink-0`, que NUNCA se encoge) fuera del
-          borde derecho de la barra. Y el scroll de PÁGINA que en teoría
-          debía alcanzarlo no funcionaba: `document.scrollingElement.scrollLeft`
-          medía siempre 0 pese a que `scrollWidth > clientWidth`, así que el
-          selector quedaba invisible y SIN NINGUNA forma de llegar a él, peor
-          que el fallo original.
-          La raíz real: dos mecanismos de scroll separados, uno que
-          funcionaba (el del `<ul>`) y otro que no (el implícito de la
-          página). La solución no es ajustar anchos mínimos por separado, es
-          que solo exista UN mecanismo: todo lo que no es la marca vive en
-          este único `overflow-x-auto`, así que cualquier cosa que no quepa
-          se alcanza con el MISMO gesto, nunca queda aislada.
-          `min-w-0` dejar encoger este contenedor por debajo de su contenido
-          es lo que activa `overflow-x-auto`; sin él, un flex item por
-          defecto no se encoge más allá de su propio contenido y el scroll
-          nunca entraría en juego. La máscara difumina los 20px del borde en
-          vez de cortar a lo bruto, señal de "esto se desliza" en vez de
-          verse como contenido roto. En desktop, donde todo cabe sin scroll,
-          el padding de cada enlace absorbe el difuminado y no se nota.
-        */}
-        <div className="flex min-w-0 flex-1 items-center justify-between gap-3 overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_20px,black_calc(100%-20px),transparent)]">
-          <NavLinks
-            items={nav.items.map((item) => ({ href: item.href, label: item.label[locale] }))}
-            tones={NAV_TONES.map((tone) => TONE_BG[tone])}
-          />
+        <NavLinks
+          items={nav.items.map((item) => ({ href: item.href, label: item.label[locale] }))}
+          tones={NAV_TONES.map((tone) => TONE_BG[tone])}
+          menuLabel={locale === 'es' ? 'Menú de secciones' : 'Sections menu'}
+        />
 
-          <div className="shrink-0">
-            <LanguageSwitch locale={locale} />
-          </div>
+        <div className="ml-auto shrink-0 lg:ml-0">
+          <LanguageSwitch locale={locale} />
         </div>
       </div>
+
+      {/* Progreso de lectura sobre el filo inferior del header: crece con el
+          scroll (solo con animation-timeline). `sticky` hace de contenedor. */}
+      <div
+        aria-hidden="true"
+        className="p-progress pointer-events-none absolute inset-x-0 -bottom-[2px] h-[2px] scale-x-0 bg-tone-green"
+      />
     </nav>
   )
 }

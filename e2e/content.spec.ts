@@ -39,9 +39,10 @@ test.describe('RF-108 — navegación interna', () => {
 
     const hrefs = await page
       .getByRole('navigation')
-      .getByRole('list')
+      // La lista va plegada tras el botón de menú en móvil: se cuenta igual.
+      .getByRole('list', { includeHidden: true })
       .first()
-      .getByRole('link')
+      .getByRole('link', { includeHidden: true })
       .evaluateAll((links) => links.map((link) => link.getAttribute('href') ?? ''))
 
     expect(hrefs.length).toBe(nav.items.length)
@@ -62,80 +63,55 @@ test.describe('RF-108 — navegación interna', () => {
   })
 
   /*
-   * Fallo real reportado en producción, en dos vueltas.
-   *
-   * 1ª: en viewports estrechos, los cinco enlaces no cabían junto a la marca
-   * y el selector de idioma, y el `<ul>` (con `overflow-x-auto` propio,
-   * deliberado) se encogía hasta 0px de ancho real: "Proyectos" se veía
-   * cortado a mitad de letra en "Proye" y el resto quedaba fuera de pantalla,
-   * sin ninguna pista de que había más.
-   *
-   * 2ª, más grave: el primer arreglo le dio al `<ul>` un ancho mínimo para
-   * que nunca llegara a 0, pero el selector de idioma vivía en un `<div>`
-   * HERMANO aparte, con su propio `shrink-0` y SIN overflow propio. Por
-   * debajo de ~200px ese arreglo empujaba al selector fuera del borde
-   * derecho de la barra, y el scroll de PÁGINA que en teoría debía
-   * alcanzarlo no funcionaba de verdad (`scrollLeft` medía siempre 0). El
-   * selector de idioma quedaba invisible y sin NINGUNA forma de llegar a
-   * él: peor que el fallo original.
-   *
-   * La causa de fondo era tener dos mecanismos de scroll separados. La
-   * solución final: un único contenedor deslizable (`nav div.overflow-x-auto`)
-   * que envuelve a la vez los enlaces de sección Y el selector de idioma, así
-   * que cualquier cosa que no quepa se alcanza con el MISMO gesto.
-   *
-   * Este test no mide el degradado del borde (CSS puramente decorativo) sino
-   * la promesa real: el último enlace de sección Y el selector de idioma
-   * tienen que poder alcanzarse y ser pulsables con ese único scroll, aunque
-   * ninguno de los dos quepa en pantalla.
+   * Historia: la nav fue antes una barra con scroll horizontal, y en dos
+   * vueltas distintas dejó "Contacto" y el selector de idioma fuera de
+   * pantalla sin forma de llegar a ellos. Ahora por debajo de `lg` los
+   * enlaces se pliegan tras un botón de menú y el selector de idioma queda
+   * siempre en la barra. La promesa que se prueba es la misma: en un viewport
+   * estrecho el último enlace y el selector de idioma se alcanzan y se pulsan.
    */
-  test('en un viewport estrecho, el último enlace y el selector de idioma se alcanzan con el mismo scroll', async ({
+  test('en un viewport estrecho, el menú despliega todos los enlaces y el idioma sigue a la vista', async ({
     page,
   }, testInfo) => {
-    test.skip(testInfo.project.name !== 'mobile', 'el fallo solo se da cuando la nav no cabe')
+    test.skip(testInfo.project.name !== 'mobile', 'el menú plegado solo existe en móvil')
 
     await page.goto('/')
 
     const lastItem = nav.items[nav.items.length - 1]
     const lastLink = page.locator('nav ul a', { hasText: lastItem.label.es })
-    const scroller = page.locator('nav div.overflow-x-auto')
+    const menuButton = page.getByRole('button', { name: 'Menú de secciones' })
     const enLink = page.locator('nav a[hreflang="en"]')
 
-    // Antes de deslizar, ninguno de los dos cabe en el viewport (si cupieran,
-    // este test no estaría probando nada real).
-    const viewportWidth = page.viewportSize()!.width
-    const lastLinkBefore = await lastLink.boundingBox()
-    const enLinkBefore = await enLink.boundingBox()
-    expect(
-      lastLinkBefore!.x + lastLinkBefore!.width,
-      'este test asume que el último enlace NO cabe sin deslizar en este viewport'
-    ).toBeGreaterThan(viewportWidth)
-    expect(
-      enLinkBefore!.x + enLinkBefore!.width,
-      'este test asume que el selector de idioma NO cabe sin deslizar en este viewport'
-    ).toBeGreaterThan(viewportWidth)
-
-    await scroller.evaluate((el) => {
-      el.scrollLeft = el.scrollWidth
-    })
-
-    // El MISMO scroll, un único gesto, alcanza los dos: eso es lo que
-    // garantiza que nada pueda quedar aislado sin salida.
-    await expect(lastLink).toBeInViewport()
     await expect(enLink).toBeInViewport()
+    await expect(lastLink).toBeHidden()
+
+    await menuButton.click()
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'true')
+    await expect(lastLink).toBeInViewport()
+
+    // Elegir un destino cierra el panel y lleva a la sección.
+    await lastLink.click()
+    await expect(lastLink).toBeHidden()
+    await expect(page).toHaveURL(new RegExp(`${lastItem.href}$`))
 
     await enLink.click()
     await expect(page).toHaveURL(/lang=en/)
   })
 
+  test('Escape cierra el menú desplegado', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'mobile', 'el menú plegado solo existe en móvil')
+
+    await page.goto('/')
+    const menuButton = page.getByRole('button', { name: 'Menú de secciones' })
+    await menuButton.click()
+    await page.keyboard.press('Escape')
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'false')
+  })
+
   /*
-   * El caso extremo del fallo de arriba: por debajo de ~200px de viewport
-   * (fuera del rango de cualquier teléfono real sin zoom, pero alcanzable con
-   * un zoom de accesibilidad alto) el selector de idioma llegó a quedar
-   * empujado fuera de la barra sin ningún scroll que lo alcanzara. Se
-   * comprueba aparte porque a este ancho ni siquiera el último enlace de
-   * sección "no cabe de forma interesante": aquí lo único que importa es que
-   * el selector de idioma nunca se vuelva inalcanzable.
+   * Caso extremo: por debajo de ~200px (zoom de accesibilidad alto) el
+   * selector de idioma llegó a quedar fuera de la barra. La marca se oculta a
+   * ese ancho para que idioma y menú sigan cabiendo.
    */
   test('el selector de idioma sigue siendo alcanzable en un viewport extremadamente estrecho', async ({
     page,
@@ -145,14 +121,9 @@ test.describe('RF-108 — navegación interna', () => {
     await page.setViewportSize({ width: 180, height: 700 })
     await page.goto('/')
 
-    const scroller = page.locator('nav div.overflow-x-auto')
     const enLink = page.locator('nav a[hreflang="en"]')
-
-    await scroller.evaluate((el) => {
-      el.scrollLeft = el.scrollWidth
-    })
-
     await expect(enLink).toBeInViewport()
+    await expect(page.getByRole('button', { name: 'Menú de secciones' })).toBeInViewport()
     await enLink.click()
     await expect(page).toHaveURL(/lang=en/)
   })
