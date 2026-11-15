@@ -110,6 +110,9 @@ test.describe('Cabeceras de seguridad', () => {
     expect(headers['referrer-policy']).toBe('strict-origin-when-cross-origin')
     expect(headers['strict-transport-security']).toContain('max-age=')
     expect(headers['permissions-policy']).toContain('geolocation=()')
+    for (const feature of ['payment=()', 'usb=()', 'browsing-topics=()']) {
+      expect(headers['permissions-policy']).toContain(feature)
+    }
     // Sin delatar el framework.
     expect(headers['x-powered-by']).toBeUndefined()
   })

@@ -20,7 +20,9 @@ import { chromium } from 'playwright-core'
 
 const chromePath = chromium.executablePath()
 
+// En Windows `npx` es `npx.cmd` y execFileSync no lo encuentra sin shell.
 execFileSync('npx', ['lhci', 'autorun'], {
   stdio: 'inherit',
+  shell: process.platform === 'win32',
   env: { ...process.env, CHROME_PATH: chromePath },
 })
