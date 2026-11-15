@@ -199,13 +199,18 @@ export const site = {
    * genera canónicas con `//`.
    */
   url: 'https://portfolio-luisceron.vercel.app' as MaybePending,
+  /**
+   * RF-112: título ≤60 y descripción ≤155 caracteres por idioma (lo mide
+   * e2e/seo.spec.ts). Palabras clave: AppSec, DevSecOps, arquitectura segura,
+   * modelado de amenazas, OWASP, full-stack, Java, Python.
+   */
   title: {
-    es: 'Luis Alejandro Cerón Muñoz, Ingeniero de Software Full-Stack',
-    en: 'Luis Alejandro Cerón Muñoz, Full-Stack Software Engineer',
+    es: 'Luis Cerón | Ingeniero AppSec y DevSecOps, Full-Stack',
+    en: 'Luis Cerón | Application Security Engineer, DevSecOps',
   } satisfies Localized,
   description: {
-    es: 'Ingeniero de software full-stack especializado en arquitectura y seguridad de aplicaciones. Diseño y desarrollo de aplicaciones web con arquitectura preparada para escalar y seguridad incorporada desde el diseño, no añadida al final. El resultado: sistemas en producción, sostenibles en el tiempo, sin deuda de seguridad oculta.',
-    en: 'Full-stack software engineer specialised in application architecture and security. Design and development of web applications with architecture built to scale and security engineered in from the start, not added at the end. The result: production systems that hold up over time, with no hidden security debt.',
+    es: 'Ingeniero de seguridad de aplicaciones (AppSec): arquitectura segura, modelado de amenazas, OWASP y DevSecOps. Full-stack con Java, Python y React.',
+    en: 'Application Security Engineer (AppSec): secure architecture, threat modeling, OWASP and DevSecOps. Full-stack engineer with Java, Python and React.',
   } satisfies Localized,
 } as const
 
@@ -692,6 +697,8 @@ export interface SecurityCase {
   kicker: Localized
   /** Una frase para la tarjeta de la home. */
   summary: Localized
+  /** Meta description de la página del caso: ≤155 caracteres (RF-112). */
+  seoDescription: Localized
   /** El problema, en una frase. */
   problem: Localized
   stack: readonly string[]
@@ -776,6 +783,10 @@ export const securityCases: readonly SecurityCase[] = [
     summary: {
       es: 'Historia clínica, triage y coordinación entre especialistas para varias instituciones sobre una misma base, con el control de acceso y el cifrado aplicados en la base de datos y en cada petición.',
       en: 'Clinical history, triage and specialist coordination for several institutions on a shared database, with access control and encryption enforced in the database and on every request.',
+    },
+    seoDescription: {
+      es: 'CareLink: plataforma clínica multi-tenant con cifrado AES-256-GCM por tenant, autorización revalidada en cada petición y registros firmados inmutables.',
+      en: 'CareLink: multi-tenant clinical platform with per-tenant AES-256-GCM encryption, per-request authorization and immutable signed records.',
     },
     problem: {
       es: 'Varias instituciones de salud comparten una base de datos, y ningún registro clínico firmado puede editarse ni ningún especialista puede leer pacientes que no le corresponden.',
@@ -976,6 +987,10 @@ export const securityCases: readonly SecurityCase[] = [
       es: 'Sitio en producción con panel de administración multi-cuenta, con autorización deny-by-default en la base de datos y todo el acceso a datos pasando por el servidor.',
       en: 'Production site with a multi-account admin panel, deny-by-default authorization in the database and all data access routed through the server.',
     },
+    seoDescription: {
+      es: 'ElevaForge: sitio en producción con Row Level Security deny-by-default, sesión firmada con HMAC y acceso a datos solo desde el servidor.',
+      en: 'ElevaForge: production site with deny-by-default Row Level Security, an HMAC-signed session and server-only data access.',
+    },
     problem: {
       es: 'El equipo edita el contenido del sitio desde un panel, y ni ese panel ni la clave pública que viaja al navegador deben convertirse en la vía de acceso a los datos de clientes potenciales.',
       en: 'The team edits the site content from a panel, and neither that panel nor the public key shipped to the browser may become the way into prospective clients’ data.',
@@ -1163,6 +1178,10 @@ export const securityCases: readonly SecurityCase[] = [
     summary: {
       es: 'Facturación electrónica para ventas entre Colombia, España y Alemania, con la inmutabilidad fiscal aplicada en PostgreSQL, 13 controles de seguridad y 4 gates independientes en CI. El quickstart lo levanta todo en menos de 3 minutos.',
       en: 'E-invoicing for sales across Colombia, Spain and Germany, with fiscal immutability enforced in PostgreSQL, 13 security controls and 4 independent CI gates. The quickstart brings it all up in under 3 minutes.',
+    },
+    seoDescription: {
+      es: 'Tributary: facturación electrónica multirrégimen con inmutabilidad fiscal en PostgreSQL, crypto-shredding, threat model STRIDE y 13 controles verificados.',
+      en: 'Tributary: multi-regime e-invoicing with fiscal immutability in PostgreSQL, crypto-shredding, a STRIDE threat model and 13 verified controls.',
     },
     problem: {
       es: 'Una venta transfronteriza se emite bajo tres regímenes fiscales incompatibles, y un registro emitido no puede alterarse sin que se detecte ni duplicarse por una respuesta perdida. Implementación de referencia, no certificada para producción.',
@@ -1400,6 +1419,10 @@ export const securityCases: readonly SecurityCase[] = [
     summary: {
       es: 'Un formulario público y un checkout: precios recalculados en el servidor y defensa contra automatización con Turnstile, confirmación por correo y límite por IP.',
       en: 'A public form and a checkout: prices recalculated on the server and anti-automation defence with Turnstile, email confirmation and a per-IP limit.',
+    },
+    seoDescription: {
+      es: 'KOA: precios recalculados en el servidor y defensa contra automatización con Turnstile, confirmación por correo y límite de solicitudes por IP.',
+      en: 'KOA: server-side price recalculation and anti-automation defense with Turnstile, email confirmation and per-IP rate limiting.',
     },
     problem: {
       es: 'Un formulario público y un checkout son lo primero que encuentran los bots y quien manipula peticiones: la lista de espera tiene que medir interés real y el total de la compra no puede salir del navegador.',

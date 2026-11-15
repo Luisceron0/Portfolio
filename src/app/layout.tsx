@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from 'next'
+import { headers } from 'next/headers'
 
 import './globals.css'
 import { footer, HTML_LANG, LOCALES, resolved, site } from '@/content'
 import { getLocale, localeHref } from '@/lib/locale'
+import { personJsonLd, previewImages, serializeJsonLd } from '@/lib/seo'
 
 /**
  * T-104: `metadataBase` sale del dominio declarado en content.ts, nunca del
@@ -78,9 +80,12 @@ export async function generateMetadata(): Promise<Metadata> {
      */
     alternates: {
       canonical: absolute(localeHref(locale)),
-      languages: Object.fromEntries(
-        LOCALES.map((candidate) => [HTML_LANG[candidate], absolute(localeHref(candidate))])
-      ),
+      languages: {
+        ...Object.fromEntries(
+          LOCALES.map((candidate) => [HTML_LANG[candidate], absolute(localeHref(candidate))])
+        ),
+        'x-default': absolute(localeHref('es')),
+      },
     },
     openGraph: {
       title: site.title[locale],
@@ -88,6 +93,13 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: HTML_LANG[locale],
       type: 'website',
       url: absolute(localeHref(locale)),
+      images: previewImages(locale),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: site.title[locale],
+      description: site.description[locale],
+      images: previewImages(locale),
     },
   }
 }
@@ -96,6 +108,9 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const locale = getLocale()
+  // Nonce de la CSP de esta petición (src/middleware.ts). Un bloque JSON-LD no
+  // se ejecuta, pero llevarlo con nonce mantiene la regla: ningún <script> sin él.
+  const nonce = headers().get('x-nonce') ?? undefined
 
   return (
     // El `lang` refleja el idioma realmente renderizado, resuelto en servidor.
@@ -110,6 +125,12 @@ export default function RootLayout({
           {footer.skipToContent[locale]}
         </a>
         {children}
+        {/* RF-112: JSON-LD Person. Solo datos públicos (ver src/lib/seo.ts). */}
+        <script
+          type="application/ld+json"
+          nonce={nonce}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd(locale)) }}
+        />
       </body>
     </html>
   )

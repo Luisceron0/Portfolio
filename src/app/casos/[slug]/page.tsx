@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { CASE_NAMES, HTML_LANG, LOCALES, resolved, securityCases, site } from '@/content'
+import { CASE_NAMES, HTML_LANG, LOCALES, securityCases } from '@/content'
 import { CaseDetail } from '@/components/case-detail'
 import { Footer } from '@/components/footer'
 import { SiteNav } from '@/components/nav'
 import { casePath, getLocale, localeHref } from '@/lib/locale'
+import { absoluteUrl, previewImages } from '@/lib/seo'
 
 /**
  * RF-111 — página de detalle de un caso de seguridad: `/casos/<slug>`.
@@ -22,10 +23,7 @@ function findCase(slug: string) {
 }
 
 /** Misma regla que el layout: URLs absolutas desde `site.url`, nunca desde `Host`. */
-function absolute(path: string): string {
-  const origin = resolved(site.url)
-  return origin ? new URL(path, origin).toString() : path
-}
+const absolute = absoluteUrl
 
 export async function generateMetadata({
   params,
@@ -40,16 +38,19 @@ export async function generateMetadata({
   const name = CASE_NAMES[found.item.slug]
   const title =
     locale === 'es' ? `${name}: caso de seguridad | Luis Cerón` : `${name}: security case | Luis Cerón`
-  const description = found.item.summary[locale]
+  const description = found.item.seoDescription[locale]
 
   return {
     title,
     description,
     alternates: {
       canonical: absolute(localeHref(locale, path)),
-      languages: Object.fromEntries(
-        LOCALES.map((candidate) => [HTML_LANG[candidate], absolute(localeHref(candidate, path))])
-      ),
+      languages: {
+        ...Object.fromEntries(
+          LOCALES.map((candidate) => [HTML_LANG[candidate], absolute(localeHref(candidate, path))])
+        ),
+        'x-default': absolute(localeHref('es', path)),
+      },
     },
     openGraph: {
       title,
@@ -57,6 +58,13 @@ export async function generateMetadata({
       locale: HTML_LANG[locale],
       type: 'article',
       url: absolute(localeHref(locale, path)),
+      images: previewImages(locale),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: previewImages(locale),
     },
   }
 }
