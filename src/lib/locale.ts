@@ -16,11 +16,30 @@ export function getLocale(): Locale {
 }
 
 /**
- * URL de esta misma página en el idioma indicado.
+ * URL de una página del sitio en el idioma indicado.
  *
  * El español, que es el idioma por defecto, se queda sin parámetro para que la
- * URL canónica sea limpia.
+ * URL canónica sea limpia. `path` es la ruta de la página (`/` para la home,
+ * `/casos/carelink` para un caso, RF-111).
  */
-export function localeHref(locale: Locale): string {
-  return locale === DEFAULT_LOCALE ? '/' : `/?${LOCALE_PARAM}=${locale}`
+export function localeHref(locale: Locale, path = '/'): string {
+  return locale === DEFAULT_LOCALE ? path : `${path}?${LOCALE_PARAM}=${locale}`
+}
+
+/** Ruta de la página de detalle de un caso de seguridad (RF-111). */
+export function casePath(slug: string): string {
+  return `/casos/${slug}`
+}
+
+/** URL del detalle de un caso, en el idioma indicado. */
+export function caseHref(slug: string, locale: Locale): string {
+  return localeHref(locale, casePath(slug))
+}
+
+/**
+ * Ancla de la home en el idioma indicado. Desde la propia home basta con
+ * `#casos`; desde una página de caso hay que volver a `/` (o `/?lang=en`).
+ */
+export function homeAnchor(anchor: string, locale: Locale, onHome: boolean): string {
+  return onHome ? anchor : `${localeHref(locale)}${anchor}`
 }

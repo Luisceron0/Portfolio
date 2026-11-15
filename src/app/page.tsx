@@ -2,9 +2,9 @@ import { Contact } from '@/components/contact'
 import { CvDownloads } from '@/components/cv'
 import { Footer } from '@/components/footer'
 import { Hero } from '@/components/hero'
+import { Pillars } from '@/components/pillars'
 import { CrossedMarquees } from '@/components/persona'
 import { SiteNav } from '@/components/nav'
-import { Profile } from '@/components/profile'
 import { Projects } from '@/components/projects'
 import { Skills } from '@/components/skills'
 import { Timeline } from '@/components/timeline'
@@ -42,7 +42,7 @@ export default function HomePage() {
             .map((part) => part.trim())
             .filter(Boolean)}
         />
-        <Profile locale={locale} />
+        <Pillars locale={locale} />
         <Timeline locale={locale} />
         <Projects locale={locale} />
         <Skills locale={locale} />

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { cv, LOCALES, nav, projects, resolved, site, skills, timeline, type Locale } from '@/content'
+import { cv, LOCALES, nav, pillars, projects, resolved, site, skills, timeline, type Locale } from '@/content'
 
 /**
  * Criterios de aceptación de RF-102 (5 proyectos), RF-106 (perfil y
@@ -353,12 +353,31 @@ test.describe('RF-106 / RF-107 — perfil, trayectoria y habilidades', () => {
     expect(await chips.count()).toBeGreaterThanOrEqual(totalItems)
   })
 
-  test('el perfil no contradice el CV: correo y ubicación coinciden', async ({ page }) => {
+  test('el perfil no contradice el CV: ubicación, especialización e inglés', async ({ page }) => {
     await page.goto('/')
 
-    const perfil = page.locator('#perfil')
-    await expect(perfil).toContainText('luiscerontrabajos@gmail.com')
-    await expect(perfil).toContainText('Pasto, Nariño, Colombia')
+    await expect(
+      page.getByRole('region', { name: /Luis Alejandro Cerón Muñoz/ })
+    ).toContainText('Pasto, Nariño, Colombia')
+    const perfil = page.locator('#seguridad')
+    await expect(perfil).toContainText('Especialización en Seguridad de la Información')
+    await expect(perfil).toContainText('Inglés C1')
+  })
+
+  test('"Qué hago" tiene tres pilares y cada punto enlaza a un caso o a su pendiente', async ({
+    page,
+  }) => {
+    await page.goto('/')
+
+    const pillarsSection = page.locator('#seguridad')
+    await expect(pillarsSection.getByRole('article')).toHaveCount(pillars.items.length)
+    for (const pillar of pillars.items) {
+      await expect(pillarsSection.getByRole('heading', { name: pillar.title.es })).toBeVisible()
+    }
+    const caseLinks = await pillarsSection
+      .locator('a[href^="/casos/"]')
+      .evaluateAll((links) => links.map((link) => link.getAttribute('href') ?? ''))
+    expect(caseLinks.length).toBeGreaterThan(0)
   })
 })
 

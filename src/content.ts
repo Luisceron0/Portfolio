@@ -127,6 +127,40 @@ export interface Project {
   links: readonly ExternalLink[]
 }
 
+/**
+ * Identificadores de los casos de seguridad (RF-102/RF-111). Son también el
+ * segmento de su URL: `/casos/<slug>`. El orden de este array NO es el orden de
+ * la página; ese lo manda `securityCases`.
+ */
+export const CASE_SLUGS = ['carelink', 'elevaforge', 'tributary', 'koa'] as const
+export type CaseSlug = (typeof CASE_SLUGS)[number]
+
+/** Nombre visible de cada caso: nombre propio, igual en los dos idiomas. */
+export const CASE_NAMES: Readonly<Record<CaseSlug, string>> = {
+  carelink: 'CareLink',
+  elevaforge: 'ElevaForge',
+  tributary: 'Tributary',
+  koa: 'KOA',
+}
+
+/**
+ * Un punto de un pilar de "Qué hago", con los casos que lo demuestran. Un punto
+ * sin caso que lo respalde lleva `pending` (regla 3: ninguna afirmación sin
+ * enlace).
+ */
+export interface PillarPoint {
+  label: Localized
+  cases: readonly CaseSlug[]
+  pending?: Pending
+}
+
+export interface Pillar {
+  id: string
+  title: Localized
+  lead: Localized
+  points: readonly PillarPoint[]
+}
+
 export interface TimelineEntry {
   id: string
   kind: 'trabajo' | 'estudio'
@@ -195,7 +229,7 @@ export const site = {
 export const nav = {
   brand: 'LC',
   items: [
-    { label: { es: 'Perfil', en: 'Profile' }, href: '#perfil' },
+    { label: { es: 'Qué hago', en: 'What I do' }, href: '#seguridad' },
     { label: { es: 'Trayectoria', en: 'Career' }, href: '#trayectoria' },
     { label: { es: 'Proyectos', en: 'Projects' }, href: '#proyectos' },
     { label: { es: 'Habilidades', en: 'Skills' }, href: '#habilidades' },
@@ -324,40 +358,115 @@ export const profile = {
       'Pursuing a Postgraduate Specialization in Information Security. English C1.',
     ],
   } satisfies LocalizedList,
-  facts: [
+} as const
+
+// ---------------------------------------------------------------------------
+// "Qué hago": tres pilares de igual peso (SRS v1.4)
+// ---------------------------------------------------------------------------
+
+export const pillars = {
+  heading: { es: 'Qué hago', en: 'What I do' } satisfies Localized,
+  /** Rótulo de los enlaces a casos que respaldan cada punto. */
+  evidenceLabel: { es: 'Lo demuestra', en: 'Shown in' } satisfies Localized,
+  items: [
     {
-      label: { es: 'Ubicación', en: 'Location' },
-      value: { es: 'Pasto, Nariño, Colombia', en: 'Pasto, Nariño, Colombia' },
-    },
-    {
-      label: { es: 'Correo', en: 'Email' },
-      value: { es: 'luiscerontrabajos@gmail.com', en: 'luiscerontrabajos@gmail.com' },
-    },
-    {
-      label: { es: 'Formación', en: 'Education' },
-      value: {
-        es: 'Ing. de Software, Esp. en Seguridad de la Información (en curso)',
-        en: 'Software Engineering, Information Security specialization (in progress)',
+      id: 'seguridad-aplicaciones',
+      title: { es: 'Seguridad de aplicaciones', en: 'Application security' },
+      lead: {
+        es: 'Qué puede fallar, quién puede abusar y qué control lo detiene.',
+        en: 'What can fail, who can abuse it and which control stops it.',
       },
+      points: [
+        {
+          label: { es: 'Modelado de amenazas', en: 'Threat modeling' },
+          cases: ['tributary', 'carelink', 'koa'],
+        },
+        {
+          label: {
+            es: 'OWASP Top 10: inyección SQL, XSS, XXE, control de acceso roto',
+            en: 'OWASP Top 10: SQL injection, XSS, XXE, broken access control',
+          },
+          cases: ['tributary', 'carelink', 'koa'],
+        },
+        {
+          label: {
+            es: 'Controles de acceso: RBAC, autorización revalidada en cada petición',
+            en: 'Access control: RBAC, authorization revalidated on every request',
+          },
+          cases: ['carelink', 'tributary', 'elevaforge'],
+        },
+        {
+          label: {
+            es: 'Revisión de dependencias (SCA) y SAST como gates de CI',
+            en: 'Dependency review (SCA) and SAST as CI gates',
+          },
+          cases: ['tributary', 'carelink', 'koa'],
+        },
+      ],
     },
     {
-      label: { es: 'Idiomas', en: 'Languages' },
-      value: {
-        es: 'Español nativo, inglés C1 (EF SET)',
-        en: 'Native Spanish, English C1 (EF SET)',
+      id: 'arquitectura-segura',
+      title: { es: 'Arquitectura segura', en: 'Secure architecture' },
+      lead: {
+        es: 'Cada control en la capa donde ningún camino de acceso lo salta por accidente.',
+        en: 'Each control at the layer where no access path skips it by accident.',
       },
+      points: [
+        {
+          label: { es: 'Aislamiento multi-tenant', en: 'Multi-tenant isolation' },
+          cases: ['carelink'],
+        },
+        {
+          label: {
+            es: 'Criptografía aplicada: AES-256-GCM por tenant, crypto-shredding',
+            en: 'Applied cryptography: per-tenant AES-256-GCM, crypto-shredding',
+          },
+          cases: ['carelink', 'tributary'],
+        },
+        {
+          label: {
+            es: 'ADRs versionados con alternativas descartadas',
+            en: 'Versioned ADRs with discarded alternatives',
+          },
+          cases: ['tributary', 'elevaforge', 'carelink'],
+        },
+        {
+          label: {
+            es: 'Deny-by-default: Row Level Security sin políticas para anon ni authenticated',
+            en: 'Deny-by-default: Row Level Security with no policies for anon or authenticated',
+          },
+          cases: ['elevaforge'],
+        },
+      ],
     },
-  ],
-  links: [
     {
-      label: { es: 'LinkedIn: luis-ceronmunoz', en: 'LinkedIn: luis-ceronmunoz' },
-      href: 'https://www.linkedin.com/in/luis-ceronmunoz',
+      id: 'ingenieria-full-stack',
+      title: { es: 'Ingeniería full-stack', en: 'Full-stack engineering' },
+      lead: {
+        es: 'Construyo el software que aseguro, del modelo de datos al despliegue.',
+        en: 'I build the software I secure, from the data model to deployment.',
+      },
+      points: [
+        { label: { es: 'Java · Spring Boot', en: 'Java · Spring Boot' }, cases: ['carelink', 'tributary'] },
+        {
+          label: { es: 'React · Next.js', en: 'React · Next.js' },
+          cases: ['elevaforge', 'carelink', 'tributary'],
+        },
+        {
+          label: { es: 'Python · Django', en: 'Python · Django' },
+          cases: [],
+          pending:
+            '[PENDIENTE: TODO-LUIS, ninguno de los 4 casos usa Python/Django. ¿Qué repositorio público lo respalda, o se quita del subtítulo?]',
+        },
+        {
+          label: { es: 'PostgreSQL', en: 'PostgreSQL' },
+          cases: ['carelink', 'tributary', 'elevaforge'],
+        },
+        { label: { es: 'Astro · TypeScript', en: 'Astro · TypeScript' }, cases: ['koa'] },
+        { label: { es: 'Docker · CI/CD', en: 'Docker · CI/CD' }, cases: ['carelink', 'tributary'] },
+      ],
     },
-    {
-      label: { es: 'GitHub: Luisceron0', en: 'GitHub: Luisceron0' },
-      href: 'https://github.com/Luisceron0',
-    },
-  ] satisfies readonly ExternalLink[],
+  ] satisfies readonly Pillar[],
 } as const
 
 // ---------------------------------------------------------------------------
