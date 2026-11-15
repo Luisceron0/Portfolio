@@ -12,6 +12,7 @@ import {
   site,
   skills,
   timeline,
+  workProcess,
   type Locale,
 } from '@/content'
 
@@ -360,6 +361,18 @@ test.describe('RF-102 / RF-111 — casos de seguridad', () => {
     for (const slug of ['carelink', 'elevaforge'] as const) {
       const item = securityCases.find((candidate) => candidate.slug === slug)!
       expect(item.threats.every((threat) => !threat.stride)).toBe(true)
+    }
+  })
+})
+
+test.describe('Cómo trabajo', () => {
+  test('cuatro pasos en orden, cada uno con evidencia enlazada', async ({ page }) => {
+    await page.goto('/')
+    const steps = page.locator('#proceso ol > li')
+    await expect(steps).toHaveCount(workProcess.steps.length)
+    for (const [index, step] of workProcess.steps.entries()) {
+      await expect(steps.nth(index).getByRole('heading', { name: step.title.es })).toBeVisible()
+      expect(await steps.nth(index).locator('a[href^="https://github.com/"]').count()).toBeGreaterThan(0)
     }
   })
 })

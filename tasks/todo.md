@@ -6,7 +6,7 @@
 - [x] 3. Titular, hero, subtítulo, disponibilidad y perfil ES/EN (primera persona implícita)
 - [x] 4. "Qué hago": tres pilares
 - [x] 5. "Casos de seguridad" con plantilla fija + rutas `/casos/[slug]` → **pendiente: revisión del dueño**
-- [ ] 6. "Cómo trabajo" (4 pasos + hueco de captura)
+- [x] 6. "Cómo trabajo" (4 pasos + hueco de captura)
 - [ ] 7. Experiencia resumida, habilidades reagrupadas, formación y certificaciones
 - [ ] 8. Navegación y anclas buscables
 - [ ] 9. SEO: title/description, JSON-LD, sitemap, robots, OG con next/og
@@ -22,6 +22,7 @@ Regla (2026-11-14): `[PENDIENTE]` en el sitio solo para datos que impiden public
 - [ ] ElevaForge: categorizar las amenazas con STRIDE en el repo (publicar un threat model; hoy solo existen los hallazgos F-01 a F-04 del SRS).
 - [ ] KOA Landing: categorizar las amenazas con STRIDE en el repo (no tiene threat model).
 - [ ] CareLink: grabar un recorrido corto con datos sintéticos.
+- [ ] Subir una captura de un gate de CI bloqueando un despliegue y declararla en `workProcess.gateScreenshot` (src/content.ts). Hasta entonces la sección "Cómo trabajo" no muestra hueco.
 
 ---
 

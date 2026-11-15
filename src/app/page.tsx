@@ -4,6 +4,7 @@ import { CvDownloads } from '@/components/cv'
 import { Footer } from '@/components/footer'
 import { Hero } from '@/components/hero'
 import { Pillars } from '@/components/pillars'
+import { Process } from '@/components/process'
 import { CrossedMarquees } from '@/components/persona'
 import { SiteNav } from '@/components/nav'
 import { Skills } from '@/components/skills'
@@ -45,6 +46,7 @@ export default function HomePage() {
         />
         <Pillars locale={locale} />
         <Cases locale={locale} />
+        <Process locale={locale} />
         <Timeline locale={locale} />
         <Skills locale={locale} />
         <CvDownloads locale={locale} />

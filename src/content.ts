@@ -683,6 +683,7 @@ const REPO = {
   elevaforge: 'https://github.com/Luisceron0/ElevaForge',
   koaLanding: 'https://github.com/luisCeron0Portfolio/koa-landing',
   koaStore: 'https://github.com/luisCeron0Portfolio/koa-store',
+  portfolio: 'https://github.com/Luisceron0/Portfolio',
 } as const
 
 const COMMIT = {
@@ -691,6 +692,7 @@ const COMMIT = {
   elevaforge: '5be5d7d3e4bec4718aaa7472baa37dad201d6a47',
   koaLanding: '56102f12d296e85b9379c55b5b0018364c801977',
   koaStore: '6959769afc9a635d8c07f4a4b4c6956b9b198c56',
+  portfolio: '07fbce5cc71bf10884bcf65947cab35d3c66a76f',
 } as const
 
 type RepoKey = keyof typeof REPO
@@ -1674,6 +1676,83 @@ export const securityCases: readonly SecurityCase[] = [
     },
   },
 ] as const
+
+// ---------------------------------------------------------------------------
+// "Cómo trabajo": el proceso en cuatro pasos (SRS v1.4)
+// ---------------------------------------------------------------------------
+
+export interface ProcessStep {
+  id: string
+  title: Localized
+  text: Localized
+  /** Dónde se ve este paso en los casos: enlaces a código o documentos. */
+  evidence: readonly ExternalLink[]
+}
+
+export const workProcess = {
+  heading: { es: 'Cómo trabajo', en: 'How I work' } satisfies Localized,
+  intro: {
+    es: 'El mismo proceso en cada proyecto, de la amenaza al gate que la vigila.',
+    en: 'The same process on every project, from the threat to the gate that watches it.',
+  } satisfies Localized,
+  evidenceLabel: { es: 'Se ve en', en: 'Seen in' } satisfies Localized,
+  steps: [
+    {
+      id: 'modelar',
+      title: { es: 'Modelar amenazas', en: 'Model threats' },
+      text: {
+        es: 'Activos, flujos de datos y amenazas antes de escribir código: qué puede fallar y quién puede abusar.',
+        en: 'Assets, data flows and threats before writing code: what can fail and who can abuse it.',
+      },
+      evidence: [
+        doc('tributary', 'docs/SRS-tributary.md', { es: 'Tributary, SRS §7', en: 'Tributary, SRS §7' }, '7-threat-model'),
+        doc('carelink', 'docs/SRS.md', { es: 'CareLink, SRS §8.1', en: 'CareLink, SRS §8.1' }, '81-threat-model-stride-merged'),
+      ],
+    },
+    {
+      id: 'decidir',
+      title: { es: 'Decidir y registrar en un ADR', en: 'Decide and record it in an ADR' },
+      text: {
+        es: 'Cada decisión con su porqué y sus alternativas descartadas, versionada junto al código.',
+        en: 'Every decision with its rationale and discarded alternatives, versioned next to the code.',
+      },
+      evidence: [
+        code('tributary', 'docs/adr/README.md'),
+        tree('carelink', 'docs/adr', { es: 'CareLink, docs/adr', en: 'CareLink, docs/adr' }),
+      ],
+    },
+    {
+      id: 'implementar',
+      title: { es: 'Implementar', en: 'Implement' },
+      text: {
+        es: 'El control en la capa donde ningún camino de acceso lo salta por accidente: la base de datos, el servidor, la propia consulta.',
+        en: 'The control at the layer no access path skips by accident: the database, the server, the query itself.',
+      },
+      evidence: [
+        code('carelink', 'services/identity-service/src/main/resources/db/tenant/tenant_template.sql', 'L127-L140'),
+        code('koaStore', 'src/lib/cart.ts', 'L145-L160'),
+      ],
+    },
+    {
+      id: 'bloquear',
+      title: { es: 'Bloquear en CI', en: 'Block in CI' },
+      text: {
+        es: 'SAST, revisión de dependencias y escaneo de secretos como gates: un hallazgo detiene la integración.',
+        en: 'SAST, dependency review and secret scanning as gates: a finding stops the integration.',
+      },
+      evidence: [
+        code('tributary', '.github/workflows/ci.yml', 'L17-L90'),
+        code('koaLanding', '.github/workflows/ci.yml', 'L32-L33'),
+        code('portfolio', '.github/workflows/ci.yml', 'L41-L85'),
+      ],
+    },
+  ] satisfies readonly ProcessStep[],
+  /**
+   * Captura de un gate bloqueando un despliegue. `null` mientras no exista: la
+   * sección no muestra ningún hueco vacío (la tarea está en tasks/todo.md).
+   */
+  gateScreenshot: null as ProjectImage | null,
+} as const
 
 // ---------------------------------------------------------------------------
 // RF-107 — Habilidades
