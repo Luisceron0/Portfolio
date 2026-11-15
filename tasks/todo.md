@@ -1,4 +1,22 @@
-# Active plan: Personal Portfolio Site v1
+# Active plan: Reposicionamiento AppSec (SRS v1.4)
+**Start:** 2026-11-14 · **Branch:** `reposicionamiento-appsec` (sin merge, push ni deploy sin aprobación del dueño)
+
+- [x] 1. Alcance: casos con URL propia (`/casos/<slug>`), SRS v1.4 y copilot-instructions
+- [ ] 2. Corregir afirmaciones (habilidades, certificaciones, viñetas Alcaldía y Freelance)
+- [ ] 3. Titular, hero, subtítulo, disponibilidad y perfil ES/EN (primera persona implícita)
+- [ ] 4. "Qué hago": tres pilares
+- [ ] 5. "Casos de seguridad" con plantilla fija + rutas `/casos/[slug]` → **revisión del dueño**
+- [ ] 6. "Cómo trabajo" (4 pasos + hueco de captura)
+- [ ] 7. Experiencia resumida, habilidades reagrupadas, formación y certificaciones
+- [ ] 8. Navegación y anclas buscables
+- [ ] 9. SEO: title/description, JSON-LD, sitemap, robots, OG con next/og
+- [ ] 10. Permissions-Policy ampliada, Lighthouse SEO ≥95
+- [ ] 11. CV ES (principal) y EN: misma información, ATS, ≤2 páginas, prueba de orden del texto extraído
+- [ ] 12. Verificación completa y lista de `[PENDIENTE: TODO-LUIS, ...]` por archivo
+
+---
+
+# Plan anterior: Personal Portfolio Site v1
 **Start:** 2026-08-07
 **Goal:** deploy a working single-page site meeting RF-101 through RF-105 of the SRS.
 

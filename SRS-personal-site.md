@@ -1,5 +1,5 @@
 # SRS — Personal Portfolio Site
-**Version:** 1.0
+**Version:** 1.4
 **Date:** 2026-08-07
 **Author:** Luis Alejandro Cerón Muñoz | **Technical reviewer:** Arch-Sentinel
 **Status:** Draft — pending [PENDIENTE] items before build starts
@@ -8,9 +8,13 @@
 
 ## 1. Executive summary
 
-A single-page personal site whose only job is to convert a non-technical recruiter's
-first 60 seconds into either a contact or a click-through to the unified GitHub
-profile. It is not a second copy of ElevaForge's marketing site and not a repo
+A personal site whose only job is to convert a recruiter's first 60 seconds into
+either a contact or a click-through to the unified GitHub profile. **Since v1.4
+(2026-11-14)** the site positions Luis as an Application Security engineer who
+builds: development is shown as the evidence behind each security decision, not as
+a separate skill set. The primary audience is now AppSec / security architecture
+hiring managers and technical recruiters; the non-technical recruiter is still
+served by the hero and the CV. It is not a second copy of ElevaForge's marketing site and not a repo
 browser — those already exist. It exists to answer, in plain language: who is Luis,
 what does he build, why does security matter in his work, and how do I reach him.
 
@@ -25,16 +29,23 @@ what does he build, why does security matter in his work, and how do I reach him
 ## 3. Scope
 
 **In scope:**
-- Single landing page (hero, value prop, profile, career timeline, 4 project
-  highlights, skills, contact CTA).
+- Landing page (hero, "what I do" pillars, security case summaries, "how I work"
+  process, experience, skills, education and certifications, contact CTA).
+- **One detail page per security case** at `/casos/<slug>` (v1.4, see RF-111). The
+  summary of each case stays on the landing page; the detail lives at its own URL.
+- `sitemap.xml`, `robots.txt`, JSON-LD `Person` and a generated Open Graph image
+  (v1.4, see RF-112).
 - Downloadable CV (ES/EN, generated from the RenderCV YAML per RF-006 of the
   portfolio-wide SRS — this site only *links* to the PDFs, it does not generate them).
 - Contact form → email, with spam protection.
 - Deploy on a domain the user owns.
 
 **Out of scope (explicit):**
-- Blog, case-study pages, multi-page navigation. One page is the spec; more pages is
-  scope creep for a v1.
+- Blog and any page type other than the landing page and the case pages of RF-111.
+  ~~Case-study pages~~ **moved into scope in v1.4 (2026-11-14)** at the owner's
+  request: a clean, linkable URL per case (`/casos/carelink`) is what a security
+  hiring manager shares and what a search engine indexes. Each case page is static
+  content from `src/content.ts`, same discipline as the landing page.
 - CMS / admin panel. Content is a static config file edited via PR, same discipline
   as the rest of the portfolio repos.
 - ~~Multilingual toggle (ES/EN switch on the site itself).~~ **Moved into scope in
@@ -45,13 +56,17 @@ what does he build, why does security matter in his work, and how do I reach him
 ## 4. Functional requirements
 
 ### RF-101: Hero + value proposition
-- **Description:** above the fold, in ≤2 sentences: what Luis builds and the security
-  angle that differentiates him.
+- **Description:** above the fold: the headline (Application Security Engineer |
+  Secure Software Architecture | DevSecOps), one supporting line about the stack he
+  builds with, and two CTAs (security cases, CV download) plus GitHub and LinkedIn.
+- **Changed in v1.4:** the audience is now security hiring managers, so standard
+  role terms (AppSec, DevSecOps) are allowed in the headline. The supporting line
+  stays in plain language.
 - **Acceptance criteria:**
-  - [ ] Readable and understood without scrolling on a 375px viewport.
-  - [ ] No jargon that a non-technical recruiter has to look up.
+  - [ ] Readable without scrolling on a 375px viewport.
+  - [ ] No security absolutes ("unbreachable", "100% secure").
 
-### RF-102: Project highlights (5)
+### RF-102: Security cases (4)
 - **Description:** CareLink, Tributary, ElevaForge, KOA Landing and KOA Store,
   each with a blurb, a screenshot, a technology list, and links to the live site
   and/or the repository.
@@ -65,6 +80,14 @@ what does he build, why does security matter in his work, and how do I reach him
   all and no intention of having one** (its own ADR-011 explains why), which the
   acceptance criteria below now account for: the "every live link resolves"
   criterion cannot be read as "every project has a live link".
+- **Scope change (v1.4, 2026-11-14):** projects become **security cases**, in this
+  order: CareLink, ElevaForge, Tributary, KOA (KOA Landing and KOA Store merged into
+  one case with two subsections: business logic security and anti-automation).
+  Every case follows a fixed template: problem, stack, status (in production /
+  demo / repository), data flow and sensitive assets, main threats, chosen controls
+  and why (each linked to a file or line of its repository), how it was verified,
+  and links. STRIDE categories appear only where the project repository publishes
+  a threat model that backs them; otherwise the field is a `[PENDIENTE]`.
 - **Precondition:** the unified GitHub account (portfolio SRS RF-001) exists, since
   both project links ultimately point there.
 - **Acceptance criteria:**
@@ -98,6 +121,26 @@ what does he build, why does security matter in his work, and how do I reach him
 - **Acceptance criteria:**
   - [ ] Groups and items match the CV YAML exactly.
   - [ ] Rendered as scannable chips, not a wall of prose.
+
+### RF-111: Case detail pages
+- **Description:** `/casos/<slug>` renders the full template of one security case
+  (RF-102). The landing page shows the summary and links to it.
+- **Added in v1.4 (2026-11-14)** at the owner's request.
+- **Acceptance criteria:**
+  - [ ] One URL per case, slug from `src/content.ts`; unknown slugs return 404.
+  - [ ] Same bilingual mechanism as the landing page (`?lang=en`), with canonical
+    and hreflang per case.
+  - [ ] One H1 per page; CSP and security headers present (same middleware).
+
+### RF-112: Discoverability
+- **Description:** title ≤60 and meta description ≤155 characters per language,
+  Open Graph and Twitter Card with a generated image (name + headline only),
+  JSON-LD `Person` (name, jobTitle, address locality, url, sameAs, knowsAbout,
+  alumniOf), `sitemap.xml`, `robots.txt`.
+- **Added in v1.4.** No phone, personal email, age or street address in metadata.
+- **Acceptance criteria:**
+  - [ ] Lighthouse SEO ≥95 and Accessibility ≥95, Performance not below its
+    previous level.
 
 ### RF-108: In-page navigation
 - **Description:** a sticky in-page nav linking to the sections of the single page.
@@ -265,4 +308,5 @@ is not retained.
 | 1.0 | 2026-08-07 | Arch-Sentinel + Luis | Initial version, split from the portfolio-wide SRS per user request |
 | 1.1 | 2026-08-09 | Luis | Scope widened at the owner's request: RF-102 goes from 2 to 4 projects (ElevaForge, CareLink, KOA Landing, KOA Store shown separately); new RF-106 (profile + career timeline), RF-107 (skills), RF-108 (in-page nav). Still one page, still no CMS, still no routes — §3's out-of-scope list is unchanged. |
 | 1.2 | 2026-08-09 | Luis | RF-109 (bilingüe ES/EN por query param, sin rutas nuevas) y RF-110 (dinamismo visual) añadidos a petición del dueño. El toggle multilingüe sale de la lista de fuera de alcance del §3. |
+| 1.4 | 2026-11-14 | Luis | Repositioning towards Application Security / secure architecture. Case-study pages move into scope (RF-111, `/casos/<slug>`), discoverability added (RF-112). RF-102 becomes 4 security cases with a fixed template (KOA Landing and KOA Store merged). RF-101 audience changes to security hiring managers. Still no CMS, no blog, no accounts. |
 | 1.3 | 2026-08-18 | Luis | RF-102 pasa de 4 a 5 proyectos: entra Tributary (motor de facturación electrónica multi-régimen), a petición del dueño. Es el primer proyecto sin URL en vivo y sin intención de tenerla, así que el criterio de aceptación de los enlaces deja de asumir que todo proyecto tiene demo. Sigue siendo una sola página, sin CMS y sin rutas nuevas. |
