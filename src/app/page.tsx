@@ -38,7 +38,7 @@ export default function HomePage() {
         {/* Las disciplinas del rol, en las cintas cruzadas que cierran el hero. */}
         <CrossedMarquees
           items={hero.role[locale]
-            .split(/[·]/)
+            .split(/[|·]/)
             .map((part) => part.trim())
             .filter(Boolean)}
         />

@@ -17,13 +17,10 @@ import { ProfileIcon } from '@/components/icons'
  * presenta como tabla de especificaciones, en monoespaciada y con una regla
  * entre filas.
  *
- * El perfil son TRES párrafos (desarrollo/arquitectura/seguridad, la estructura
- * antes del código, y la seguridad desde el diseño). Pasó por varias formas
- * antes: el resumen del CV a secas, el resumen más un bloque DEV/ARCH/SEC, el
- * resumen más prosa, y un único párrafo largo. El número de párrafos lo manda
- * `profile.summary`, no este componente: si el dueño añade o quita uno, aquí no
- * hay nada que tocar. El panel de diálogo envuelve el bloque entero para que
- * no se corte entre párrafo y párrafo.
+ * El perfil es la adaptación del "Perfil" del CV (SRS v1.4), en primera
+ * persona implícita: ver la nota de TONO en `profile.summary`. El número de
+ * párrafos lo manda `profile.summary`, no este componente. El panel de diálogo
+ * envuelve el bloque entero para que no se corte entre párrafo y párrafo.
  */
 export function Profile({ locale }: { locale: Locale }) {
   return (

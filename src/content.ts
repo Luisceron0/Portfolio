@@ -220,50 +220,71 @@ export const hero = {
   /** Nombre propio: idéntico en ambos idiomas. */
   name: 'Luis Alejandro Cerón Muñoz',
   /**
-   * Tres disciplinas, no tres empleos. El orden va de lo más concreto a lo más
-   * transversal, que es como se lee de un vistazo.
+   * Titular del rol (SRS v1.4). Es el mismo texto que el `headline` del CV y
+   * que el `jobTitle` del JSON-LD: si cambia aquí, cambia allí.
+   *
+   * Las cintas cruzadas de page.tsx lo parten por "|", así que cada disciplina
+   * va separada por esa barra.
    *
    * OJO: esto se renderiza encima del titular, así que cuenta para el
    * presupuesto vertical de RF-101 (hero completo en 375x667). Si lo alargas,
    * verifica `e2e/landing.spec.ts` antes de darlo por bueno.
    */
   role: {
-    es: 'Ingeniero de Software Full-Stack · Arquitectura y Seguridad',
-    en: 'Full-Stack Software Engineer · Architecture and Security',
+    es: 'Ingeniero de Seguridad de Aplicaciones | Arquitectura Segura | DevSecOps',
+    en: 'Application Security Engineer | Secure Software Architecture | DevSecOps',
   } satisfies Localized,
   /**
-   * RF-101: máximo dos frases, legibles sin hacer scroll en 375 px.
-   * Sin jerga que obligue a buscar un término.
+   * RF-101: la propuesta de valor, en una frase. Sin absolutos de seguridad
+   * ("imposible de vulnerar", "100 % seguro"): la seguridad se decide y se
+   * verifica, no se promete.
    *
    * La longitud NO es libre: e2e/landing.spec.ts mide que el hero completo
    * entre en 375x667. Si alargas esto, ese test falla. Es intencionado.
    */
   pitch: {
-    es: 'Diseño y desarrollo aplicaciones web completas, resistentes desde el principio a quien intente vulnerarlas. Entrego software funcional, sin dejar deuda de seguridad oculta.',
-    en: 'I design and develop complete web applications, built from the outset to withstand attempts to breach them. I deliver working software, with no hidden security debt.',
+    es: 'Diseño aplicaciones web con la seguridad decidida desde la arquitectura, no añadida al final.',
+    en: 'I design web applications with security decided at the architecture stage, not added at the end.',
+  } satisfies Localized,
+  /** Línea de apoyo: el desarrollo como evidencia de la seguridad. */
+  support: {
+    es: 'Construyo el software que aseguro: full-stack con Java/Spring Boot, Python/Django y React/Next.js.',
+    en: 'I build the software I secure: full-stack with Java/Spring Boot, Python/Django and React/Next.js.',
   } satisfies Localized,
   location: {
     es: 'Pasto, Nariño, Colombia',
     en: 'Pasto, Nariño, Colombia',
   } satisfies Localized,
   availability: {
-    es: 'Disponible para relocalización',
-    en: 'Open to relocation',
+    es: 'Híbrido en Medellín o Bogotá · Relocalización a Alemania o España',
+    en: 'Hybrid in Medellín or Bogotá · Relocation to Germany or Spain',
   } satisfies Localized,
+  /** CTA principal: lleva a los casos de seguridad de esta misma página. */
+  casesCta: {
+    label: { es: 'Ver casos de seguridad', en: 'View security cases' },
+    href: '#casos',
+  } satisfies ExternalLink,
+  /**
+   * CTA secundario: descarga directa del CV en el idioma de la página. El otro
+   * idioma sigue disponible en la sección de CV.
+   */
+  cvCta: {
+    label: { es: 'Descargar CV', en: 'Download CV' },
+    href: { es: '/cv/luis-ceron-cv-es.pdf', en: '/cv/luis-ceron-cv-en.pdf' },
+  } satisfies ExternalLink,
   /** RF-105: visible sin pasar del hero. Enlace al perfil, no a un repo suelto. */
   githubLink: {
-    label: { es: 'Ver mi perfil de GitHub', en: 'View my GitHub profile' },
+    label: { es: 'GitHub', en: 'GitHub' },
     href: 'https://github.com/Luisceron0',
   } satisfies ExternalLink,
-  contactCta: {
-    label: { es: 'Escríbame', en: 'Get in touch' },
-    /** Ancla interna a la sección de contacto. Una sola página (regla 1). */
-    href: '#contacto',
+  linkedinLink: {
+    label: { es: 'LinkedIn', en: 'LinkedIn' },
+    href: 'https://www.linkedin.com/in/luis-ceronmunoz',
   } satisfies ExternalLink,
   /**
    * Menú de pausa del hero, al estilo de P3R. Son las mismas anclas de la nav
-   * más la del CV: no introduce destinos nuevos (regla 1). Va DEBAJO de los
-   * CTA, así que no consume el presupuesto vertical de RF-101.
+   * más la del CV: no introduce destinos nuevos. Va DEBAJO de los CTA, así que
+   * no consume el presupuesto vertical de RF-101.
    */
   menu: {
     title: { es: 'Menú', en: 'Menu' } satisfies Localized,
@@ -280,35 +301,27 @@ export const hero = {
 export const profile = {
   heading: { es: 'Perfil', en: 'Profile' } satisfies Localized,
   /**
-   * Tres párrafos, por decisión del dueño: los tres ángulos (desarrollo,
-   * arquitectura, seguridad), la estructura antes del código, y la seguridad
-   * pensada desde el diseño. Antes fue el resumen literal del CV, luego el
-   * resumen más un bloque DEV/ARCH/SEC, luego un único párrafo largo.
+   * TONO (decisión del dueño, 2026-11-14, SRS v1.4): primera persona IMPLÍCITA,
+   * sin pronombre ("Reviso…", "Diseño…", nunca "yo"). En inglés, estilo de CV
+   * sin pronombre ("Review…", "Design…"). Sustituye a la decisión anterior de un
+   * texto impersonal: no la reviertas sin hablar con el dueño.
    *
-   * OJO, esto cambia una garantía anterior: el resumen YA NO es la copia
-   * literal del "Perfil Profesional" del YAML del CV, ni repite el stack ni el
-   * nivel de inglés. Página y PDF siguen sin CONTRADECIRSE (los hechos del CV
-   * están en `facts` y en el resto de secciones), pero ya no son el mismo
-   * texto, y eso es deliberado: un resumen de CV y la entradilla de un sitio no
-   * tienen por qué sonar igual. Si cambian los HECHOS de uno, revisar el otro.
+   * Es una adaptación del "Perfil" del CV (cv/*.yaml): mismos hechos, sin
+   * añadir ninguno. Si cambian los HECHOS de uno, se revisa el otro.
    *
-   * La disponibilidad para relocalización salió de aquí a propósito: ya está en
-   * `hero.availability`, y repetirla restaba en vez de sumar.
-   *
-   * El texto habla del trabajo, no en primera persona: es una elección de tono
-   * del dueño, no un descuido. Si se vuelve a primera persona, hay que cambiar
-   * los tres párrafos y los dos idiomas a la vez.
+   * Vocabulario fijo en todo el sitio y el CV: "modelado de amenazas" (nunca
+   * "análisis de amenazas"), "threat modeling" en inglés.
    */
   summary: {
     es: [
-      'El trabajo combina desarrollo full-stack con arquitectura de software y arquitectura de seguridad: no son etapas independientes, sino una misma decisión abordada desde tres ángulos. La interfaz, la lógica de negocio y la puesta en producción están interconectadas, y las decisiones que cruzan esas capas se resuelven mejor con una visión de conjunto.',
-      'La estructura se define antes de la primera línea de código: los límites entre los componentes del sistema, qué debe permanecer estable y qué debe poder modificarse sin reconstruir lo que ya funciona. Esta decisión temprana determina si el producto evoluciona junto al negocio o si requiere reconstrucción ante cada requisito de envergadura.',
-      'La arquitectura de seguridad se define desde el diseño, no se incorpora al final: cada control se ubica en la capa donde efectivamente sostiene, a partir de un análisis explícito de qué puede fallar. Ante un fallo, el sistema prioriza el cierre seguro sobre la disponibilidad: ningún control se desactiva ante la duda.',
+      'Ingeniero de software con más de 3 años construyendo y manteniendo sistemas para salud, comercio y sector público, enfocado en seguridad de aplicaciones.',
+      'Reviso arquitecturas y flujos de datos con modelado de amenazas, diseño controles de acceso (RBAC, Row Level Security deny-by-default), aplico criptografía (AES-256-GCM por tenant, gestión de secretos) e integro SAST y SCA como gates bloqueantes en CI (CodeQL, Semgrep, audit-ci).',
+      'Cursando la Especialización en Seguridad de la Información. Inglés C1.',
     ],
     en: [
-      'The work combines full-stack development with software architecture and security architecture: these are not independent stages, but a single decision approached from three angles. The interface, the business logic and the path to production are interconnected, and the decisions that cross those layers are resolved better with a complete view of the system.',
-      'The structure is defined before the first line of code: the boundaries between system components, what must remain stable, and what must be able to change without rebuilding what already works. This early decision determines whether the product evolves with the business or requires reconstruction with every major requirement.',
-      'Security architecture is defined at the design stage, not added at the end: each control is placed at the layer where it actually holds, based on an explicit analysis of what could fail. On failure, the system prioritises secure closure over availability: no control is disabled under uncertainty.',
+      'Software engineer with more than 3 years building and maintaining systems for healthcare, commerce and the public sector, focused on application security.',
+      'Review architectures and data flows with threat modeling, design access controls (RBAC, deny-by-default Row Level Security), apply cryptography (per-tenant AES-256-GCM, secrets management) and integrate SAST and SCA as blocking CI gates (CodeQL, Semgrep, audit-ci).',
+      'Pursuing a Postgraduate Specialization in Information Security. English C1.',
     ],
   } satisfies LocalizedList,
   facts: [

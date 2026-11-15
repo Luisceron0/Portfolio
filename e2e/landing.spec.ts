@@ -48,9 +48,10 @@ test.describe('Landing', () => {
     // pantalla: es el criterio literal de RF-101 y de RF-105.
     for (const locator of [
       page.getByRole('heading', { level: 1 }),
-      page.getByText(/Diseño y desarrollo aplicaciones web completas/),
-      heroSection.getByRole('link', { name: /Escríbame/ }),
-      heroSection.getByRole('link', { name: /Ver mi perfil de GitHub/ }),
+      page.getByText(/seguridad decidida desde la arquitectura/),
+      heroSection.getByRole('link', { name: /Ver casos de seguridad/ }),
+      heroSection.getByRole('link', { name: /Descargar CV/ }),
+      heroSection.getByRole('link', { name: /^GitHub/ }),
     ]) {
       const box = await locator.boundingBox()
       expect(box).not.toBeNull()
@@ -63,7 +64,7 @@ test.describe('Landing', () => {
 
     const link = page
       .getByRole('region', { name: /Luis Alejandro Cerón Muñoz/ })
-      .getByRole('link', { name: /Ver mi perfil de GitHub/ })
+      .getByRole('link', { name: /^GitHub/ })
     const href = await link.getAttribute('href')
 
     expect(href).toBe('https://github.com/Luisceron0')
