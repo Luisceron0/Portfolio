@@ -295,7 +295,7 @@ test.describe('RF-102 / RF-111 — casos de seguridad', () => {
       await expect(page.getByRole('heading', { level: 1 })).toHaveText(CASE_NAMES[item.slug])
       for (const label of [
         casesSection.labels.dataFlow.es,
-        casesSection.labels.threats.es,
+        (item.threatsHeading ?? casesSection.labels.threats).es,
         casesSection.labels.controls.es,
         casesSection.labels.verification.es,
         casesSection.labels.links.es,

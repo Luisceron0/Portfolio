@@ -264,10 +264,14 @@ export const hero = {
     es: 'Diseño aplicaciones web con la seguridad decidida desde la arquitectura, no añadida al final.',
     en: 'I design web applications with security decided at the architecture stage, not added at the end.',
   } satisfies Localized,
-  /** Línea de apoyo: el desarrollo como evidencia de la seguridad. */
+  /**
+   * Línea de apoyo: el desarrollo como evidencia de la seguridad. Nombra solo
+   * el stack que aparece en los casos de seguridad (decisión del dueño,
+   * 2026-11-14): Python/Django salió porque ningún caso lo usa.
+   */
   support: {
-    es: 'Construyo el software que aseguro: full-stack con Java/Spring Boot, Python/Django y React/Next.js.',
-    en: 'I build the software I secure: full-stack with Java/Spring Boot, Python/Django and React/Next.js.',
+    es: 'Construyo el software que aseguro: full-stack con Java/Spring Boot, React/Next.js, TypeScript y PostgreSQL.',
+    en: 'I build the software I secure: full-stack with Java/Spring Boot, React/Next.js, TypeScript and PostgreSQL.',
   } satisfies Localized,
   location: {
     es: 'Pasto, Nariño, Colombia',
@@ -437,12 +441,6 @@ export const pillars = {
           cases: ['elevaforge', 'carelink', 'tributary'],
         },
         {
-          label: { es: 'Python · Django', en: 'Python · Django' },
-          cases: [],
-          pending:
-            '[PENDIENTE: TODO-LUIS, ninguno de los 4 casos usa Python/Django. ¿Qué repositorio público lo respalda, o se quita del subtítulo?]',
-        },
-        {
           label: { es: 'PostgreSQL', en: 'PostgreSQL' },
           cases: ['carelink', 'tributary', 'elevaforge'],
         },
@@ -561,14 +559,14 @@ export const timeline = {
           'Cofundé un estudio de software de tres ingenieros, con responsabilidad sobre las decisiones de arquitectura del producto: límites entre módulos, contratos de datos y alternativas descartadas, documentadas en ADRs versionados que el equipo consulta de forma independiente.',
           'Dirigí la migración del sitio corporativo de Angular a Next.js 14, planificada por capas para que la estructura nueva absorbiera el contenido existente sin rehacerlo.',
           'Diseñé el modelo de autorización de la plataforma como deny-by-default: Row Level Security activa y sin ninguna política para el rol anónimo ni el autenticado, con todo el acceso a datos pasando por el servidor.',
-          'Establecí un estándar de seguridad en CI que corre en cada despliegue (CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI), de forma que un hallazgo detiene la entrega en lugar de descubrirse en producción.',
+          'Configuré la CI del sitio con escaneo de secretos (gitleaks), lint, typecheck, tests, build y e2e en cada push; en los demos KOA, CodeQL, audit-ci y Lighthouse CI (landing) y CodeQL y npm audit (tienda).',
           'Construí elevaforge.com y la vertical de demostración KOA (landing y e-commerce) con un panel de administración multi-cuenta, con el que el equipo edita paquetes, proyectos y contenido sin un despliegue de por medio.',
         ],
         en: [
           'Co-founded a three engineer software studio, with responsibility for the product architecture decisions: module boundaries, data contracts and discarded alternatives, documented in versioned ADRs the team consults independently.',
           'Led the migration of the corporate site from Angular to Next.js 14, planned layer by layer so the new structure absorbed the existing content instead of rebuilding it.',
           'Designed the platform authorisation model as deny-by-default: Row Level Security enabled with no policy at all for the anonymous or the authenticated role, and all data access routed through the server.',
-          'Established a CI security baseline that runs on every deploy (CodeQL, custom Semgrep rules, audit-ci and Lighthouse CI gates), so a finding stops the delivery instead of surfacing in production.',
+          'Set up the site CI with secret scanning (gitleaks), lint, typecheck, tests, build and e2e on every push; on the KOA demos, CodeQL, audit-ci and Lighthouse CI (landing) and CodeQL and npm audit (store).',
           'Built elevaforge.com and the KOA demo vertical (landing and e-commerce) with a multi-account admin panel the team uses to edit packages, projects and content without a deploy in between.',
         ],
       },
@@ -774,10 +772,14 @@ export interface SecurityCase {
   status: CaseStatus
   dataFlow: Localized
   assets: LocalizedList
-  /** Dónde está el threat model del repo, o el pendiente si no existe. */
+  /**
+   * Título del bloque de amenazas cuando no sale de un threat model (ElevaForge:
+   * hallazgos de la revisión de seguridad de su SRS). Sin él, "Amenazas
+   * principales".
+   */
+  threatsHeading?: Localized
+  /** Documento del repo del que salen las amenazas. */
   threatModel: ExternalLink
-  /** Nota sobre STRIDE cuando el threat model no la respalda por amenaza. */
-  strideNote?: Pending
   threats: readonly CaseThreat[]
   controlGroups: readonly CaseControlGroup[]
   verification: readonly CaseCheck[]
@@ -832,7 +834,10 @@ export const projectsSection = { labels: { newTab: casesSection.labels.newTab } 
  *  - Cada control enlaza a un archivo o línea de su repositorio, en un commit
  *    fijo, o lleva su `[PENDIENTE: TODO-LUIS, ...]`.
  *  - La categoría STRIDE de una amenaza solo aparece si el threat model del
- *    repositorio la declara para esa amenaza. No se reconstruye desde el código.
+ *    repositorio la declara para esa amenaza. No se reconstruye desde el código,
+ *    y su ausencia NO se marca como pendiente: va a tasks/todo.md.
+ *  - `[PENDIENTE]` solo para un dato que impide publicar algo verdadero. Las
+ *    mejoras opcionales van a tasks/todo.md, no al sitio (dueño, 2026-11-14).
  *  - Nada de absolutos de seguridad.
  */
 export const securityCases: readonly SecurityCase[] = [
@@ -878,8 +883,6 @@ export const securityCases: readonly SecurityCase[] = [
       { es: 'Threat model, docs/SRS.md §8.1', en: 'Threat model, docs/SRS.md §8.1' },
       '81-threat-model-stride-merged'
     ),
-    strideNote:
-      '[PENDIENTE: TODO-LUIS, el threat model de CareLink (docs/SRS.md §8.1) lista amenazas pero no asigna categoría STRIDE a cada una. ¿Añadir esa columna en el repo para mostrarla aquí?]',
     threats: [
       {
         text: {
@@ -999,16 +1002,12 @@ export const securityCases: readonly SecurityCase[] = [
       },
       {
         text: {
-          es: 'CI en cada push: build con tests, Semgrep con reglas propias y gitleaks. El análisis de dependencias (OWASP dependency-check) está configurado pero hoy no bloquea: le falta la clave de la API de NVD.',
-          en: 'CI on every push: build with tests, Semgrep with custom rules and gitleaks. Dependency analysis (OWASP dependency-check) is configured but does not block today: it is missing the NVD API key.',
+          es: 'CI en cada push: build con tests, Semgrep con reglas propias y gitleaks. OWASP dependency-check configurado; hoy no bloqueante hasta configurar la clave de NVD.',
+          en: 'CI on every push: build with tests, Semgrep with custom rules and gitleaks. OWASP dependency-check configured; not blocking until the NVD key is set up.',
         },
         evidence: [
           code('carelink', '.github/workflows/ci.yml', 'L71-L101'),
           tree('carelink', '.semgrep', { es: 'Reglas Semgrep propias', en: 'Custom Semgrep rules' }),
-          {
-            label: { es: 'Gate de SCA', en: 'SCA gate' },
-            href: '[PENDIENTE: TODO-LUIS, configurar NVD_API_KEY en CareLink para que OWASP dependency-check vuelva a bloquear]',
-          },
         ],
       },
       {
@@ -1024,10 +1023,12 @@ export const securityCases: readonly SecurityCase[] = [
     ],
     links: [
       { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.carelink },
-      {
-        label: { es: 'Demo', en: 'Demo' },
-        href: '[PENDIENTE: TODO-LUIS, URL de la demo de CareLink cuando esté desplegada. Ojo: docs/SRS.md §1.6 dice que este hito no tiene demo pública a propósito]',
-      },
+      doc(
+        'carelink',
+        'docs/SRS.md',
+        { es: 'Sin demo pública, por diseño (SRS §1.6)', en: 'No public demo, by design (SRS §1.6)' },
+        '16-nature-of-the-artifact-and-limits-of-use'
+      ),
       tree('carelink', 'docs/adr', { es: 'ADRs', en: 'ADRs' }),
       doc('carelink', 'docs/portfolio/SCREENSHOTS.md', { es: 'Capturas del sistema', en: 'System screenshots' }),
     ],
@@ -1073,10 +1074,16 @@ export const securityCases: readonly SecurityCase[] = [
         'Service-role key and session seed',
       ],
     },
-    threatModel: {
-      label: { es: 'Threat model', en: 'Threat model' },
-      href: '[PENDIENTE: TODO-LUIS, ¿publicar threat model de ElevaForge? Las amenazas de abajo salen de los hallazgos F-01 a F-04 de su SRS, sin categoría STRIDE]',
+    threatsHeading: {
+      es: 'Hallazgos de la revisión de seguridad (SRS, F-01 a F-04)',
+      en: 'Security review findings (SRS, F-01 to F-04)',
     },
+    threatModel: doc(
+      'elevaforge',
+      'SRS-ElevaForge-v0.3.md',
+      { es: 'SRS v0.3, F-01 a F-04 (L80 a L84)', en: 'SRS v0.3, F-01 to F-04 (L80 to L84)' },
+      'L80-L84'
+    ),
     threats: [
       {
         ref: 'F-02',
@@ -1200,10 +1207,6 @@ export const securityCases: readonly SecurityCase[] = [
         },
         evidence: [
           code('elevaforge', '.github/workflows/ci.yml'),
-          {
-            label: { es: 'CodeQL, Semgrep, audit-ci y Lighthouse CI', en: 'CodeQL, Semgrep, audit-ci and Lighthouse CI' },
-            href: '[PENDIENTE: TODO-LUIS, el workflow de ElevaForge no incluye CodeQL, Semgrep, audit-ci ni Lighthouse CI (koa-landing sí tiene CodeQL, audit-ci y Lighthouse CI). ¿Dónde viven esos gates, o se corrige la afirmación en el sitio y el CV?]',
-          },
         ],
       },
     ],
@@ -1232,8 +1235,8 @@ export const securityCases: readonly SecurityCase[] = [
       en: 'Multi-regime e-invoicing engine, reference implementation',
     },
     summary: {
-      es: 'Facturación electrónica para ventas entre Colombia, España y Alemania, con la inmutabilidad fiscal aplicada en PostgreSQL, 13 controles de seguridad y 4 gates independientes en CI.',
-      en: 'E-invoicing for sales across Colombia, Spain and Germany, with fiscal immutability enforced in PostgreSQL, 13 security controls and 4 independent CI gates.',
+      es: 'Facturación electrónica para ventas entre Colombia, España y Alemania, con la inmutabilidad fiscal aplicada en PostgreSQL, 13 controles de seguridad y 4 gates independientes en CI. El quickstart lo levanta todo en menos de 3 minutos.',
+      en: 'E-invoicing for sales across Colombia, Spain and Germany, with fiscal immutability enforced in PostgreSQL, 13 security controls and 4 independent CI gates. The quickstart brings it all up in under 3 minutes.',
     },
     problem: {
       es: 'Una venta transfronteriza se emite bajo tres regímenes fiscales incompatibles, y un registro emitido no puede alterarse sin que se detecte ni duplicarse por una respuesta perdida. Implementación de referencia, no certificada para producción.',
@@ -1438,10 +1441,17 @@ export const securityCases: readonly SecurityCase[] = [
     ],
     links: [
       { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.tributary },
-      {
-        label: { es: 'Demo', en: 'Demo' },
-        href: '[PENDIENTE: TODO-LUIS, URL de la demo de Tributary cuando esté desplegada. Ojo: ADR-011 decide no tener demo pública. ¿Se mantiene esa decisión?]',
-      },
+      doc(
+        'tributary',
+        'README.md',
+        { es: 'Probarlo en local: quickstart en menos de 3 minutos', en: 'Try it locally: quickstart in under 3 minutes' },
+        'quickstart'
+      ),
+      doc(
+        'tributary',
+        'docs/adr/ADR-011-infrastructure-ready-not-deployed.md',
+        { es: 'Sin demo pública, por diseño (ADR-011)', en: 'No public demo, by design (ADR-011)' }
+      ),
       code('tributary', 'docs/adr/README.md'),
       doc('tributary', 'docs/portfolio.md', { es: 'Resumen técnico', en: 'Technical writeup' }),
     ],
@@ -1495,8 +1505,6 @@ export const securityCases: readonly SecurityCase[] = [
       { es: 'Threat model de la tienda (SRS)', en: 'Store threat model (SRS)' },
       'L331'
     ),
-    strideNote:
-      '[PENDIENTE: TODO-LUIS, ¿publicar threat model de KOA Landing? Solo la tienda tiene uno con STRIDE; la amenaza de bots sobre la landing no tiene categoría]',
     threats: [
       {
         ref: 'T2',
@@ -1650,10 +1658,12 @@ export const securityCases: readonly SecurityCase[] = [
       },
       { label: { es: 'Repositorio de la landing', en: 'Landing repository' }, href: REPO.koaLanding },
       { label: { es: 'Repositorio de la tienda', en: 'Store repository' }, href: REPO.koaStore },
-      {
-        label: { es: 'ADRs', en: 'ADRs' },
-        href: '[PENDIENTE: TODO-LUIS, los ADR de la tienda (ADR-004, ADR-005, ADR-008) están dentro de su SRS. ¿Enlazo esa sección o hay un documento propio?]',
-      },
+      doc(
+        'koaStore',
+        'SRS-sitio-web-demo-KOA.md',
+        { es: 'ADRs de la tienda (SRS §6.3)', en: 'Store ADRs (SRS §6.3)' },
+        '63-decisiones-de-arquitectura-adrs'
+      ),
     ],
     screenshot: {
       src: '/proyectos/koa-store.png',
@@ -1729,7 +1739,6 @@ export const skills = {
          */
         es: [
           'Spring Boot',
-          'Django',
           'React',
           'Next.js',
           'Vue.js',
@@ -1740,7 +1749,6 @@ export const skills = {
         ],
         en: [
           'Spring Boot',
-          'Django',
           'React',
           'Next.js',
           'Vue.js',

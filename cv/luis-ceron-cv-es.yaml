@@ -12,7 +12,7 @@ cv:
       username: Luisceron0
   sections:
     Perfil Profesional:
-      - 'Ingeniero de Software Full-Stack orientado a arquitectura de software y seguridad de aplicaciones. Diseño sistemas de punta a punta (React, Angular, Vue.js, Spring Boot, Django, PostgreSQL) definiendo la estructura antes del primer archivo: límites entre módulos, contratos de datos y decisiones registradas en ADRs versionados. Incorporo la seguridad desde el diseño (RBAC, JWT, modelado de amenazas, SAST y SCA en el pipeline) y despliego en AWS y Docker con CI/CD. Egresado de Ingeniería de Software de la Universidad Cooperativa de Colombia y cursando una Especialización en Seguridad de la Información en el Politécnico Grancolombiano. Bilingüe (inglés C1, EF SET), con disponibilidad para relocalización.'
+      - 'Ingeniero de Software Full-Stack orientado a arquitectura de software y seguridad de aplicaciones. Diseño sistemas de punta a punta (React, Angular, Vue.js, Spring Boot, PostgreSQL) definiendo la estructura antes del primer archivo: límites entre módulos, contratos de datos y decisiones registradas en ADRs versionados. Incorporo la seguridad desde el diseño (RBAC, JWT, modelado de amenazas, SAST y SCA en el pipeline) y despliego en AWS y Docker con CI/CD. Egresado de Ingeniería de Software de la Universidad Cooperativa de Colombia y cursando una Especialización en Seguridad de la Información en el Politécnico Grancolombiano. Bilingüe (inglés C1, EF SET), con disponibilidad para relocalización.'
 
     Experiencia:
       - company: I.P.S. San José
@@ -43,7 +43,7 @@ cv:
           - 'Cofundé un estudio de software de 3 ingenieros y asumí las decisiones de arquitectura del producto: definí los límites entre módulos y los contratos de datos, y dejé cada decisión y sus alternativas descartadas en ADRs versionados, de modo que el equipo puede revisarlas sin depender de mí.'
           - 'Dirigí la migración del sitio corporativo de Angular a Next.js 14, planificada por capas para que la estructura nueva absorbiera el contenido existente sin rehacerlo.'
           - 'Diseñé el modelo de autorización de la plataforma como deny-by-default: Row Level Security activa y sin ninguna política para el rol anónimo ni el autenticado, con todo el acceso a datos pasando por el servidor, así que la clave pública que viaja al navegador no habilita ninguna consulta.'
-          - 'Establecí un estándar de seguridad en CI que corre en cada despliegue (CodeQL, reglas propias de Semgrep, audit-ci y gates de Lighthouse CI), de forma que un hallazgo detiene la entrega en lugar de descubrirse en producción.'
+          - 'Configuré la CI del sitio con escaneo de secretos (gitleaks), lint, typecheck, tests, build y e2e en cada push; en los demos KOA, CodeQL, audit-ci y Lighthouse CI (landing) y CodeQL y npm audit (tienda).'
           - 'Construí elevaforge.com y la vertical de demostración KOA (landing y e-commerce) con un panel de administración multi-cuenta, con el que el equipo edita paquetes, proyectos y contenido sin un despliegue de por medio.'
       - company: Estación de Servicio Kennedy
         position: Contratista de TI y Sistemas
@@ -97,7 +97,7 @@ cv:
       - label: Arquitectura
         details: Diseño de sistemas escalables, Arquitectura hexagonal, Separación por capas, Diseño de APIs REST, Modelado de datos, ADRs, Aislamiento multi-tenant
       - label: Desarrollo
-        details: React, Next.js, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python
+        details: React, Next.js, Vue.js, Angular, Spring Boot, JavaScript, TypeScript, Java, Python
       - label: Seguridad y DevOps
         details: RBAC, JWT, Modelado de amenazas, Prácticas de código seguro, SAST y SCA en CI (CodeQL, Semgrep), Docker, AWS (EC2, S3), CI/CD, Seguridad de redes
       - label: Bases de Datos

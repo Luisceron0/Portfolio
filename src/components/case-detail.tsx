@@ -4,7 +4,6 @@ import { CASE_NAMES, casesSection, type Locale, type SecurityCase } from '@/cont
 import { homeAnchor } from '@/lib/locale'
 import { CASE_TONES, CaseScreenshot, StatusBadge } from '@/components/cases'
 import { EvidenceLink } from '@/components/evidence-link'
-import { PendingNote } from '@/components/pending'
 import { TONE_BG, TONE_BORDER, TONE_TEXT, type Tone } from '@/components/section'
 
 /** Bloque de la plantilla: un H2 con su regla de color y el contenido. */
@@ -147,7 +146,7 @@ export function CaseDetail({
         </ul>
       </Block>
 
-      <Block id="amenazas" title={labels.threats[locale]} tone={tone}>
+      <Block id="amenazas" title={(item.threatsHeading ?? labels.threats)[locale]} tone={tone}>
         <ol className="space-y-3">
           {item.threats.map((threat) => (
             <li
@@ -170,11 +169,6 @@ export function CaseDetail({
           <span>{labels.threatModelSource[locale]}:</span>
           <EvidenceLink link={item.threatModel} locale={locale} />
         </p>
-        {item.strideNote && (
-          <p className="mt-3">
-            <PendingNote value={item.strideNote} />
-          </p>
-        )}
       </Block>
 
       <Block id="controles" title={labels.controls[locale]} tone={tone}>

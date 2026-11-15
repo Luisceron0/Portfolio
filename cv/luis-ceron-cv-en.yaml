@@ -12,7 +12,7 @@ cv:
       username: Luisceron0
   sections:
     Professional Profile:
-      - 'Full-Stack Software Engineer focused on software architecture and application security. I design systems end to end (React, Angular, Vue.js, Spring Boot, Django, PostgreSQL), defining the structure before the first line of code: module boundaries, data contracts, and decisions recorded in versioned ADRs. I build security in from the design stage (RBAC, JWT, threat modelling, SAST and SCA in the pipeline) and deploy on AWS and Docker with CI/CD. Software Engineering graduate of Universidad Cooperativa de Colombia, currently pursuing a postgraduate specialization in Information Security at Politécnico Grancolombiano. Bilingual (English C1, EF SET), open to relocation.'
+      - 'Full-Stack Software Engineer focused on software architecture and application security. I design systems end to end (React, Angular, Vue.js, Spring Boot, PostgreSQL), defining the structure before the first line of code: module boundaries, data contracts, and decisions recorded in versioned ADRs. I build security in from the design stage (RBAC, JWT, threat modelling, SAST and SCA in the pipeline) and deploy on AWS and Docker with CI/CD. Software Engineering graduate of Universidad Cooperativa de Colombia, currently pursuing a postgraduate specialization in Information Security at Politécnico Grancolombiano. Bilingual (English C1, EF SET), open to relocation.'
 
     Experience:
       - company: I.P.S. San José
@@ -43,7 +43,7 @@ cv:
           - 'Co-founded a 3-engineer software studio and owned the product architecture decisions: I defined the module boundaries and the data contracts, and recorded every decision and its discarded alternatives in versioned ADRs, so the team can review them without depending on me.'
           - 'Led the migration of the corporate site from Angular to Next.js 14, planned layer by layer so the new structure absorbed the existing content instead of rebuilding it.'
           - 'Designed the platform authorization model as deny-by-default: Row Level Security enabled with no policy at all for the anonymous or the authenticated role, and all data access routed through the server, so the public key shipped to the browser enables no query.'
-          - 'Established a CI security baseline that runs on every deploy (CodeQL, custom Semgrep rules, audit-ci and Lighthouse CI gates), so a finding stops the delivery instead of surfacing in production.'
+          - 'Set up the site CI with secret scanning (gitleaks), lint, typecheck, tests, build and e2e on every push; on the KOA demos, CodeQL, audit-ci and Lighthouse CI (landing) and CodeQL and npm audit (store).'
           - 'Built elevaforge.com and the KOA demo vertical (landing and e-commerce) with a multi-account admin panel the team uses to edit packages, projects and content without a deploy in between.'
       - company: Estación de Servicio Kennedy
         position: IT and Systems Contractor
@@ -95,7 +95,7 @@ cv:
       - label: Architecture
         details: Scalable system design, Hexagonal architecture, Layered separation, REST API design, Data modelling, ADRs, Multi-tenant isolation
       - label: Development
-        details: React, Next.js, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python
+        details: React, Next.js, Vue.js, Angular, Spring Boot, JavaScript, TypeScript, Java, Python
       - label: Security & DevOps
         details: RBAC, JWT, Threat modelling, Secure coding practices, SAST and SCA in CI (CodeQL, Semgrep), Docker, AWS (EC2, S3), CI/CD, Network security
       - label: Databases

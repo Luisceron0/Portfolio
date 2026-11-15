@@ -14,6 +14,15 @@
 - [ ] 11. CV ES (principal) y EN: misma información, ATS, ≤2 páginas, prueba de orden del texto extraído
 - [ ] 12. Verificación completa y lista de `[PENDIENTE: TODO-LUIS, ...]` por archivo
 
+### Tareas del dueño (mejoras opcionales, no bloquean el deploy)
+Regla (2026-11-14): `[PENDIENTE]` en el sitio solo para datos que impiden publicar algo verdadero; las mejoras opcionales van aquí.
+
+- [ ] CareLink: configurar el secret `NVD_API_KEY` para que OWASP dependency-check vuelva a bloquear en CI.
+- [ ] CareLink: categorizar las amenazas con STRIDE en `docs/SRS.md` §8.1 (hoy no tienen columna de categoría).
+- [ ] ElevaForge: categorizar las amenazas con STRIDE en el repo (publicar un threat model; hoy solo existen los hallazgos F-01 a F-04 del SRS).
+- [ ] KOA Landing: categorizar las amenazas con STRIDE en el repo (no tiene threat model).
+- [ ] CareLink: grabar un recorrido corto con datos sintéticos.
+
 ---
 
 # Plan anterior: Personal Portfolio Site v1
