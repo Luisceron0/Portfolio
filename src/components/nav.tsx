@@ -72,12 +72,12 @@ export function SiteNav({ locale, path = '/' }: { locale: Locale; path?: string 
       {/*
         Header acoplado a todo el ancho, no una tarjeta flotante: nada que se
         corte en los bordes ni scroll horizontal propio. Los enlaces van en
-        línea desde `lg`; por debajo se pliegan tras el botón de menú (ver
+        línea desde `xl`; por debajo se pliegan tras el botón de menú (ver
         nav-links.tsx) y el selector de idioma queda siempre a la vista. Por
         debajo de 260px (zoom de accesibilidad alto) la marca se oculta para
         que idioma y menú sigan cabiendo.
       */}
-      <div className="relative mx-auto flex h-16 max-w-content items-center gap-3 px-3 sm:px-8 lg:gap-6">
+      <div className="relative mx-auto flex h-16 max-w-content items-center gap-3 px-3 sm:px-8 xl:gap-6">
         {/* Marca: monograma en un recorte violeta girado, como la carta de aviso. */}
         <a
           href={onHome ? '#contenido' : localeHref(locale)}
@@ -95,7 +95,7 @@ export function SiteNav({ locale, path = '/' }: { locale: Locale; path?: string 
           menuLabel={locale === 'es' ? 'Menú de secciones' : 'Sections menu'}
         />
 
-        <div className="ml-auto shrink-0 lg:ml-0">
+        <div className="ml-auto shrink-0 xl:ml-0">
           <LanguageSwitch locale={locale} path={path} />
         </div>
       </div>

@@ -80,7 +80,7 @@ test.describe('RF-108 — navegación interna', () => {
   /*
    * Historia: la nav fue antes una barra con scroll horizontal, y en dos
    * vueltas distintas dejó "Contacto" y el selector de idioma fuera de
-   * pantalla sin forma de llegar a ellos. Ahora por debajo de `lg` los
+   * pantalla sin forma de llegar a ellos. Ahora por debajo de `xl` los
    * enlaces se pliegan tras un botón de menú y el selector de idioma queda
    * siempre en la barra. La promesa que se prueba es la misma: en un viewport
    * estrecho el último enlace y el selector de idioma se alcanzan y se pulsan.

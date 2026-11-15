@@ -212,11 +212,17 @@ export const site = {
 /** RF-108/109: navegación interna y selector de idioma. */
 export const nav = {
   brand: 'LC',
+  /**
+   * Anclas con nombres buscables (SRS v1.4, RF-112), en el orden de la página.
+   * Las páginas de caso las convierten en `/#ancla` (ver `homeAnchor`).
+   */
   items: [
     { label: { es: 'Qué hago', en: 'What I do' }, href: '#seguridad' },
-    { label: { es: 'Experiencia', en: 'Experience' }, href: '#experiencia' },
     { label: { es: 'Casos', en: 'Cases' }, href: '#casos' },
+    { label: { es: 'Cómo trabajo', en: 'How I work' }, href: '#proceso' },
+    { label: { es: 'Experiencia', en: 'Experience' }, href: '#experiencia' },
     { label: { es: 'Habilidades', en: 'Skills' }, href: '#habilidades' },
+    { label: { es: 'Formación', en: 'Education' }, href: '#formacion' },
     { label: { es: 'Contacto', en: 'Contact' }, href: '#contacto' },
   ] satisfies readonly NavItem[],
   language: {

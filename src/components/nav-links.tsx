@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
  * Enlaces de sección con el "cursor" de menú de Persona: un paralelogramo que
  * marca la sección en la que está el visitante y se mueve con el scroll.
  *
- * Es UNA sola lista para los dos tamaños. En escritorio (`lg`) va en línea
+ * Es UNA sola lista para los dos tamaños. En escritorio (`xl`, desde 1280 px: con siete secciones no caben a 1024) va en línea
  * dentro de la barra; por debajo se pliega tras un botón de menú y se abre
  * como panel bajo el header. Antes la lista vivía en un contenedor con scroll
  * horizontal: en móvil había que deslizar para encontrar "Contacto", y en
@@ -64,13 +64,13 @@ export function NavLinks({
   }, [open])
 
   return (
-    <div className="order-last lg:order-none lg:flex-1">
+    <div className="order-last xl:order-none xl:flex-1">
       <button
         type="button"
         aria-expanded={open}
         aria-controls="nav-secciones"
         onClick={() => setOpen((value) => !value)}
-        className="flex h-10 w-10 items-center justify-center border-2 border-ink text-ink transition-colors hover:bg-ink hover:text-surface lg:hidden"
+        className="flex h-10 w-10 items-center justify-center border-2 border-ink text-ink transition-colors hover:bg-ink hover:text-surface xl:hidden"
       >
         <span className="sr-only">{menuLabel}</span>
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -86,7 +86,7 @@ export function NavLinks({
         id="nav-secciones"
         className={`${
           open ? 'flex' : 'hidden'
-        } absolute inset-x-0 top-full flex-col gap-1 border-b-2 border-violet bg-surface px-5 py-4 shadow-[0_12px_24px_rgba(0,0,0,0.5)] lg:static lg:flex lg:flex-row lg:items-center lg:gap-2 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none`}
+        } absolute inset-x-0 top-full flex-col gap-1 border-b-2 border-violet bg-surface px-5 py-4 shadow-[0_12px_24px_rgba(0,0,0,0.5)] xl:static xl:flex xl:flex-row xl:items-center xl:gap-2 xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none`}
       >
         {items.map((item, index) => {
           const isActive = active === item.href
@@ -96,7 +96,7 @@ export function NavLinks({
                 href={item.href}
                 onClick={() => setOpen(false)}
                 aria-current={isActive ? 'location' : undefined}
-                className={`group relative isolate inline-block whitespace-nowrap px-3 py-2.5 font-display text-lg font-black uppercase italic transition-colors duration-150 lg:px-3.5 lg:py-1.5 lg:text-sm ${
+                className={`group relative isolate inline-block whitespace-nowrap px-3 py-2.5 font-display text-lg font-black uppercase italic transition-colors duration-150 xl:px-3.5 xl:py-1.5 xl:text-sm ${
                   isActive ? 'text-surface' : 'text-ink-muted hover:text-ink'
                 }`}
               >
