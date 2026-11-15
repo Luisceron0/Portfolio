@@ -110,22 +110,6 @@ export interface ProjectImage {
   height?: number
 }
 
-export interface Project {
-  id: string
-  /** Nombre propio del proyecto: no se traduce. */
-  name: string
-  kicker: Localized
-  /** Qué problema resuelve, en lenguaje llano. Criterio RF-102. */
-  problem: Localized
-  /** Stack técnico real, como chips. Son nombres propios: no se traducen. */
-  stack: readonly string[]
-  /** Ángulo de seguridad o de ingeniería. Criterio RF-102. */
-  security: Localized
-  /** Detalles técnicos verificables, en viñetas. */
-  highlights: LocalizedList
-  screenshot: ProjectImage
-  links: readonly ExternalLink[]
-}
 
 /**
  * Identificadores de los casos de seguridad (RF-102/RF-111). Son también el
@@ -231,7 +215,7 @@ export const nav = {
   items: [
     { label: { es: 'Qué hago', en: 'What I do' }, href: '#seguridad' },
     { label: { es: 'Trayectoria', en: 'Career' }, href: '#trayectoria' },
-    { label: { es: 'Proyectos', en: 'Projects' }, href: '#proyectos' },
+    { label: { es: 'Casos', en: 'Cases' }, href: '#casos' },
     { label: { es: 'Habilidades', en: 'Skills' }, href: '#habilidades' },
     { label: { es: 'Contacto', en: 'Contact' }, href: '#contacto' },
   ] satisfies readonly NavItem[],
@@ -683,22 +667,149 @@ export const timeline = {
 } as const
 
 // ---------------------------------------------------------------------------
-// RF-102 — Proyectos (4)
+// RF-102 / RF-111 — Casos de seguridad (4)
 // ---------------------------------------------------------------------------
 
-export const projectsSection = {
-  heading: { es: 'Proyectos', en: 'Projects' } satisfies Localized,
+/**
+ * Enlaces a código: SIEMPRE a un commit fijo (permalink), nunca a `main`. Un
+ * enlace a una línea de `main` apunta a otra cosa en cuanto alguien edita el
+ * archivo; uno a un commit sigue señalando el código que respalda la frase.
+ *
+ * Commits revisados el 2026-11-14 (clon de solo lectura, sin tocar los repos).
+ * Para actualizar un caso: volver a leer el archivo en el commit nuevo, comprobar
+ * que las líneas siguen diciendo lo mismo y cambiar el hash aquí.
+ */
+const REPO = {
+  carelink: 'https://github.com/Luisceron0/CareLink',
+  tributary: 'https://github.com/Luisceron0/Tributary',
+  elevaforge: 'https://github.com/Luisceron0/ElevaForge',
+  koaLanding: 'https://github.com/luisCeron0Portfolio/koa-landing',
+  koaStore: 'https://github.com/luisCeron0Portfolio/koa-store',
+} as const
+
+const COMMIT = {
+  carelink: 'b61a8aa54785235519e52a8d2aedee20c1ecea5f',
+  tributary: '725be9809f59c09929675db439db380fcdd0f621',
+  elevaforge: '5be5d7d3e4bec4718aaa7472baa37dad201d6a47',
+  koaLanding: '56102f12d296e85b9379c55b5b0018364c801977',
+  koaStore: '6959769afc9a635d8c07f4a4b4c6956b9b198c56',
+} as const
+
+type RepoKey = keyof typeof REPO
+
+/**
+ * Enlace a un archivo (y opcionalmente a un rango de líneas) en su commit fijo.
+ * La etiqueta es el nombre del archivo y las líneas: igual en los dos idiomas,
+ * porque es una referencia de código, no prosa.
+ */
+function code(repo: RepoKey, path: string, lines?: string): ExternalLink {
+  const file = path.split('/').pop() ?? path
+  const label = lines ? `${file} (${lines.replace(/-/g, ' a ')})` : file
+  const labelEn = lines ? `${file} (${lines.replace(/-/g, ' to ')})` : file
+  return {
+    label: { es: label, en: labelEn },
+    href: `${REPO[repo]}/blob/${COMMIT[repo]}/${path}${lineAnchor(path, lines)}`,
+  }
+}
+
+/**
+ * Ancla de línea. En un Markdown, GitHub muestra el documento renderizado y
+ * el `#L12` no apunta a nada: con `?plain=1` muestra el texto con números de
+ * línea y el ancla funciona.
+ */
+function lineAnchor(path: string, lines?: string): string {
+  if (!lines) return ''
+  return path.endsWith('.md') ? `?plain=1#${lines}` : `#${lines}`
+}
+
+/** Enlace a una carpeta del repositorio en su commit fijo. */
+function tree(repo: RepoKey, path: string, label: Localized): ExternalLink {
+  return { label, href: `${REPO[repo]}/tree/${COMMIT[repo]}/${path}` }
+}
+
+/** Enlace a un documento del repo con etiqueta propia (no un nombre de archivo). */
+function doc(repo: RepoKey, path: string, label: Localized, anchor?: string): ExternalLink {
+  const suffix = !anchor ? '' : /^L\d/.test(anchor) ? lineAnchor(path, anchor) : `#${anchor}`
+  return { label, href: `${REPO[repo]}/blob/${COMMIT[repo]}/${path}${suffix}` }
+}
+
+export type CaseStatus = 'produccion' | 'demo' | 'repositorio'
+
+/** Una amenaza del caso. `stride` solo si el threat model del repo la declara. */
+export interface CaseThreat {
+  /** Identificador en el threat model del repo (T-001, T2...), si lo tiene. */
+  ref?: string
+  text: Localized
+  /** Categoría STRIDE tal como la escribe el threat model del repo. */
+  stride?: string
+}
+
+/** Un control elegido, por qué, y dónde vive en el código. */
+export interface CaseControl {
+  title: Localized
+  why: Localized
+  evidence: readonly ExternalLink[]
+}
+
+/** Grupo de controles. KOA usa dos con título; los demás, uno sin título. */
+export interface CaseControlGroup {
+  heading?: Localized
+  controls: readonly CaseControl[]
+}
+
+/** Una verificación: qué se comprobó y con qué evidencia. */
+export interface CaseCheck {
+  text: Localized
+  evidence: readonly ExternalLink[]
+}
+
+export interface SecurityCase {
+  slug: CaseSlug
+  kicker: Localized
+  /** Una frase para la tarjeta de la home. */
+  summary: Localized
+  /** El problema, en una frase. */
+  problem: Localized
+  stack: readonly string[]
+  status: CaseStatus
+  dataFlow: Localized
+  assets: LocalizedList
+  /** Dónde está el threat model del repo, o el pendiente si no existe. */
+  threatModel: ExternalLink
+  /** Nota sobre STRIDE cuando el threat model no la respalda por amenaza. */
+  strideNote?: Pending
+  threats: readonly CaseThreat[]
+  controlGroups: readonly CaseControlGroup[]
+  verification: readonly CaseCheck[]
+  links: readonly ExternalLink[]
+  screenshot: ProjectImage
+}
+
+export const casesSection = {
+  heading: { es: 'Casos de seguridad', en: 'Security cases' } satisfies Localized,
   intro: {
-    es: 'Cinco sistemas que construí de principio a fin. Cada uno enlaza a su código y, cuando existe, al sitio en vivo: nada de lo que afirmo aquí queda sin respaldo.',
-    en: 'Five systems I built end to end. Each one links to its code and, where it exists, to the live site: nothing I claim here is left unbacked.',
+    es: 'Cuatro sistemas que diseñé y construí. Cada caso sigue la misma plantilla: problema, flujo de datos, amenazas, controles enlazados al código que los implementa y cómo se verificaron.',
+    en: 'Four systems I designed and built. Every case follows the same template: problem, data flow, threats, controls linked to the code that implements them, and how they were verified.',
   } satisfies Localized,
-  /** Etiquetas reutilizadas dentro de cada tarjeta. */
   labels: {
-    technologies: { es: 'Tecnologías', en: 'Technologies' } satisfies Localized,
-    securityAngle: {
-      es: 'El ángulo de seguridad',
-      en: 'The security angle',
-    } satisfies Localized,
+    problem: { es: 'Problema', en: 'Problem' } satisfies Localized,
+    stack: { es: 'Stack', en: 'Stack' } satisfies Localized,
+    status: { es: 'Estado', en: 'Status' } satisfies Localized,
+    statuses: {
+      produccion: { es: 'En producción', en: 'In production' },
+      demo: { es: 'Demo en vivo', en: 'Live demo' },
+      repositorio: { es: 'Repositorio', en: 'Repository' },
+    } satisfies Record<CaseStatus, Localized>,
+    dataFlow: { es: 'Flujo de datos', en: 'Data flow' } satisfies Localized,
+    assets: { es: 'Activos sensibles', en: 'Sensitive assets' } satisfies Localized,
+    threats: { es: 'Amenazas principales', en: 'Main threats' } satisfies Localized,
+    threatModelSource: { es: 'Fuente', en: 'Source' } satisfies Localized,
+    controls: { es: 'Controles elegidos y por qué', en: 'Chosen controls and why' } satisfies Localized,
+    evidence: { es: 'Código', en: 'Code' } satisfies Localized,
+    verification: { es: 'Cómo se verificó', en: 'How it was verified' } satisfies Localized,
+    links: { es: 'Enlaces', en: 'Links' } satisfies Localized,
+    readCase: { es: 'Ver el caso completo', en: 'Read the full case' } satisfies Localized,
+    backToCases: { es: 'Volver a los casos', en: 'Back to the cases' } satisfies Localized,
     newTab: {
       es: ' (se abre en una pestaña nueva)',
       en: ' (opens in a new tab)',
@@ -706,101 +817,635 @@ export const projectsSection = {
   },
 } as const
 
-export const projects: readonly Project[] = [
+/**
+ * Compatibilidad: componentes que solo necesitan el aviso de "pestaña nueva".
+ * Es el mismo texto que `casesSection.labels.newTab`.
+ */
+export const projectsSection = { labels: { newTab: casesSection.labels.newTab } } as const
+
+/**
+ * Los cuatro casos, en el orden de la página (decisión del dueño, 2026-11-14):
+ * CareLink primero, porque es el que mejor muestra flujo de datos, criptografía
+ * y control de acceso.
+ *
+ * Reglas de este bloque:
+ *  - Cada control enlaza a un archivo o línea de su repositorio, en un commit
+ *    fijo, o lleva su `[PENDIENTE: TODO-LUIS, ...]`.
+ *  - La categoría STRIDE de una amenaza solo aparece si el threat model del
+ *    repositorio la declara para esa amenaza. No se reconstruye desde el código.
+ *  - Nada de absolutos de seguridad.
+ */
+export const securityCases: readonly SecurityCase[] = [
   {
-    id: 'carelink',
-    name: 'CareLink',
+    slug: 'carelink',
     kicker: {
       es: 'Plataforma clínica multi-tenant, implementación de referencia',
       en: 'Multi-tenant clinical platform, reference implementation',
     },
-    // Fuente: README de github.com/Luisceron0/CareLink (repo público).
+    summary: {
+      es: 'Historia clínica, triage y coordinación entre especialistas para varias instituciones sobre una misma base, con el control de acceso y el cifrado aplicados en la base de datos y en cada petición.',
+      en: 'Clinical history, triage and specialist coordination for several institutions on a shared database, with access control and encryption enforced in the database and on every request.',
+    },
     problem: {
-      es: 'CareLink gestiona historia clínica, triage y coordinación entre especialistas sobre una misma base de datos, con dos garantías sin excepción: la inmutabilidad de todo registro firmado, incluso frente a un administrador con acceso directo a la base de datos, y la restricción del historial clínico al personal a cargo de cada paciente.',
-      en: 'CareLink manages clinical history, triage and coordination between specialists on a shared database, under two guarantees with no exceptions: the immutability of every signed record, even against an administrator with direct database access, and the restriction of clinical history to the staff responsible for each patient.',
+      es: 'Varias instituciones de salud comparten una base de datos, y ningún registro clínico firmado puede editarse ni ningún especialista puede leer pacientes que no le corresponden.',
+      en: 'Several healthcare institutions share one database, and no signed clinical record may be edited and no specialist may read patients outside their care.',
     },
     stack: ['Java', 'Spring Boot', 'PostgreSQL 16', 'React 18', 'Vite', 'Docker', 'Flyway'],
-    security: {
-      es: 'La inmutabilidad se aplica en la base de datos, no en la capa de aplicación: un trigger de PostgreSQL rechaza cualquier UPDATE sobre un encuentro ya firmado, incluso si el acceso ocurre fuera de la API, mediante un cliente SQL o una migración. El control queda así en la capa que ningún camino de acceso puede evitar. La captura documenta el intento rechazado con un código 409.',
-      en: 'Immutability is enforced at the database layer, not in the application: a PostgreSQL trigger rejects any UPDATE on an already signed encounter, regardless of whether access occurs outside the API, through a SQL client or a migration. The control therefore sits at the layer no access path can bypass. The screenshot documents the rejected attempt with a 409 status code.',
+    status: 'repositorio',
+    dataFlow: {
+      es: 'Navegador (SPA en React) → API en Spring Boot: el filtro JWT valida la firma RS256 antes de leer el payload → casos de uso que validan institución (tenant) y servicio en cada petición → adaptador de cifrado AES-256-GCM → PostgreSQL con un schema por institución y una bitácora de auditoría append-only.',
+      en: 'Browser (React SPA) → Spring Boot API: the JWT filter validates the RS256 signature before reading the payload → use cases that validate institution (tenant) and service on every request → AES-256-GCM encryption adapter → PostgreSQL with one schema per institution and an append-only audit log.',
     },
-    highlights: {
+    assets: {
       es: [
-        'Aislamiento multi-tenant por schema: cada institución vive en su propio schema de PostgreSQL, y el filtro por servicio va dentro del WHERE de la consulta, no aplicado sobre filas ya traídas a memoria. La distinción no es de estilo: filtrar después significa que los datos ya salieron de la base.',
-        'El permiso de un especialista sobre un paciente nace de una interconsulta y se revalida en cada petición. El mismo JWT responde 200 mientras la interconsulta está abierta y 403 en cuanto se cierra, sin que el usuario vuelva a iniciar sesión: la autorización vive en el estado del sistema, no dentro del token.',
-        'El motor de conocimiento agrega datos clínicos para consulta estadística y descarta cualquier resultado que se apoye en menos de cinco pacientes distintos. La supresión ocurre dentro de la propia consulta, así que el recuento pequeño nunca llega a formar parte de la respuesta: es la defensa contra la re-identificación por cruce de agregados.',
-        'La información de salud se cifra con AES-256-GCM, con IV aleatorio en cada operación y clave derivada por tenant. Un volcado de la base sin las claves no es aprovechable, y comprometer un tenant no arrastra al resto.',
-        'Auditoría de seguridad antes de darlo por terminado, no después: reglas Semgrep propias validadas primero contra código deliberadamente vulnerable (una regla que nunca se ha visto fallar en rojo no demuestra nada), sqlmap contra la instancia real, y un hallazgo de severidad alta corregido y documentado con evidencia.',
+        'Información de salud (notas clínicas), cifrada en reposo',
+        'Encuentros clínicos firmados',
+        'Bitácora de auditoría',
+        'Clave maestra de cifrado y claves derivadas por institución',
+        'Par de claves RS256 de los JWT',
       ],
       en: [
-        'Multi-tenant isolation by schema: each institution lives in its own PostgreSQL schema, and the service filter goes inside the query WHERE clause, not applied to rows already fetched into memory. The distinction is not stylistic: filtering afterwards means the data already left the database.',
-        'A specialist’s permission over a patient comes from a referral and is revalidated on every request. The same JWT answers 200 while the referral is open and 403 the moment it closes, with no re-login: authorization lives in the state of the system, not inside the token.',
-        'The knowledge engine aggregates clinical data for statistical queries and drops any result resting on fewer than five distinct patients. The suppression happens inside the query itself, so the small count never becomes part of the response: it is the defence against re-identification by cross-referencing aggregates.',
-        'Health information is encrypted with AES-256-GCM, with a random IV per operation and a key derived per tenant. A database dump without the keys is not usable, and compromising one tenant does not drag the rest with it.',
-        'Security audit before calling it done, not after: custom Semgrep rules validated first against deliberately vulnerable code (a rule never seen failing in red proves nothing), sqlmap against the real instance, and one high severity finding fixed and documented with evidence.',
+        'Health information (clinical notes), encrypted at rest',
+        'Signed clinical encounters',
+        'Audit log',
+        'Master encryption key and per-institution derived keys',
+        'RS256 JWT key pair',
       ],
     },
+    threatModel: doc(
+      'carelink',
+      'docs/SRS.md',
+      { es: 'Threat model, docs/SRS.md §8.1', en: 'Threat model, docs/SRS.md §8.1' },
+      '81-threat-model-stride-merged'
+    ),
+    strideNote:
+      '[PENDIENTE: TODO-LUIS, el threat model de CareLink (docs/SRS.md §8.1) lista amenazas pero no asigna categoría STRIDE a cada una. ¿Añadir esa columna en el repo para mostrarla aquí?]',
+    threats: [
+      {
+        text: {
+          es: 'Acceso a información de salud de otra institución por IDOR en la API.',
+          en: 'Access to another institution’s health information through IDOR in the API.',
+        },
+      },
+      {
+        text: {
+          es: 'Un especialista conserva el acceso al paciente después de cerrarse la interconsulta.',
+          en: 'A specialist keeps access to the patient after the referral closes.',
+        },
+      },
+      {
+        text: {
+          es: 'Re-identificación de pacientes cruzando agregados del motor de conocimiento.',
+          en: 'Patient re-identification by cross-referencing knowledge engine aggregates.',
+        },
+      },
+      {
+        text: {
+          es: 'Alteración de la bitácora de auditoría con acceso directo a la base.',
+          en: 'Audit log tampering through direct database access.',
+        },
+      },
+      {
+        text: {
+          es: 'JWT manipulado para escalar de rol.',
+          en: 'Tampered JWT used to escalate role.',
+        },
+      },
+    ],
+    controlGroups: [
+      {
+        controls: [
+          {
+            title: {
+              es: 'Trigger de PostgreSQL que bloquea la edición de encuentros firmados',
+              en: 'PostgreSQL trigger that blocks edits to signed encounters',
+            },
+            why: {
+              es: 'La regla vive en la base: rechaza el UPDATE aunque llegue desde un cliente SQL o una migración, no solo desde la API.',
+              en: 'The rule lives in the database: it rejects the UPDATE even when it comes from a SQL client or a migration, not only from the API.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/resources/db/tenant/tenant_template.sql', 'L127-L140'),
+            ],
+          },
+          {
+            title: {
+              es: 'Cifrado AES-256-GCM con clave derivada por institución',
+              en: 'AES-256-GCM encryption with a per-institution derived key',
+            },
+            why: {
+              es: 'IV aleatorio en cada operación y una clave por institución derivada con HMAC-SHA256: un volcado sin claves no se lee, y la clave de una institución no abre otra. Deuda declarada en el repo: la clave maestra vive en una variable de entorno, no en un KMS.',
+              en: 'Random IV per operation and a per-institution key derived with HMAC-SHA256: a dump without keys cannot be read, and one institution’s key does not open another. Debt stated in the repo: the master key lives in an environment variable, not in a KMS.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/encryption/AesGcmEncryptionService.java', 'L45'),
+              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/encryption/AesGcmEncryptionService.java', 'L116-L118'),
+            ],
+          },
+          {
+            title: {
+              es: 'Autorización revalidada en cada petición contra el estado de la interconsulta',
+              en: 'Authorization revalidated on every request against the referral status',
+            },
+            why: {
+              es: 'El permiso del especialista es un EXISTS sobre la interconsulta abierta, sin caché: cerrarla revoca el acceso en la siguiente petición, sin esperar a que caduque el token.',
+              en: 'The specialist’s permission is an EXISTS over the open referral, with no cache: closing it revokes access on the next request, without waiting for the token to expire.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/persistence/JdbcInterconsultationRepository.java', 'L44-L63'),
+            ],
+          },
+          {
+            title: {
+              es: 'Supresión de agregados clínicos con menos de 5 pacientes distintos',
+              en: 'Suppression of clinical aggregates with fewer than 5 distinct patients',
+            },
+            why: {
+              es: 'El umbral va dentro de la consulta (HAVING COUNT(DISTINCT patient_id)), así que el grupo pequeño nunca sale de la base: defensa contra la re-identificación.',
+              en: 'The threshold sits inside the query (HAVING COUNT(DISTINCT patient_id)), so the small group never leaves the database: a defence against re-identification.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/persistence/JdbcKnowledgeEngineRepository.java', 'L89-L91'),
+            ],
+          },
+          {
+            title: {
+              es: 'Bitácora de auditoría append-only',
+              en: 'Append-only audit log',
+            },
+            why: {
+              es: 'Triggers que rechazan UPDATE y DELETE sobre la bitácora: quién hizo qué queda registrado aunque alguien tenga acceso a la base.',
+              en: 'Triggers that reject UPDATE and DELETE on the log: who did what stays recorded even for someone with database access.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/resources/db/tenant/tenant_template.sql', 'L63-L76'),
+            ],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: 'Tests de integración contra PostgreSQL real: un encuentro firmado rechaza la edición, el acceso se revoca al cerrar la interconsulta, una columna con información de salud no se lee en claro y un paciente es invisible entre servicios.',
+          en: 'Integration tests against real PostgreSQL: a signed encounter rejects edits, access is revoked when the referral closes, a health information column cannot be read in plain text and a patient is invisible across services.',
+        },
+        evidence: [
+          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/ClinicalEncounterLifecycleIT.java', 'L65'),
+          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/InterconsultationLifecycleIT.java', 'L57'),
+          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/infrastructure/encryption/PhiColumnCannotBeReadAsPlaintextIT.java'),
+          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/ServiceScopeIsolationIT.java', 'L71'),
+        ],
+      },
+      {
+        text: {
+          es: 'CI en cada push: build con tests, Semgrep con reglas propias y gitleaks. El análisis de dependencias (OWASP dependency-check) está configurado pero hoy no bloquea: le falta la clave de la API de NVD.',
+          en: 'CI on every push: build with tests, Semgrep with custom rules and gitleaks. Dependency analysis (OWASP dependency-check) is configured but does not block today: it is missing the NVD API key.',
+        },
+        evidence: [
+          code('carelink', '.github/workflows/ci.yml', 'L71-L101'),
+          tree('carelink', '.semgrep', { es: 'Reglas Semgrep propias', en: 'Custom Semgrep rules' }),
+          {
+            label: { es: 'Gate de SCA', en: 'SCA gate' },
+            href: '[PENDIENTE: TODO-LUIS, configurar NVD_API_KEY en CareLink para que OWASP dependency-check vuelva a bloquear]',
+          },
+        ],
+      },
+      {
+        text: {
+          es: 'Dos auditorías documentadas contra el sistema en ejecución: SAST, sqlmap y barrido de secretos; después, una batería manual de autorización (IDOR, bypass de rol, JWT, límite de intentos) que encontró y corrigió un hallazgo de severidad alta.',
+          en: 'Two documented audits against the running system: SAST, sqlmap and a secrets sweep; then a manual authorization battery (IDOR, role bypass, JWT, rate limiting) that found and fixed one high severity finding.',
+        },
+        evidence: [
+          code('carelink', 'docs/security/AUDIT-2026-08-06.md'),
+          code('carelink', 'docs/security/AUDIT-2026-08-07.md'),
+        ],
+      },
+    ],
+    links: [
+      { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.carelink },
+      {
+        label: { es: 'Demo', en: 'Demo' },
+        href: '[PENDIENTE: TODO-LUIS, URL de la demo de CareLink cuando esté desplegada. Ojo: docs/SRS.md §1.6 dice que este hito no tiene demo pública a propósito]',
+      },
+      tree('carelink', 'docs/adr', { es: 'ADRs', en: 'ADRs' }),
+      doc('carelink', 'docs/portfolio/SCREENSHOTS.md', { es: 'Capturas del sistema', en: 'System screenshots' }),
+    ],
     screenshot: {
-      // Descargada del repo público de CareLink (asset público, no se tocó el repo).
       src: '/proyectos/carelink.png',
       alt: {
         es: 'Pantalla de CareLink mostrando el intento de editar un encuentro clínico ya firmado, rechazado con un error 409 por un trigger de la base de datos.',
         en: 'CareLink screen showing an attempt to edit an already signed clinical encounter, rejected with a 409 error by a database trigger.',
       },
     },
-    links: [
-      {
-        label: {
-          es: 'Ver las capturas del sistema',
-          en: 'See the system screenshots',
-        },
-        href: 'https://github.com/Luisceron0/CareLink/blob/main/docs/portfolio/SCREENSHOTS.md',
-      },
-      {
-        label: { es: 'Código en GitHub', en: 'Code on GitHub' },
-        href: 'https://github.com/Luisceron0/CareLink',
-      },
-    ],
   },
   {
-    id: 'tributary',
-    name: 'Tributary',
+    slug: 'elevaforge',
     kicker: {
-      es: 'Motor de facturación electrónica multi-régimen, implementación de referencia',
-      en: 'Multi-regime e-invoicing engine, reference implementation',
+      es: 'Sitio y panel de administración de un estudio de software',
+      en: 'Site and admin panel for a software studio',
     },
-    // Fuente: README y docs/portfolio.md de github.com/Luisceron0/Tributary.
+    summary: {
+      es: 'Sitio en producción con panel de administración multi-cuenta, con autorización deny-by-default en la base de datos y todo el acceso a datos pasando por el servidor.',
+      en: 'Production site with a multi-account admin panel, deny-by-default authorization in the database and all data access routed through the server.',
+    },
     problem: {
-      es: 'Tributary resuelve la incompatibilidad técnica entre los regímenes fiscales que activa una venta transfronteriza: Colombia valida la factura ante la DIAN antes de que exista legalmente, España exige una cadena de registros enlazados por hash que custodia el emisor, y Alemania exige un documento estructurado entregado al comprador. El dominio se modela una sola vez, de forma neutral a los tres regímenes, en lugar de adaptarse al primero implementado y tratar los demás como casos especiales. Es una implementación de referencia contra especificaciones públicas: no está certificada bajo ningún régimen ni habilitada para emisión en producción, condición declarada explícitamente en el repositorio.',
-      en: 'Tributary resolves the technical incompatibility between the fiscal regimes triggered by a single cross-border sale: Colombia clears the invoice with the tax authority before it legally exists, Spain requires a hash-chained record kept by the issuer, and Germany requires a structured document handed to the buyer. The domain is modelled once, neutral to all three regimes, rather than shaped around whichever was implemented first with the rest treated as special cases. This is a reference implementation built against public specifications: it is not certified under any regime and is not enabled for production issuance, a condition stated explicitly in the repository.',
+      es: 'El equipo edita el contenido del sitio desde un panel, y ni ese panel ni la clave pública que viaja al navegador deben convertirse en la vía de acceso a los datos de clientes potenciales.',
+      en: 'The team edits the site content from a panel, and neither that panel nor the public key shipped to the browser may become the way into prospective clients’ data.',
     },
-    stack: ['Java 21', 'Spring Boot', 'PostgreSQL 16', 'Flyway', 'React 19', 'Testcontainers', 'Docker'],
-    security: {
-      es: 'La inmutabilidad de un registro fiscal es una garantía de la base de datos, no una promesa de la aplicación. Un trigger de PostgreSQL rechaza cualquier UPDATE y cualquier DELETE sobre los registros fiscales y la bitácora de auditoría, de modo que la regla se cumple incluso ante una sesión de psql con credenciales válidas y sin código de aplicación involucrado: una corrección es una fila nueva que referencia a la anterior, nunca una edición sobre la existente. Ante la desactivación del trigger y la alteración de una fila, el verificador del sistema recalcula la cadena de hashes e identifica el registro exacto donde la verificación falla, condición documentada en la captura.',
-      en: 'The immutability of a fiscal record is a database guarantee, not an application promise. A PostgreSQL trigger rejects every UPDATE and DELETE on fiscal records and the audit log, so the rule holds even against a psql session with valid credentials and no application code involved: a correction is a new row referencing the previous one, never an edit to the existing record. Should the trigger be disabled and a row altered regardless, the system’s verifier recomputes the hash chain and identifies the exact record where verification fails, a condition documented in the screenshot.',
+    stack: ['Next.js', 'TypeScript', 'Supabase', 'PostgreSQL', 'Upstash', 'Vercel'],
+    status: 'produccion',
+    dataFlow: {
+      es: 'Navegador → rutas de servidor de Next.js (sesión de administrador en cookie firmada con HMAC, validación de origen, límite por IP) → Supabase con la service-role key, solo en el servidor. La anon key que llega al navegador no tiene ninguna política que le dé acceso.',
+      en: 'Browser → Next.js server routes (admin session in an HMAC-signed cookie, origin validation, per-IP limit) → Supabase with the service-role key, server-side only. The anon key shipped to the browser has no policy that grants it access.',
     },
-    highlights: {
+    assets: {
       es: [
-        'El hecho de negocio se modela una sola vez sobre EN 16931, la norma europea de facturación, incluso para el régimen colombiano que no la exige. Cada país es un adaptador delgado en el borde, así que añadir un cuarto régimen es escribir un adaptador contra un puerto que ya existe, no tocar el modelo del que dependen los otros tres. ArchUnit rompe la compilación si el dominio llega a importar Spring, Jackson o JDBC.',
-        'Idempotencia por clave determinista derivada de la propia venta, con una consulta de reconciliación obligatoria antes de cualquier reintento. Una respuesta perdida después de una emisión real no se arregla reintentando (duplica un documento legal) ni dejando de reintentar (pierde uno legítimo). Verificado matando el proceso a mitad de una emisión contra el sandbox real y comprobando al reiniciar que existe exactamente un documento.',
-        'Crypto-shredding para conciliar dos obligaciones que se contradicen sobre la misma fila, el borrado del RGPD y la retención fiscal: los datos personales se cifran con una clave por titular, y borrar destruye la clave, no la fila. El registro fiscal sigue íntegro y verificable, y el dato personal queda como texto cifrado irrecuperable.',
-        'El adaptador español construye y encadena los registros y genera el QR del RD 1007/2023, pero no remite nada a la AEAT, porque eso exige un certificado cualificado que este proyecto no tiene. El QR apunta al verificador del propio sistema, y un test comprueba que ningún host de la AEAT aparece jamás en el QR generado: nada de lo que produce el sistema afirma un envío que no ocurrió.',
-        'Trece controles de seguridad, cada uno con su herramienta, su comando y un criterio binario de aprobado o fallado: sqlmap contra una instancia real, XXE rechazado en el único sitio del proyecto donde se instancia un parser de XML, tokens con alg none y tokens HS256 firmados con los bytes de la clave pública RSA rechazados con 401, y el validador oficial alemán anclado por checksum antes de desempaquetarlo. En CI son cuatro gates independientes, incluido gitleaks sobre todo el historial y no solo sobre el diff.',
-        'No hay demo público, y es una decisión registrada, no un cabo suelto: la infraestructura de producción está construida y verificada (Caddy con TLS automático, unidades systemd, rotación de claves programada), simplemente no está corriendo en ningún sitio. Un demo caído o dormido cuando alguien lo abre es peor que un repositorio honesto sobre no tener uno, y el quickstart levanta el stack completo con Docker Compose en menos de tres minutos.',
+        'Solicitudes de contacto (datos de clientes potenciales)',
+        'Cuentas de administrador',
+        'Contenido editable del sitio',
+        'Service-role key y semilla de sesión',
       ],
       en: [
-        'The business fact is modelled once on EN 16931, the European invoicing standard, even for the Colombian regime, which does not require it. Each country is a thin adapter at the edge, so adding a fourth regime means writing an adapter against a port that already exists, not touching the model the other three depend on. ArchUnit fails the build if the domain ever imports Spring, Jackson or JDBC.',
-        'Idempotency through a deterministic key derived from the sale itself, with a mandatory reconciliation query before any retry. A response lost after a real issuance cannot be fixed by retrying (it duplicates a legal document) or by not retrying (it loses a legitimate one). Verified by killing the process mid-issuance against the real sandbox and confirming on restart that exactly one document exists.',
-        'Crypto-shredding to reconcile two obligations that contradict each other on the same row, GDPR erasure and fiscal retention: personal data is encrypted under a per-subject key, and erasing destroys the key, not the row. The fiscal record stays intact and verifiable, and the personal data becomes unrecoverable ciphertext.',
-        'The Spanish adapter builds and chains the records and generates the regulator’s QR code, but submits nothing to the tax authority, because that requires a qualified certificate this project does not hold. The QR points at the system’s own verifier, and a test asserts that no tax-authority hostname ever appears in the generated QR: nothing the system produces claims a submission that did not happen.',
-        'Thirteen security controls, each with its tool, its command and a binary pass or fail criterion: sqlmap against a real running instance, XXE rejected in the single place in the project where an XML parser is instantiated, alg none tokens and HS256 tokens signed with the RSA public key’s own bytes both rejected with 401, and the official German validator pinned by checksum before it is ever unpacked. In CI that is four independent gates, including gitleaks across the full history and not just the diff.',
-        'There is no public demo, and that is a recorded decision rather than a loose end: the production infrastructure is built and verified (Caddy with automatic TLS, systemd units, scheduled key rotation), it is simply not running anywhere. A demo that is down or cold-starting when someone opens it is worse than a repository that is honest about not having one, and the quickstart brings the whole stack up with Docker Compose in under three minutes.',
+        'Contact requests (prospective client data)',
+        'Admin accounts',
+        'Editable site content',
+        'Service-role key and session seed',
       ],
     },
+    threatModel: {
+      label: { es: 'Threat model', en: 'Threat model' },
+      href: '[PENDIENTE: TODO-LUIS, ¿publicar threat model de ElevaForge? Las amenazas de abajo salen de los hallazgos F-01 a F-04 de su SRS, sin categoría STRIDE]',
+    },
+    threats: [
+      {
+        ref: 'F-02',
+        text: {
+          es: 'Lectura de las solicitudes de contacto con la anon key que viaja al navegador.',
+          en: 'Reading contact requests with the anon key shipped to the browser.',
+        },
+      },
+      {
+        ref: 'F-01',
+        text: {
+          es: 'Límite de solicitudes evadible falsificando la IP de origen.',
+          en: 'Rate limit bypassed by spoofing the source IP.',
+        },
+      },
+      {
+        ref: 'F-03',
+        text: {
+          es: 'Sesión de administrador firmada con una semilla acoplada a la service-role key.',
+          en: 'Admin session signed with a seed coupled to the service-role key.',
+        },
+      },
+      {
+        ref: 'F-04',
+        text: {
+          es: 'Credencial de administrador heredada que sigue activa tras migrar a cuentas multi-admin.',
+          en: 'Legacy admin credential still active after moving to multi-admin accounts.',
+        },
+      },
+    ],
+    controlGroups: [
+      {
+        controls: [
+          {
+            title: {
+              es: 'Row Level Security deny-by-default',
+              en: 'Deny-by-default Row Level Security',
+            },
+            why: {
+              es: 'RLS activa y sin ninguna política para los roles anon ni authenticated: lo que no está concedido no existe. Todo el acceso pasa por el servidor con la service-role key, así que la clave pública no habilita ninguna consulta.',
+              en: 'RLS enabled with no policy at all for the anon or authenticated roles: what is not granted does not exist. All access goes through the server with the service-role key, so the public key enables no query.',
+            },
+            evidence: [
+              code('elevaforge', 'supabase/01-schema-and-rls.sql', 'L1-L13'),
+              code('elevaforge', 'supabase/01-schema-and-rls.sql', 'L61-L63'),
+            ],
+          },
+          {
+            title: {
+              es: 'Sesión propia firmada con HMAC y semilla dedicada',
+              en: 'Own HMAC-signed session with a dedicated seed',
+            },
+            why: {
+              es: 'La semilla de sesión es un secreto propio, sin respaldo en la service-role key, y las comparaciones de credenciales y firmas son en tiempo constante.',
+              en: 'The session seed is its own secret, with no fallback to the service-role key, and credential and signature comparisons are constant-time.',
+            },
+            evidence: [code('elevaforge', 'lib/security/admin-session.ts', 'L22-L55')],
+          },
+          {
+            title: {
+              es: 'Límite por IP con la IP que entrega la plataforma',
+              en: 'Per-IP limit using the IP the platform provides',
+            },
+            why: {
+              es: 'La IP sale de la plataforma de despliegue, no de una cabecera que controle el cliente, y el contador vive en Upstash Redis.',
+              en: 'The IP comes from the hosting platform, not from a client-controlled header, and the counter lives in Upstash Redis.',
+            },
+            evidence: [
+              code('elevaforge', 'lib/security/rate-limit.ts', 'L158'),
+              code('elevaforge', 'lib/security/client-ip.ts'),
+            ],
+          },
+          {
+            title: {
+              es: 'Validación de origen en las rutas que modifican datos',
+              en: 'Origin validation on data-changing routes',
+            },
+            why: {
+              es: 'Defensa contra CSRF en el panel: una petición de otro origen se rechaza antes de tocar los datos.',
+              en: 'CSRF defence for the panel: a request from another origin is rejected before it touches the data.',
+            },
+            evidence: [code('elevaforge', 'lib/security/csrf.ts', 'L22')],
+          },
+          {
+            title: {
+              es: 'Aviso de arranque si quedan credenciales heredadas',
+              en: 'Startup warning when legacy credentials remain',
+            },
+            why: {
+              es: 'Si coexisten administradores en la base y la credencial antigua por variable de entorno, el arranque lo avisa en lugar de dejarla pasar en silencio.',
+              en: 'If database admins and the old environment-variable credential coexist, startup warns about it instead of letting it pass silently.',
+            },
+            evidence: [code('elevaforge', 'lib/security/admin-bootstrap-check.ts', 'L18')],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: 'Prueba TC-06 contra el proyecto real de Supabase con la anon key (2026-07-22): solicitudes de contacto devuelve una lista vacía, y administradores y contenido devuelven permiso denegado.',
+          en: 'TC-06 test against the real Supabase project with the anon key (2026-07-22): contact requests return an empty list, and admins and content return permission denied.',
+        },
+        evidence: [doc('elevaforge', 'SRS-ElevaForge-v0.3.md', { es: 'SRS v0.3, F-02 (L82)', en: 'SRS v0.3, F-02 (L82)' }, 'L82')],
+      },
+      {
+        text: {
+          es: 'Tests unitarios de los controles: validación de origen, IP de cliente y comportamiento del límite cuando Redis no responde.',
+          en: 'Unit tests for the controls: origin validation, client IP and rate limit behaviour when Redis does not respond.',
+        },
+        evidence: [
+          code('elevaforge', 'lib/security/csrf.test.ts'),
+          code('elevaforge', 'lib/security/client-ip.test.ts'),
+          code('elevaforge', 'lib/security/rate-limit-failopen.test.ts'),
+        ],
+      },
+      {
+        text: {
+          es: 'CI del repositorio: gitleaks, lint, typecheck, tests, build y e2e con Playwright.',
+          en: 'Repository CI: gitleaks, lint, typecheck, tests, build and Playwright e2e.',
+        },
+        evidence: [
+          code('elevaforge', '.github/workflows/ci.yml'),
+          {
+            label: { es: 'CodeQL, Semgrep, audit-ci y Lighthouse CI', en: 'CodeQL, Semgrep, audit-ci and Lighthouse CI' },
+            href: '[PENDIENTE: TODO-LUIS, el workflow de ElevaForge no incluye CodeQL, Semgrep, audit-ci ni Lighthouse CI (koa-landing sí tiene CodeQL, audit-ci y Lighthouse CI). ¿Dónde viven esos gates, o se corrige la afirmación en el sitio y el CV?]',
+          },
+        ],
+      },
+    ],
+    links: [
+      { label: { es: 'elevaforge.com', en: 'elevaforge.com' }, href: 'https://www.elevaforge.com' },
+      { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.elevaforge },
+      doc(
+        'elevaforge',
+        'SRS-ElevaForge-v0.3.md',
+        { es: 'ADRs (SRS, Anexo A)', en: 'ADRs (SRS, Annex A)' },
+        'L307'
+      ),
+    ],
     screenshot: {
-      // Del repo público de Tributary (docs/evidence/chain-broken.png). Es la
-      // única captura del sitio que no mide 1280x577, y por eso declara su
-      // tamaño: recortarla al formato de las demás cortaba la evidencia.
+      src: '/proyectos/elevaforge.png',
+      alt: {
+        es: 'Página de inicio de ElevaForge con el titular "Forjamos el motor digital de tu empresa".',
+        en: 'ElevaForge home page with the headline "Forjamos el motor digital de tu empresa".',
+      },
+    },
+  },
+  {
+    slug: 'tributary',
+    kicker: {
+      es: 'Motor de facturación electrónica multirrégimen, implementación de referencia',
+      en: 'Multi-regime e-invoicing engine, reference implementation',
+    },
+    summary: {
+      es: 'Facturación electrónica para ventas entre Colombia, España y Alemania, con la inmutabilidad fiscal aplicada en PostgreSQL, 13 controles de seguridad y 4 gates independientes en CI.',
+      en: 'E-invoicing for sales across Colombia, Spain and Germany, with fiscal immutability enforced in PostgreSQL, 13 security controls and 4 independent CI gates.',
+    },
+    problem: {
+      es: 'Una venta transfronteriza se emite bajo tres regímenes fiscales incompatibles, y un registro emitido no puede alterarse sin que se detecte ni duplicarse por una respuesta perdida. Implementación de referencia, no certificada para producción.',
+      en: 'One cross-border sale is issued under three incompatible fiscal regimes, and an issued record cannot be altered undetected or duplicated by a lost response. Reference implementation, not certified for production.',
+    },
+    stack: ['Java 21', 'Spring Boot', 'PostgreSQL 16', 'Flyway', 'React 19', 'Testcontainers', 'Docker'],
+    status: 'repositorio',
+    dataFlow: {
+      es: 'Operador (máquina a máquina, OAuth2 con JWT RS256) → API con RBAC → casos de uso → adaptadores por país (Colombia en sandbox, España sin remisión, Alemania validada con el validador oficial) → PostgreSQL con cadena de hashes SHA-256, triggers de inmutabilidad y bitácora append-only. Los datos personales del comprador se cifran con una clave por titular.',
+      en: 'Operator (machine to machine, OAuth2 with RS256 JWT) → API with RBAC → use cases → per-country adapters (Colombia in sandbox, Spain without submission, Germany validated with the official validator) → PostgreSQL with a SHA-256 hash chain, immutability triggers and an append-only audit log. Buyer personal data is encrypted with a per-subject key.',
+    },
+    assets: {
+      es: [
+        'Cadena de registros fiscales',
+        'Credenciales OAuth2 del operador tecnológico',
+        'Datos personales de compradores',
+        'Claves de cifrado por titular',
+        'Consecutivo de numeración',
+        'Bitácora de auditoría',
+      ],
+      en: [
+        'Fiscal record chain',
+        'OAuth2 credentials of the e-invoicing provider',
+        'Buyer personal data',
+        'Per-subject encryption keys',
+        'Invoice numbering sequence',
+        'Audit log',
+      ],
+    },
+    threatModel: doc(
+      'tributary',
+      'docs/SRS-tributary.md',
+      { es: 'Threat model, docs/SRS-tributary.md §7', en: 'Threat model, docs/SRS-tributary.md §7' },
+      '7-threat-model'
+    ),
+    threats: [
+      {
+        ref: 'T-001',
+        stride: 'Tampering',
+        text: {
+          es: 'Alteración de un registro fiscal con acceso directo a la base de datos.',
+          en: 'Alteration of a fiscal record through direct database access.',
+        },
+      },
+      {
+        ref: 'T-002',
+        stride: 'Tampering / Repudiation',
+        text: {
+          es: 'Emisión duplicada tras una respuesta perdida.',
+          en: 'Duplicate issuance after a lost response.',
+        },
+      },
+      {
+        ref: 'T-003',
+        stride: 'Information Disclosure',
+        text: {
+          es: 'Fuga del secreto OAuth2 del operador en el repositorio o en los logs.',
+          en: 'Leak of the provider’s OAuth2 secret in the repository or the logs.',
+        },
+      },
+      {
+        ref: 'T-004',
+        stride: 'Tampering / DoS / Information Disclosure',
+        text: {
+          es: 'XXE y expansión de entidades al parsear XML de terceros.',
+          en: 'XXE and entity expansion when parsing third-party XML.',
+        },
+      },
+      {
+        ref: 'T-011',
+        stride: 'Spoofing',
+        text: {
+          es: 'Token falsificado con algoritmo none o por confusión de algoritmo.',
+          en: 'Token forged with the none algorithm or through algorithm confusion.',
+        },
+      },
+    ],
+    controlGroups: [
+      {
+        controls: [
+          {
+            title: {
+              es: 'Triggers de inmutabilidad y REVOKE sobre el rol de la aplicación',
+              en: 'Immutability triggers and REVOKE on the application role',
+            },
+            why: {
+              es: 'La inmutabilidad es una garantía de la base, no de la aplicación: rechaza UPDATE y DELETE incluso desde psql con credenciales válidas. Una corrección es una fila nueva que referencia a la anterior.',
+              en: 'Immutability is a database guarantee, not an application promise: it rejects UPDATE and DELETE even from psql with valid credentials. A correction is a new row referencing the previous one.',
+            },
+            evidence: [
+              code('tributary', 'tributary-persistence/src/main/resources/db/migration/V3__immutability_triggers.sql', 'L22-L40'),
+              code('tributary', 'tributary-persistence/src/main/resources/db/migration/V5__application_roles.sql', 'L17'),
+              code('tributary', 'docs/adr/ADR-002-chain-integrity-in-postgresql.md'),
+            ],
+          },
+          {
+            title: {
+              es: 'Verificador de la cadena de hashes',
+              en: 'Hash chain verifier',
+            },
+            why: {
+              es: 'Si alguien desactiva el trigger y altera una fila, el verificador recalcula la cadena y señala el registro exacto donde falla.',
+              en: 'If someone disables the trigger and alters a row, the verifier recomputes the chain and points at the exact record where it breaks.',
+            },
+            evidence: [code('tributary', 'tributary-persistence/src/main/java/com/tributary/persistence/ChainVerifier.java', 'L61')],
+          },
+          {
+            title: {
+              es: 'Idempotencia por clave determinista y reconciliación antes de reintentar',
+              en: 'Deterministic-key idempotency and reconciliation before retrying',
+            },
+            why: {
+              es: 'Una respuesta perdida no se arregla reintentando (duplica un documento legal) ni dejando de reintentar (pierde uno legítimo): se consulta el estado real antes de decidir.',
+              en: 'A lost response is not fixed by retrying (it duplicates a legal document) or by not retrying (it loses a legitimate one): the real state is queried before deciding.',
+            },
+            evidence: [
+              code('tributary', 'tributary-application/src/main/java/com/tributary/application/usecase/ReconcileInvoiceUseCase.java'),
+              code('tributary', 'docs/adr/ADR-003-idempotency-and-reconciliation.md'),
+            ],
+          },
+          {
+            title: {
+              es: 'Fábrica única de parsers XML endurecidos',
+              en: 'Single factory of hardened XML parsers',
+            },
+            why: {
+              es: 'DOCTYPE deshabilitado y procesamiento seguro activado en el único sitio que crea parsers; ArchUnit impide instanciarlos fuera de él.',
+              en: 'DOCTYPE disabled and secure processing enabled in the only place that creates parsers; ArchUnit forbids instantiating them anywhere else.',
+            },
+            evidence: [
+              code('tributary', 'tributary-adapter-de-en16931/src/main/java/com/tributary/adapter/de/SecureXmlFactory.java', 'L68-L71'),
+            ],
+          },
+          {
+            title: {
+              es: 'Algoritmo del JWT fijado a RS256',
+              en: 'JWT algorithm pinned to RS256',
+            },
+            why: {
+              es: 'El verificador solo acepta RS256: un token con alg none o uno HS256 firmado con la clave pública se rechaza.',
+              en: 'The verifier only accepts RS256: a token with alg none or an HS256 token signed with the public key is rejected.',
+            },
+            evidence: [code('tributary', 'tributary-api/src/main/java/com/tributary/api/security/SecurityConfig.java', 'L61')],
+          },
+          {
+            title: {
+              es: 'Crypto-shredding para conciliar el borrado RGPD con la retención fiscal',
+              en: 'Crypto-shredding to reconcile GDPR erasure with fiscal retention',
+            },
+            why: {
+              es: 'Los datos personales se cifran con una clave por titular y borrar destruye la clave, no la fila: el registro fiscal sigue íntegro y el dato personal queda ilegible.',
+              en: 'Personal data is encrypted with a per-subject key and erasure destroys the key, not the row: the fiscal record stays intact and the personal data becomes unreadable.',
+            },
+            evidence: [
+              code('tributary', 'tributary-persistence/src/main/java/com/tributary/persistence/JdbcKeyVaultRepository.java', 'L59-L61'),
+              code('tributary', 'docs/adr/ADR-004-crypto-shredding.md'),
+            ],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: 'Matriz de 13 controles, cada uno con herramienta, comando y criterio binario de aprobado o fallado (sqlmap, psql, payload XXE, gitleaks, ArchUnit, tokens manipulados, test de caos).',
+          en: 'Matrix of 13 controls, each with a tool, a command and a binary pass or fail criterion (sqlmap, psql, XXE payload, gitleaks, ArchUnit, tampered tokens, chaos test).',
+        },
+        evidence: [
+          doc('tributary', 'docs/SRS-tributary.md', { es: 'SRS §9A', en: 'SRS §9A' }, '9a-matriz-de-verificación-de-controles'),
+        ],
+      },
+      {
+        text: {
+          es: 'Tests automatizados de los controles: tokens con alg none y por confusión de algoritmo rechazados con 401, detección de manipulación en la cadena, aislamiento del dominio y ausencia de hosts de la autoridad fiscal en el QR.',
+          en: 'Automated tests for the controls: alg none and algorithm confusion tokens rejected with 401, tamper detection in the chain, domain isolation and no tax authority hosts in the QR code.',
+        },
+        evidence: [
+          code('tributary', 'tributary-api/src/test/java/com/tributary/api/RbacAndJwtIntegrationTest.java', 'L146-L169'),
+          code('tributary', 'tributary-persistence/src/test/java/com/tributary/persistence/ChainVerifierTest.java', 'L82'),
+          code('tributary', 'tributary-api/src/test/java/com/tributary/architecture/ArchitectureTest.java'),
+          code('tributary', 'tributary-adapter-es-verifactu/src/test/java/com/tributary/adapter/es/VerifactuQrGeneratorTest.java', 'L57'),
+        ],
+      },
+      {
+        text: {
+          es: '4 gates independientes en CI: build con tests, SAST con Semgrep (reglas propias probadas contra fixtures vulnerables), SCA con Trivy que bloquea en HIGH y CRITICAL, y gitleaks sobre todo el historial.',
+          en: '4 independent CI gates: build with tests, SAST with Semgrep (custom rules proven against vulnerable fixtures), SCA with Trivy blocking on HIGH and CRITICAL, and gitleaks across the full history.',
+        },
+        evidence: [
+          code('tributary', '.github/workflows/ci.yml', 'L17-L90'),
+          code('tributary', '.github/workflows/ci.yml', 'L126-L139'),
+          tree('tributary', '.semgrep', { es: 'Reglas y fixtures de Semgrep', en: 'Semgrep rules and fixtures' }),
+        ],
+      },
+      {
+        text: {
+          es: 'El quickstart levanta todo el stack con Docker Compose en menos de 3 minutos.',
+          en: 'The quickstart brings the whole stack up with Docker Compose in under 3 minutes.',
+        },
+        evidence: [doc('tributary', 'README.md', { es: 'Quickstart', en: 'Quickstart' }, 'quickstart')],
+      },
+    ],
+    links: [
+      { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.tributary },
+      {
+        label: { es: 'Demo', en: 'Demo' },
+        href: '[PENDIENTE: TODO-LUIS, URL de la demo de Tributary cuando esté desplegada. Ojo: ADR-011 decide no tener demo pública. ¿Se mantiene esa decisión?]',
+      },
+      code('tributary', 'docs/adr/README.md'),
+      doc('tributary', 'docs/portfolio.md', { es: 'Resumen técnico', en: 'Technical writeup' }),
+    ],
+    screenshot: {
       src: '/proyectos/tributary.png',
       width: 1280,
       height: 1000,
@@ -809,150 +1454,207 @@ export const projects: readonly Project[] = [
         en: 'Tributary interface verifying a fiscal chain: the result is BROKEN, it names the broken record and shows the stored hash next to the recomputed one.',
       },
     },
-    links: [
+  },
+  {
+    slug: 'koa',
+    kicker: {
+      es: 'Landing de lista de espera y tienda bilingüe de demostración',
+      en: 'Waitlist landing page and bilingual demo store',
+    },
+    summary: {
+      es: 'Un formulario público y un checkout: precios recalculados en el servidor y defensa contra automatización con Turnstile, confirmación por correo y límite por IP.',
+      en: 'A public form and a checkout: prices recalculated on the server and anti-automation defence with Turnstile, email confirmation and a per-IP limit.',
+    },
+    problem: {
+      es: 'Un formulario público y un checkout son lo primero que encuentran los bots y quien manipula peticiones: la lista de espera tiene que medir interés real y el total de la compra no puede salir del navegador.',
+      en: 'A public form and a checkout are the first things bots and request tamperers find: the waitlist has to measure real interest and the purchase total cannot come from the browser.',
+    },
+    stack: ['Astro', 'React', 'TypeScript', 'Neon Postgres', 'Upstash', 'Turnstile', 'Resend', 'Vercel'],
+    status: 'demo',
+    dataFlow: {
+      es: 'Landing: formulario → endpoint de servidor (límite por IP con hash en Upstash → verificación de Turnstile → validación) → Neon Postgres en estado pendiente → correo de confirmación con token. Tienda: carrito anónimo en sesión → el servidor recotiza cada línea contra el catálogo → checkout simulado, sin pagos reales.',
+      en: 'Landing: form → server endpoint (per-IP limit with a hashed IP in Upstash → Turnstile verification → validation) → Neon Postgres in pending state → confirmation email with a token. Store: anonymous session cart → the server reprices every line against the catalogue → simulated checkout, no real payments.',
+    },
+    assets: {
+      es: [
+        'Lista de espera (correos)',
+        'Reputación de envío del dominio de correo',
+        'Integridad de precios y totales',
+        'Datos de contacto de la tienda',
+      ],
+      en: [
+        'Waitlist (email addresses)',
+        'Sending reputation of the email domain',
+        'Price and total integrity',
+        'Store contact data',
+      ],
+    },
+    threatModel: doc(
+      'koaStore',
+      'SRS-sitio-web-demo-KOA.md',
+      { es: 'Threat model de la tienda (SRS)', en: 'Store threat model (SRS)' },
+      'L331'
+    ),
+    strideNote:
+      '[PENDIENTE: TODO-LUIS, ¿publicar threat model de KOA Landing? Solo la tienda tiene uno con STRIDE; la amenaza de bots sobre la landing no tiene categoría]',
+    threats: [
       {
-        label: {
-          es: 'Leer el resumen técnico',
-          en: 'Read the technical writeup',
+        ref: 'T2',
+        stride: 'Tampering',
+        text: {
+          es: 'Manipulación del precio o del total en la petición del carrito o del checkout.',
+          en: 'Tampering with the price or total in the cart or checkout request.',
         },
-        href: 'https://github.com/Luisceron0/Tributary/blob/main/docs/portfolio.md',
       },
       {
-        label: { es: 'Código en GitHub', en: 'Code on GitHub' },
-        href: 'https://github.com/Luisceron0/Tributary',
+        ref: 'T6',
+        stride: 'Denial of Service',
+        text: {
+          es: 'Inundación de formularios o del checkout.',
+          en: 'Flooding of forms or the checkout.',
+        },
+      },
+      {
+        ref: 'T10',
+        stride: 'Spoofing / Info Disclosure',
+        text: {
+          es: 'Uso del checkout como relé de spam hacia correos de terceros.',
+          en: 'Use of the checkout as a spam relay to third-party addresses.',
+        },
+      },
+      {
+        text: {
+          es: 'Bots que llenan la lista de espera o apuntan a terceros sin su consentimiento.',
+          en: 'Bots filling the waitlist or signing up third parties without consent.',
+        },
       },
     ],
-  },
-  {
-    id: 'elevaforge',
-    name: 'ElevaForge',
-    kicker: {
-      es: 'Agencia de software, sitio corporativo con panel de administración',
-      en: 'Software agency, corporate site with an admin panel',
-    },
-    // Fuente: README de github.com/Luisceron0/ElevaForge y el sitio en vivo.
-    problem: {
-      es: 'Una agencia de software necesita captar clientes y editar el contenido de su propio sitio (paquetes, proyectos, equipo) sin depender de un desarrollador para cada cambio de texto. El panel de administración debe conceder esa autonomía sin convertirse en la vía de acceso más vulnerable del sitio.',
-      en: 'A software agency needs to capture clients and edit its own site content (packages, projects, team) without depending on a developer for every copy change. The admin panel must grant that autonomy without becoming the site’s most vulnerable access path.',
-    },
-    stack: ['Next.js 14', 'TypeScript', 'Tailwind CSS', 'Supabase', 'PostgreSQL', 'Vercel'],
-    security: {
-      es: 'Las tablas de Supabase operan con Row Level Security activada y sin ninguna policy para el rol anónimo ni el autenticado, un esquema deny-by-default en sentido estricto: lo que no está explícitamente concedido no existe. Todo el acceso a datos se canaliza a través del servidor, de modo que la clave pública expuesta al navegador no habilita ninguna operación.',
-      en: 'The Supabase tables operate with Row Level Security enabled and no policy for either the anonymous or the authenticated role, a strict deny-by-default scheme: what is not explicitly granted does not exist. All data access is routed through the server, so the public key exposed to the browser enables no operation.',
-    },
-    highlights: {
-      es: [
-        'Panel de administración multi-cuenta: las altas y las bajas se gestionan desde la propia interfaz, sin entrar a la base de datos a mano ni compartir un usuario único entre varias personas.',
-        'La semilla de sesión del panel es un secreto propio y dedicado, no reutilizado de otra parte del sistema. El arranque avisa de forma explícita si quedan credenciales antiguas activas, en lugar de dejarlas pasar en silencio, que es como sobreviven durante meses.',
-        'Paquetes, proyectos y la sección de equipo son contenido editable desde el panel: cambiar un precio o añadir un caso no exige un despliegue ni un desarrollador disponible.',
-        'Las solicitudes de contacto y de diagnóstico caen en una bandeja con estado revisable, así que ningún posible cliente depende de que alguien vigile una casilla de correo.',
-      ],
-      en: [
-        'Multi-account admin panel: accounts are created and deactivated from the interface itself, without touching the database by hand or sharing one login between several people.',
-        'The panel’s session seed is its own dedicated secret, not reused from elsewhere in the system. Startup warns explicitly if old credentials are still active, instead of letting them through in silence, which is how they survive for months.',
-        'Packages, projects and the team section are content editable from the panel: changing a price or adding a case study needs neither a deploy nor an available developer.',
-        'Contact and diagnostic requests land in an inbox with reviewable status, so no prospective client depends on somebody watching a mailbox.',
-      ],
-    },
-    screenshot: {
-      src: '/proyectos/elevaforge.png',
-      alt: {
-        es: 'Página de inicio de ElevaForge con el titular "Forjamos el motor digital de tu empresa".',
-        en: 'ElevaForge home page with the headline "Forjamos el motor digital de tu empresa".',
+    controlGroups: [
+      {
+        heading: { es: 'Seguridad de lógica de negocio', en: 'Business logic security' },
+        controls: [
+          {
+            title: {
+              es: 'Precios recalculados en el servidor',
+              en: 'Prices recalculated on the server',
+            },
+            why: {
+              es: 'El precio unitario sale siempre del catálogo, nunca del estado que envía el navegador: un precio o un subtotal inyectado se ignora.',
+              en: 'The unit price always comes from the catalogue, never from the state the browser sends: an injected price or subtotal is ignored.',
+            },
+            evidence: [
+              code('koaStore', 'src/lib/cart.ts', 'L145-L160'),
+              code('koaStore', 'src/pages/api/checkout/simulate.ts', 'L51'),
+            ],
+          },
+          {
+            title: {
+              es: 'Checkout simulado, sin campos de tarjeta',
+              en: 'Simulated checkout, no card fields',
+            },
+            why: {
+              es: 'No se procesa ningún pago real y no existe un campo donde escribir una tarjeta, así que no hay datos de pago que custodiar. La interfaz lo dice.',
+              en: 'No real payment is processed and there is no field to type a card into, so there is no payment data to safeguard. The interface says so.',
+            },
+            evidence: [
+              code('koaStore', 'README.md', 'L12'),
+              doc('koaStore', 'SRS-sitio-web-demo-KOA.md', { es: 'SRS, T3 (L335)', en: 'SRS, T3 (L335)' }, 'L335'),
+            ],
+          },
+        ],
       },
-    },
+      {
+        heading: { es: 'Defensa contra automatización', en: 'Anti-automation defence' },
+        controls: [
+          {
+            title: {
+              es: 'Turnstile verificado en el servidor',
+              en: 'Turnstile verified on the server',
+            },
+            why: {
+              es: 'El servidor valida el token con Cloudflare antes de aceptar el envío, sin fiarse de lo que reporta el cliente.',
+              en: 'The server validates the token with Cloudflare before accepting the submission, without trusting what the client reports.',
+            },
+            evidence: [
+              code('koaLanding', 'src/pages/api/waitlist.ts', 'L80-L83'),
+              code('koaLanding', 'src/lib/adapters/turnstile.ts', 'L9'),
+            ],
+          },
+          {
+            title: {
+              es: 'Límite de solicitudes por IP, con la IP guardada como hash',
+              en: 'Per-IP request limit, with the IP stored as a hash',
+            },
+            why: {
+              es: 'El límite se comprueba antes de cualquier otra operación, y la IP se guarda con hash y pepper: sirve para contar intentos sin registrar quién visitó la página.',
+              en: 'The limit is checked before any other operation, and the IP is stored hashed with a pepper: it counts attempts without logging who visited the page.',
+            },
+            evidence: [
+              code('koaLanding', 'src/pages/api/waitlist.ts', 'L61-L76'),
+              code('koaLanding', 'src/lib/domain/ip.ts', 'L6'),
+            ],
+          },
+          {
+            title: {
+              es: 'Confirmación por correo',
+              en: 'Email confirmation',
+            },
+            why: {
+              es: 'Una dirección no cuenta como suscrita hasta que su dueño abre el enlace; el token se guarda como hash. Nadie puede apuntar a terceros.',
+              en: 'An address does not count as subscribed until its owner opens the link; the token is stored as a hash. Nobody can sign up someone else.',
+            },
+            evidence: [code('koaLanding', 'src/pages/confirmar.astro', 'L18-L20')],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: 'Tests de la lógica de negocio: el carrito ignora un precio y un subtotal inyectados.',
+          en: 'Business logic tests: the cart ignores an injected price and subtotal.',
+        },
+        evidence: [
+          code('koaStore', 'src/lib/cart.test.ts', 'L176'),
+          code('koaStore', 'src/lib/cart.test.ts', 'L206'),
+        ],
+      },
+      {
+        text: {
+          es: 'Tests e2e de los caminos de fallo: el sexto intento en 10 minutos desde la misma IP responde 429, y un envío con el honeypot lleno no se guarda.',
+          en: 'E2E tests of the failure paths: the sixth attempt in 10 minutes from the same IP gets a 429, and a submission with the honeypot filled is not stored.',
+        },
+        evidence: [
+          code('koaLanding', 'tests/e2e/waitlist-rate-limit.spec.ts', 'L14'),
+          code('koaLanding', 'tests/e2e/waitlist-honeypot.spec.ts', 'L8'),
+        ],
+      },
+      {
+        text: {
+          es: 'CI: CodeQL, audit-ci, gitleaks y Lighthouse CI en la landing; CodeQL, npm audit y gitleaks en la tienda. Registro de sqlmap contra el formulario de contacto de la tienda.',
+          en: 'CI: CodeQL, audit-ci, gitleaks and Lighthouse CI on the landing page; CodeQL, npm audit and gitleaks on the store. sqlmap log against the store contact form.',
+        },
+        evidence: [
+          code('koaLanding', '.github/workflows/codeql.yml'),
+          code('koaLanding', '.github/workflows/ci.yml', 'L32-L33'),
+          code('koaStore', '.github/workflows/ci.yml', 'L25-L59'),
+          code('koaStore', 'docs/security-evidence/sqlmap-t5-contact-2026-07-29.log'),
+        ],
+      },
+    ],
     links: [
+      { label: { es: 'koa.elevaforge.com', en: 'koa.elevaforge.com' }, href: 'https://koa.elevaforge.com/' },
       {
-        label: { es: 'Ver elevaforge.com', en: 'Visit elevaforge.com' },
-        href: 'https://www.elevaforge.com',
+        label: { es: 'store.koa.elevaforge.com', en: 'store.koa.elevaforge.com' },
+        href: { es: 'https://store.koa.elevaforge.com/es', en: 'https://store.koa.elevaforge.com/en' },
       },
+      { label: { es: 'Repositorio de la landing', en: 'Landing repository' }, href: REPO.koaLanding },
+      { label: { es: 'Repositorio de la tienda', en: 'Store repository' }, href: REPO.koaStore },
       {
-        label: { es: 'Código en GitHub', en: 'Code on GitHub' },
-        href: 'https://github.com/Luisceron0/ElevaForge',
+        label: { es: 'ADRs', en: 'ADRs' },
+        href: '[PENDIENTE: TODO-LUIS, los ADR de la tienda (ADR-004, ADR-005, ADR-008) están dentro de su SRS. ¿Enlazo esa sección o hay un documento propio?]',
       },
     ],
-  },
-  {
-    id: 'koa-landing',
-    name: 'KOA Landing',
-    kicker: {
-      es: 'Lanzamiento de producto, captación de lista de espera',
-      en: 'Product launch, waitlist capture',
-    },
-    // Fuente: README de github.com/luisCeron0Portfolio/koa-landing y el sitio en vivo.
-    problem: {
-      es: 'KOA Landing capta la lista de espera de un lanzamiento de producto mediante un formulario público, el tipo de endpoint que los sistemas automatizados detectan sin intervención humana. Sin control, esto genera dos problemas: una lista de direcciones no verificadas que deja de medir interés real, y una vía de bajo costo para saturar la bandeja de entrada del equipo.',
-      en: 'KOA Landing captures a product launch waitlist through a public form, the type of endpoint automated systems find without human involvement. Left uncontrolled, this creates two problems: a list of unverified addresses that stops measuring genuine interest, and a low-cost route to flood the team’s inbox.',
-    },
-    stack: ['Astro 7', 'React', 'TypeScript', 'Neon Postgres', 'Resend', 'Upstash', 'Turnstile'],
-    security: {
-      es: 'El envío permanece bloqueado hasta que Cloudflare Turnstile confirma la presencia de una persona, y el servidor verifica ese token de forma independiente, sin asumir la validez de lo que reporta el cliente. Es el mismo patrón fail-closed empleado en el formulario de este sitio, incorporado tras corregir una condición de carrera en la que el botón podía pulsarse antes de que el token existiera.',
-      en: 'Submission remains blocked until Cloudflare Turnstile confirms a human presence, and the server verifies that token independently, without assuming the validity of what the client reports. This is the same fail-closed pattern used in this site’s contact form, adopted after fixing a race condition where the button could be pressed before the token existed.',
-    },
-    highlights: {
-      es: [
-        'Validación en servidor y confirmación por token: una dirección no cuenta como suscrita hasta que su dueño la confirma, así que nadie puede apuntar a terceros a la lista.',
-        'Límite de envíos por IP con Upstash. La IP se guarda con hash y nunca en claro: sirve para contar intentos sin convertir el control antiabuso en un registro de quién visitó la página.',
-        'El contenido de las secciones se gestiona desde un CMS, de modo que una corrección de texto no necesita pasar por un despliegue.',
-        'Cobertura con Vitest y Playwright que incluye los caminos que suelen quedarse sin probar precisamente por ser los de fallo: el del bot detectado y el del límite de envíos alcanzado.',
-      ],
-      en: [
-        'Server-side validation and token confirmation: an address does not count as subscribed until its owner confirms it, so nobody can sign someone else up.',
-        'Per-IP rate limiting with Upstash. The IP is stored hashed and never in plain text: it serves to count attempts without turning the anti-abuse control into a log of who visited the page.',
-        'Section content is managed from a CMS, so a copy fix does not have to go through a deploy.',
-        'Covered by Vitest and Playwright, including the paths that usually go untested precisely because they are the failure ones: bot detected and rate limit reached.',
-      ],
-    },
-    screenshot: {
-      src: '/proyectos/koa-landing.png',
-      alt: {
-        es: 'Página de inicio de KOA Landing, con el producto KOA Buds y el llamado a unirse a la lista de espera.',
-        en: 'KOA Landing home page, showing the KOA Buds product and the call to join the waitlist.',
-      },
-    },
-    links: [
-      {
-        label: { es: 'Ver koa.elevaforge.com', en: 'Visit koa.elevaforge.com' },
-        // Este sitio no tiene versión en inglés: /en devuelve 404, comprobado.
-        href: 'https://koa.elevaforge.com/',
-      },
-      {
-        label: { es: 'Código en GitHub', en: 'Code on GitHub' },
-        href: 'https://github.com/luisCeron0Portfolio/koa-landing',
-      },
-    ],
-  },
-  {
-    id: 'koa-store',
-    name: 'KOA Store',
-    kicker: {
-      es: 'Tienda de producto, catálogo bilingüe y simulación de compra',
-      en: 'Product store, bilingual catalogue and checkout simulation',
-    },
-    // Fuente: README de github.com/luisCeron0Portfolio/koa-store y el sitio en vivo.
-    problem: {
-      es: 'KOA Store presenta un catálogo completo en dos idiomas con un flujo de compra realista de principio a fin, sin procesar pagos reales ni retener datos personales. El sistema debe comportarse como una tienda funcional, no simularla, y a la vez no generar ninguna obligación de custodia de información personal.',
-      en: 'KOA Store presents a complete catalogue in two languages with a realistic end-to-end purchase flow, without processing real payments or retaining personal data. The system must function as an operating store rather than simulate one, while creating no obligation to safeguard personal information.',
-    },
-    stack: ['Astro', 'TypeScript', 'Content Collections', 'PostgreSQL', 'Vitest', 'Vercel'],
-    security: {
-      es: 'El precio se recalcula en el servidor a partir del catálogo: los datos recibidos desde el carrito del navegador se tratan como una propuesta, nunca como información de confianza. Este control evita el fallo clásico de una tienda, no mediante mejor validación en el cliente, sino mediante la ausencia total de confianza en él. El carrito es anónimo y limitado a la sesión, con una vía explícita de borrado de datos en lugar de una retención indefinida.',
-      en: 'The price is recalculated server-side from the catalogue: data received from the browser cart is treated as a proposal, never as trusted information. This control avoids the classic storefront flaw, not through better client-side validation, but through the complete absence of trust in the client. The cart is anonymous and session-scoped, with an explicit data erasure path rather than indefinite retention.',
-    },
-    highlights: {
-      es: [
-        'Catálogo bilingüe (español e inglés) con páginas de producto y selección de variantes, generado desde una única fuente de contenido: las dos versiones no pueden desincronizarse porque no son dos textos distintos que alguien tenga que mantener a la par.',
-        'Simulación de checkout de principio a fin con validación de precios en servidor. No se procesa ningún pago real, y eso se dice en la interfaz en lugar de esconderse.',
-        'SEO completo: sitemap, robots.txt, datos estructurados JSON-LD y metadatos por página.',
-        'Cabeceras de seguridad y CSP definidas explícitamente para el despliegue en Vercel, no heredadas de los valores por defecto de la plataforma.',
-      ],
-      en: [
-        'Bilingual catalogue (Spanish and English) with product pages and variant selection, generated from a single content source: the two versions cannot drift apart because they are not two separate texts someone has to keep in step.',
-        'End to end checkout simulation with server-side price validation. No real payment is processed, and the interface says so instead of hiding it.',
-        'Full SEO: sitemap, robots.txt, JSON-LD structured data and per-page metadata.',
-        'Security headers and CSP defined explicitly for the Vercel deployment, not inherited from the platform defaults.',
-      ],
-    },
     screenshot: {
       src: '/proyectos/koa-store.png',
       alt: {
@@ -960,27 +1662,6 @@ export const projects: readonly Project[] = [
         en: 'KOA store with the headline "Seis productos. Ninguno de más." and the Spanish/English language switcher.',
       },
     },
-    links: [
-      {
-        label: {
-          es: 'Ver store.koa.elevaforge.com',
-          en: 'Visit store.koa.elevaforge.com',
-        },
-        /*
-         * Único enlace localizado del sitio: esta tienda SÍ tiene versión en
-         * inglés (comprobado, /en devuelve 200). Los otros dos proyectos
-         * devuelven 404 en /en, así que su enlace no se localiza.
-         */
-        href: {
-          es: 'https://store.koa.elevaforge.com/es',
-          en: 'https://store.koa.elevaforge.com/en',
-        },
-      },
-      {
-        label: { es: 'Código en GitHub', en: 'Code on GitHub' },
-        href: 'https://github.com/luisCeron0Portfolio/koa-store',
-      },
-    ],
   },
 ] as const
 

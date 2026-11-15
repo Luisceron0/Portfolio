@@ -1,19 +1,20 @@
 import { Contact } from '@/components/contact'
+import { Cases } from '@/components/cases'
 import { CvDownloads } from '@/components/cv'
 import { Footer } from '@/components/footer'
 import { Hero } from '@/components/hero'
 import { Pillars } from '@/components/pillars'
 import { CrossedMarquees } from '@/components/persona'
 import { SiteNav } from '@/components/nav'
-import { Projects } from '@/components/projects'
 import { Skills } from '@/components/skills'
 import { Timeline } from '@/components/timeline'
 import { hero } from '@/content'
 import { getLocale } from '@/lib/locale'
 
 /**
- * Una sola página. Regla 1 de copilot-instructions: no se añaden rutas, blog ni
- * CMS sin cambiar antes el alcance de la SRS.
+ * La home. Regla 1 de copilot-instructions (SRS v1.4): la home más una página
+ * por caso de seguridad (`/casos/<slug>`, RF-111); nada más sin cambiar antes
+ * el alcance de la SRS.
  *
  * Ni la navegación de RF-108 ni el idioma de RF-109 introducen rutas: la
  * primera son anclas de este mismo documento, el segundo un parámetro de query.
@@ -43,8 +44,8 @@ export default function HomePage() {
             .filter(Boolean)}
         />
         <Pillars locale={locale} />
+        <Cases locale={locale} />
         <Timeline locale={locale} />
-        <Projects locale={locale} />
         <Skills locale={locale} />
         <CvDownloads locale={locale} />
         <Contact locale={locale} />

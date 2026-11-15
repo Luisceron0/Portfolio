@@ -1,5 +1,5 @@
 import { HTML_LANG, LOCALES, nav, type Locale } from '@/content'
-import { localeHref } from '@/lib/locale'
+import { homeAnchor, localeHref } from '@/lib/locale'
 import { NavLinks } from '@/components/nav-links'
 import { TONE_BG, type Tone } from '@/components/section'
 
@@ -21,7 +21,7 @@ const NAV_TONES: readonly Tone[] = ['violet', 'green', 'mint', 'lilac', 'silver'
  * compartible y se puede marcar como favorito, que es un criterio de
  * aceptación explícito de RF-109.
  */
-function LanguageSwitch({ locale }: { locale: Locale }) {
+function LanguageSwitch({ locale, path }: { locale: Locale; path: string }) {
   return (
     <div
       role="group"
@@ -33,7 +33,7 @@ function LanguageSwitch({ locale }: { locale: Locale }) {
         return (
           <a
             key={candidate}
-            href={localeHref(candidate)}
+            href={localeHref(candidate, path)}
             hrefLang={HTML_LANG[candidate]}
             // `aria-current` es lo que anuncia "estás en esta versión". El
             // color por sí solo no es información accesible.
@@ -55,7 +55,15 @@ function LanguageSwitch({ locale }: { locale: Locale }) {
   )
 }
 
-export function SiteNav({ locale }: { locale: Locale }) {
+/**
+ * `path` es la ruta de la página actual. En la home los destinos son anclas
+ * (`#casos`); en una página de caso (RF-111) vuelven a la home en el mismo
+ * idioma (`/?lang=en#casos`), y el selector de idioma cambia el idioma de la
+ * página en la que se está, no manda a la home.
+ */
+export function SiteNav({ locale, path = '/' }: { locale: Locale; path?: string }) {
+  const onHome = path === '/'
+
   return (
     <nav
       aria-label={locale === 'es' ? 'Secciones de la página' : 'Page sections'}
@@ -72,20 +80,23 @@ export function SiteNav({ locale }: { locale: Locale }) {
       <div className="relative mx-auto flex h-16 max-w-content items-center gap-3 px-3 sm:px-8 lg:gap-6">
         {/* Marca: monograma en un recorte violeta girado, como la carta de aviso. */}
         <a
-          href="#contenido"
+          href={onHome ? '#contenido' : localeHref(locale)}
           className="p-display shrink-0 -rotate-6 bg-violet px-2 py-0.5 text-base text-ink transition-transform duration-200 hover:rotate-0 hover:scale-110 max-[259px]:hidden"
         >
           {nav.brand}
         </a>
 
         <NavLinks
-          items={nav.items.map((item) => ({ href: item.href, label: item.label[locale] }))}
+          items={nav.items.map((item) => ({
+            href: homeAnchor(item.href, locale, onHome),
+            label: item.label[locale],
+          }))}
           tones={NAV_TONES.map((tone) => TONE_BG[tone])}
           menuLabel={locale === 'es' ? 'Menú de secciones' : 'Sections menu'}
         />
 
         <div className="ml-auto shrink-0 lg:ml-0">
-          <LanguageSwitch locale={locale} />
+          <LanguageSwitch locale={locale} path={path} />
         </div>
       </div>
 

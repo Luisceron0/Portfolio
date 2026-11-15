@@ -2,10 +2,10 @@
 **Start:** 2026-11-14 · **Branch:** `reposicionamiento-appsec` (sin merge, push ni deploy sin aprobación del dueño)
 
 - [x] 1. Alcance: casos con URL propia (`/casos/<slug>`), SRS v1.4 y copilot-instructions
-- [ ] 2. Corregir afirmaciones (habilidades, certificaciones, viñetas Alcaldía y Freelance)
-- [ ] 3. Titular, hero, subtítulo, disponibilidad y perfil ES/EN (primera persona implícita)
-- [ ] 4. "Qué hago": tres pilares
-- [ ] 5. "Casos de seguridad" con plantilla fija + rutas `/casos/[slug]` → **revisión del dueño**
+- [x] 2. Corregir afirmaciones (habilidades, certificaciones, viñetas Alcaldía y Freelance)
+- [x] 3. Titular, hero, subtítulo, disponibilidad y perfil ES/EN (primera persona implícita)
+- [x] 4. "Qué hago": tres pilares
+- [x] 5. "Casos de seguridad" con plantilla fija + rutas `/casos/[slug]` → **pendiente: revisión del dueño**
 - [ ] 6. "Cómo trabajo" (4 pasos + hueco de captura)
 - [ ] 7. Experiencia resumida, habilidades reagrupadas, formación y certificaciones
 - [ ] 8. Navegación y anclas buscables
