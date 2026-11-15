@@ -1,7 +1,11 @@
+# CV en español: versión PRINCIPAL (vacantes inmediatas en Colombia).
+# cv/luis-ceron-cv-en.yaml tiene exactamente la misma información.
+# Fuente de los hechos: src/content.ts (mismo texto que el sitio). Si cambia
+# uno, cambia el otro. Fechas siempre "Mmm AAAA", sin rayas.
 cv:
   name: Luis Alejandro Cerón Muñoz
-  headline: Ingeniero de Software Full-Stack | Arquitectura de Software y Seguridad de Aplicaciones
-  location: Pasto, Nariño, Colombia (disponibilidad de relocalización)
+  headline: Ingeniero de Seguridad de Aplicaciones | Arquitectura Segura | DevSecOps
+  location: Pasto, Colombia. Híbrido en Medellín o Bogotá. Relocalización a Alemania o España
   email: luiscerontrabajos@gmail.com
   phone: "+57 314 4087963"
   website: https://portfolio-luisceron.vercel.app/
@@ -11,75 +15,69 @@ cv:
     - network: GitHub
       username: Luisceron0
   sections:
-    Perfil Profesional:
-      - 'Ingeniero de Software Full-Stack orientado a arquitectura de software y seguridad de aplicaciones. Diseño sistemas de punta a punta (React, Angular, Vue.js, Spring Boot, PostgreSQL) definiendo la estructura antes del primer archivo: límites entre módulos, contratos de datos y decisiones registradas en ADRs versionados. Incorporo la seguridad desde el diseño (RBAC, JWT, modelado de amenazas, SAST y SCA en el pipeline) y despliego en AWS y Docker con CI/CD. Egresado de Ingeniería de Software de la Universidad Cooperativa de Colombia y cursando una Especialización en Seguridad de la Información en el Politécnico Grancolombiano. Bilingüe (inglés C1, EF SET), con disponibilidad para relocalización.'
+    Perfil:
+      - 'Ingeniero de software con más de 3 años construyendo y manteniendo sistemas para salud, comercio y sector público, enfocado en seguridad de aplicaciones. Reviso arquitecturas y flujos de datos con modelado de amenazas, diseño controles de acceso (RBAC, Row Level Security deny-by-default), aplico criptografía (AES-256-GCM por tenant, gestión de secretos) e integro SAST y SCA como gates bloqueantes en CI (CodeQL, Semgrep, audit-ci). Cursando la Especialización en Seguridad de la Información. Inglés C1.'
 
     Experiencia:
       - company: I.P.S. San José
-        position: Ingeniero de Software
+        position: Ingeniero de Software (contrato por proyecto)
         location: Villagarzón, Putumayo, Colombia
         start_date: 2026-09
         end_date: 2026-11
         highlights:
-          - 'Responsable del desarrollo, la implementación y el mantenimiento de los sistemas informáticos de una institución prestadora de servicios de salud, incluida la administración de sus bases de datos.'
-          - 'Desarrollé un gestor de inventario y automatizaciones de procesos internos de la institución.'
-          - 'Inicié el desarrollo de un visor de imágenes médicas DICOM para la institución, orientado a la reconstrucción multiplanar 2D/3D (MPR), la fusión de estudios PET-CT y la conexión como cliente PACS.'
-          - 'Di soporte técnico y resolución de incidencias a los procesos operativos y administrativos.'
+          - 'Desarrollé y mantuve los sistemas de información de una institución prestadora de servicios de salud, incluida la administración de sus bases de datos.'
+          - 'Construí un gestor de inventario y automatizaciones de procesos internos.'
+          - 'Inicié un visor de imágenes médicas DICOM, orientado a reconstrucción multiplanar 2D/3D, fusión PET-CT y conexión como cliente PACS.'
       - company: Alcaldía de Pasto
         position: Practicante de Ingeniería de Software Full-Stack
         location: Pasto, Colombia
         start_date: 2025-10
         end_date: 2025-12
         highlights:
-          - 'Desarrollé de punta a punta el sistema de gestión de mantenimientos de una entidad pública, construyendo la interfaz de usuario, la lógica de backend y el modelo de datos, y lo entregué operativo dentro de los tres meses de la práctica.'
-          - 'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas del lado del servidor sobre un sistema que gestiona información de una entidad pública, mitigando inyección SQL y XSS (OWASP Top 10) con consultas parametrizadas, sanitización del lado del servidor y RBAC.'
-          - 'Reestructuré la capa de acceso a datos y optimicé las consultas cuando los tiempos de respuesta se convirtieron en el cuello de botella del sistema, reduciendo la latencia de las pantallas de consulta más usadas.'
+          - 'Entregué de punta a punta el sistema de gestión de mantenimientos de una entidad pública (interfaz, backend y modelo de datos), operativo en los 3 meses de la práctica.'
+          - 'Mitigué inyección SQL y XSS (OWASP Top 10) con consultas parametrizadas, sanitización del lado del servidor y RBAC, en un sistema con información de una entidad pública.'
+          - 'Optimicé la capa de acceso a datos y las consultas de las pantallas más usadas cuando los tiempos de respuesta se volvieron el cuello de botella.'
       - company: ElevaForge
         position: Cofundador e Ingeniero de Software
         location: Remoto
         start_date: 2025-06
         end_date: present
         highlights:
-          - 'Cofundé un estudio de software de 3 ingenieros y asumí las decisiones de arquitectura del producto: definí los límites entre módulos y los contratos de datos, y dejé cada decisión y sus alternativas descartadas en ADRs versionados, de modo que el equipo puede revisarlas sin depender de mí.'
-          - 'Dirigí la migración del sitio corporativo de Angular a Next.js 14, planificada por capas para que la estructura nueva absorbiera el contenido existente sin rehacerlo.'
-          - 'Diseñé el modelo de autorización de la plataforma como deny-by-default: Row Level Security activa y sin ninguna política para el rol anónimo ni el autenticado, con todo el acceso a datos pasando por el servidor, así que la clave pública que viaja al navegador no habilita ninguna consulta.'
+          - 'Cofundé un estudio de software de 3 ingenieros y asumí las decisiones de arquitectura, registradas en ADRs versionados con sus alternativas descartadas.'
+          - 'Diseñé la autorización deny-by-default: Row Level Security activa y sin políticas para anon ni authenticated, con todo el acceso a datos pasando por el servidor.'
+          - 'Dirigí la migración del sitio corporativo de Angular a Next.js 14 y construí elevaforge.com y los demos KOA (landing y tienda) con un panel de administración multi-cuenta.'
           - 'Configuré la CI del sitio con escaneo de secretos (gitleaks), lint, typecheck, tests, build y e2e en cada push; en los demos KOA, CodeQL, audit-ci y Lighthouse CI (landing) y CodeQL y npm audit (tienda).'
-          - 'Construí elevaforge.com y la vertical de demostración KOA (landing y e-commerce) con un panel de administración multi-cuenta, con el que el equipo edita paquetes, proyectos y contenido sin un despliegue de por medio.'
-      - company: Estación de Servicio Kennedy
-        position: Contratista de TI y Sistemas
-        location: Pasto, Colombia
-        start_date: 2023-03
-        end_date: 2026-03
-        highlights:
-          - 'Contratista de TI durante tres años consecutivos, responsable del desarrollo, la implementación y el mantenimiento de los sistemas informáticos de una estación de servicio en funcionamiento.'
-          - 'Administré las bases de datos del negocio y optimicé las herramientas de control de inventario y ventas, la operación diaria de la que dependía la caja y el abastecimiento.'
-          - 'Fui el punto de contacto técnico permanente: soporte a los procesos operativos y administrativos, y resolución de incidencias sobre los sistemas de gestión de la empresa según iban apareciendo, no bajo un contrato de horas fijas.'
-      - company: Freelance
-        position: Desarrollador de Software Full-Stack
-        location: Remoto
+      - company: Estación de Servicio Kennedy y clientes freelance
+        position: Contratista independiente de software y TI
+        location: Pasto, Colombia y remoto
         start_date: 2023-03
         end_date: present
         highlights:
-          - 'Atendí clientes a medio tiempo en paralelo a la carrera universitaria y, después, a la práctica en la Alcaldía de Pasto, hasta formalizar esa disciplina de producto cofundando ElevaForge a mediados de 2025.'
-          - 'Asumí encargos de alcance distinto según el cliente: interfaces de frontend, servicios de backend, desarrollos completos desde la interfaz hasta el despliegue y automatización de procesos internos.'
-          - 'Evaluaciones de seguridad de la información para más de 10 clínicas privadas y pymes, a través de firmas de outsourcing: control de acceso, trazabilidad y custodia de datos.'
-          - 'Ejecuté migraciones de datos hacia SAP y Oracle NetSuite aplicando cifrado y respaldos previos, de modo que cada corte tuviera un punto de retorno antes de mover el primer registro.'
-          - 'Implementé soluciones CRM a medida (Salesforce, HubSpot) para negocios de e-commerce, incluyendo la configuración de controles de acceso por rol para que cada usuario opere solo sobre la cartera que le corresponde.'
-          - 'Desarrollé sistemas de reportes automatizados con Odoo, Python y PostgreSQL que sustituyeron la consolidación manual de datos por una generación periódica para análisis de negocio.'
-          - 'Parte de este trabajo está cubierta por acuerdos de confidencialidad, así que cada encargo se describe por su tipo de trabajo y su stack, nunca por el cliente ni por sus datos.'
+          - 'Realicé evaluaciones de seguridad de la información para más de 10 clínicas privadas y pymes, a través de firmas de outsourcing: control de acceso, trazabilidad y custodia de datos.'
+          - 'Estación de Servicio Kennedy (Mar 2023 a Mar 2026): desarrollé y mantuve sus sistemas, administré las bases de datos y optimicé el control de inventario y ventas.'
+          - 'Freelance a medio tiempo, en paralelo a la carrera: frontend, backend y automatización; migraciones de datos a SAP y Oracle NetSuite, CRM (Salesforce, HubSpot) y reportes con Odoo, Python y PostgreSQL.'
+
+    Proyectos de seguridad:
+      - name: CareLink, plataforma clínica multi-tenant
+        location: github.com/Luisceron0/CareLink
+        summary: 'Historia clínica, triage y coordinación entre especialistas para varias instituciones sobre una misma base de datos. Implementación de referencia.'
+        highlights:
+          - 'Apliqué cifrado AES-256-GCM con clave derivada por institución y supresión, dentro de la consulta, de agregados con menos de 5 pacientes distintos, contra la re-identificación.'
+          - 'Bloqueé la edición de registros firmados con un trigger de PostgreSQL y revalidé el acceso de cada especialista en cada petición, verificado con tests de integración contra PostgreSQL real.'
+      - name: Tributary, facturación electrónica multirrégimen
+        location: github.com/Luisceron0/Tributary
+        summary: 'Facturación electrónica para ventas transfronterizas entre Colombia, España y Alemania. Implementación de referencia, no certificada para producción.'
+        highlights:
+          - 'Garanticé la inmutabilidad fiscal con triggers de PostgreSQL y una cadena de hashes SHA-256 cuyo verificador señala el registro alterado.'
+          - 'Definí 13 controles de seguridad con criterio binario de verificación y 4 gates independientes en CI; el quickstart levanta todo el stack en menos de 3 minutos.'
+      - name: KOA, landing y tienda bilingüe de demostración
+        location: koa.elevaforge.com
+        summary: 'Lista de espera pública y tienda con checkout simulado, sin pagos reales.'
+        highlights:
+          - 'Recalculé los precios en el servidor contra el catálogo, ignorando cualquier precio o total enviado por el navegador.'
+          - 'Protegí el formulario público con Turnstile verificado en el servidor, confirmación por correo y límite de solicitudes por IP.'
 
     Educación:
-      - institution: Universidad Cooperativa de Colombia
-        # Sin `degree`: el locale espanol compone "DEGREE en AREA", y con
-        # degree "Ingenieria" la linea quedaba "Ingenieria en Ingenieria de
-        # Software". La especializacion SI lo lleva, porque ahi compone bien.
-        area: Ingeniería de Software
-        location: Pasto, Colombia
-        start_date: 2022-02
-        end_date: 2025-12
-        highlights:
-          - 'Proyecto de grado: API REST para gestión de espacios físicos con apoyo de IA, con autenticación JWT y gestión segura de secretos.'
-          - 'Cursos relevantes: Arquitectura de Sistemas Escalables, Desarrollo Back-End, Metodologías Ágiles (Scrum), Ciberseguridad, Seguridad de Redes.'
       - institution: Politécnico Grancolombiano
         area: Seguridad de la Información
         degree: Especialización
@@ -87,23 +85,42 @@ cv:
         start_date: 2026-01
         end_date: present
         highlights:
-          - 'En curso, finalización estimada: 2027.'
+          - 'En curso, finalización estimada en 2027.'
+      - institution: Universidad Cooperativa de Colombia
+        # Sin `degree`: el locale español compone "DEGREE en AREA", y con
+        # degree "Ingeniería" la línea quedaba "Ingeniería en Ingeniería de
+        # Software". La especialización SÍ lo lleva, porque ahí compone bien.
+        area: Ingeniería de Software
+        location: Pasto, Colombia
+        start_date: 2022-02
+        end_date: 2025-12
+        highlights:
+          - 'Proyecto de grado: API REST con apoyo de IA, autenticación JWT y gestión segura de secretos.'
+          - 'Cursos relevantes: Arquitectura de Software, Sistemas Distribuidos, Seguridad Informática, Sistemas de Inteligencia Artificial.'
 
     Certificaciones:
-      - 'Ciberseguridad, MinTIC Colombia (Sept 2024)'
+      - 'Ciberseguridad, MinTIC Colombia (Sep 2024)'
       - 'Network Security, Cisco (Dic 2024)'
 
     Habilidades:
+      - label: Seguridad
+        details: Modelado de amenazas, OWASP Top 10, RBAC, Row Level Security, JWT (RS256), Criptografía aplicada (AES-256-GCM), Gestión de secretos, SAST (CodeQL, Semgrep), SCA (audit-ci, npm audit, Trivy), Escaneo de secretos (gitleaks), Seguridad de redes
       - label: Arquitectura
-        details: Diseño de sistemas escalables, Arquitectura hexagonal, Separación por capas, Diseño de APIs REST, Modelado de datos, ADRs, Aislamiento multi-tenant
-      - label: Desarrollo
-        details: React, Next.js, Vue.js, Angular, Spring Boot, JavaScript, TypeScript, Java, Python
-      - label: Seguridad y DevOps
-        details: RBAC, JWT, Modelado de amenazas, Prácticas de código seguro, SAST y SCA en CI (CodeQL, Semgrep), Docker, AWS (EC2, S3), CI/CD, Seguridad de redes
-      - label: Bases de Datos
+        details: Aislamiento multi-tenant, ADRs, Arquitectura hexagonal, Separación por capas, Diseño de APIs REST, Modelado de datos, Diseño de sistemas escalables
+      - label: Backend
+        details: Java, Spring Boot, Python, TypeScript
+      - label: Frontend
+        details: React, Next.js, Angular, Vue.js, Astro, JavaScript, Tailwind CSS, HTML5, CSS3
+      - label: Cloud y DevOps
+        details: Docker, GitHub Actions (CI/CD), AWS (EC2, S3), Vercel, Git
+      - label: Bases de datos
         details: PostgreSQL, MySQL, MongoDB, Migraciones versionadas (Flyway)
-      - label: Idiomas
-        details: Español (Nativo), Inglés (Avanzado C1, EF SET Certified)
+
+    Idiomas:
+      - label: Español
+        details: Nativo
+      - label: Inglés
+        details: C1 (EF SET)
 
 # ---------------------------------------------------------------------------
 # Diseno: formato Harvard, legible por un ATS.
@@ -184,9 +201,20 @@ design:
     # Verificar visualmente tras cualquier cambio de contenido: el ajuste
     # correcto depende de cuanto texto haya, no es una constante fija.
     allow_page_break: true
+  # Fechas y separadores sin rayas, con el mismo formato que el sitio
+  # ("Mar 2023 a la actualidad"): la plantilla harvard usa "–" en los rangos y
+  # " -- " (que Typst convierte en raya) entre empresa y lugar.
   templates:
+    date_range: "START_DATE a END_DATE"
     education_entry:
       degree_column: null
+      main_column: "**INSTITUTION**, DEGREE_WITH_AREA | LOCATION\nSUMMARY\nHIGHLIGHTS"
+    normal_entry:
+      main_column: "**NAME** | LOCATION\nSUMMARY\nHIGHLIGHTS"
+    experience_entry:
+      main_column: "**COMPANY**, POSITION | LOCATION\nSUMMARY\nHIGHLIGHTS"
 
 locale:
   language: spanish
+  # Mismo texto que el sitio: "Mar 2023 a la actualidad".
+  present: la actualidad
