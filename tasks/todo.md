@@ -12,7 +12,7 @@
 - [x] 9. SEO: title/description, JSON-LD, sitemap, robots, OG con next/og
 - [x] 10. Permissions-Policy ampliada, Lighthouse SEO ≥95
 - [x] 11. CV ES (principal) y EN: misma información, ATS, ≤2 páginas, prueba de orden del texto extraído
-- [ ] 12. Verificación completa y lista de `[PENDIENTE: TODO-LUIS, ...]` por archivo
+- [x] 12. Verificación completa y lista de `[PENDIENTE: TODO-LUIS, ...]` por archivo
 
 ### Tareas del dueño (mejoras opcionales, no bloquean el deploy)
 Regla (2026-11-14): `[PENDIENTE]` en el sitio solo para datos que impiden publicar algo verdadero; las mejoras opcionales van aquí.

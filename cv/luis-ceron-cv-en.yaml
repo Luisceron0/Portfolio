@@ -73,7 +73,7 @@ cv:
         location: koa.elevaforge.com
         summary: 'Public waitlist and a store with a simulated checkout, no real payments.'
         highlights:
-          - 'Recalculated prices on the server against the catalogue, ignoring any price or total sent by the browser.'
+          - 'Recalculated prices on the server against the catalog, ignoring any price or total sent by the browser.'
           - 'Protected the public form with server-verified Turnstile, email confirmation and a per-IP request limit.'
 
     Education:

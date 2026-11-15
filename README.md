@@ -1,7 +1,9 @@
 # Sitio personal de Luis Alejandro Cerón Muñoz
 
-Página única cuyo único objetivo es convertir los primeros 60 segundos de un
-reclutador en un contacto o en un clic a GitHub. Especificación completa en
+Portafolio de Luis Alejandro Cerón Muñoz como ingeniero de seguridad de
+aplicaciones que construye (SRS v1.4): una home y una página por caso de
+seguridad (`/casos/<slug>`). Su objetivo es convertir los primeros 60 segundos
+de un reclutador en un contacto o en un clic a GitHub. Especificación completa en
 [SRS-personal-site.md](SRS-personal-site.md); reglas de stack y seguridad en
 [.github/copilot-instructions.md](.github/copilot-instructions.md); plan por
 fases en [tasks/todo.md](tasks/todo.md).
@@ -105,6 +107,15 @@ no debe llevar texto nunca.
   header `Host` (T-104).
 
 ## Estado
+
+**Reposicionamiento AppSec (rama `reposicionamiento-appsec`, 2026-11-14):**
+casos de seguridad con plantilla fija y controles enlazados a código en commits
+fijos, sección "Cómo trabajo", experiencia agrupada, SEO (JSON-LD, sitemap,
+Open Graph generado con next/og) y CV ES/EN regenerados con RenderCV. El único
+`[PENDIENTE]` que bloquea el deploy es el bloque "En formación"; las mejoras
+opcionales del dueño están en `tasks/todo.md`.
+
+**Historial anterior:**
 
 Fases 1-3 completas (andamiaje, formulario de contacto, contenido real de los
 cinco proyectos, perfil y trayectoria, bilingüe ES/EN) y desplegadas en GitHub

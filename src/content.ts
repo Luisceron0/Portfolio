@@ -14,10 +14,12 @@
  * compilación, no un hueco silencioso que se descubre en producción.
  *
  * FUENTES DE ESTE ARCHIVO (nada aquí es inventado):
- *  - Perfil, trayectoria, educación, certificaciones y habilidades: el YAML de
- *    RenderCV del dueño (RF-106/107). Si el CV cambia, este archivo cambia.
- *  - Proyectos: los README públicos de cada repo y las URLs en vivo, todas
- *    verificadas con HTTP 200 antes de escribirlas aquí (RF-102).
+ *  - Perfil, experiencia, formación, certificaciones y habilidades: los hechos
+ *    verificados por el dueño (2026-11-14, SRS v1.4). El CV (cv/*.yaml) usa
+ *    EXACTAMENTE los mismos textos: si cambia uno, cambia el otro.
+ *  - Casos de seguridad: el código de cada repo, leído en un commit fijo y
+ *    enlazado con permalinks (ver REPO y COMMIT más abajo), y las URLs en vivo
+ *    verificadas antes de escribirlas aquí.
  *
  * NOTA DE ESTILO: no se usan rayas largas en el copy visible. Se prefieren
  * comas, dos puntos o paréntesis.
@@ -902,7 +904,7 @@ export const securityCases: readonly SecurityCase[] = [
             },
             why: {
               es: 'El umbral va dentro de la consulta (HAVING COUNT(DISTINCT patient_id)), así que el grupo pequeño nunca sale de la base: defensa contra la re-identificación.',
-              en: 'The threshold sits inside the query (HAVING COUNT(DISTINCT patient_id)), so the small group never leaves the database: a defence against re-identification.',
+              en: 'The threshold sits inside the query (HAVING COUNT(DISTINCT patient_id)), so the small group never leaves the database: a defense against re-identification.',
             },
             evidence: [
               code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/persistence/JdbcKnowledgeEngineRepository.java', 'L89-L91'),
@@ -1104,7 +1106,7 @@ export const securityCases: readonly SecurityCase[] = [
             },
             why: {
               es: 'Defensa contra CSRF en el panel: una petición de otro origen se rechaza antes de tocar los datos.',
-              en: 'CSRF defence for the panel: a request from another origin is rejected before it touches the data.',
+              en: 'CSRF defense for the panel: a request from another origin is rejected before it touches the data.',
             },
             evidence: [code('elevaforge', 'lib/security/csrf.ts', 'L22')],
           },
@@ -1133,7 +1135,7 @@ export const securityCases: readonly SecurityCase[] = [
       {
         text: {
           es: 'Tests unitarios de los controles: validación de origen, IP de cliente y comportamiento del límite cuando Redis no responde.',
-          en: 'Unit tests for the controls: origin validation, client IP and rate limit behaviour when Redis does not respond.',
+          en: 'Unit tests for the controls: origin validation, client IP and rate limit behavior when Redis does not respond.',
         },
         evidence: [
           code('elevaforge', 'lib/security/csrf.test.ts'),
@@ -1418,7 +1420,7 @@ export const securityCases: readonly SecurityCase[] = [
     },
     summary: {
       es: 'Un formulario público y un checkout: precios recalculados en el servidor y defensa contra automatización con Turnstile, confirmación por correo y límite por IP.',
-      en: 'A public form and a checkout: prices recalculated on the server and anti-automation defence with Turnstile, email confirmation and a per-IP limit.',
+      en: 'A public form and a checkout: prices recalculated on the server and anti-automation defense with Turnstile, email confirmation and a per-IP limit.',
     },
     seoDescription: {
       es: 'KOA: precios recalculados en el servidor y defensa contra automatización con Turnstile, confirmación por correo y límite de solicitudes por IP.',
@@ -1432,7 +1434,7 @@ export const securityCases: readonly SecurityCase[] = [
     status: 'demo',
     dataFlow: {
       es: 'Landing: formulario → endpoint de servidor (límite por IP con hash en Upstash → verificación de Turnstile → validación) → Neon Postgres en estado pendiente → correo de confirmación con token. Tienda: carrito anónimo en sesión → el servidor recotiza cada línea contra el catálogo → checkout simulado, sin pagos reales.',
-      en: 'Landing: form → server endpoint (per-IP limit with a hashed IP in Upstash → Turnstile verification → validation) → Neon Postgres in pending state → confirmation email with a token. Store: anonymous session cart → the server reprices every line against the catalogue → simulated checkout, no real payments.',
+      en: 'Landing: form → server endpoint (per-IP limit with a hashed IP in Upstash → Turnstile verification → validation) → Neon Postgres in pending state → confirmation email with a token. Store: anonymous session cart → the server reprices every line against the catalog → simulated checkout, no real payments.',
     },
     assets: {
       es: [
@@ -1497,7 +1499,7 @@ export const securityCases: readonly SecurityCase[] = [
             },
             why: {
               es: 'El precio unitario sale siempre del catálogo, nunca del estado que envía el navegador: un precio o un subtotal inyectado se ignora.',
-              en: 'The unit price always comes from the catalogue, never from the state the browser sends: an injected price or subtotal is ignored.',
+              en: 'The unit price always comes from the catalog, never from the state the browser sends: an injected price or subtotal is ignored.',
             },
             evidence: [
               code('koaStore', 'src/lib/cart.ts', 'L145-L160'),
@@ -1521,7 +1523,7 @@ export const securityCases: readonly SecurityCase[] = [
         ],
       },
       {
-        heading: { es: 'Defensa contra automatización', en: 'Anti-automation defence' },
+        heading: { es: 'Defensa contra automatización', en: 'Anti-automation defense' },
         controls: [
           {
             title: {
@@ -1557,8 +1559,8 @@ export const securityCases: readonly SecurityCase[] = [
               en: 'Email confirmation',
             },
             why: {
-              es: 'Una dirección no cuenta como suscrita hasta que su dueño abre el enlace; el token se guarda como hash. Nadie puede apuntar a terceros.',
-              en: 'An address does not count as subscribed until its owner opens the link; the token is stored as a hash. Nobody can sign up someone else.',
+              es: 'Una dirección no cuenta como suscrita hasta que su dueño abre el enlace; el token se guarda como hash. Apuntar a un tercero no lo suscribe sin su confirmación.',
+              en: 'An address does not count as subscribed until its owner opens the link; the token is stored as a hash. Signing up a third party does not subscribe them without their confirmation.',
             },
             evidence: [code('koaLanding', 'src/pages/confirmar.astro', 'L18-L20')],
           },
