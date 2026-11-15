@@ -32,7 +32,7 @@ cv:
         end_date: 2025-12
         highlights:
           - 'Built the maintenance-management system of a public-sector entity end to end, covering the user interface, the backend logic and the data model, and delivered it in operation within the three months of the internship.'
-          - 'Implemented Role-Based Access Control (RBAC) and server-side input sanitization on a system holding government records, closing the SQL injection and XSS paths before it went into production.'
+          - 'Implemented Role-Based Access Control (RBAC) and server-side input sanitization on a system holding government records, mitigating SQL injection and XSS (OWASP Top 10) with parameterized queries, server-side sanitization and RBAC.'
           - 'Restructured the data access layer and optimized queries once response times became the bottleneck, reducing latency on the most heavily used query screens.'
       - company: ElevaForge
         position: Co-Founder and Software Engineer
@@ -61,7 +61,8 @@ cv:
         end_date: present
         highlights:
           - 'Served clients part-time alongside my degree and, later, alongside the internship at Alcaldía de Pasto, until I formalized that product discipline by co-founding ElevaForge in mid-2025.'
-          - 'Took on engagements of different scope depending on the client: frontend interfaces, backend services, complete builds from the interface through to deployment, internal process automation, and security audits of applications already in operation.'
+          - 'Took on engagements of different scope depending on the client: frontend interfaces, backend services, complete builds from the interface through to deployment, and internal process automation.'
+          - 'Information security assessments for more than 10 private clinics and SMEs, through outsourcing firms: access control, traceability and data custody.'
           - 'Executed data migrations to SAP and Oracle NetSuite applying encryption and prior backups, so every cutover had a tested rollback path before the first record moved.'
           - 'Implemented custom CRM solutions (Salesforce, HubSpot) for e-commerce businesses, including role-based access control configuration so each user works only on the accounts assigned to them.'
           - 'Built automated reporting systems with Odoo, Python and PostgreSQL that replaced manual data consolidation with periodic report generation for business analysis.'
@@ -89,16 +90,12 @@ cv:
     Certifications:
       - 'Cybersecurity, MinTIC Colombia (Sept 2024)'
       - 'Network Security, Cisco (Dec 2024)'
-      - 'Agile Software Development and Scrum, IBM (Jan 2025)'
-      - 'Building Scalable Systems, IBM (Feb 2025)'
-      - 'Introduction to Back-End Development, Meta (Feb 2025)'
-      - 'AI and Productivity Certifications, Microsoft & LinkedIn (Feb 2025)'
 
     Skills:
       - label: Architecture
         details: Scalable system design, Hexagonal architecture, Layered separation, REST API design, Data modelling, ADRs, Multi-tenant isolation
       - label: Development
-        details: React, Next.js, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
+        details: React, Next.js, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python
       - label: Security & DevOps
         details: RBAC, JWT, Threat modelling, Secure coding practices, SAST and SCA in CI (CodeQL, Semgrep), Docker, AWS (EC2, S3), CI/CD, Network security
       - label: Databases

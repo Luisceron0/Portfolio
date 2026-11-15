@@ -425,12 +425,12 @@ export const timeline = {
       highlights: {
         es: [
           'Desarrollé de punta a punta el sistema de gestión de mantenimientos de una entidad pública, construyendo la interfaz de usuario, la lógica de backend y el modelo de datos, y lo entregué operativo dentro de los tres meses de la práctica.',
-          'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas del lado del servidor sobre un sistema que gestiona información de una entidad pública, cerrando las vías de inyección SQL y de XSS antes de la puesta en producción.',
+          'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas del lado del servidor sobre un sistema que gestiona información de una entidad pública, mitigando inyección SQL y XSS (OWASP Top 10) con consultas parametrizadas, sanitización del lado del servidor y RBAC.',
           'Reestructuré la capa de acceso a datos y optimicé las consultas cuando los tiempos de respuesta se convirtieron en el cuello de botella del sistema, reduciendo la latencia de las pantallas de consulta más usadas.',
         ],
         en: [
           'Built the maintenance management system of a public sector entity end to end, covering the user interface, the backend logic and the data model, and delivered it in operation within the three months of the internship.',
-          'Implemented Role-Based Access Control (RBAC) and server-side input sanitisation on a system holding government records, closing the SQL injection and XSS paths before it went into production.',
+          'Implemented Role-Based Access Control (RBAC) and server-side input sanitisation on a system holding government records, mitigating SQL injection and XSS (OWASP Top 10) with parameterized queries, server-side sanitization and RBAC.',
           'Restructured the data access layer and optimised queries once response times became the bottleneck, reducing latency on the most heavily used query screens.',
         ],
       },
@@ -904,8 +904,8 @@ export const skills = {
     {
       label: { es: 'Lenguajes', en: 'Languages' },
       items: {
-        es: ['Java', 'Python', 'C#', 'C++', 'JavaScript', 'TypeScript', 'Dart', 'HTML5', 'CSS3'],
-        en: ['Java', 'Python', 'C#', 'C++', 'JavaScript', 'TypeScript', 'Dart', 'HTML5', 'CSS3'],
+        es: ['Java', 'Python', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3'],
+        en: ['Java', 'Python', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3'],
       },
     },
     {
@@ -956,7 +956,6 @@ export const skills = {
           'Docker',
           'Git',
           'CI/CD Pipelines',
-          'Pruebas de penetración',
           'Modelado de amenazas',
           'SAST y SCA en CI (CodeQL, Semgrep)',
           'Seguridad de redes',
@@ -969,7 +968,6 @@ export const skills = {
           'Docker',
           'Git',
           'CI/CD pipelines',
-          'Penetration testing',
           'Threat modelling',
           'SAST and SCA in CI (CodeQL, Semgrep)',
           'Network security',
@@ -1002,18 +1000,10 @@ export const skills = {
     es: [
       'Ciberseguridad, MinTIC Colombia (Sept 2024)',
       'Network Security, Cisco (Dic 2024)',
-      'Desarrollo de Software Ágil y Scrum, IBM (Ene 2025)',
-      'Building Scalable Systems, IBM (Feb 2025)',
-      'Introduction to Back-End Development, Meta (Feb 2025)',
-      'Certificaciones en IA y Productividad, Microsoft y LinkedIn (Feb 2025)',
     ],
     en: [
       'Cybersecurity, MinTIC Colombia (Sept 2024)',
       'Network Security, Cisco (Dec 2024)',
-      'Agile Software Development and Scrum, IBM (Jan 2025)',
-      'Building Scalable Systems, IBM (Feb 2025)',
-      'Introduction to Back-End Development, Meta (Feb 2025)',
-      'AI and Productivity certifications, Microsoft and LinkedIn (Feb 2025)',
     ],
   } satisfies LocalizedList,
 } as const

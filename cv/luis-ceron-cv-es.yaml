@@ -32,7 +32,7 @@ cv:
         end_date: 2025-12
         highlights:
           - 'Desarrollé de punta a punta el sistema de gestión de mantenimientos de una entidad pública, construyendo la interfaz de usuario, la lógica de backend y el modelo de datos, y lo entregué operativo dentro de los tres meses de la práctica.'
-          - 'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas del lado del servidor sobre un sistema que gestiona información de una entidad pública, cerrando las vías de inyección SQL y de XSS antes de la puesta en producción.'
+          - 'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas del lado del servidor sobre un sistema que gestiona información de una entidad pública, mitigando inyección SQL y XSS (OWASP Top 10) con consultas parametrizadas, sanitización del lado del servidor y RBAC.'
           - 'Reestructuré la capa de acceso a datos y optimicé las consultas cuando los tiempos de respuesta se convirtieron en el cuello de botella del sistema, reduciendo la latencia de las pantallas de consulta más usadas.'
       - company: ElevaForge
         position: Cofundador e Ingeniero de Software
@@ -61,7 +61,8 @@ cv:
         end_date: present
         highlights:
           - 'Atendí clientes a medio tiempo en paralelo a la carrera universitaria y, después, a la práctica en la Alcaldía de Pasto, hasta formalizar esa disciplina de producto cofundando ElevaForge a mediados de 2025.'
-          - 'Asumí encargos de alcance distinto según el cliente: interfaces de frontend, servicios de backend, desarrollos completos desde la interfaz hasta el despliegue, automatización de procesos internos y auditorías de seguridad sobre aplicaciones ya en operación.'
+          - 'Asumí encargos de alcance distinto según el cliente: interfaces de frontend, servicios de backend, desarrollos completos desde la interfaz hasta el despliegue y automatización de procesos internos.'
+          - 'Evaluaciones de seguridad de la información para más de 10 clínicas privadas y pymes, a través de firmas de outsourcing: control de acceso, trazabilidad y custodia de datos.'
           - 'Ejecuté migraciones de datos hacia SAP y Oracle NetSuite aplicando cifrado y respaldos previos, de modo que cada corte tuviera un punto de retorno antes de mover el primer registro.'
           - 'Implementé soluciones CRM a medida (Salesforce, HubSpot) para negocios de e-commerce, incluyendo la configuración de controles de acceso por rol para que cada usuario opere solo sobre la cartera que le corresponde.'
           - 'Desarrollé sistemas de reportes automatizados con Odoo, Python y PostgreSQL que sustituyeron la consolidación manual de datos por una generación periódica para análisis de negocio.'
@@ -91,16 +92,12 @@ cv:
     Certificaciones:
       - 'Ciberseguridad, MinTIC Colombia (Sept 2024)'
       - 'Network Security, Cisco (Dic 2024)'
-      - 'Desarrollo de Software Ágil y Scrum, IBM (Ene 2025)'
-      - 'Building Scalable Systems, IBM (Feb 2025)'
-      - 'Introduction to Back-End Development, Meta (Feb 2025)'
-      - 'Certificaciones en IA y Productividad, Microsoft & LinkedIn (Feb 2025)'
 
     Habilidades:
       - label: Arquitectura
         details: Diseño de sistemas escalables, Arquitectura hexagonal, Separación por capas, Diseño de APIs REST, Modelado de datos, ADRs, Aislamiento multi-tenant
       - label: Desarrollo
-        details: React, Next.js, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
+        details: React, Next.js, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python
       - label: Seguridad y DevOps
         details: RBAC, JWT, Modelado de amenazas, Prácticas de código seguro, SAST y SCA en CI (CodeQL, Semgrep), Docker, AWS (EC2, S3), CI/CD, Seguridad de redes
       - label: Bases de Datos
