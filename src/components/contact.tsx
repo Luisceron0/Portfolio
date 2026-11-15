@@ -30,7 +30,7 @@ export function Contact({ locale }: { locale: Locale }) {
     <Section id="contacto" labelledBy="contacto-title">
       <SectionHeading
         id="contacto-title"
-        number="05"
+        number="07"
         title={contact.heading[locale]}
         intro={contact.intro[locale]}
         tone="violet"

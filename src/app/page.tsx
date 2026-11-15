@@ -1,6 +1,7 @@
 import { Contact } from '@/components/contact'
 import { Cases } from '@/components/cases'
 import { CvDownloads } from '@/components/cv'
+import { Education } from '@/components/education'
 import { Footer } from '@/components/footer'
 import { Hero } from '@/components/hero'
 import { Pillars } from '@/components/pillars'
@@ -49,6 +50,7 @@ export default function HomePage() {
         <Process locale={locale} />
         <Timeline locale={locale} />
         <Skills locale={locale} />
+        <Education locale={locale} />
         <CvDownloads locale={locale} />
         <Contact locale={locale} />
       </main>

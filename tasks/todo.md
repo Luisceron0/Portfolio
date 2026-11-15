@@ -7,7 +7,7 @@
 - [x] 4. "Qué hago": tres pilares
 - [x] 5. "Casos de seguridad" con plantilla fija + rutas `/casos/[slug]` → **pendiente: revisión del dueño**
 - [x] 6. "Cómo trabajo" (4 pasos + hueco de captura)
-- [ ] 7. Experiencia resumida, habilidades reagrupadas, formación y certificaciones
+- [x] 7. Experiencia resumida, habilidades reagrupadas, formación y certificaciones
 - [ ] 8. Navegación y anclas buscables
 - [ ] 9. SEO: title/description, JSON-LD, sitemap, robots, OG con next/og
 - [ ] 10. Permissions-Policy ampliada, Lighthouse SEO ≥95

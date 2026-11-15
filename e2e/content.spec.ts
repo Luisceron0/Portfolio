@@ -4,6 +4,7 @@ import {
   CASE_NAMES,
   casesSection,
   cv,
+  education,
   LOCALES,
   nav,
   pillars,
@@ -377,19 +378,50 @@ test.describe('Cómo trabajo', () => {
   })
 })
 
-test.describe('RF-106 / RF-107 — perfil, trayectoria y habilidades', () => {
-  test('la trayectoria lista todas las entradas del CV, en una lista ordenada', async ({
+test.describe('RF-106 / RF-107 — perfil, experiencia, habilidades y formación', () => {
+  test('la experiencia lista todas las entradas del CV, en una lista ordenada', async ({
     page,
   }) => {
     await page.goto('/')
 
-    const entries = page.locator('#trayectoria ol > li')
+    const entries = page.locator('#experiencia ol > li')
     await expect(entries).toHaveCount(timeline.entries.length)
 
     // Cada entrada muestra su periodo: una cronología sin fechas no lo es.
     for (const entry of timeline.entries) {
-      await expect(page.locator('#trayectoria')).toContainText(entry.period.es)
-      await expect(page.locator('#trayectoria')).toContainText(entry.organization)
+      await expect(page.locator('#experiencia')).toContainText(entry.period.es)
+      await expect(page.locator('#experiencia')).toContainText(entry.organization)
+    }
+  })
+
+  test('Kennedy y freelance van agrupados como contratista independiente', async ({ page }) => {
+    await page.goto('/')
+    const experiencia = page.locator('#experiencia')
+    await expect(experiencia).toContainText('Contratista independiente de software y TI')
+    await expect(experiencia).toContainText('Mar 2023 a la actualidad')
+    await expect(experiencia).toContainText('medio tiempo, en paralelo a la carrera')
+    await expect(experiencia).toContainText('contrato por proyecto')
+    await expect(experiencia).not.toContainText('Voluntario')
+  })
+
+  test('Seguridad es el primer grupo de habilidades y no hay afirmaciones retiradas', async ({ page }) => {
+    await page.goto('/')
+    expect(skills.groups[0].label.es).toBe('Seguridad')
+    const habilidades = page.locator('#habilidades')
+    for (const removed of ['Pruebas de penetración', 'C++', 'Dart', 'C#', 'Django']) {
+      await expect(habilidades).not.toContainText(removed)
+    }
+  })
+
+  test('formación: estudios, solo certificaciones de seguridad e idiomas', async ({ page }) => {
+    await page.goto('/')
+    const formacion = page.locator('#formacion')
+    for (const entry of education.entries) {
+      await expect(formacion).toContainText(entry.organization)
+    }
+    await expect(formacion.locator('li', { hasText: 'Cisco' })).toHaveCount(1)
+    for (const removed of ['IBM', 'Meta', 'Microsoft']) {
+      await expect(formacion).not.toContainText(removed)
     }
   })
 

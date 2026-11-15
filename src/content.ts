@@ -214,7 +214,7 @@ export const nav = {
   brand: 'LC',
   items: [
     { label: { es: 'Qué hago', en: 'What I do' }, href: '#seguridad' },
-    { label: { es: 'Trayectoria', en: 'Career' }, href: '#trayectoria' },
+    { label: { es: 'Experiencia', en: 'Experience' }, href: '#experiencia' },
     { label: { es: 'Casos', en: 'Cases' }, href: '#casos' },
     { label: { es: 'Habilidades', en: 'Skills' }, href: '#habilidades' },
     { label: { es: 'Contacto', en: 'Contact' }, href: '#contacto' },
@@ -456,30 +456,30 @@ export const pillars = {
 // ---------------------------------------------------------------------------
 
 export const timeline = {
-  heading: { es: 'Trayectoria', en: 'Career' } satisfies Localized,
+  heading: { es: 'Experiencia', en: 'Experience' } satisfies Localized,
   intro: {
-    es: 'Experiencia y formación, en orden cronológico inverso. El contenido proviene del mismo currículum disponible para descarga más abajo.',
-    en: 'Experience and education, most recent first, drawn from the same CV available for download below.',
+    es: 'Resumen de la experiencia laboral, el mismo del CV descargable. Más de 3 años como contratista, outsourcing y freelance desde marzo de 2023.',
+    en: 'Summary of my work experience, the same as in the downloadable CV. More than 3 years as a contractor, through outsourcing and freelance since March 2023.',
   } satisfies Localized,
-  /** Etiquetas de tipo de entrada. */
-  kinds: {
-    trabajo: { es: 'Trabajo', en: 'Work' } satisfies Localized,
-    estudio: { es: 'Estudio', en: 'Education' } satisfies Localized,
-  },
+  /**
+   * Solo trabajo, más reciente primero (la formación tiene su propia sección).
+   *
+   * Fechas: siempre "Mmm AAAA a Mmm AAAA" o "Mmm AAAA a la actualidad", sin
+   * rayas (check:dashes). El CV usa exactamente el mismo formato.
+   *
+   * Estación de Servicio Kennedy y el trabajo freelance van agrupados como
+   * "Contratista independiente" (decisión del dueño, 2026-11-14): cinco
+   * frentes simultáneos generaban dudas; agrupados, se lee que el freelance fue
+   * a medio tiempo, en paralelo a la carrera.
+   */
   entries: [
     {
-      /*
-       * Contrato de duración fija (21 sep a 16 nov 2026). El periodo se escribe
-       * con su fecha de cierre y no como "a la actualidad": así no queda
-       * desactualizado el día que termina. Cargo y funciones, por indicación
-       * del dueño (2026-10-31): las de E.D.S. Kennedy más los proyectos
-       * concretos que desarrolló aquí. El visor DICOM está en desarrollo
-       * temprano: sus capacidades se escriben como objetivo ("orientado a"),
-       * no como funciones ya entregadas. Sin cifras que no tengan respaldo.
-       */
       id: 'ips-san-jose',
       kind: 'trabajo',
-      title: { es: 'Ingeniero de Software', en: 'Software Engineer' },
+      title: {
+        es: 'Ingeniero de Software (contrato por proyecto)',
+        en: 'Software Engineer (project-based contract)',
+      },
       organization: 'I.P.S. San José',
       location: {
         es: 'Villagarzón, Putumayo, Colombia',
@@ -488,32 +488,15 @@ export const timeline = {
       period: { es: 'Sep 2026 a Nov 2026', en: 'Sep 2026 to Nov 2026' },
       highlights: {
         es: [
-          'Responsable del desarrollo, la implementación y el mantenimiento de los sistemas informáticos de una institución prestadora de servicios de salud, incluida la administración de sus bases de datos.',
-          'Desarrollé un gestor de inventario y automatizaciones de procesos internos de la institución.',
-          'Inicié el desarrollo de un visor de imágenes médicas DICOM para la institución, orientado a la reconstrucción multiplanar 2D/3D (MPR), la fusión de estudios PET-CT y la conexión como cliente PACS.',
-          'Di soporte técnico y resolución de incidencias a los procesos operativos y administrativos.',
+          'Desarrollé y mantuve los sistemas de información de una institución prestadora de servicios de salud, incluida la administración de sus bases de datos.',
+          'Construí un gestor de inventario y automatizaciones de procesos internos.',
+          'Inicié un visor de imágenes médicas DICOM, orientado a reconstrucción multiplanar 2D/3D, fusión PET-CT y conexión como cliente PACS.',
         ],
         en: [
-          'Responsible for the development, implementation and maintenance of the information systems of a healthcare provider institution, including the administration of its databases.',
-          'Built an inventory manager and automations for the internal processes of the institution.',
-          'Started the development of a DICOM medical imaging viewer for the institution, aimed at 2D/3D multiplanar reconstruction (MPR), PET-CT study fusion and connection as a PACS client.',
-          'Provided technical support and incident resolution for operational and administrative processes.',
+          'Developed and maintained the information systems of a healthcare provider, including the administration of its databases.',
+          'Built an inventory manager and internal process automations.',
+          'Started a DICOM medical imaging viewer, aimed at 2D/3D multiplanar reconstruction, PET-CT fusion and connection as a PACS client.',
         ],
-      },
-    },
-    {
-      id: 'especializacion',
-      kind: 'estudio',
-      title: {
-        es: 'Especialización en Seguridad de la Información',
-        en: 'Postgraduate Specialization in Information Security',
-      },
-      organization: 'Politécnico Grancolombiano',
-      location: { es: 'Colombia', en: 'Colombia' },
-      period: { es: 'Ene 2026, en curso', en: 'Jan 2026, in progress' },
-      highlights: {
-        es: ['En curso. Finalización estimada: 2027.'],
-        en: ['In progress. Estimated completion: 2027.'],
       },
     },
     {
@@ -528,22 +511,21 @@ export const timeline = {
       period: { es: 'Oct 2025 a Dic 2025', en: 'Oct 2025 to Dec 2025' },
       highlights: {
         es: [
-          'Desarrollé de punta a punta el sistema de gestión de mantenimientos de una entidad pública, construyendo la interfaz de usuario, la lógica de backend y el modelo de datos, y lo entregué operativo dentro de los tres meses de la práctica.',
-          'Implementé Control de Acceso Basado en Roles (RBAC) y sanitización de entradas del lado del servidor sobre un sistema que gestiona información de una entidad pública, mitigando inyección SQL y XSS (OWASP Top 10) con consultas parametrizadas, sanitización del lado del servidor y RBAC.',
-          'Reestructuré la capa de acceso a datos y optimicé las consultas cuando los tiempos de respuesta se convirtieron en el cuello de botella del sistema, reduciendo la latencia de las pantallas de consulta más usadas.',
+          'Entregué de punta a punta el sistema de gestión de mantenimientos de una entidad pública (interfaz, backend y modelo de datos), operativo en los 3 meses de la práctica.',
+          'Mitigué inyección SQL y XSS (OWASP Top 10) con consultas parametrizadas, sanitización del lado del servidor y RBAC, en un sistema con información de una entidad pública.',
+          'Optimicé la capa de acceso a datos y las consultas de las pantallas más usadas cuando los tiempos de respuesta se volvieron el cuello de botella.',
         ],
         en: [
-          'Built the maintenance management system of a public sector entity end to end, covering the user interface, the backend logic and the data model, and delivered it in operation within the three months of the internship.',
-          'Implemented Role-Based Access Control (RBAC) and server-side input sanitisation on a system holding government records, mitigating SQL injection and XSS (OWASP Top 10) with parameterized queries, server-side sanitization and RBAC.',
-          'Restructured the data access layer and optimised queries once response times became the bottleneck, reducing latency on the most heavily used query screens.',
+          'Delivered the maintenance management system of a public sector entity end to end (interface, backend and data model), in operation within the 3 months of the internship.',
+          'Mitigated SQL injection and XSS (OWASP Top 10) with parameterized queries, server-side sanitization and RBAC, on a system holding public sector records.',
+          'Optimized the data access layer and the queries behind the most used screens once response times became the bottleneck.',
         ],
       },
     },
     {
       /*
-       * ElevaForge aparece dos veces en la página, y es a propósito: aquí como
-       * el puesto (cofundador, desde jun 2025) y en `projects` como el sistema
-       * construido. Si cambia el nombre o las fechas, hay que tocar los dos.
+       * ElevaForge aparece también como caso de seguridad (`securityCases`).
+       * Si cambia el nombre o las fechas, hay que tocar los dos.
        */
       id: 'elevaforge',
       kind: 'trabajo',
@@ -556,108 +538,44 @@ export const timeline = {
       period: { es: 'Jun 2025 a la actualidad', en: 'Jun 2025 to present' },
       highlights: {
         es: [
-          'Cofundé un estudio de software de tres ingenieros, con responsabilidad sobre las decisiones de arquitectura del producto: límites entre módulos, contratos de datos y alternativas descartadas, documentadas en ADRs versionados que el equipo consulta de forma independiente.',
-          'Dirigí la migración del sitio corporativo de Angular a Next.js 14, planificada por capas para que la estructura nueva absorbiera el contenido existente sin rehacerlo.',
-          'Diseñé el modelo de autorización de la plataforma como deny-by-default: Row Level Security activa y sin ninguna política para el rol anónimo ni el autenticado, con todo el acceso a datos pasando por el servidor.',
+          'Cofundé un estudio de software de 3 ingenieros y asumí las decisiones de arquitectura, registradas en ADRs versionados con sus alternativas descartadas.',
+          'Diseñé la autorización deny-by-default: Row Level Security activa y sin políticas para anon ni authenticated, con todo el acceso a datos pasando por el servidor.',
+          'Dirigí la migración del sitio corporativo de Angular a Next.js 14 y construí elevaforge.com y los demos KOA (landing y tienda) con un panel de administración multi-cuenta.',
           'Configuré la CI del sitio con escaneo de secretos (gitleaks), lint, typecheck, tests, build y e2e en cada push; en los demos KOA, CodeQL, audit-ci y Lighthouse CI (landing) y CodeQL y npm audit (tienda).',
-          'Construí elevaforge.com y la vertical de demostración KOA (landing y e-commerce) con un panel de administración multi-cuenta, con el que el equipo edita paquetes, proyectos y contenido sin un despliegue de por medio.',
         ],
         en: [
-          'Co-founded a three engineer software studio, with responsibility for the product architecture decisions: module boundaries, data contracts and discarded alternatives, documented in versioned ADRs the team consults independently.',
-          'Led the migration of the corporate site from Angular to Next.js 14, planned layer by layer so the new structure absorbed the existing content instead of rebuilding it.',
-          'Designed the platform authorisation model as deny-by-default: Row Level Security enabled with no policy at all for the anonymous or the authenticated role, and all data access routed through the server.',
+          'Co-founded a 3-engineer software studio and owned the architecture decisions, recorded in versioned ADRs with their discarded alternatives.',
+          'Designed deny-by-default authorization: Row Level Security enabled with no policies for anon or authenticated, and all data access routed through the server.',
+          'Led the migration of the corporate site from Angular to Next.js 14 and built elevaforge.com and the KOA demos (landing page and store) with a multi-account admin panel.',
           'Set up the site CI with secret scanning (gitleaks), lint, typecheck, tests, build and e2e on every push; on the KOA demos, CodeQL, audit-ci and Lighthouse CI (landing) and CodeQL and npm audit (store).',
-          'Built elevaforge.com and the KOA demo vertical (landing and e-commerce) with a multi-account admin panel the team uses to edit packages, projects and content without a deploy in between.',
-        ],
-      },
-    },
-    {
-      id: 'universidad',
-      kind: 'estudio',
-      title: { es: 'Ingeniería de Software', en: 'Software Engineering' },
-      organization: 'Universidad Cooperativa de Colombia',
-      location: { es: 'Pasto, Colombia', en: 'Pasto, Colombia' },
-      period: { es: 'Feb 2022 a Dic 2025', en: 'Feb 2022 to Dec 2025' },
-      highlights: {
-        es: [
-          'Proyecto de grado: API REST para gestión de espacios físicos utilizando IA, con autenticación JWT y gestión segura de secretos.',
-          'Cursos relevantes: Arquitectura de Sistemas Escalables, Desarrollo Back-End, Metodologías Ágiles (Scrum), Ciberseguridad, Seguridad de Redes.',
-        ],
-        en: [
-          'Final degree project: REST API for physical space management using AI, with JWT authentication and secure secret handling.',
-          'Relevant coursework: Scalable Systems Architecture, Back-End Development, Agile Methodologies (Scrum), Cybersecurity, Network Security.',
         ],
       },
     },
     {
       /*
-       * Entrada respaldada por una constancia laboral formal del negocio
-       * (2026-08-28), a diferencia de "freelance", cuyo texto es deliberadamente
-       * genérico porque cubre OTROS clientes bajo confidencialidad. Esta sí
-       * tiene nombre y fechas exactas porque hay un documento firmado detrás.
-       * Va justo antes de "freelance" (mismo mes de inicio, mismo tipo de
-       * trabajo independiente) y no reordena el resto de la trayectoria.
+       * Agrupa Estación de Servicio Kennedy (constancia laboral formal, mar 2023
+       * a mar 2026) y el trabajo freelance (parte bajo confidencialidad: se
+       * describe por tipo de trabajo, nunca por cliente).
        */
-      id: 'eds-kennedy',
+      id: 'contratista-independiente',
       kind: 'trabajo',
       title: {
-        es: 'Contratista de TI y Sistemas',
-        en: 'IT and Systems Contractor',
+        es: 'Contratista independiente de software y TI',
+        en: 'Independent Software and IT Contractor',
       },
-      organization: 'Estación de Servicio Kennedy',
-      location: { es: 'Pasto, Colombia', en: 'Pasto, Colombia' },
-      period: { es: 'Mar 2023 a Mar 2026', en: 'Mar 2023 to Mar 2026' },
-      highlights: {
-        es: [
-          'Contratista de TI durante tres años consecutivos, responsable del desarrollo, la implementación y el mantenimiento de los sistemas informáticos de una estación de servicio en funcionamiento.',
-          'Administré las bases de datos del negocio y optimicé las herramientas de control de inventario y ventas, la operación diaria de la que dependía la caja y el abastecimiento.',
-          'Fui el punto de contacto técnico permanente: soporte a los procesos operativos y administrativos, y resolución de incidencias sobre los sistemas de gestión de la empresa según iban apareciendo, no bajo un contrato de horas fijas.',
-        ],
-        en: [
-          'IT contractor for three consecutive years, responsible for the development, implementation and maintenance of the information systems of an operating fuel station.',
-          'Managed the business databases and optimised the inventory and sales control tools, the day to day operation the till and fuel supply depended on.',
-          'Was the standing technical point of contact: support for operational and administrative processes, and incident resolution on the company management systems as they came up, not under a fixed-hours contract.',
-        ],
-      },
-    },
-    {
-      id: 'freelance',
-      kind: 'trabajo',
-      title: {
-        es: 'Desarrollador de Software Full-Stack',
-        en: 'Full-Stack Software Developer',
-      },
-      organization: 'Freelance',
-      location: { es: 'Remoto', en: 'Remote' },
+      organization: 'Estación de Servicio Kennedy y clientes freelance',
+      location: { es: 'Pasto, Colombia y remoto', en: 'Pasto, Colombia and remote' },
       period: { es: 'Mar 2023 a la actualidad', en: 'Mar 2023 to present' },
       highlights: {
         es: [
-          'Atendí clientes a medio tiempo en paralelo a la carrera universitaria y, después, a la práctica en la Alcaldía de Pasto, hasta formalizar esa disciplina de producto cofundando ElevaForge a mediados de 2025.',
-          'Ejecuté migraciones de datos hacia SAP y Oracle NetSuite aplicando cifrado y respaldos previos, de modo que cada corte tuviera un punto de retorno antes de mover el primer registro.',
-          'Implementé soluciones CRM a medida (Salesforce, HubSpot) para negocios de e-commerce, incluyendo la configuración de controles de acceso por rol para que cada usuario opere solo sobre la cartera que le corresponde.',
-          'Desarrollé sistemas de reportes automatizados con Odoo, Python y PostgreSQL que sustituyeron la consolidación manual de datos por una generación periódica para análisis de negocio.',
+          'Realicé evaluaciones de seguridad de la información para más de 10 clínicas privadas y pymes, a través de firmas de outsourcing: control de acceso, trazabilidad y custodia de datos.',
+          'Estación de Servicio Kennedy (Mar 2023 a Mar 2026): desarrollé y mantuve sus sistemas, administré las bases de datos y optimicé el control de inventario y ventas.',
+          'Freelance a medio tiempo, en paralelo a la carrera: frontend, backend y automatización; migraciones de datos a SAP y Oracle NetSuite, CRM (Salesforce, HubSpot) y reportes con Odoo, Python y PostgreSQL.',
         ],
         en: [
-          'Served clients part-time alongside my degree and, later, alongside the internship at Alcaldía de Pasto, until I formalised that product discipline by co-founding ElevaForge in mid 2025.',
-          'Executed data migrations to SAP and Oracle NetSuite applying encryption and prior backups, so every cutover had a point of return before the first record moved.',
-          'Implemented custom CRM solutions (Salesforce, HubSpot) for e-commerce businesses, including role-based access control configuration so each user works only on the accounts assigned to them.',
-          'Built automated reporting systems with Odoo, Python and PostgreSQL that replaced manual data consolidation with periodic report generation for business analysis.',
-        ],
-      },
-    },
-    {
-      id: 'voluntariado',
-      kind: 'trabajo',
-      title: { es: 'Voluntario comunitario', en: 'Community volunteer' },
-      organization: 'Refugios de animales y escuelas locales',
-      location: { es: 'Pasto, Colombia', en: 'Pasto, Colombia' },
-      period: { es: 'Ene 2019', en: 'Jan 2019' },
-      highlights: {
-        es: [
-          'Soporte técnico y asistencia en tecnología educativa para fomentar la alfabetización digital en la comunidad local.',
-        ],
-        en: [
-          'Technical support and educational technology assistance to promote digital literacy in the local community.',
+          'Performed information security assessments for more than 10 private clinics and SMEs, through outsourcing firms: access control, traceability and data custody.',
+          'Estación de Servicio Kennedy (Mar 2023 to Mar 2026): developed and maintained its systems, managed the databases and optimized inventory and sales control.',
+          'Part-time freelance, alongside my degree: frontend, backend and automation; data migrations to SAP and Oracle NetSuite, CRM (Salesforce, HubSpot) and reporting with Odoo, Python and PostgreSQL.',
         ],
       },
     },
@@ -1761,140 +1679,162 @@ export const workProcess = {
 export const skills = {
   heading: { es: 'Habilidades', en: 'Skills' } satisfies Localized,
   intro: {
-    es: 'Las tecnologías con las que trabajo, agrupadas como aparecen en mi CV.',
-    en: 'The technologies I work with, grouped as they appear in my CV.',
+    es: 'Agrupadas como en el CV, con seguridad primero. Cada una aparece en algún caso o en la experiencia.',
+    en: 'Grouped as in the CV, security first. Each one appears in a case or in my experience.',
   } satisfies Localized,
   groups: [
     {
-      /*
-       * Grupo nuevo, y va PRIMERO a propósito: es el eje del CV desde que el
-       * dueño lo giró hacia arquitectura, y el orden de esta lista es lo
-       * primero que lee alguien que la escanea por encima.
-       */
+      label: { es: 'Seguridad', en: 'Security' },
+      items: {
+        es: [
+          'Modelado de amenazas',
+          'OWASP Top 10',
+          'RBAC',
+          'Row Level Security',
+          'JWT (RS256)',
+          'Criptografía aplicada (AES-256-GCM)',
+          'Gestión de secretos',
+          'SAST (CodeQL, Semgrep)',
+          'SCA (audit-ci, npm audit, Trivy)',
+          'Escaneo de secretos (gitleaks)',
+          'Seguridad de redes',
+        ],
+        en: [
+          'Threat modeling',
+          'OWASP Top 10',
+          'RBAC',
+          'Row Level Security',
+          'JWT (RS256)',
+          'Applied cryptography (AES-256-GCM)',
+          'Secrets management',
+          'SAST (CodeQL, Semgrep)',
+          'SCA (audit-ci, npm audit, Trivy)',
+          'Secret scanning (gitleaks)',
+          'Network security',
+        ],
+      },
+    },
+    {
       label: { es: 'Arquitectura', en: 'Architecture' },
       items: {
         es: [
-          'Diseño de sistemas escalables',
+          'Aislamiento multi-tenant',
+          'ADRs',
           'Arquitectura hexagonal',
           'Separación por capas',
           'Diseño de APIs REST',
           'Modelado de datos',
-          'ADRs',
-          'Aislamiento multi-tenant',
+          'Diseño de sistemas escalables',
         ],
         en: [
-          'Scalable system design',
+          'Multi-tenant isolation',
+          'ADRs',
           'Hexagonal architecture',
           'Layered separation',
           'REST API design',
-          'Data modelling',
-          'ADRs',
-          'Multi-tenant isolation',
+          'Data modeling',
+          'Scalable system design',
         ],
       },
     },
     {
-      label: { es: 'Lenguajes', en: 'Languages' },
+      label: { es: 'Backend', en: 'Backend' },
       items: {
-        es: ['Java', 'Python', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3'],
-        en: ['Java', 'Python', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3'],
+        es: ['Java', 'Spring Boot', 'Python', 'TypeScript'],
+        en: ['Java', 'Spring Boot', 'Python', 'TypeScript'],
       },
     },
     {
-      label: { es: 'Frameworks', en: 'Frameworks' },
+      label: { es: 'Frontend', en: 'Frontend' },
       items: {
-        /*
-         * Cada meta-framework va detrás de su base (Next.js tras React): el
-         * orden comunica la relación entre ambos, que es información gratis
-         * para quien lee la lista por encima.
-         *
-         * Nuxt salió cuando el dueño lo quitó del CV, y no vuelve salvo que
-         * haya un proyecto en esta misma página que lo use. Next.js SÍ se queda
-         * aunque el CV ya no lo liste en "Desarrollo": lo respaldan la entrada
-         * de ElevaForge (migración de Angular a Next.js 14), el stack del
-         * proyecto ElevaForge y este propio sitio. Regla 3: lo que se afirma
-         * aquí tiene respaldo visible, y quitarlo dejaría la lista contradiciendo
-         * a la trayectoria.
-         */
-        es: [
-          'Spring Boot',
-          'React',
-          'Next.js',
-          'Vue.js',
-          'Angular',
-          'Astro',
-          'Bootstrap',
-          'Tailwind CSS',
-        ],
-        en: [
-          'Spring Boot',
-          'React',
-          'Next.js',
-          'Vue.js',
-          'Angular',
-          'Astro',
-          'Bootstrap',
-          'Tailwind CSS',
-        ],
+        es: ['React', 'Next.js', 'Angular', 'Vue.js', 'Astro', 'JavaScript', 'Tailwind CSS', 'HTML5', 'CSS3'],
+        en: ['React', 'Next.js', 'Angular', 'Vue.js', 'Astro', 'JavaScript', 'Tailwind CSS', 'HTML5', 'CSS3'],
       },
     },
     {
-      label: { es: 'Cloud, DevOps y Seguridad', en: 'Cloud, DevOps and Security' },
+      label: { es: 'Cloud y DevOps', en: 'Cloud and DevOps' },
       items: {
-        es: [
-          'AWS (EC2, S3)',
-          'Docker',
-          'Git',
-          'CI/CD Pipelines',
-          'Modelado de amenazas',
-          'SAST y SCA en CI (CodeQL, Semgrep)',
-          'Seguridad de redes',
-          'RBAC',
-          'JWT',
-          'Prácticas de código seguro',
-        ],
-        en: [
-          'AWS (EC2, S3)',
-          'Docker',
-          'Git',
-          'CI/CD pipelines',
-          'Threat modelling',
-          'SAST and SCA in CI (CodeQL, Semgrep)',
-          'Network security',
-          'RBAC',
-          'JWT',
-          'Secure coding practices',
-        ],
+        es: ['Docker', 'GitHub Actions (CI/CD)', 'AWS (EC2, S3)', 'Vercel', 'Git'],
+        en: ['Docker', 'GitHub Actions (CI/CD)', 'AWS (EC2, S3)', 'Vercel', 'Git'],
       },
     },
     {
       label: { es: 'Bases de datos', en: 'Databases' },
       items: {
-        es: ['PostgreSQL', 'MySQL', 'MongoDB'],
-        en: ['PostgreSQL', 'MySQL', 'MongoDB'],
-      },
-    },
-    {
-      label: { es: 'Idiomas', en: 'Spoken languages' },
-      items: {
-        es: ['Español (nativo)', 'Inglés (avanzado C1, EF SET Certified)'],
-        en: ['Spanish (native)', 'English (advanced C1, EF SET Certified)'],
+        es: ['PostgreSQL', 'MySQL', 'MongoDB', 'Migraciones versionadas (Flyway)'],
+        en: ['PostgreSQL', 'MySQL', 'MongoDB', 'Versioned migrations (Flyway)'],
       },
     },
   ] satisfies readonly SkillGroup[],
-  certificationsHeading: {
-    es: 'Certificaciones',
-    en: 'Certifications',
-  } satisfies Localized,
+  /**
+   * Bloque separado, y NO se publica sin confirmación del dueño: el
+   * `[PENDIENTE]` bloquea el deploy (check:pending) hasta que lo confirme.
+   */
+  learning: {
+    label: { es: 'En formación', en: 'Currently learning' } satisfies Localized,
+    items: ['Terraform', 'Kubernetes', 'AWS Solutions Architect Associate'],
+    pending:
+      '[PENDIENTE: TODO-LUIS, confirmar qué estoy estudiando y fecha estimada]' as Pending,
+  },
+} as const
+
+// ---------------------------------------------------------------------------
+// Formación y certificaciones
+// ---------------------------------------------------------------------------
+
+export interface EducationEntry {
+  id: string
+  title: Localized
+  organization: string
+  location: Localized
+  period: Localized
+  highlights: LocalizedList
+}
+
+export const education = {
+  heading: { es: 'Formación y certificaciones', en: 'Education and certifications' } satisfies Localized,
+  entries: [
+    {
+      id: 'especializacion',
+      title: {
+        es: 'Especialización en Seguridad de la Información',
+        en: 'Postgraduate Specialization in Information Security',
+      },
+      organization: 'Politécnico Grancolombiano',
+      location: { es: 'Colombia', en: 'Colombia' },
+      period: { es: 'Ene 2026 a la actualidad', en: 'Jan 2026 to present' },
+      highlights: {
+        es: ['En curso, finalización estimada en 2027.'],
+        en: ['In progress, estimated completion in 2027.'],
+      },
+    },
+    {
+      id: 'universidad',
+      title: { es: 'Ingeniería de Software', en: 'Software Engineering' },
+      organization: 'Universidad Cooperativa de Colombia',
+      location: { es: 'Pasto, Colombia', en: 'Pasto, Colombia' },
+      period: { es: 'Feb 2022 a Dic 2025', en: 'Feb 2022 to Dec 2025' },
+      highlights: {
+        es: [
+          'Proyecto de grado: API REST con apoyo de IA, autenticación JWT y gestión segura de secretos.',
+          'Cursos relevantes: Arquitectura de Software, Sistemas Distribuidos, Seguridad Informática, Sistemas de Inteligencia Artificial.',
+        ],
+        en: [
+          'Final degree project: AI-assisted REST API with JWT authentication and secure secrets management.',
+          'Relevant coursework: Software Architecture, Distributed Systems, Computer Security, Artificial Intelligence Systems.',
+        ],
+      },
+    },
+  ] satisfies readonly EducationEntry[],
+  certificationsHeading: { es: 'Certificaciones', en: 'Certifications' } satisfies Localized,
   certifications: {
-    es: [
-      'Ciberseguridad, MinTIC Colombia (Sept 2024)',
-      'Network Security, Cisco (Dic 2024)',
-    ],
-    en: [
-      'Cybersecurity, MinTIC Colombia (Sept 2024)',
-      'Network Security, Cisco (Dec 2024)',
-    ],
+    es: ['Ciberseguridad, MinTIC Colombia (Sep 2024)', 'Network Security, Cisco (Dic 2024)'],
+    en: ['Cybersecurity, MinTIC Colombia (Sep 2024)', 'Network Security, Cisco (Dec 2024)'],
+  } satisfies LocalizedList,
+  languagesHeading: { es: 'Idiomas', en: 'Languages' } satisfies Localized,
+  languages: {
+    es: ['Español: nativo', 'Inglés: C1 (EF SET)'],
+    en: ['Spanish: native', 'English: C1 (EF SET)'],
   } satisfies LocalizedList,
 } as const
 
