@@ -509,14 +509,14 @@ export const timeline = {
       /*
        * Fuentes (revisadas el 2026-11-19 en clones de solo lectura, sin copiar
        * archivos a este repo):
-       *  - Sitio institucional: repo privado JhonatanDV/SanJoseIPS. 47 commits:
+       *  - Sitio institucional: repo privado del sitio de la IPS. 47 commits:
        *    37 de Luis y 10 de Jhonatan (`git shortlog -sne --all`), así que va
        *    "en equipo de 2". Lo de Luis según `git log --author`: autenticación
        *    del panel (Better Auth), PQRS, sedes, middleware, cabeceras de
        *    seguridad, retención y la CI (gitleaks, regla estática de SQL, audit).
        *    En producción: el dominio público responde con la app nueva
        *    (HTTP 200, comprobado el 2026-11-19).
-       *  - rx-gmail-pdf: repo privado Luisceron0/Panoramicas, 75 de 75 commits
+       *  - rx-gmail-pdf: repo privado de rx-gmail-pdf, 75 de 75 commits
        *    de Luis. Pendiente de puesta en producción (decisión institucional).
        * Repos privados: no se enlazan.
        */
@@ -2002,7 +2002,7 @@ export const securityCases: readonly SecurityCase[] = [
   },
   {
     /*
-     * Fuente: repo PRIVADO JhonatanDV/SanJoseIPS (no se enlaza), revisado el
+     * Fuente: repo PRIVADO del sitio de la IPS (no se enlaza), revisado el
      * 2026-11-19 en un clon de solo lectura. Autoría: 37 de 47 commits de Luis,
      * 10 de Jhonatan. Lo de Luis según `git log --author`: autenticación del
      * panel, PQRS, sedes, middleware, cabeceras, retención, aprovisionamiento y
@@ -2205,7 +2205,7 @@ export const securityCases: readonly SecurityCase[] = [
   },
   {
     /*
-     * Fuente: repo PRIVADO Luisceron0/Panoramicas (no se enlaza), revisado el
+     * Fuente: repo PRIVADO de rx-gmail-pdf (no se enlaza), revisado el
      * 2026-11-19. Autoría: 75 de 75 commits de Luis. STRIDE: docs/SRS.md §7.
      * Estado: el SRS v2.8 dice que un pendiente institucional (R-10) bloquea
      * solo la puesta en producción. Sin remitente, rutas ni versiones exactas.

@@ -1,5 +1,25 @@
 # Lessons learned
 
+## 2026-11-19 — Un título largo ensanchó la home a 430 px y ningún test lo vio
+**Contexto:** la sección "Formación y certificaciones" (commit del 2026-11-14)
+desbordaba la home en móvil: la palabra "certificaciones" en `text-3xl` no
+cabía en 375 px. La comprobación manual de ese día se hizo ANTES de añadir la
+sección, así que pasó cinco días sin detectarse.
+**Solución:** títulos de sección a `text-[1.6rem]` en móvil con
+`overflow-wrap:anywhere`, y un test en `e2e/landing.spec.ts` que mide
+`scrollWidth` en la home y en cada caso. **Regla:** una comprobación de layout
+que no está en un test no protege nada de lo que se añada después.
+**Tags:** #responsive #tests #falso-verde
+
+## 2026-11-19 — Repos privados de un cliente: describir sin enlazar
+**Contexto:** las fichas de la IPS San José salen de repos privados con datos de
+salud. No se enlaza el código ni se publican rutas internas, versiones exactas
+ni hallazgos abiertos; lo que haya que corregir va a notas privadas fuera de
+Git, nunca a este repo (tampoco a este archivo). El modelo de casos admite
+`privateRepo`, y el test exige el aviso visible y cero enlaces a github.com en
+esas páginas.
+**Tags:** #contenido #privacidad #appsec
+
 ## 2026-11-14 — Una afirmación del CV no estaba en el repo al que se atribuía
 **Contexto:** el CV y el sitio decían que ElevaForge tenía gates de CodeQL,
 Semgrep, audit-ci y Lighthouse CI. Al clonar el repo para enlazar cada control

@@ -18,8 +18,8 @@ cv:
       - 'Application security engineer with more than 3 years building and deploying software for healthcare, the public sector and commerce. Threat modeling, access control, applied cryptography, WAF and SAST/SCA in CI, on a full-stack foundation (Java/Spring Boot, Python/Django, React/Next.js).'
 
     Experience:
-      # IPS: private repos JhonatanDV/SanJoseIPS (37 of 47 commits by Luis) and
-      # Luisceron0/Panoramicas (75 of 75), reviewed 2026-11-19. Not linked.
+      # IPS: private repos for the IPS website (37 of 47 commits by Luis) and
+      # rx-gmail-pdf (75 of 75), reviewed 2026-11-19. Not linked.
       - company: I.P.S. San José
         position: Software Engineer (project-based contract)
         location: Villagarzón, Putumayo, Colombia

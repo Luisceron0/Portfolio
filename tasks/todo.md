@@ -14,6 +14,13 @@
 - [x] 11. CV ES (principal) y EN: misma información, ATS, ≤2 páginas, prueba de orden del texto extraído
 - [x] 12. Verificación completa y lista de `[PENDIENTE: TODO-LUIS, ...]` por archivo
 
+### Actualización de experiencia (2026-11-19)
+- [x] Alcaldía, IPS San José, ElevaForge (CTO), Kennedy (tiempo completo) y freelance (tiempo parcial)
+- [x] Caso SEG; fichas del sitio de la IPS y de rx-gmail-pdf
+- [x] CV ES y EN regenerados (2 páginas, prueba de ATS)
+- [ ] Responder las preguntas de `ownerQuestions` en src/content.ts (check:pending las lista)
+- [ ] Revisar las notas privadas que quedaron fuera de Git
+
 ### Tareas del dueño (mejoras opcionales, no bloquean el deploy)
 Regla (2026-11-14): `[PENDIENTE]` en el sitio solo para datos que impiden publicar algo verdadero; las mejoras opcionales van aquí.
 
