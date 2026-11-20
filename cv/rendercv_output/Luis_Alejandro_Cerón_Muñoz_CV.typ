@@ -6,8 +6,8 @@
   name: "Luis Alejandro Cerón Muñoz",
   title: "Luis Alejandro Cerón Muñoz - CV",
   footer: context { [#emph[Luis Alejandro Cerón Muñoz -- #str(here().page())\/#str(counter(page).final().first())]] },
-  top-note: [ #emph[Última actualización Nov 2026] ],
-  locale-catalog-language: "es",
+  top-note: [ #emph[Last updated in Nov 2026] ],
+  locale-catalog-language: "en",
   text-direction: ltr,
   page-size: "a4",
   page-top-margin: 0.5in,
@@ -81,17 +81,17 @@
   date: datetime(
     year: 2026,
     month: 11,
-    day: 14,
+    day: 19,
   ),
 )
 
 
 = Luis Alejandro Cerón Muñoz
 
-  #headline([Ingeniero de Seguridad de Aplicaciones | Arquitectura Segura | DevSecOps])
+  #headline([Application Security Engineer | Secure Software Architecture | DevSecOps])
 
 #connections(
-  [Pasto, Colombia. Híbrido en Medellín o Bogotá. Relocalización a Alemania o España],
+  [Pasto, Colombia. Hybrid in Medellín or Bogotá. Relocation to Germany or Spain],
   [#link("mailto:luiscerontrabajos@gmail.com", icon: false, if-underline: false, if-color: false)[luiscerontrabajos\@gmail.com]],
   [#link("tel:+57-314-4087963", icon: false, if-underline: false, if-color: false)[+57 314 4087963]],
   [#link("https://portfolio-luisceron.vercel.app/", icon: false, if-underline: false, if-color: false)[portfolio-luisceron.vercel.app]],
@@ -100,199 +100,227 @@
 )
 
 
-== Perfil
+== Profile
 
-Ingeniero de software con más de 3 años construyendo y manteniendo sistemas para salud, comercio y sector público, enfocado en seguridad de aplicaciones. Reviso arquitecturas y flujos de datos con modelado de amenazas, diseño controles de acceso (RBAC, Row Level Security deny-by-default), aplico criptografía (AES-256-GCM por tenant, gestión de secretos) e integro SAST y SCA como gates bloqueantes en CI (CodeQL, Semgrep, audit-ci). Cursando la Especialización en Seguridad de la Información. Inglés C1.
+Application security engineer with more than 3 years building and deploying software for healthcare, the public sector and commerce. Threat modeling, access control, applied cryptography, WAF and SAST\/SCA in CI, on a full-stack foundation (Java\/Spring Boot, Python\/Django, React\/Next.js).
 
-== Experiencia
+== Experience
 
 #regular-entry(
   [
-    #strong[I.P.S. San José], Ingeniero de Software (contrato por proyecto) | Villagarzón, Putumayo, Colombia
+    #strong[I.P.S. San José], Software Engineer (project-based contract) | Villagarzón, Putumayo, Colombia
 
   ],
   [
-    Sep 2026 a Nov 2026
+    Sep 2026 to Nov 2026
 
   ],
   main-column-second-row: [
-    - Desarrollé y mantuve los sistemas de información de una institución prestadora de servicios de salud, incluida la administración de sus bases de datos.
+    - Built, in a 2-person team, the new institutional website with an admin panel (Astro, Cloudflare Workers, D1, Better Auth), now in production: panel authentication, end-to-end patient requests, locations and configurable data retention.
 
-    - Construí un gestor de inventario y automatizaciones de procesos internos.
+    - Developed a tool that converts emailed panoramic X-rays to PDF without re-encoding, with sender verification (DKIM and DMARC), image validation, secrets in the OS credential store and fidelity checked with SHA-256.
 
-    - Inicié un visor de imágenes médicas DICOM, orientado a reconstrucción multiplanar 2D\/3D, fusión PET-CT y conexión como cliente PACS.
+    - Added security gates to the website CI (gitleaks across the full history, a static SQL rule, pnpm audit, coverage) and closed the findings of an internal audit.
+
+    - Managed the databases, built an inventory manager and internal automations, and started a DICOM medical imaging viewer (in progress).
 
   ],
 )
 
 #regular-entry(
   [
-    #strong[Alcaldía de Pasto], Practicante de Ingeniería de Software Full-Stack | Pasto, Colombia
+    #strong[Alcaldía de Pasto (City Government)], Full-Stack Software Engineering Intern | Pasto, Colombia
 
   ],
   [
-    Oct 2025 a Dic 2025
+    Oct 2025 to Dec 2025
 
   ],
   main-column-second-row: [
-    - Entregué de punta a punta el sistema de gestión de mantenimientos de una entidad pública (interfaz, backend y modelo de datos), operativo en los 3 meses de la práctica.
+    - Co-developed (2-person team) an equipment maintenance management system (Django REST, Next.js, MySQL, JWT) and deployed it on Apache to the municipality’s server with production hardening: environment-based secrets, DEBUG off by default, HTTPS and CSRF trusted origins.
 
-    - Mitigué inyección SQL y XSS (OWASP Top 10) con consultas parametrizadas, sanitización del lado del servidor y RBAC, en un sistema con información de una entidad pública.
-
-    - Optimicé la capa de acceso a datos y las consultas de las pantallas más usadas cuando los tiempos de respuesta se volvieron el cuello de botella.
+    - Delivered the system in operation within the 3 months of the internship, with PDF and Excel report generation.
 
   ],
 )
 
 #regular-entry(
   [
-    #strong[ElevaForge], Cofundador e Ingeniero de Software | Remoto
+    #strong[ElevaForge], Co-Founder and CTO (architecture and security) | Remote
 
   ],
   [
-    Jun 2025 a la actualidad
+    Jun 2025 to present
 
   ],
   main-column-second-row: [
-    - Cofundé un estudio de software de 3 ingenieros y asumí las decisiones de arquitectura, registradas en ADRs versionados con sus alternativas descartadas.
+    - Co-founded a 3-engineer software studio and owned the architecture decisions, recorded in versioned ADRs with their discarded alternatives.
 
-    - Diseñé la autorización deny-by-default: Row Level Security activa y sin políticas para anon ni authenticated, con todo el acceso a datos pasando por el servidor.
+    - Designed deny-by-default authorization: Row Level Security enabled with no policies for anon or authenticated, and all data access routed through the server.
 
-    - Dirigí la migración del sitio corporativo de Angular a Next.js 14 y construí elevaforge.com y los demos KOA (landing y tienda) con un panel de administración multi-cuenta.
+    - Led the migration of the corporate site from Angular to Next.js 14 and built elevaforge.com and the KOA demos (landing page and store) with a multi-account admin panel.
 
-    - Configuré la CI del sitio con escaneo de secretos (gitleaks), lint, typecheck, tests, build y e2e en cada push; en los demos KOA, CodeQL, audit-ci y Lighthouse CI (landing) y CodeQL y npm audit (tienda).
+    - Set up the site CI with gitleaks, lint, typecheck, tests, build and e2e; on the KOA demos, CodeQL, audit-ci and Lighthouse CI (landing) and CodeQL and npm audit (store).
 
   ],
 )
 
 #regular-entry(
   [
-    #strong[Estación de Servicio Kennedy y clientes freelance], Contratista independiente de software y TI | Pasto, Colombia y remoto
+    #strong[Estación de Servicio Kennedy], IT and Systems Contractor (full-time) | Pasto, Colombia
 
   ],
   [
-    Mar 2023 a la actualidad
+    Mar 2023 to Mar 2026
 
   ],
   main-column-second-row: [
-    - Realicé evaluaciones de seguridad de la información para más de 10 clínicas privadas y pymes, a través de firmas de outsourcing: control de acceso, trazabilidad y custodia de datos.
-
-    - Estación de Servicio Kennedy (Mar 2023 a Mar 2026): desarrollé y mantuve sus sistemas, administré las bases de datos y optimicé el control de inventario y ventas.
-
-    - Freelance a medio tiempo, en paralelo a la carrera: frontend, backend y automatización; migraciones de datos a SAP y Oracle NetSuite, CRM (Salesforce, HubSpot) y reportes con Odoo, Python y PostgreSQL.
+    - Developed and maintained the information systems of an operating fuel station; managed the databases and optimized inventory and sales control.
 
   ],
 )
 
-== Proyectos de seguridad
+#regular-entry(
+  [
+    #strong[Freelance], Full-Stack Software Developer (part-time) | Remote
+
+  ],
+  [
+    Mar 2023 to present
+
+  ],
+  main-column-second-row: [
+    - Performed information security assessments for more than 10 private clinics and SMEs, through outsourcing firms: access control, traceability and data custody.
+
+    - Projects alongside my degree: data migrations to SAP and Oracle NetSuite, CRM (Salesforce, HubSpot) and reporting with Odoo, Python and PostgreSQL.
+
+  ],
+)
+
+== Security Projects
 
   #regular-entry(
   [
-    #strong[CareLink, plataforma clínica multi-tenant] | github.com\/Luisceron0\/CareLink
+    #strong[SEG, JML workforce access system] | github.com\/grupogpsi12\/SEG
 
   ],
   [
   ],
   main-column-second-row: [
-    #summary[Historia clínica, triage y coordinación entre especialistas para varias instituciones sobre una misma base de datos. Implementación de referencia.]
+    #summary[Postgraduate project with professional practices; fictitious company and data.]
 
-    - Apliqué cifrado AES-256-GCM con clave derivada por institución y supresión, dentro de la consulta, de agregados con menos de 5 pacientes distintos, contra la re-identificación.
+    - Led the design and build (206 of 209 commits) of a system connecting HR and IT through GLPI 11: hexagonal Django 5.2 behind a ModSecurity\/OWASP CRS 4 WAF, password plus TOTP and Docker secrets.
 
-    - Bloqueé la edición de registros firmados con un trigger de PostgreSQL y revalidé el acceso de cada especialista en cada petición, verificado con tests de integración contra PostgreSQL real.
+    - Verified it with 2,574 unit tests, 97.7\% branch coverage and a 97.8\% mutation score on the domain, and a dashboard p95 of 786 ms with 20 concurrent users.
+
+    - Self-audited 39 DREAD-scored findings mapped to ASVS L2, each fix proven red to green, plus ZAP and sqlmap with no injectable parameters.
 
   ],
 )
 
   #regular-entry(
   [
-    #strong[Tributary, facturación electrónica multirrégimen] | github.com\/Luisceron0\/Tributary
+    #strong[Tributary, multi-regime e-invoicing engine] | github.com\/Luisceron0\/Tributary
 
   ],
   [
   ],
   main-column-second-row: [
-    #summary[Facturación electrónica para ventas transfronterizas entre Colombia, España y Alemania. Implementación de referencia, no certificada para producción.]
+    #summary[Sales across Colombia, Spain and Germany. Reference implementation, not certified.]
 
-    - Garanticé la inmutabilidad fiscal con triggers de PostgreSQL y una cadena de hashes SHA-256 cuyo verificador señala el registro alterado.
+    - Guaranteed fiscal immutability with PostgreSQL triggers and a SHA-256 hash chain whose verifier points at the altered record.
 
-    - Definí 13 controles de seguridad con criterio binario de verificación y 4 gates independientes en CI; el quickstart levanta todo el stack en menos de 3 minutos.
+    - Defined 13 security controls with a binary criterion and 4 independent CI gates; the quickstart brings everything up in under 3 minutes.
 
   ],
 )
 
   #regular-entry(
   [
-    #strong[KOA, landing y tienda bilingüe de demostración] | koa.elevaforge.com
+    #strong[KOA Store, bilingual demo store] | store.koa.elevaforge.com
 
   ],
   [
   ],
   main-column-second-row: [
-    #summary[Lista de espera pública y tienda con checkout simulado, sin pagos reales.]
-
-    - Recalculé los precios en el servidor contra el catálogo, ignorando cualquier precio o total enviado por el navegador.
-
-    - Protegí el formulario público con Turnstile verificado en el servidor, confirmación por correo y límite de solicitudes por IP.
+    - Recalculated prices on the server against the catalog, ignoring any price or total sent by the browser; simulated checkout, no real payments.
 
   ],
 )
 
-== Educación
+  #regular-entry(
+  [
+    #strong[CareLink, multi-tenant clinical platform] | github.com\/Luisceron0\/CareLink
+
+  ],
+  [
+  ],
+  main-column-second-row: [
+    #summary[Clinical history and triage for several institutions. Reference implementation.]
+
+    - Applied AES-256-GCM encryption with a per-institution derived key and in-query suppression of aggregates with fewer than 5 distinct patients.
+
+    - Blocked edits to signed records with a PostgreSQL trigger and revalidated each specialist access on every request.
+
+  ],
+)
+
+== Education
 
 #education-entry(
   [
-    #strong[Politécnico Grancolombiano], Especialización en Seguridad de la Información | Colombia
+    #strong[Universidad Cooperativa de Colombia], BEng in Software Engineering | Pasto, Colombia
 
   ],
   [
-    Ene 2026 a la actualidad
+    Feb 2022 to Dec 2025
 
   ],
   main-column-second-row: [
-    - En curso, finalización estimada en 2027.
+    - Final degree project: AI-assisted REST API with JWT authentication and secure secrets management.
+
+    - Relevant coursework: Software Architecture, Distributed Systems, Computer Security, Artificial Intelligence Systems.
 
   ],
 )
 
 #education-entry(
   [
-    #strong[Universidad Cooperativa de Colombia], Ingeniería de Software | Pasto, Colombia
+    #strong[Politécnico Grancolombiano], Postgraduate Specialization in Information Security Project Management | Colombia
 
   ],
   [
-    Feb 2022 a Dic 2025
+    Jan 2026 to present
 
   ],
   main-column-second-row: [
-    - Proyecto de grado: API REST con apoyo de IA, autenticación JWT y gestión segura de secretos.
+    - In progress, estimated completion in 2027.
 
-    - Cursos relevantes: Arquitectura de Software, Sistemas Distribuidos, Seguridad Informática, Sistemas de Inteligencia Artificial.
+    - SEG project: led the design and build of a JML system with hexagonal architecture behind a WAF, audited against ASVS level 2.
 
   ],
 )
 
-== Certificaciones
+== Certifications
 
-Ciberseguridad, MinTIC Colombia (Sep 2024)
+Cybersecurity, MinTIC Colombia (Sep 2024)
 
-Network Security, Cisco (Dic 2024)
+Network Security, Cisco (Dec 2024)
 
-== Habilidades
+== Skills
 
-#strong[Seguridad:] Modelado de amenazas, OWASP Top 10, RBAC, Row Level Security, JWT (RS256), Criptografía aplicada (AES-256-GCM), Gestión de secretos, SAST (CodeQL, Semgrep), SCA (audit-ci, npm audit, Trivy), Escaneo de secretos (gitleaks), Seguridad de redes
+#strong[Security:] Threat modeling, OWASP Top 10, OWASP ASVS, RBAC, Row Level Security, JWT (RS256), Applied cryptography (AES-256-GCM), Secrets management, SAST (CodeQL, Semgrep, bandit), SCA (audit-ci, npm audit, Trivy, pip-audit), DAST (OWASP ZAP, sqlmap), WAF (ModSecurity, OWASP CRS), Secret scanning (gitleaks), Network security
 
-#strong[Arquitectura:] Aislamiento multi-tenant, ADRs, Arquitectura hexagonal, Separación por capas, Diseño de APIs REST, Modelado de datos, Diseño de sistemas escalables
+#strong[Architecture:] Hexagonal architecture, Multi-tenant isolation, ADRs, Layered separation, REST API design, Data modeling, Scalable system design
 
-#strong[Backend:] Java, Spring Boot, Python, TypeScript
+#strong[Backend:] Java, Spring Boot, Python, Django, Django REST Framework, TypeScript
 
 #strong[Frontend:] React, Next.js, Angular, Vue.js, Astro, JavaScript, Tailwind CSS, HTML5, CSS3
 
-#strong[Cloud y DevOps:] Docker, GitHub Actions (CI\/CD), AWS (EC2, S3), Vercel, Git
+#strong[Cloud and DevOps:] Docker, GitHub Actions (CI\/CD), Cloudflare Workers, Apache, AWS (EC2, S3), Vercel, Git
 
-#strong[Bases de datos:] PostgreSQL, MySQL, MongoDB, Migraciones versionadas (Flyway)
+#strong[Databases:] PostgreSQL, MySQL, MongoDB, SQLite, Versioned migrations (Flyway)
 
-== Idiomas
+== Languages
 
-#strong[Español:] Nativo
-
-#strong[Inglés:] C1 (EF SET)
+Spanish: native. English: C1 (EF SET).

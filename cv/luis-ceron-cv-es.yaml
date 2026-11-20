@@ -16,29 +16,33 @@ cv:
       username: Luisceron0
   sections:
     Perfil:
-      - 'Ingeniero de software con más de 3 años construyendo y manteniendo sistemas para salud, comercio y sector público, enfocado en seguridad de aplicaciones. Reviso arquitecturas y flujos de datos con modelado de amenazas, diseño controles de acceso (RBAC, Row Level Security deny-by-default), aplico criptografía (AES-256-GCM por tenant, gestión de secretos) e integro SAST y SCA como gates bloqueantes en CI (CodeQL, Semgrep, audit-ci). Cursando la Especialización en Seguridad de la Información. Inglés C1.'
+      - 'Ingeniero de seguridad de aplicaciones con más de 3 años construyendo y desplegando software para salud, sector público y comercio. Modelado de amenazas, controles de acceso, criptografía aplicada, WAF y SAST/SCA en CI, sobre una base full-stack (Java/Spring Boot, Python/Django, React/Next.js).'
 
     Experiencia:
+      # IPS: repos privados JhonatanDV/SanJoseIPS (37 de 47 commits de Luis) y
+      # Luisceron0/Panoramicas (75 de 75), revisados el 2026-11-19. No se enlazan.
       - company: I.P.S. San José
         position: Ingeniero de Software (contrato por proyecto)
         location: Villagarzón, Putumayo, Colombia
         start_date: 2026-09
         end_date: 2026-11
         highlights:
-          - 'Desarrollé y mantuve los sistemas de información de una institución prestadora de servicios de salud, incluida la administración de sus bases de datos.'
-          - 'Construí un gestor de inventario y automatizaciones de procesos internos.'
-          - 'Inicié un visor de imágenes médicas DICOM, orientado a reconstrucción multiplanar 2D/3D, fusión PET-CT y conexión como cliente PACS.'
+          - 'Construí en equipo de 2 el nuevo sitio institucional con panel de administración (Astro, Cloudflare Workers, D1, Better Auth), en producción: autenticación del panel, PQRS de punta a punta, sedes y retención configurable de datos.'
+          - 'Desarrollé una herramienta que convierte a PDF sin recodificar las radiografías panorámicas que llegan por correo, con verificación del remitente (DKIM y DMARC), validación de imágenes, secretos en el almacén de credenciales y fidelidad comprobada con SHA-256.'
+          - 'Integré gates de seguridad en la CI del sitio (gitleaks sobre todo el historial, regla estática de SQL, pnpm audit, cobertura) y cerré los hallazgos de una auditoría propia.'
+          - 'Administré las bases de datos, construí un gestor de inventario y automatizaciones internas, e inicié un visor de imágenes médicas DICOM (en desarrollo).'
+      # Alcaldía: datos confirmados por Luis (2026-11-19). El repo público
+      # JhonatanDV/Alcaldia es una versión anterior: no se enlaza.
       - company: Alcaldía de Pasto
         position: Practicante de Ingeniería de Software Full-Stack
         location: Pasto, Colombia
         start_date: 2025-10
         end_date: 2025-12
         highlights:
-          - 'Entregué de punta a punta el sistema de gestión de mantenimientos de una entidad pública (interfaz, backend y modelo de datos), operativo en los 3 meses de la práctica.'
-          - 'Mitigué inyección SQL y XSS (OWASP Top 10) con consultas parametrizadas, sanitización del lado del servidor y RBAC, en un sistema con información de una entidad pública.'
-          - 'Optimicé la capa de acceso a datos y las consultas de las pantallas más usadas cuando los tiempos de respuesta se volvieron el cuello de botella.'
+          - 'Codesarrollé (equipo de 2) un sistema de gestión de mantenimiento de equipos (Django REST, Next.js, MySQL, JWT) y lo desplegué sobre Apache en el servidor de la Alcaldía con configuración endurecida: secretos por variables de entorno, DEBUG apagado por defecto, HTTPS y orígenes CSRF de confianza.'
+          - 'Sistema entregado y operativo dentro de los 3 meses de la práctica, con generación de reportes en PDF y Excel.'
       - company: ElevaForge
-        position: Cofundador e Ingeniero de Software
+        position: Cofundador y CTO (arquitectura y seguridad)
         location: Remoto
         start_date: 2025-06
         end_date: present
@@ -46,46 +50,56 @@ cv:
           - 'Cofundé un estudio de software de 3 ingenieros y asumí las decisiones de arquitectura, registradas en ADRs versionados con sus alternativas descartadas.'
           - 'Diseñé la autorización deny-by-default: Row Level Security activa y sin políticas para anon ni authenticated, con todo el acceso a datos pasando por el servidor.'
           - 'Dirigí la migración del sitio corporativo de Angular a Next.js 14 y construí elevaforge.com y los demos KOA (landing y tienda) con un panel de administración multi-cuenta.'
-          - 'Configuré la CI del sitio con escaneo de secretos (gitleaks), lint, typecheck, tests, build y e2e en cada push; en los demos KOA, CodeQL, audit-ci y Lighthouse CI (landing) y CodeQL y npm audit (tienda).'
-      - company: Estación de Servicio Kennedy y clientes freelance
-        position: Contratista independiente de software y TI
-        location: Pasto, Colombia y remoto
+          - 'Configuré la CI del sitio con gitleaks, lint, typecheck, tests, build y e2e; en los demos KOA, CodeQL, audit-ci y Lighthouse CI (landing) y CodeQL y npm audit (tienda).'
+      - company: Estación de Servicio Kennedy
+        position: Contratista de TI y Sistemas (tiempo completo)
+        location: Pasto, Colombia
+        start_date: 2023-03
+        end_date: 2026-03
+        highlights:
+          - 'Desarrollé y mantuve los sistemas de información de una estación de servicio en funcionamiento; administré las bases de datos y optimicé el control de inventario y ventas.'
+      - company: Freelance
+        position: Desarrollador de Software Full-Stack (tiempo parcial)
+        location: Remoto
         start_date: 2023-03
         end_date: present
         highlights:
           - 'Realicé evaluaciones de seguridad de la información para más de 10 clínicas privadas y pymes, a través de firmas de outsourcing: control de acceso, trazabilidad y custodia de datos.'
-          - 'Estación de Servicio Kennedy (Mar 2023 a Mar 2026): desarrollé y mantuve sus sistemas, administré las bases de datos y optimicé el control de inventario y ventas.'
-          - 'Freelance a medio tiempo, en paralelo a la carrera: frontend, backend y automatización; migraciones de datos a SAP y Oracle NetSuite, CRM (Salesforce, HubSpot) y reportes con Odoo, Python y PostgreSQL.'
+          - 'Proyectos en paralelo a la carrera: migraciones de datos a SAP y Oracle NetSuite, CRM (Salesforce, HubSpot) y reportes con Odoo, Python y PostgreSQL.'
 
     Proyectos de seguridad:
-      - name: CareLink, plataforma clínica multi-tenant
-        location: github.com/Luisceron0/CareLink
-        summary: 'Historia clínica, triage y coordinación entre especialistas para varias instituciones sobre una misma base de datos. Implementación de referencia.'
+      # SEG: repo público grupogpsi12/SEG, commit 63bef20. Autoría: 206 de 209
+      # commits (git shortlog -sne --all). Cifras de auditoria/metricas.json
+      # (medidas sobre el commit 5fa3f32): pruebas_unitarias 2574,
+      # cobertura_ramas_dominio_pct 97.74, mutacion_dominio_pct 97.8,
+      # rnf06_dashboard_p95_ms 786 (umbral 2000). Carga: 300 colaboradores y 20
+      # usuarios concurrentes (docs/evidencia/rendimiento-2026-10-24.md).
+      # Hallazgos: auditoria/score-global.md (39).
+      - name: SEG, sistema JML de gestión de personal
+        location: github.com/grupogpsi12/SEG
+        summary: 'Proyecto de la especialización con prácticas profesionales; empresa y datos ficticios.'
         highlights:
-          - 'Apliqué cifrado AES-256-GCM con clave derivada por institución y supresión, dentro de la consulta, de agregados con menos de 5 pacientes distintos, contra la re-identificación.'
-          - 'Bloqueé la edición de registros firmados con un trigger de PostgreSQL y revalidé el acceso de cada especialista en cada petición, verificado con tests de integración contra PostgreSQL real.'
+          - 'Lideré el diseño y la construcción (206 de 209 commits) de un sistema que conecta RRHH con TI vía GLPI 11: Django 5.2 hexagonal detrás de un WAF ModSecurity/OWASP CRS 4, contraseña con TOTP y Docker secrets.'
+          - 'Lo verifiqué con 2.574 pruebas unitarias, 97,7 % de cobertura de ramas y 97,8 % de puntaje de mutación en el dominio, y un p95 de 786 ms en el dashboard con 20 usuarios concurrentes.'
+          - 'Audité 39 hallazgos priorizados con DREAD y mapeados a ASVS nivel 2, cada corrección probada de rojo a verde, más ZAP y sqlmap sin parámetros inyectables.'
       - name: Tributary, facturación electrónica multirrégimen
         location: github.com/Luisceron0/Tributary
-        summary: 'Facturación electrónica para ventas transfronterizas entre Colombia, España y Alemania. Implementación de referencia, no certificada para producción.'
+        summary: 'Ventas entre Colombia, España y Alemania. Implementación de referencia, no certificada.'
         highlights:
           - 'Garanticé la inmutabilidad fiscal con triggers de PostgreSQL y una cadena de hashes SHA-256 cuyo verificador señala el registro alterado.'
-          - 'Definí 13 controles de seguridad con criterio binario de verificación y 4 gates independientes en CI; el quickstart levanta todo el stack en menos de 3 minutos.'
-      - name: KOA, landing y tienda bilingüe de demostración
-        location: koa.elevaforge.com
-        summary: 'Lista de espera pública y tienda con checkout simulado, sin pagos reales.'
+          - 'Definí 13 controles de seguridad con criterio binario y 4 gates independientes en CI; el quickstart levanta todo en menos de 3 minutos.'
+      - name: KOA Store, tienda bilingüe de demostración
+        location: store.koa.elevaforge.com
         highlights:
-          - 'Recalculé los precios en el servidor contra el catálogo, ignorando cualquier precio o total enviado por el navegador.'
-          - 'Protegí el formulario público con Turnstile verificado en el servidor, confirmación por correo y límite de solicitudes por IP.'
+          - 'Recalculé los precios en el servidor contra el catálogo, ignorando cualquier precio o total enviado por el navegador; checkout simulado, sin pagos reales.'
+      - name: CareLink, plataforma clínica multi-tenant
+        location: github.com/Luisceron0/CareLink
+        summary: 'Historia clínica y triage para varias instituciones. Implementación de referencia.'
+        highlights:
+          - 'Apliqué cifrado AES-256-GCM con clave derivada por institución y supresión, dentro de la consulta, de agregados con menos de 5 pacientes distintos.'
+          - 'Bloqueé la edición de registros firmados con un trigger de PostgreSQL y revalidé el acceso de cada especialista en cada petición.'
 
     Educación:
-      - institution: Politécnico Grancolombiano
-        area: Seguridad de la Información
-        degree: Especialización
-        location: Colombia
-        start_date: 2026-01
-        end_date: present
-        highlights:
-          - 'En curso, finalización estimada en 2027.'
       - institution: Universidad Cooperativa de Colombia
         # Sin `degree`: el locale español compone "DEGREE en AREA", y con
         # degree "Ingeniería" la línea quedaba "Ingeniería en Ingeniería de
@@ -97,6 +111,15 @@ cv:
         highlights:
           - 'Proyecto de grado: API REST con apoyo de IA, autenticación JWT y gestión segura de secretos.'
           - 'Cursos relevantes: Arquitectura de Software, Sistemas Distribuidos, Seguridad Informática, Sistemas de Inteligencia Artificial.'
+      - institution: Politécnico Grancolombiano
+        area: Gerencia de Proyectos en Seguridad de la Información
+        degree: Especialización
+        location: Colombia
+        start_date: 2026-01
+        end_date: present
+        highlights:
+          - 'En curso, finalización estimada en 2027.'
+          - 'Proyecto SEG: lideré el diseño y la construcción de un sistema JML con arquitectura hexagonal detrás de un WAF, auditado contra ASVS nivel 2.'
 
     Certificaciones:
       - 'Ciberseguridad, MinTIC Colombia (Sep 2024)'
@@ -104,23 +127,20 @@ cv:
 
     Habilidades:
       - label: Seguridad
-        details: Modelado de amenazas, OWASP Top 10, RBAC, Row Level Security, JWT (RS256), Criptografía aplicada (AES-256-GCM), Gestión de secretos, SAST (CodeQL, Semgrep), SCA (audit-ci, npm audit, Trivy), Escaneo de secretos (gitleaks), Seguridad de redes
+        details: Modelado de amenazas, OWASP Top 10, OWASP ASVS, RBAC, Row Level Security, JWT (RS256), Criptografía aplicada (AES-256-GCM), Gestión de secretos, SAST (CodeQL, Semgrep, bandit), SCA (audit-ci, npm audit, Trivy, pip-audit), DAST (OWASP ZAP, sqlmap), WAF (ModSecurity, OWASP CRS), Escaneo de secretos (gitleaks), Seguridad de redes
       - label: Arquitectura
-        details: Aislamiento multi-tenant, ADRs, Arquitectura hexagonal, Separación por capas, Diseño de APIs REST, Modelado de datos, Diseño de sistemas escalables
+        details: Arquitectura hexagonal, Aislamiento multi-tenant, ADRs, Separación por capas, Diseño de APIs REST, Modelado de datos, Diseño de sistemas escalables
       - label: Backend
-        details: Java, Spring Boot, Python, TypeScript
+        details: Java, Spring Boot, Python, Django, Django REST Framework, TypeScript
       - label: Frontend
         details: React, Next.js, Angular, Vue.js, Astro, JavaScript, Tailwind CSS, HTML5, CSS3
       - label: Cloud y DevOps
-        details: Docker, GitHub Actions (CI/CD), AWS (EC2, S3), Vercel, Git
+        details: Docker, GitHub Actions (CI/CD), Cloudflare Workers, Apache, AWS (EC2, S3), Vercel, Git
       - label: Bases de datos
-        details: PostgreSQL, MySQL, MongoDB, Migraciones versionadas (Flyway)
+        details: PostgreSQL, MySQL, MongoDB, SQLite, Migraciones versionadas (Flyway)
 
     Idiomas:
-      - label: Español
-        details: Nativo
-      - label: Inglés
-        details: C1 (EF SET)
+      - 'Español: nativo. Inglés: C1 (EF SET).'
 
 # ---------------------------------------------------------------------------
 # Diseno: formato Harvard, legible por un ATS.
