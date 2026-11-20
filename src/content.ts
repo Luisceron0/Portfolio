@@ -118,7 +118,15 @@ export interface ProjectImage {
  * segmento de su URL: `/casos/<slug>`. El orden de este array NO es el orden de
  * la página; ese lo manda `securityCases`.
  */
-export const CASE_SLUGS = ['carelink', 'elevaforge', 'tributary', 'koa'] as const
+export const CASE_SLUGS = [
+  'carelink',
+  'seg',
+  'elevaforge',
+  'tributary',
+  'koa',
+  'sitio-ips-san-jose',
+  'radiografias-ips-san-jose',
+] as const
 export type CaseSlug = (typeof CASE_SLUGS)[number]
 
 /** Nombre visible de cada caso: nombre propio, igual en los dos idiomas. */
@@ -127,6 +135,9 @@ export const CASE_NAMES: Readonly<Record<CaseSlug, string>> = {
   elevaforge: 'ElevaForge',
   tributary: 'Tributary',
   koa: 'KOA',
+  seg: 'SEG',
+  'sitio-ips-san-jose': 'Sitio IPS San José',
+  'radiografias-ips-san-jose': 'rx-gmail-pdf',
 }
 
 /**
@@ -657,6 +668,7 @@ const REPO = {
   koaLanding: 'https://github.com/luisCeron0Portfolio/koa-landing',
   koaStore: 'https://github.com/luisCeron0Portfolio/koa-store',
   portfolio: 'https://github.com/Luisceron0/Portfolio',
+  seg: 'https://github.com/grupogpsi12/SEG',
 } as const
 
 const COMMIT = {
@@ -666,6 +678,9 @@ const COMMIT = {
   koaLanding: '56102f12d296e85b9379c55b5b0018364c801977',
   koaStore: '6959769afc9a635d8c07f4a4b4c6956b9b198c56',
   portfolio: '07fbce5cc71bf10884bcf65947cab35d3c66a76f',
+  // SEG revisado el 2026-11-19. Las métricas de auditoria/metricas.json se
+  // midieron sobre el commit 5fa3f32 (campo `commit_auditado`).
+  seg: '63bef202f39b517b9667b842d42196fe021411f7',
 } as const
 
 type RepoKey = keyof typeof REPO
@@ -681,7 +696,7 @@ function code(repo: RepoKey, path: string, lines?: string): ExternalLink {
   const labelEn = lines ? `${file} (${lines.replace(/-/g, ' to ')})` : file
   return {
     label: { es: label, en: labelEn },
-    href: `${REPO[repo]}/blob/${COMMIT[repo]}/${path}${lineAnchor(path, lines)}`,
+    href: `${REPO[repo]}/blob/${COMMIT[repo]}/${encodeURI(path)}${lineAnchor(path, lines)}`,
   }
 }
 
@@ -697,16 +712,16 @@ function lineAnchor(path: string, lines?: string): string {
 
 /** Enlace a una carpeta del repositorio en su commit fijo. */
 function tree(repo: RepoKey, path: string, label: Localized): ExternalLink {
-  return { label, href: `${REPO[repo]}/tree/${COMMIT[repo]}/${path}` }
+  return { label, href: `${REPO[repo]}/tree/${COMMIT[repo]}/${encodeURI(path)}` }
 }
 
 /** Enlace a un documento del repo con etiqueta propia (no un nombre de archivo). */
 function doc(repo: RepoKey, path: string, label: Localized, anchor?: string): ExternalLink {
   const suffix = !anchor ? '' : /^L\d/.test(anchor) ? lineAnchor(path, anchor) : `#${anchor}`
-  return { label, href: `${REPO[repo]}/blob/${COMMIT[repo]}/${path}${suffix}` }
+  return { label, href: `${REPO[repo]}/blob/${COMMIT[repo]}/${encodeURI(path)}${suffix}` }
 }
 
-export type CaseStatus = 'produccion' | 'demo' | 'repositorio'
+export type CaseStatus = 'produccion' | 'demo' | 'repositorio' | 'preproduccion'
 
 /** Una amenaza del caso. `stride` solo si el threat model del repo la declara. */
 export interface CaseThreat {
@@ -728,6 +743,12 @@ export interface CaseControl {
 export interface CaseControlGroup {
   heading?: Localized
   controls: readonly CaseControl[]
+}
+
+/** Una capa del diagrama de arquitectura del caso (de fuera hacia dentro). */
+export interface CaseLayer {
+  label: Localized
+  detail: Localized
 }
 
 /** Una verificación: qué se comprobó y con qué evidencia. */
@@ -761,7 +782,19 @@ export interface SecurityCase {
   controlGroups: readonly CaseControlGroup[]
   verification: readonly CaseCheck[]
   links: readonly ExternalLink[]
-  screenshot: ProjectImage
+  /** Captura con datos ficticios o públicos. Sin ella, la ficha usa el diagrama. */
+  screenshot?: ProjectImage
+  /** Diagrama simple de capas, de fuera hacia dentro. */
+  architecture?: readonly CaseLayer[]
+  /** Lo que quedó abierto, resumido sin detalles explotables. */
+  openItems?: LocalizedList
+  /** Qué hizo Luis, con la autoría medida en Git. */
+  role?: Localized
+  /**
+   * Repositorio privado (sistemas de un cliente): no se enlaza el código y los
+   * controles se describen sin rutas internas ni versiones expuestas.
+   */
+  privateRepo?: boolean
 }
 
 export const casesSection = {
@@ -778,6 +811,7 @@ export const casesSection = {
       produccion: { es: 'En producción', en: 'In production' },
       demo: { es: 'Demo en vivo', en: 'Live demo' },
       repositorio: { es: 'Repositorio', en: 'Repository' },
+      preproduccion: { es: 'Pendiente de puesta en producción', en: 'Awaiting go-live' },
     } satisfies Record<CaseStatus, Localized>,
     dataFlow: { es: 'Flujo de datos', en: 'Data flow' } satisfies Localized,
     assets: { es: 'Activos sensibles', en: 'Sensitive assets' } satisfies Localized,
@@ -787,6 +821,17 @@ export const casesSection = {
     evidence: { es: 'Código', en: 'Code' } satisfies Localized,
     verification: { es: 'Cómo se verificó', en: 'How it was verified' } satisfies Localized,
     links: { es: 'Enlaces', en: 'Links' } satisfies Localized,
+    architecture: { es: 'Arquitectura', en: 'Architecture' } satisfies Localized,
+    architectureNote: {
+      es: 'De fuera hacia dentro: cada capa solo habla con la siguiente.',
+      en: 'From the outside in: each layer only talks to the next one.',
+    } satisfies Localized,
+    openItems: { es: 'Qué quedó abierto', en: 'What remains open' } satisfies Localized,
+    role: { es: 'Mi rol', en: 'My role' } satisfies Localized,
+    privateRepo: {
+      es: 'Repositorio privado de la institución: el código no se enlaza y los controles se describen sin detalles internos.',
+      en: 'Private repository owned by the institution: the code is not linked and controls are described without internal details.',
+    } satisfies Localized,
     readCase: { es: 'Ver el caso completo', en: 'Read the full case' } satisfies Localized,
     backToCases: { es: 'Volver a los casos', en: 'Back to the cases' } satisfies Localized,
     newTab: {
@@ -1020,6 +1065,284 @@ export const securityCases: readonly SecurityCase[] = [
         en: 'CareLink screen showing an attempt to edit an already signed clinical encounter, rejected with a 409 error by a database trigger.',
       },
     },
+  },
+  {
+    /*
+     * Fuente: repo público grupogpsi12/SEG, commit 63bef20 (revisado el
+     * 2026-11-19). Autoría: 206 de 209 commits son de Luis (174 con su nombre y
+     * 32 con el alias "equipo", con su correo), medido con
+     * `git shortlog -sne --all`. Autores en el SRS: Jhinnet Bravo, Carlos Ruiz,
+     * Luis Cerón, Jhon Leal y Cristian Caro. Empresa y datos ficticios.
+     * Cifras: auditoria/metricas.json (medidas sobre el commit 5fa3f32) y
+     * docs/evidencia/rendimiento-2026-10-24.md.
+     */
+    slug: 'seg',
+    kicker: {
+      es: 'Sistema JML de ingreso, cambios y retiro de personal. Proyecto de la especialización',
+      en: 'JML system for joiners, movers and leavers. Postgraduate project',
+    },
+    summary: {
+      es: 'Conecta RRHH con TI: cada ingreso, cambio o retiro genera tickets en GLPI 11. Arquitectura hexagonal detrás de un WAF, 2.574 pruebas unitarias y una auditoría propia de 39 hallazgos mapeada a ASVS nivel 2.',
+      en: 'Connects HR with IT: every joiner, mover or leaver creates tickets in GLPI 11. Hexagonal architecture behind a WAF, 2,574 unit tests and a self-audit of 39 findings mapped to ASVS level 2.',
+    },
+    seoDescription: {
+      es: 'SEG: sistema JML en Django con arquitectura hexagonal tras un WAF ModSecurity, 2.574 pruebas, mutación 97,8 % y auditoría ASVS nivel 2.',
+      en: 'SEG: Django JML system with hexagonal architecture behind a ModSecurity WAF, 2,574 tests, 97.8% mutation score and an ASVS level 2 audit.',
+    },
+    problem: {
+      es: 'Cuando RRHH registra un ingreso, un cambio o un retiro, TI tiene que crear, ajustar o revocar accesos sin perder ni duplicar tareas, aunque el sistema de tickets esté caído. Empresa ficticia (Andina Servicios S.A.S.) y datos ficticios.',
+      en: 'When HR records a joiner, a mover or a leaver, IT has to create, adjust or revoke access without losing or duplicating tasks, even when the ticketing system is down. Fictitious company (Andina Servicios S.A.S.) and fictitious data.',
+    },
+    stack: ['Python 3.12', 'Django 5.2 LTS', 'PostgreSQL 17', 'Docker Compose', 'BunkerWeb (ModSecurity, OWASP CRS 4)', 'Supabase Auth', 'GLPI 11'],
+    status: 'repositorio',
+    dataFlow: {
+      es: 'Navegador → WAF (nginx + ModSecurity + OWASP CRS 4) como único servicio con puertos publicados → Django: adaptadores (vistas, ORM, cliente de GLPI) → casos de uso → dominio. El inicio de sesión con contraseña y TOTP lo media el servidor contra Supabase Auth. Los tickets salen por una bandeja de salida (outbox) que un worker envía a la API REST de GLPI 11, y el mismo worker sincroniza su estado.',
+      en: 'Browser → WAF (nginx + ModSecurity + OWASP CRS 4) as the only service with published ports → Django: adapters (views, ORM, GLPI client) → use cases → domain. Password and TOTP sign-in is mediated by the server against Supabase Auth. Tickets leave through an outbox that a worker sends to the GLPI 11 REST API, and the same worker syncs their status.',
+    },
+    assets: {
+      es: [
+        'Datos personales de colaboradores (ficticios) y motivos de retiro',
+        'Soportes de vinculación (PDF)',
+        'Tokens de la API de GLPI y secretos de Django y de la base',
+        'Bitácora de auditoría con cadena de hashes',
+      ],
+      en: [
+        'Employee personal data (fictitious) and leaving reasons',
+        'Onboarding documents (PDF)',
+        'GLPI API tokens and Django and database secrets',
+        'Hash-chained audit log',
+      ],
+    },
+    architecture: [
+      {
+        label: { es: 'Borde', en: 'Edge' },
+        detail: {
+          es: 'WAF: nginx + ModSecurity + OWASP CRS 4 como proxy inverso; exclusiones versionadas en archivos propios.',
+          en: 'WAF: nginx + ModSecurity + OWASP CRS 4 as a reverse proxy; exclusions versioned in their own files.',
+        },
+      },
+      {
+        label: { es: 'Adaptadores', en: 'Adapters' },
+        detail: {
+          es: 'Django 5.2: vistas, ORM, cliente de la API de GLPI y worker con bandeja de salida.',
+          en: 'Django 5.2: views, ORM, GLPI API client and an outbox worker.',
+        },
+      },
+      {
+        label: { es: 'Aplicación', en: 'Application' },
+        detail: {
+          es: 'Casos de uso. Contratos de import-linter en la CI impiden que importen Django, el ORM o clientes HTTP.',
+          en: 'Use cases. import-linter contracts in CI forbid them from importing Django, the ORM or HTTP clients.',
+        },
+      },
+      {
+        label: { es: 'Dominio', en: 'Domain' },
+        detail: {
+          es: 'Reglas JML puras, solo con la biblioteca estándar.',
+          en: 'Pure JML rules, standard library only.',
+        },
+      },
+      {
+        label: { es: 'Datos y servicios', en: 'Data and services' },
+        detail: {
+          es: 'PostgreSQL 17 en una red interna sin puertos publicados · Supabase Auth (contraseña + TOTP, vía servidor) · GLPI 11.',
+          en: 'PostgreSQL 17 on an internal network with no published ports · Supabase Auth (password + TOTP, via the server) · GLPI 11.',
+        },
+      },
+    ],
+    threatModel: doc(
+      'seg',
+      'docs/SRS.md',
+      { es: 'Análisis STRIDE, docs/SRS.md (L576)', en: 'STRIDE analysis, docs/SRS.md (L576)' },
+      'L576'
+    ),
+    threats: [
+      {
+        ref: 'T1',
+        stride: 'Suplantación (Spoofing)',
+        text: {
+          es: 'Robo de credenciales de RRHH para emitir retiros falsos.',
+          en: 'Stolen HR credentials used to issue fake leaver requests.',
+        },
+      },
+      {
+        ref: 'T4',
+        stride: 'Manipulación (Tampering)',
+        text: {
+          es: 'Inyección SQL o de cabeceras.',
+          en: 'SQL or header injection.',
+        },
+      },
+      {
+        ref: 'T8',
+        stride: 'Divulgación (Information Disclosure)',
+        text: {
+          es: 'Conexión directa a la base de datos desde fuera de los contenedores.',
+          en: 'Direct connection to the database from outside the containers.',
+        },
+      },
+      {
+        ref: 'T11',
+        stride: 'Denegación de servicio (DoS)',
+        text: {
+          es: 'GLPI caído bloquea una emergencia.',
+          en: 'GLPI being down blocks an emergency.',
+        },
+      },
+      {
+        ref: 'T19',
+        stride: 'Manipulación (Tampering)',
+        text: {
+          es: 'Saltarse el WAF accediendo directamente a la aplicación o a GLPI.',
+          en: 'Bypassing the WAF by reaching the application or GLPI directly.',
+        },
+      },
+    ],
+    controlGroups: [
+      {
+        controls: [
+          {
+            title: {
+              es: 'WAF como único punto de entrada',
+              en: 'WAF as the single entry point',
+            },
+            why: {
+              es: 'Solo el WAF publica puertos; la aplicación, la base y GLPI viven en redes internas de Docker. Las exclusiones del CRS son puntuales y versionadas, no un modo permisivo.',
+              en: 'Only the WAF publishes ports; the application, the database and GLPI live on internal Docker networks. CRS exclusions are targeted and versioned, not a permissive mode.',
+            },
+            evidence: [
+              code('seg', 'infra/compose.yaml', 'L55-L97'),
+              code('seg', 'infra/bunkerweb/configs/README.md'),
+            ],
+          },
+          {
+            title: {
+              es: 'Arquitectura hexagonal verificada en la CI',
+              en: 'Hexagonal architecture enforced in CI',
+            },
+            why: {
+              es: 'Tres contratos de import-linter: el dominio solo usa la biblioteca estándar y la aplicación solo importa el dominio. Una regla de negocio no puede acabar acoplada al framework sin romper el build.',
+              en: 'Three import-linter contracts: the domain uses only the standard library and the application imports only the domain. A business rule cannot end up coupled to the framework without breaking the build.',
+            },
+            evidence: [code('seg', 'pyproject.toml', 'L90-L112')],
+          },
+          {
+            title: {
+              es: 'Contraseña y TOTP obligatorio, mediados por el servidor',
+              en: 'Password and mandatory TOTP, mediated by the server',
+            },
+            why: {
+              es: 'El navegador nunca habla con el proveedor de identidad: el servidor verifica la contraseña y el segundo factor, y la clave de servicio solo existe en un comando de administración.',
+              en: 'The browser never talks to the identity provider: the server verifies the password and the second factor, and the service key only exists in an admin command.',
+            },
+            evidence: [code('seg', 'src/jml/adaptadores/entrada/web/ingreso.py', 'L94-L131')],
+          },
+          {
+            title: {
+              es: 'Secretos como Docker secrets',
+              en: 'Secrets as Docker secrets',
+            },
+            why: {
+              es: 'Cada servicio recibe solo los secretos que necesita, como archivos montados, fuera del repositorio y de las variables de entorno.',
+              en: 'Each service receives only the secrets it needs, as mounted files, outside the repository and environment variables.',
+            },
+            evidence: [code('seg', 'infra/compose.yaml', 'L297-L307')],
+          },
+          {
+            title: {
+              es: 'Bandeja de salida con reintentos e idempotencia',
+              en: 'Outbox with retries and idempotency',
+            },
+            why: {
+              es: 'Una caída de GLPI no pierde ni duplica tickets: el worker reintenta desde la bandeja y, tras 10 intentos fallidos, la solicitud queda en error visible.',
+              en: 'A GLPI outage neither loses nor duplicates tickets: the worker retries from the outbox and, after 10 failed attempts, the request moves to a visible error state.',
+            },
+            evidence: [
+              code('seg', 'src/jml/adaptadores/entrada/worker/ciclo.py', 'L1-L58'),
+              doc('seg', 'docs/SRS.md', { es: 'RF-18 (L428)', en: 'RF-18 (L428)' }, 'L428'),
+            ],
+          },
+          {
+            title: {
+              es: 'Matriz de autorización probada celda por celda',
+              en: 'Authorization matrix tested cell by cell',
+            },
+            why: {
+              es: 'Cada combinación de rol y acción tiene su resultado esperado y una prueba que lo verifica; una denegación también deja rastro en la auditoría.',
+              en: 'Every role and action combination has its expected outcome and a test that checks it; a denial also leaves an audit trail.',
+            },
+            evidence: [code('seg', 'auditoria/matriz-authz.csv')],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: '2.574 pruebas unitarias. Cobertura de ramas: 97,7 % en el dominio y 94,8 % en la aplicación. Puntaje de mutación: 97,8 % en el dominio y 92,7 % en la aplicación.',
+          en: '2,574 unit tests. Branch coverage: 97.7% on the domain and 94.8% on the application. Mutation score: 97.8% on the domain and 92.7% on the application.',
+        },
+        evidence: [code('seg', 'auditoria/metricas.json')],
+      },
+      {
+        text: {
+          es: 'p95 del dashboard de 786 ms con 300 colaboradores y 20 usuarios concurrentes (umbral: 2.000 ms).',
+          en: 'Dashboard p95 of 786 ms with 300 employees and 20 concurrent users (threshold: 2,000 ms).',
+        },
+        evidence: [code('seg', 'docs/evidencia/rendimiento-2026-10-24.md')],
+      },
+      {
+        text: {
+          es: 'Auditoría propia: 39 hallazgos priorizados con DREAD, cada corrección verificada "rojo a verde" con una prueba que falla sin el control, y una matriz ASVS 4 nivel 2 requisito por requisito.',
+          en: 'Self-audit: 39 findings prioritized with DREAD, each fix verified "red to green" with a test that fails without the control, and an ASVS 4 level 2 matrix requirement by requirement.',
+        },
+        evidence: [
+          code('seg', 'auditoria/score-global.md'),
+          tree('seg', 'auditoria/hallazgos', { es: 'auditoria/hallazgos', en: 'auditoria/hallazgos' }),
+          code('seg', 'auditoria/asvs-l2.csv'),
+        ],
+      },
+      {
+        text: {
+          es: 'Pruebas dinámicas: ZAP baseline y activo autenticado sin hallazgos reales, sqlmap sin parámetros inyectables, y pruebas de MitM y captura de tráfico.',
+          en: 'Dynamic testing: ZAP baseline and authenticated active scan with no real findings, sqlmap with no injectable parameters, and MitM and traffic capture tests.',
+        },
+        evidence: [
+          code('seg', 'docs/estado.md', 'L39'),
+          code('seg', 'docs/Desarrollo Seguro/2-Resultados-de-pruebas-de-vulnerabilidades.md'),
+          code('seg', 'docs/Desarrollo Seguro/5-Pruebas-de-ataque-MitM-y-SQLi.md'),
+        ],
+      },
+      {
+        text: {
+          es: 'CI: gitleaks sobre todo el historial, pip-audit, bandit, acciones fijadas por SHA y pruebas de contrato contra un GLPI 11 real.',
+          en: 'CI: gitleaks across the full history, pip-audit, bandit, actions pinned by SHA and contract tests against a real GLPI 11.',
+        },
+        evidence: [code('seg', '.github/workflows/verificar.yml')],
+      },
+    ],
+    openItems: {
+      es: [
+        '17 de los 39 hallazgos siguen abiertos o aceptados: ninguno crítico ni alto (4 medios, 9 bajos y 4 informativos). Score global 1,2 de 100 sobre 147 controles ASVS verificados.',
+        'Los abiertos son sobre todo decisiones de endurecimiento pendientes de ADR (segmentación de la red interna y ejecución de contenedores) y la protección de la rama principal.',
+        'Vulnerabilidades sin parche disponible en la imagen base y en imágenes de terceros, aceptadas con exención escrita y pendientes de un procedimiento de actualización.',
+      ],
+      en: [
+        '17 of the 39 findings remain open or accepted: none critical or high (4 medium, 9 low and 4 informational). Global score 1.2 out of 100 over 147 verified ASVS controls.',
+        'The open ones are mostly hardening decisions pending an ADR (internal network segmentation and container runtime) and main branch protection.',
+        'Vulnerabilities with no patch available in the base image and in third-party images, accepted with a written exemption and pending an update procedure.',
+      ],
+    },
+    role: {
+      es: 'Lideré el diseño y la construcción: 206 de 209 commits del repositorio son míos. Equipo académico de 5 personas según el SRS (grupo D01).',
+      en: 'Led the design and build: 206 of the 209 commits in the repository are mine. Academic team of 5 according to the SRS (group D01).',
+    },
+    links: [
+      { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.seg },
+      doc('seg', 'docs/SRS.md', { es: 'SRS versionado', en: 'Versioned SRS' }),
+      doc('seg', 'docs/decisiones.md', { es: '37 ADR', en: '37 ADRs' }),
+      doc('seg', 'auditoria/informes/0-Informe-maestro.md', { es: 'Informe de auditoría', en: 'Audit report' }),
+    ],
   },
   {
     slug: 'elevaforge',

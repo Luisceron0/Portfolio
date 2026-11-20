@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { CASE_NAMES, casesSection, type Locale, type SecurityCase } from '@/content'
 import { homeAnchor } from '@/lib/locale'
 import { CASE_TONES, CaseScreenshot, StatusBadge } from '@/components/cases'
+import { ArchitectureDiagram } from '@/components/architecture-diagram'
 import { EvidenceLink } from '@/components/evidence-link'
 import { TONE_BG, TONE_BORDER, TONE_TEXT, type Tone } from '@/components/section'
 
@@ -39,6 +40,8 @@ function EvidenceList({
   locale: Locale
   label: string
 }) {
+  // Repos privados: un control sin enlaces no pinta una lista vacía.
+  if (links.length === 0) return null
   return (
     <ul aria-label={label} className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
       {links.map((link) => (
@@ -125,8 +128,24 @@ export function CaseDetail({
           </dl>
         </div>
 
-        <CaseScreenshot item={item} locale={locale} sizes="(min-width: 1024px) 40vw, 100vw" />
+        {item.screenshot ? (
+          <CaseScreenshot item={item} locale={locale} sizes="(min-width: 1024px) 40vw, 100vw" />
+        ) : item.architecture ? (
+          <ArchitectureDiagram
+            layers={item.architecture}
+            locale={locale}
+            tone={tone}
+            label={labels.architecture[locale]}
+            compact
+          />
+        ) : null}
       </header>
+
+      {item.privateRepo && (
+        <p role="note" className="mt-8 max-w-4xl border border-hairline-strong px-4 py-3 text-sm leading-relaxed text-ink-muted">
+          {labels.privateRepo[locale]}
+        </p>
+      )}
 
       <Block id="flujo" title={labels.dataFlow[locale]} tone={tone}>
         <p className="max-w-4xl font-mono text-sm leading-relaxed text-ink">{item.dataFlow[locale]}</p>
@@ -145,6 +164,20 @@ export function CaseDetail({
           ))}
         </ul>
       </Block>
+
+      {item.architecture && (
+        <Block id="arquitectura" title={labels.architecture[locale]} tone={tone}>
+          <p className="mb-4 text-sm text-ink-muted">{labels.architectureNote[locale]}</p>
+          <div className="max-w-3xl">
+            <ArchitectureDiagram
+              layers={item.architecture}
+              locale={locale}
+              tone={tone}
+              label={labels.architecture[locale]}
+            />
+          </div>
+        </Block>
+      )}
 
       <Block id="amenazas" title={(item.threatsHeading ?? labels.threats)[locale]} tone={tone}>
         <ol className="space-y-3">
@@ -209,6 +242,28 @@ export function CaseDetail({
           ))}
         </ul>
       </Block>
+
+      {item.openItems && (
+        <Block id="abierto" title={labels.openItems[locale]} tone={tone}>
+          <ul className="space-y-3">
+            {item.openItems[locale].map((entry) => (
+              <li key={entry} className="relative pl-5 text-base leading-relaxed text-ink">
+                <span
+                  aria-hidden="true"
+                  className={`absolute left-0 top-[0.55em] h-2 w-2 -skew-x-[20deg] ${TONE_BG[tone]}`}
+                />
+                {entry}
+              </li>
+            ))}
+          </ul>
+        </Block>
+      )}
+
+      {item.role && (
+        <Block id="rol" title={labels.role[locale]} tone={tone}>
+          <p className="max-w-4xl text-lg leading-relaxed text-ink">{item.role[locale]}</p>
+        </Block>
+      )}
 
       <Block id="enlaces" title={labels.links[locale]} tone={tone}>
         <EvidenceList links={item.links} locale={locale} label={labels.links[locale]} />

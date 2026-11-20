@@ -269,16 +269,19 @@ test.describe('RF-102 / RF-111 — casos de seguridad', () => {
   }) => {
     await page.goto('/')
 
-    expect(
-      securityCases.map((item) => item.slug),
-      'SRS v1.4: CareLink, ElevaForge, Tributary, KOA'
-    ).toEqual(['carelink', 'elevaforge', 'tributary', 'koa'])
+    // CareLink primero (2026-11-14) y SEG segundo (2026-11-19).
+    expect(securityCases.map((item) => item.slug).slice(0, 2)).toEqual(['carelink', 'seg'])
 
     for (const item of securityCases) {
       const article = page.locator(`article[aria-labelledby="caso-${item.slug}"]`)
       await expect(article, `falta la tarjeta de ${CASE_NAMES[item.slug]}`).toHaveCount(1)
       await expect(article.getByRole('heading', { name: CASE_NAMES[item.slug] })).toBeVisible()
-      await expect(article.locator('img')).toHaveAttribute('alt', /\S/)
+      // Sin captura (datos sensibles o repo privado), la tarjeta muestra el diagrama.
+      if (item.screenshot) {
+        await expect(article.locator('img')).toHaveAttribute('alt', /\S/)
+      } else {
+        await expect(article.getByRole('list', { name: casesSection.labels.architecture.es })).toBeVisible()
+      }
       await expect(
         article.getByText(casesSection.labels.statuses[item.status].es).first()
       ).toBeVisible()
@@ -307,9 +310,15 @@ test.describe('RF-102 / RF-111 — casos de seguridad', () => {
     }
   })
 
-  test('cada control enlaza a código en un commit fijo o muestra su pendiente', async ({ page }) => {
+  test('cada control enlaza a código en un commit fijo, o el caso declara repo privado', async ({ page }) => {
     for (const item of securityCases) {
       await page.goto(`/casos/${item.slug}`)
+      if (item.privateRepo) {
+        // Repo privado: ni un enlace a github.com en la página, y el aviso visible.
+        await expect(page.getByText(casesSection.labels.privateRepo.es)).toBeVisible()
+        expect(await page.locator('main a[href*="github.com/"]').count()).toBe(0)
+        continue
+      }
       const controls = page.locator('#controles').locator('xpath=..').locator('li:has(> h3), li:has(> h4)')
       const count = await controls.count()
       expect(count).toBeGreaterThan(0)
@@ -403,7 +412,7 @@ test.describe('RF-106 / RF-107 — perfil, experiencia, habilidades y formación
     await expect(experiencia).toContainText('equipo de 2')
     await expect(experiencia).not.toContainText('Voluntario')
     // La Alcaldía no afirma prevención de SQLi (dato confirmado por el dueño).
-    await expect(experiencia.locator('li', { hasText: 'Alcaldía' })).not.toContainText('inyección SQL')
+    await expect(experiencia.locator('ol > li', { hasText: 'Alcaldía de Pasto' })).not.toContainText('inyección SQL')
   })
 
   test('Seguridad es el primer grupo de habilidades y no hay afirmaciones retiradas', async ({ page }) => {

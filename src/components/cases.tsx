@@ -22,9 +22,10 @@ import {
   type Tone,
 } from '@/components/section'
 import { ProjectsIcon } from '@/components/icons'
+import { ArchitectureDiagram } from '@/components/architecture-diagram'
 
 /** RF-110: un tono por caso, en el orden de `securityCases`. */
-export const CASE_TONES: readonly Tone[] = ['violet', 'mint', 'green', 'lilac']
+export const CASE_TONES: readonly Tone[] = ['violet', 'green', 'mint', 'lilac', 'silver', 'mint', 'green']
 
 /** Insignia de estado: en producción, demo en vivo o repositorio. */
 export function StatusBadge({ item, locale }: { item: SecurityCase; locale: Locale }) {
@@ -33,7 +34,9 @@ export function StatusBadge({ item, locale }: { item: SecurityCase; locale: Loca
       ? 'text-surface [--slant-bg:#a6f13c]'
       : item.status === 'demo'
         ? 'text-surface [--slant-bg:#5ef0a8]'
-        : 'text-surface [--slant-bg:#f5f3fa]'
+        : item.status === 'preproduccion'
+          ? 'text-surface [--slant-bg:#d7c4ff]'
+          : 'text-surface [--slant-bg:#f5f3fa]'
   return (
     <span
       className={`p-slant inline-block px-3 py-1 font-mono text-[0.68rem] font-bold uppercase tracking-widest2 ${tone}`}
@@ -44,7 +47,11 @@ export function StatusBadge({ item, locale }: { item: SecurityCase; locale: Loca
   )
 }
 
-/** Captura del caso, o su pendiente si no hay archivo confirmado. */
+/**
+ * Captura del caso, o su pendiente si no hay archivo confirmado. Un caso sin
+ * captura (repos privados, datos sensibles) no pinta nada aquí: la ficha usa
+ * su diagrama de arquitectura.
+ */
 export function CaseScreenshot({
   item,
   locale,
@@ -54,20 +61,22 @@ export function CaseScreenshot({
   locale: Locale
   sizes: string
 }) {
-  const src = resolved(item.screenshot.src)
+  const shot = item.screenshot
+  if (!shot) return null
+  const src = resolved(shot.src)
   if (!src) {
     return (
       <div className="flex aspect-[16/10] w-full items-center justify-center border border-dashed border-warn-border bg-warn-surface p-4 text-center">
-        <PendingNote value={item.screenshot.src} />
+        <PendingNote value={shot.src} />
       </div>
     )
   }
   return (
     <Image
       src={src}
-      alt={item.screenshot.alt[locale]}
-      width={item.screenshot.width ?? 1280}
-      height={item.screenshot.height ?? 577}
+      alt={shot.alt[locale]}
+      width={shot.width ?? 1280}
+      height={shot.height ?? 577}
       className="w-full border-2 border-ink"
       sizes={sizes}
     />
@@ -88,15 +97,25 @@ function CaseCard({ item, index, locale }: { item: SecurityCase; index: number; 
         aria-labelledby={headingId}
         className="p-notch flex h-full flex-col border-t-4 border-ink bg-surface-card p-5 sm:p-7"
       >
-        <div className="group/shot relative">
-          <span
-            aria-hidden="true"
-            className={`absolute inset-0 translate-x-2 translate-y-2 -skew-x-3 ${TONE_BG[tone]}`}
-          />
-          <div className="relative -rotate-1 transition-transform duration-300 ease-out group-hover/shot:rotate-0">
-            <CaseScreenshot item={item} locale={locale} sizes="(min-width: 1024px) 45vw, 100vw" />
+        {item.screenshot ? (
+          <div className="group/shot relative">
+            <span
+              aria-hidden="true"
+              className={`absolute inset-0 translate-x-2 translate-y-2 -skew-x-3 ${TONE_BG[tone]}`}
+            />
+            <div className="relative -rotate-1 transition-transform duration-300 ease-out group-hover/shot:rotate-0">
+              <CaseScreenshot item={item} locale={locale} sizes="(min-width: 1024px) 45vw, 100vw" />
+            </div>
           </div>
-        </div>
+        ) : item.architecture ? (
+          <ArchitectureDiagram
+            layers={item.architecture}
+            locale={locale}
+            tone={tone}
+            label={casesSection.labels.architecture[locale]}
+            compact
+          />
+        ) : null}
 
         <div className="mt-7 flex flex-wrap items-center gap-3">
           <span aria-hidden="true" className={`p-display p-outline text-3xl leading-none ${TONE_TEXT[tone]}`}>
