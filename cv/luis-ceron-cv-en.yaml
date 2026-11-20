@@ -115,7 +115,7 @@ cv:
         start_date: 2026-01
         end_date: present
         highlights:
-          - 'In progress, estimated completion in 2027.'
+          - 'In progress, estimated completion in early 2027.'
           - 'SEG project: led the design and build of a JML system with hexagonal architecture behind a WAF, audited against ASVS level 2.'
 
     Certifications:

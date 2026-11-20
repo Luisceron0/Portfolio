@@ -18,7 +18,8 @@
 - [x] Alcaldía, IPS San José, ElevaForge (CTO), Kennedy (tiempo completo) y freelance (tiempo parcial)
 - [x] Caso SEG; fichas del sitio de la IPS y de rx-gmail-pdf
 - [x] CV ES y EN regenerados (2 páginas, prueba de ATS)
-- [ ] Responder las preguntas de `ownerQuestions` en src/content.ts (check:pending las lista)
+- [x] Responder las preguntas de `ownerQuestions` (respondidas el 2026-11-19)
+- [ ] 2026-11-20: cuando rx-gmail-pdf esté corriendo en producción, cambiar su `status` a `'produccion'` en src/content.ts
 - [ ] Revisar las notas privadas que quedaron fuera de Git
 
 ### Tareas del dueño (mejoras opcionales, no bloquean el deploy)

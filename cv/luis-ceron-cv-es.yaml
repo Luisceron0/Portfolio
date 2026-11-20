@@ -118,7 +118,7 @@ cv:
         start_date: 2026-01
         end_date: present
         highlights:
-          - 'En curso, finalización estimada en 2027.'
+          - 'En curso, finalización estimada a inicios de 2027.'
           - 'Proyecto SEG: lideré el diseño y la construcción de un sistema JML con arquitectura hexagonal detrás de un WAF, auditado contra ASVS nivel 2.'
 
     Certificaciones:

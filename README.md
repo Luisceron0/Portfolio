@@ -111,8 +111,8 @@ no debe llevar texto nunca.
 **Reposicionamiento AppSec (rama `reposicionamiento-appsec`, 2026-11-14):**
 casos de seguridad con plantilla fija y controles enlazados a código en commits
 fijos, sección "Cómo trabajo", experiencia agrupada, SEO (JSON-LD, sitemap,
-Open Graph generado con next/og) y CV ES/EN regenerados con RenderCV. El único
-`[PENDIENTE]` que bloquea el deploy es el bloque "En formación"; las mejoras
+Open Graph generado con next/og) y CV ES/EN regenerados con RenderCV. Sin
+`[PENDIENTE]` abiertos (2026-11-19): `check:pending` pasa en verde. Las mejoras
 opcionales del dueño están en `tasks/todo.md`.
 
 **Historial anterior:**

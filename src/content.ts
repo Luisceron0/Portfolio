@@ -516,6 +516,9 @@ export const timeline = {
        *    seguridad, retención y la CI (gitleaks, regla estática de SQL, audit).
        *    En producción: el dominio público responde con la app nueva
        *    (HTTP 200, comprobado el 2026-11-19).
+       *  - Rol formal confirmado por Luis (2026-11-19): Ingeniero de Software.
+       *    Trabajo en equipo con Jhonatan confirmado. El panel tiene una sola
+       *    cuenta creada: sin cifras de uso que publicar.
        *  - rx-gmail-pdf: repo privado de rx-gmail-pdf, 75 de 75 commits
        *    de Luis. Pendiente de puesta en producción (decisión institucional).
        * Repos privados: no se enlazan.
@@ -2038,13 +2041,13 @@ export const securityCases: readonly SecurityCase[] = [
     assets: {
       es: [
         'Datos personales de quienes envían PQRS',
-        'Cuentas del panel de administración',
+        'Cuenta del panel de administración',
         'Documentos regulatorios publicados',
         'Respaldos de la base de datos',
       ],
       en: [
         'Personal data of people who submit PQRS',
-        'Admin panel accounts',
+        'Admin panel account',
         'Published regulatory documents',
         'Database backups',
       ],
@@ -2208,7 +2211,9 @@ export const securityCases: readonly SecurityCase[] = [
      * Fuente: repo PRIVADO de rx-gmail-pdf (no se enlaza), revisado el
      * 2026-11-19. Autoría: 75 de 75 commits de Luis. STRIDE: docs/SRS.md §7.
      * Estado: el SRS v2.8 dice que un pendiente institucional (R-10) bloquea
-     * solo la puesta en producción. Sin remitente, rutas ni versiones exactas.
+     * solo la puesta en producción. Luis confirma la puesta en producción para
+     * el 2026-11-20: cambiar `status` a 'produccion' cuando esté corriendo, no
+     * antes (tarea en tasks/todo.md). Sin remitente, rutas ni versiones exactas.
      */
     slug: 'radiografias-ips-san-jose',
     kicker: {
@@ -2573,16 +2578,6 @@ export const skills = {
       },
     },
   ] satisfies readonly SkillGroup[],
-  /**
-   * Bloque separado, y NO se publica sin confirmación del dueño: el
-   * `[PENDIENTE]` bloquea el deploy (check:pending) hasta que lo confirme.
-   */
-  learning: {
-    label: { es: 'En formación', en: 'Currently learning' } satisfies Localized,
-    items: ['Terraform', 'Kubernetes', 'AWS Solutions Architect Associate'],
-    pending:
-      '[PENDIENTE: TODO-LUIS, confirmar qué estoy estudiando y fecha estimada]' as Pending,
-  },
 } as const
 
 // ---------------------------------------------------------------------------
@@ -2612,11 +2607,11 @@ export const education = {
       period: { es: 'Ene 2026 a la actualidad', en: 'Jan 2026 to present' },
       highlights: {
         es: [
-          'En curso, finalización estimada en 2027.',
+          'En curso, finalización estimada a inicios de 2027.',
           'Proyecto SEG: lideré el diseño y la construcción de un sistema JML (ingreso, cambios y retiro de personal) con arquitectura hexagonal detrás de un WAF, auditado contra ASVS nivel 2.',
         ],
         en: [
-          'In progress, estimated completion in 2027.',
+          'In progress, estimated completion in early 2027.',
           'SEG project: led the design and build of a JML (joiner, mover, leaver) system with hexagonal architecture behind a WAF, audited against ASVS level 2.',
         ],
       },
@@ -2774,16 +2769,9 @@ export const footer = {
 // ---------------------------------------------------------------------------
 
 /**
- * Preguntas que el dueño pidió dejar como `[PENDIENTE]` (2026-11-19). No se
- * muestran en el sitio: viven aquí para que `npm run check:pending` las liste
- * y bloquee el deploy hasta que se respondan. Al responder una, se borra de
+ * Preguntas que el dueño pidió dejar como `[PENDIENTE]`. No se muestran en el
+ * sitio: viven aquí para que `npm run check:pending` las liste y bloquee el
+ * deploy hasta que se respondan. Las del 2026-11-19 ya están respondidas. Al responder una, se borra de
  * aquí y el dato confirmado va a su sitio (experiencia, caso o CV).
  */
-export const ownerQuestions: readonly Pending[] = [
-  '[PENDIENTE: TODO-LUIS, Alcaldía: ¿hay alguna cifra real de uso, como equipos registrados o reportes generados?]',
-  '[PENDIENTE: TODO-LUIS, SEG: ¿incluimos la línea de próximos pasos (implementación propia y completa a partir de este diseño)?]',
-  '[PENDIENTE: TODO-LUIS, IPS San José: ¿cuál fue tu rol formal? Hoy dice Ingeniero de Software (contrato por proyecto)]',
-  '[PENDIENTE: TODO-LUIS, IPS San José: ¿cuántos usuarios o registros tiene el sitio (PQRS, novedades, documentos)?]',
-  '[PENDIENTE: TODO-LUIS, IPS San José: confirma el trabajo en equipo con JhonatanDV en el sitio (git: 37 de 47 commits tuyos, 10 suyos)]',
-  '[PENDIENTE: TODO-LUIS, IPS San José: el sitio responde en su dominio público; rx-gmail-pdf está pendiente de la decisión institucional R-10. ¿Fecha estimada de puesta en producción?]',
-]
+export const ownerQuestions: readonly Pending[] = []
