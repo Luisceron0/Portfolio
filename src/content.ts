@@ -291,11 +291,12 @@ export const hero = {
   /**
    * Línea de apoyo: el desarrollo como evidencia de la seguridad. Nombra solo
    * el stack que aparece en los casos de seguridad (decisión del dueño,
-   * 2026-11-14): Python/Django salió porque ningún caso lo usa.
+   * 2026-11-14). Python/Django volvió el 2026-11-19: lo respaldan SEG
+   * (Django 5.2) y la Alcaldía (Django REST Framework).
    */
   support: {
-    es: 'Construyo el software que aseguro: full-stack con Java/Spring Boot, React/Next.js, TypeScript y PostgreSQL.',
-    en: 'I build the software I secure: full-stack with Java/Spring Boot, React/Next.js, TypeScript and PostgreSQL.',
+    es: 'Construyo el software que aseguro: full-stack con Java/Spring Boot, Python/Django, React/Next.js y PostgreSQL.',
+    en: 'I build the software I secure: full-stack with Java/Spring Boot, Python/Django, React/Next.js and PostgreSQL.',
   } satisfies Localized,
   location: {
     es: 'Pasto, Nariño, Colombia',
@@ -391,14 +392,14 @@ export const pillars = {
       points: [
         {
           label: { es: 'Modelado de amenazas', en: 'Threat modeling' },
-          cases: ['tributary', 'carelink', 'koa'],
+          cases: ['seg', 'tributary', 'carelink'],
         },
         {
           label: {
-            es: 'OWASP Top 10: inyección SQL, XSS, XXE, control de acceso roto',
-            en: 'OWASP Top 10: SQL injection, XSS, XXE, broken access control',
+            es: 'OWASP Top 10 y ASVS: inyección, XXE, control de acceso roto, pruebas con ZAP y sqlmap',
+            en: 'OWASP Top 10 and ASVS: injection, XXE, broken access control, ZAP and sqlmap testing',
           },
-          cases: ['tributary', 'carelink', 'koa'],
+          cases: ['seg', 'tributary', 'carelink'],
         },
         {
           label: {
@@ -412,7 +413,7 @@ export const pillars = {
             es: 'Revisión de dependencias (SCA) y SAST como gates de CI',
             en: 'Dependency review (SCA) and SAST as CI gates',
           },
-          cases: ['tributary', 'carelink', 'koa'],
+          cases: ['seg', 'tributary', 'koa'],
         },
       ],
     },
@@ -430,6 +431,13 @@ export const pillars = {
         },
         {
           label: {
+            es: 'Arquitectura hexagonal verificada en CI y borde con WAF',
+            en: 'Hexagonal architecture enforced in CI and a WAF at the edge',
+          },
+          cases: ['seg', 'tributary'],
+        },
+        {
+          label: {
             es: 'Criptografía aplicada: AES-256-GCM por tenant, crypto-shredding',
             en: 'Applied cryptography: per-tenant AES-256-GCM, crypto-shredding',
           },
@@ -440,7 +448,7 @@ export const pillars = {
             es: 'ADRs versionados con alternativas descartadas',
             en: 'Versioned ADRs with discarded alternatives',
           },
-          cases: ['tributary', 'elevaforge', 'carelink'],
+          cases: ['seg', 'tributary', 'elevaforge'],
         },
         {
           label: {
@@ -468,7 +476,8 @@ export const pillars = {
           label: { es: 'PostgreSQL', en: 'PostgreSQL' },
           cases: ['carelink', 'tributary', 'elevaforge'],
         },
-        { label: { es: 'Astro · TypeScript', en: 'Astro · TypeScript' }, cases: ['koa'] },
+        { label: { es: 'Python · Django', en: 'Python · Django' }, cases: ['seg'] },
+        { label: { es: 'Astro · TypeScript', en: 'Astro · TypeScript' }, cases: ['koa', 'sitio-ips-san-jose'] },
         { label: { es: 'Docker · CI/CD', en: 'Docker · CI/CD' }, cases: ['carelink', 'tributary'] },
       ],
     },
@@ -2486,8 +2495,11 @@ export const skills = {
           'JWT (RS256)',
           'Criptografía aplicada (AES-256-GCM)',
           'Gestión de secretos',
-          'SAST (CodeQL, Semgrep)',
-          'SCA (audit-ci, npm audit, Trivy)',
+          'OWASP ASVS',
+          'SAST (CodeQL, Semgrep, bandit)',
+          'SCA (audit-ci, npm audit, Trivy, pip-audit)',
+          'DAST (OWASP ZAP, sqlmap)',
+          'WAF (ModSecurity, OWASP CRS)',
           'Escaneo de secretos (gitleaks)',
           'Seguridad de redes',
         ],
@@ -2499,8 +2511,11 @@ export const skills = {
           'JWT (RS256)',
           'Applied cryptography (AES-256-GCM)',
           'Secrets management',
-          'SAST (CodeQL, Semgrep)',
-          'SCA (audit-ci, npm audit, Trivy)',
+          'OWASP ASVS',
+          'SAST (CodeQL, Semgrep, bandit)',
+          'SCA (audit-ci, npm audit, Trivy, pip-audit)',
+          'DAST (OWASP ZAP, sqlmap)',
+          'WAF (ModSecurity, OWASP CRS)',
           'Secret scanning (gitleaks)',
           'Network security',
         ],
@@ -2532,8 +2547,8 @@ export const skills = {
     {
       label: { es: 'Backend', en: 'Backend' },
       items: {
-        es: ['Java', 'Spring Boot', 'Python', 'TypeScript'],
-        en: ['Java', 'Spring Boot', 'Python', 'TypeScript'],
+        es: ['Java', 'Spring Boot', 'Python', 'Django', 'Django REST Framework', 'TypeScript'],
+        en: ['Java', 'Spring Boot', 'Python', 'Django', 'Django REST Framework', 'TypeScript'],
       },
     },
     {
@@ -2546,8 +2561,8 @@ export const skills = {
     {
       label: { es: 'Cloud y DevOps', en: 'Cloud and DevOps' },
       items: {
-        es: ['Docker', 'GitHub Actions (CI/CD)', 'AWS (EC2, S3)', 'Vercel', 'Git'],
-        en: ['Docker', 'GitHub Actions (CI/CD)', 'AWS (EC2, S3)', 'Vercel', 'Git'],
+        es: ['Docker', 'GitHub Actions (CI/CD)', 'Cloudflare Workers', 'Apache', 'AWS (EC2, S3)', 'Vercel', 'Git'],
+        en: ['Docker', 'GitHub Actions (CI/CD)', 'Cloudflare Workers', 'Apache', 'AWS (EC2, S3)', 'Vercel', 'Git'],
       },
     },
     {

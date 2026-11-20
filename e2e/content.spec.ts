@@ -420,7 +420,7 @@ test.describe('RF-106 / RF-107 — perfil, experiencia, habilidades y formación
     await page.goto('/')
     expect(skills.groups[0].label.es).toBe('Seguridad')
     const habilidades = page.locator('#habilidades')
-    for (const removed of ['Pruebas de penetración', 'C++', 'Dart', 'C#', 'Django']) {
+    for (const removed of ['Pruebas de penetración', 'C++', 'Dart', 'C#']) {
       await expect(habilidades).not.toContainText(removed)
     }
   })
