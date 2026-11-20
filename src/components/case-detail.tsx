@@ -200,7 +200,11 @@ export function CaseDetail({
         </ol>
         <p className="mt-4 flex flex-wrap items-center gap-3 text-sm text-ink-muted">
           <span>{labels.threatModelSource[locale]}:</span>
-          <EvidenceLink link={item.threatModel} locale={locale} />
+          {item.threatModel ? (
+            <EvidenceLink link={item.threatModel} locale={locale} />
+          ) : (
+            <span>{item.threatNote?.[locale]}</span>
+          )}
         </p>
       </Block>
 
@@ -265,9 +269,11 @@ export function CaseDetail({
         </Block>
       )}
 
-      <Block id="enlaces" title={labels.links[locale]} tone={tone}>
-        <EvidenceList links={item.links} locale={locale} label={labels.links[locale]} />
-      </Block>
+      {item.links.length > 0 && (
+        <Block id="enlaces" title={labels.links[locale]} tone={tone}>
+          <EvidenceList links={item.links} locale={locale} label={labels.links[locale]} />
+        </Block>
+      )}
     </article>
   )
 }

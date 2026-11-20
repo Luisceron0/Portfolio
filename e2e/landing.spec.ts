@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+import { securityCases } from '@/content'
+
 /**
  * Criterios de aceptación de RF-101, RF-102, RF-103 y RF-105 que se pueden
  * verificar ya, sin los recursos que aún faltan (dominio, capturas, PDFs).
@@ -56,6 +58,17 @@ test.describe('Landing', () => {
       const box = await locator.boundingBox()
       expect(box).not.toBeNull()
       expect(box!.y + box!.height).toBeLessThanOrEqual(viewport!.height)
+    }
+  })
+
+  test('sin scroll horizontal en móvil, en la home y en cada caso', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'mobile', 'solo aplica al viewport móvil')
+    // Un título largo ("Formación y certificaciones") llegó a ensanchar la página
+    // a 430 px sin que ningún test lo viera.
+    for (const path of ['/', '/?lang=en', ...securityCases.map((item) => `/casos/${item.slug}`)]) {
+      await page.goto(path)
+      const width = await page.evaluate(() => document.documentElement.scrollWidth)
+      expect(width, `${path} desborda en horizontal`).toBeLessThanOrEqual(page.viewportSize()!.width)
     }
   })
 

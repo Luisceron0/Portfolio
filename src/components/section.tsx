@@ -106,7 +106,7 @@ export function SectionHeading({
           )}
           <h2
             id={id}
-            className="p-display text-3xl leading-none sm:text-5xl md:text-6xl"
+            className="p-display text-[1.6rem] leading-none [overflow-wrap:anywhere] sm:text-5xl md:text-6xl"
           >
             <span className="p-title-box">{title}</span>
           </h2>

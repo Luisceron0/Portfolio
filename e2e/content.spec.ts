@@ -303,7 +303,8 @@ test.describe('RF-102 / RF-111 — casos de seguridad', () => {
         (item.threatsHeading ?? casesSection.labels.threats).es,
         casesSection.labels.controls.es,
         casesSection.labels.verification.es,
-        casesSection.labels.links.es,
+        // Un repo privado sin sitio público no tiene bloque de enlaces.
+        ...(item.links.length > 0 ? [casesSection.labels.links.es] : []),
       ]) {
         await expect(page.getByRole('heading', { level: 2, name: label })).toBeVisible()
       }

@@ -776,8 +776,10 @@ export interface SecurityCase {
    * principales".
    */
   threatsHeading?: Localized
-  /** Documento del repo del que salen las amenazas. */
-  threatModel: ExternalLink
+  /** Documento del repo del que salen las amenazas (repos públicos). */
+  threatModel?: ExternalLink
+  /** Fuente de las amenazas cuando no se puede enlazar (repo privado). */
+  threatNote?: Localized
   threats: readonly CaseThreat[]
   controlGroups: readonly CaseControlGroup[]
   verification: readonly CaseCheck[]
@@ -1988,6 +1990,400 @@ export const securityCases: readonly SecurityCase[] = [
         en: 'KOA store with the headline "Seis productos. Ninguno de más." and the Spanish/English language switcher.',
       },
     },
+  },
+  {
+    /*
+     * Fuente: repo PRIVADO JhonatanDV/SanJoseIPS (no se enlaza), revisado el
+     * 2026-11-19 en un clon de solo lectura. Autoría: 37 de 47 commits de Luis,
+     * 10 de Jhonatan. Lo de Luis según `git log --author`: autenticación del
+     * panel, PQRS, sedes, middleware, cabeceras, retención, aprovisionamiento y
+     * CI. De Jhonatan: validación de adjuntos, respaldos cifrados y copia de
+     * PQRS por correo. STRIDE: SRS-SanJose-IPS-Putumayo-v0.3.docx §7.2.
+     * Regla 4 del dueño: sin rutas internas, versiones exactas ni hallazgos
+     * abiertos (esos están en NOTAS-PRIVADAS.md, fuera de Git).
+     */
+    slug: 'sitio-ips-san-jose',
+    kicker: {
+      es: 'Sitio institucional y panel de administración de una IPS',
+      en: 'Institutional website and admin panel for a healthcare provider',
+    },
+    summary: {
+      es: 'Reemplaza el WordPress de un proveedor externo por un sitio propio con panel de administración, PQRS y documentos regulatorios, en producción sobre Cloudflare.',
+      en: 'Replaces a vendor-run WordPress site with an in-house website with an admin panel, patient requests (PQRS) and regulatory documents, in production on Cloudflare.',
+    },
+    seoDescription: {
+      es: 'Sitio de una IPS en producción: panel con sesión obligatoria, PQRS con radicado no secuencial, límites de solicitudes, CSP estricta y gates en CI.',
+      en: 'Healthcare provider website in production: session-gated panel, PQRS with non-sequential IDs, rate limits, strict CSP and CI gates.',
+    },
+    problem: {
+      es: 'Una institución de salud necesita publicar información y recibir PQRS con datos personales (Ley 1581 de 2012) sin depender de un proveedor externo, con un panel que solo opere el personal autorizado.',
+      en: 'A healthcare institution needs to publish information and receive patient requests containing personal data (Colombian Law 1581 of 2012) without depending on an outside vendor, with a panel only authorized staff can operate.',
+    },
+    stack: ['Astro', 'TypeScript', 'Cloudflare Workers', 'D1', 'R2', 'KV', 'Better Auth', 'Drizzle', 'Zod'],
+    status: 'produccion',
+    privateRepo: true,
+    dataFlow: {
+      es: 'Navegador → Cloudflare Workers (Astro en modo servidor; un middleware exige sesión en todo el panel y se valida el origen de cada mutación) → D1 para contenido y PQRS, R2 para documentos e imágenes, KV para sesiones y límites de solicitudes. Una tarea aparte exporta respaldos cifrados de la base.',
+      en: 'Browser → Cloudflare Workers (Astro in server mode; a middleware requires a session across the whole panel and every mutation has its origin validated) → D1 for content and PQRS, R2 for documents and images, KV for sessions and rate limits. A separate job exports encrypted database backups.',
+    },
+    assets: {
+      es: [
+        'Datos personales de quienes envían PQRS',
+        'Cuentas del panel de administración',
+        'Documentos regulatorios publicados',
+        'Respaldos de la base de datos',
+      ],
+      en: [
+        'Personal data of people who submit PQRS',
+        'Admin panel accounts',
+        'Published regulatory documents',
+        'Database backups',
+      ],
+    },
+    architecture: [
+      {
+        label: { es: 'Borde', en: 'Edge' },
+        detail: {
+          es: 'Cloudflare: HTTPS forzado, cabeceras de seguridad y CSP sin unsafe-inline.',
+          en: 'Cloudflare: forced HTTPS, security headers and a CSP without unsafe-inline.',
+        },
+      },
+      {
+        label: { es: 'Aplicación', en: 'Application' },
+        detail: {
+          es: 'Astro en Workers: sitio público y panel en un solo artefacto; sesión obligatoria en el panel y validación de entradas con Zod.',
+          en: 'Astro on Workers: public site and panel in a single artifact; mandatory session on the panel and input validation with Zod.',
+        },
+      },
+      {
+        label: { es: 'Datos', en: 'Data' },
+        detail: {
+          es: 'D1 (contenido, PQRS, auditoría), R2 (documentos e imágenes), KV (sesiones y límites).',
+          en: 'D1 (content, PQRS, audit), R2 (documents and images), KV (sessions and limits).',
+        },
+      },
+      {
+        label: { es: 'Respaldo', en: 'Backup' },
+        detail: {
+          es: 'Exportación cifrada con AES-256-GCM y rotación de copias.',
+          en: 'Export encrypted with AES-256-GCM and copy rotation.',
+        },
+      },
+    ],
+    threatNote: {
+      es: 'Modelo de amenazas STRIDE del SRS del proyecto (repositorio privado).',
+      en: 'STRIDE threat model in the project SRS (private repository).',
+    },
+    threats: [
+      {
+        ref: 'T-03',
+        stride: 'Tampering / Information Disclosure',
+        text: {
+          es: 'Inyección SQL a través de los datos de IP y User-Agent que guarda el control de abuso.',
+          en: 'SQL injection through the IP and User-Agent data stored by the abuse control.',
+        },
+      },
+      {
+        ref: 'T-05',
+        stride: 'Information Disclosure',
+        text: {
+          es: 'Exposición de PQRS por enumeración de identificadores, logs o mensajes de error detallados.',
+          en: 'PQRS exposure through ID enumeration, logs or detailed error messages.',
+        },
+      },
+      {
+        ref: 'T-07',
+        stride: 'Denial of Service',
+        text: {
+          es: 'Envío masivo automatizado a los formularios de PQRS o de encuesta.',
+          en: 'Automated mass submission to the PQRS or survey forms.',
+        },
+      },
+      {
+        ref: 'T-09',
+        stride: 'Tampering',
+        text: {
+          es: 'Carga de un archivo malicioso desde el panel.',
+          en: 'Upload of a malicious file from the panel.',
+        },
+      },
+      {
+        ref: 'T-10',
+        stride: 'Spoofing',
+        text: {
+          es: 'Suplantación de las cabeceras Host o X-Forwarded-For para envenenar enlaces o falsear el control de abuso.',
+          en: 'Spoofed Host or X-Forwarded-For headers to poison links or defeat the abuse control.',
+        },
+      },
+    ],
+    controlGroups: [
+      {
+        controls: [
+          {
+            title: { es: 'Sesión obligatoria en todo el panel', en: 'Mandatory session across the panel' },
+            why: {
+              es: 'Un middleware responde sin sesión válida a cualquier ruta del panel o de su API, salvo el ingreso. El rol no se puede fijar desde una solicitud: solo desde el servidor.',
+              en: 'A middleware rejects any panel or panel API route without a valid session, except sign-in. The role cannot be set from a request: only from the server.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Límites que cuentan lo que importa', en: 'Limits that count what matters' },
+            why: {
+              es: 'El límite de ingreso cuenta intentos fallidos, no peticiones; los formularios públicos tienen límite por IP y campo trampa.',
+              en: 'The sign-in limit counts failed attempts, not requests; public forms have a per-IP limit and a honeypot field.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'PQRS sin rastro innecesario', en: 'PQRS with no unnecessary trail' },
+            why: {
+              es: 'Radicado no secuencial ni predecible, páginas de error genéricas y logs sin contenido de las PQRS.',
+              en: 'Non-sequential, unpredictable request IDs, generic error pages and logs without PQRS content.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Cabeceras, origen y dominio permitidos', en: 'Headers, origin and allowed hosts' },
+            why: {
+              es: 'CSP sin unsafe-inline, nosniff y HTTPS forzado; validación de origen en las mutaciones y lista de dominios permitidos para la cabecera Host.',
+              en: 'CSP without unsafe-inline, nosniff and forced HTTPS; origin validation on mutations and an allowlist for the Host header.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Archivos validados por su contenido', en: 'Files validated by their content' },
+            why: {
+              es: 'El tipo se decide por la firma de bytes, no por la extensión, con límite de tamaño por clase de archivo.',
+              en: 'The type is decided by the byte signature, not the extension, with a size limit per file class.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Retención configurable y respaldos cifrados', en: 'Configurable retention and encrypted backups' },
+            why: {
+              es: 'El plazo de retención de las PQRS se fija desde el panel, y la base se respalda cifrada con AES-256-GCM.',
+              en: 'The PQRS retention period is set from the panel, and the database is backed up encrypted with AES-256-GCM.',
+            },
+            evidence: [],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: 'CI en cada cambio: lint, una regla estática que rechaza SQL sin parametrizar, pruebas con cobertura, build, una matriz de humo y pnpm audit; gitleaks sobre todo el historial.',
+          en: 'CI on every change: lint, a static rule that rejects non-parameterized SQL, tests with coverage, build, a smoke matrix and pnpm audit; gitleaks across the full history.',
+        },
+        evidence: [],
+      },
+      {
+        text: {
+          es: 'Auditoría propia con checklist ejecutable y verificación contra el entorno desplegado, y corrección de sus hallazgos antes de la entrega.',
+          en: 'Internal audit with an executable checklist and verification against the deployed environment, with its findings fixed before delivery.',
+        },
+        evidence: [],
+      },
+    ],
+    role: {
+      es: 'En equipo de 2 (37 de 47 commits): autenticación del panel, PQRS de punta a punta, sedes, middleware, cabeceras de seguridad, retención, aprovisionamiento del entorno y gates de CI. La validación de adjuntos, los respaldos cifrados y la copia de PQRS por correo son del otro integrante.',
+      en: 'In a 2-person team (37 of 47 commits): panel authentication, end-to-end PQRS, locations, middleware, security headers, retention, environment provisioning and CI gates. File validation, encrypted backups and the PQRS email copy belong to the other team member.',
+    },
+    links: [
+      { label: { es: 'Sitio público', en: 'Public website' }, href: 'https://sanjoseipsputumayo.com.co/' },
+    ],
+  },
+  {
+    /*
+     * Fuente: repo PRIVADO Luisceron0/Panoramicas (no se enlaza), revisado el
+     * 2026-11-19. Autoría: 75 de 75 commits de Luis. STRIDE: docs/SRS.md §7.
+     * Estado: el SRS v2.8 dice que un pendiente institucional (R-10) bloquea
+     * solo la puesta en producción. Sin remitente, rutas ni versiones exactas.
+     */
+    slug: 'radiografias-ips-san-jose',
+    kicker: {
+      es: 'Herramienta interna de una IPS: radiografías del correo a PDF',
+      en: 'Internal tool for a healthcare provider: X-rays from email to PDF',
+    },
+    summary: {
+      es: 'Descarga cada hora hábil las radiografías panorámicas que un prestador envía por correo y las deja en PDF sin recodificar, listas para facturar, con el remitente verificado y la fidelidad comprobada.',
+      en: 'Every business hour, downloads the panoramic X-rays a provider sends by email and stores them as PDF without re-encoding, ready for billing, with the sender verified and fidelity checked.',
+    },
+    seoDescription: {
+      es: 'Herramienta que pasa radiografías del correo a PDF sin recodificar: OAuth de solo lectura, DKIM y DMARC, validación de imágenes y SHA-256.',
+      en: 'Tool that turns emailed X-rays into PDF without re-encoding: read-only OAuth, DKIM and DMARC checks, image validation and SHA-256.',
+    },
+    problem: {
+      es: 'Facturación necesita como soporte las radiografías que llegan por correo, y buscarlas a mano dejaba servicios sin facturar. Son datos de salud (Ley 1581 de 2012): la herramienta no puede alterar la imagen ni exponer el nombre del paciente.',
+      en: 'Billing needs the X-rays that arrive by email as supporting documents, and finding them by hand left services unbilled. They are health data (Colombian Law 1581 of 2012): the tool cannot alter the image or expose the patient name.',
+    },
+    stack: ['Python', 'Gmail API', 'OAuth 2.0', 'img2pdf', 'Pillow', 'SQLite', 'Windows'],
+    status: 'preproduccion',
+    privateRepo: true,
+    dataFlow: {
+      es: 'Programador de tareas (cada hora hábil) → lectura del buzón dedicado con OAuth de solo lectura → verificación del veredicto DKIM y DMARC del servidor de correo → validación del JPEG → conversión a PDF sin recodificar y comparación SHA-256 → escritura en una carpeta local con disco cifrado, organizada por año y mes. Un monitor externo avisa si deja de correr.',
+      en: 'Task Scheduler (every business hour) → read-only OAuth access to the dedicated mailbox → check of the mail server DKIM and DMARC verdict → JPEG validation → PDF conversion without re-encoding and SHA-256 comparison → write to a local folder on an encrypted disk, organized by year and month. An external monitor alerts if it stops running.',
+    },
+    assets: {
+      es: [
+        'Radiografías e identidad del paciente',
+        'Token de acceso al buzón',
+        'Integridad y disponibilidad de los PDF',
+        'Estado local que relaciona correos y archivos',
+      ],
+      en: [
+        'X-rays and patient identity',
+        'Mailbox access token',
+        'Integrity and availability of the PDFs',
+        'Local state linking emails and files',
+      ],
+    },
+    architecture: [
+      {
+        label: { es: 'Entrada', en: 'Input' },
+        detail: {
+          es: 'Buzón dedicado, OAuth con permiso de solo lectura.',
+          en: 'Dedicated mailbox, OAuth with read-only scope.',
+        },
+      },
+      {
+        label: { es: 'Verificación', en: 'Verification' },
+        detail: {
+          es: 'Remitente exacto, DKIM y DMARC; JPEG válido y dentro de los límites.',
+          en: 'Exact sender, DKIM and DMARC; valid JPEG within limits.',
+        },
+      },
+      {
+        label: { es: 'Conversión', en: 'Conversion' },
+        detail: {
+          es: 'PDF sin recodificar; SHA-256 del JPEG incrustado igual al original.',
+          en: 'PDF without re-encoding; SHA-256 of the embedded JPEG equal to the original.',
+        },
+      },
+      {
+        label: { es: 'Salida', en: 'Output' },
+        detail: {
+          es: 'Carpeta local en disco cifrado, archivos completos e inmutables; monitor externo y avisos locales de catálogo cerrado.',
+          en: 'Local folder on an encrypted disk, complete and immutable files; external monitor and closed-catalog local alerts.',
+        },
+      },
+    ],
+    threatNote: {
+      es: 'Modelo de amenazas STRIDE del SRS del proyecto (repositorio privado).',
+      en: 'STRIDE threat model in the project SRS (private repository).',
+    },
+    threats: [
+      {
+        ref: 'T-01',
+        stride: 'Spoofing',
+        text: { es: 'Correo falsificado del remitente.', en: 'Forged email from the sender.' },
+      },
+      {
+        ref: 'T-03',
+        stride: 'Tampering / Elevation of Privilege',
+        text: {
+          es: 'Recorrido de rutas o nombre de archivo reservado.',
+          en: 'Path traversal or reserved file name.',
+        },
+      },
+      {
+        ref: 'T-04',
+        stride: 'Denial of Service / Elevation of Privilege',
+        text: {
+          es: 'JPEG malformado o bomba de descompresión.',
+          en: 'Malformed JPEG or decompression bomb.',
+        },
+      },
+      {
+        ref: 'T-05',
+        stride: 'Information Disclosure',
+        text: { es: 'Robo del token de acceso al buzón.', en: 'Theft of the mailbox access token.' },
+      },
+      {
+        ref: 'T-06',
+        stride: 'Information Disclosure',
+        text: {
+          es: 'Nombre del paciente en la pantalla de bloqueo, los logs o el monitor.',
+          en: 'Patient name on the lock screen, in logs or in the monitor.',
+        },
+      },
+    ],
+    controlGroups: [
+      {
+        controls: [
+          {
+            title: { es: 'Autenticidad del remitente', en: 'Sender authenticity' },
+            why: {
+              es: 'Solo cuenta el primer veredicto de autenticación del servidor de correo, y exige DMARC y DKIM del dominio del remitente: un veredicto inyectado más abajo en las cabeceras no pasa.',
+              en: 'Only the first authentication verdict from the mail server counts, and it requires DMARC and DKIM for the sender domain: a verdict injected further down the headers does not pass.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Validación de imagen sin atajos', en: 'Image validation without shortcuts' },
+            why: {
+              es: 'Límite de tamaño y límite de píxeles activo; incluso el aviso de bomba de descompresión se trata como rechazo.',
+              en: 'Size limit and an active pixel limit; even the decompression bomb warning is treated as a rejection.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Conversión sin pérdida, comprobada', en: 'Lossless conversion, checked' },
+            why: {
+              es: 'El PDF incrusta los bytes originales del JPEG y se compara el SHA-256 del JPEG extraído con el original: en una imagen diagnóstica, recodificar es un riesgo de integridad.',
+              en: 'The PDF embeds the original JPEG bytes and the SHA-256 of the extracted JPEG is compared with the original: in a diagnostic image, re-encoding is an integrity risk.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Nombres saneados y escritura atómica', en: 'Sanitized names and atomic writes' },
+            why: {
+              es: 'Se neutralizan el recorrido de rutas y los nombres reservados de Windows, y los temporales nunca se escriben en la carpeta que leen los usuarios.',
+              en: 'Path traversal and reserved Windows names are neutralized, and temporary files are never written to the folder users read.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Secretos fuera de archivos', en: 'Secrets out of files' },
+            why: {
+              es: 'Los cuatro secretos viven en el almacén de credenciales del sistema operativo, nunca en archivos, variables de entorno, logs ni el repositorio.',
+              en: 'The four secrets live in the operating system credential store, never in files, environment variables, logs or the repository.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Avisos y logs sin datos del paciente', en: 'Alerts and logs without patient data' },
+            why: {
+              es: 'Las notificaciones salen de un catálogo cerrado de mensajes fijos (solo se pasa un índice) y los logs nunca registran nombres de archivo ni asuntos.',
+              en: 'Notifications come from a closed catalog of fixed messages (only an index is passed) and logs never record file names or subjects.',
+            },
+            evidence: [],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: 'La CI instala dependencias con hash obligatorio y exige cobertura de ramas del 85 % global y del 100 % en los módulos de saneamiento y autenticidad, además de pip-audit y gitleaks sobre el historial.',
+          en: 'CI installs dependencies with mandatory hashes and requires 85% overall branch coverage and 100% on the sanitization and authenticity modules, plus pip-audit and gitleaks across the history.',
+        },
+        evidence: [],
+      },
+      {
+        text: {
+          es: 'Desarrollo aislado de los datos reales: entornos de producción y prueba separados, sin acceso del entorno de desarrollo a radiografías ni a secretos de producción.',
+          en: 'Development isolated from real data: separate production and test environments, with no access from the development environment to X-rays or production secrets.',
+        },
+        evidence: [],
+      },
+    ],
+    role: {
+      es: 'Solo (75 de 75 commits): especificación con modelo de amenazas STRIDE y 13 ADR, código, pruebas y runbook de operación.',
+      en: 'Solo (75 of 75 commits): specification with a STRIDE threat model and 13 ADRs, code, tests and operations runbook.',
+    },
+    links: [],
   },
 ] as const
 
