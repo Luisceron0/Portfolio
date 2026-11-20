@@ -4,7 +4,7 @@ import { Section, SectionHeading } from '@/components/section'
 import { TimelineIcon } from '@/components/icons'
 
 /**
- * RF-106 — trayectoria.
+ * RF-106 — experiencia (solo trabajo; la formación tiene su propia sección).
  *
  * Una lista ordenada (`<ol>`) y no una serie de `<div>`: para un lector de
  * pantalla, "elemento 2 de 4" es información real sobre una cronología. La
@@ -12,14 +12,12 @@ import { TimelineIcon } from '@/components/icons'
  *
  * Vive sobre la banda abismo: el periodo va arriba, en una pestaña
  * inclinada, como la fecha del calendario del juego, que es lo que marca el
- * paso del tiempo. Trabajo y estudio se distinguen por color Y por la
- * etiqueta escrita, nunca solo por color.
+ * paso del tiempo.
  *
  * Todas las entradas salen del YAML del CV. Ninguna fecha, cargo ni empleador
  * se escribe aquí a mano.
  */
 function Entry({ entry, locale }: { entry: TimelineEntry; locale: Locale }) {
-  const isWork = entry.kind === 'trabajo'
 
   return (
     <li className="group relative pl-8 sm:pl-12">
@@ -47,13 +45,6 @@ function Entry({ entry, locale }: { entry: TimelineEntry; locale: Locale }) {
           <div className="flex flex-wrap items-center gap-3">
             <span className="p-slant p-display px-3.5 py-1 text-sm text-surface [--slant-bg:#a6f13c] sm:text-base">
               {entry.period[locale]}
-            </span>
-            <span
-              className={`p-slant px-2.5 py-0.5 font-mono text-[0.68rem] font-bold uppercase tracking-widest2 ${
-                isWork ? 'text-ink [--slant-bg:#7a1fff]' : 'text-surface [--slant-bg:#d7c4ff]'
-              }`}
-            >
-              {timeline.kinds[entry.kind][locale]}
             </span>
           </div>
 
@@ -91,15 +82,10 @@ function Entry({ entry, locale }: { entry: TimelineEntry; locale: Locale }) {
 
 export function Timeline({ locale }: { locale: Locale }) {
   return (
-    <Section
-      id="trayectoria"
-      labelledBy="trayectoria-title"
-      band="abyss"
-      watermark={timeline.heading[locale]}
-    >
+    <Section id="experiencia" labelledBy="experiencia-title" watermark={timeline.heading[locale]}>
       <SectionHeading
-        id="trayectoria-title"
-        number="02"
+        id="experiencia-title"
+        number="04"
         title={timeline.heading[locale]}
         intro={timeline.intro[locale]}
         tone="green"

@@ -1,9 +1,24 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { cv, LOCALES, nav, projects, resolved, site, skills, timeline, type Locale } from '@/content'
+import {
+  CASE_NAMES,
+  casesSection,
+  cv,
+  education,
+  LOCALES,
+  nav,
+  pillars,
+  resolved,
+  securityCases,
+  site,
+  skills,
+  timeline,
+  workProcess,
+  type Locale,
+} from '@/content'
 
 /**
- * Criterios de aceptación de RF-102 (5 proyectos), RF-106 (perfil y
+ * Criterios de aceptación de RF-102/RF-111 (4 casos de seguridad), RF-106 (perfil y
  * trayectoria), RF-107 (habilidades), RF-108 (navegación interna) y RF-109
  * (bilingüe).
  *
@@ -65,7 +80,7 @@ test.describe('RF-108 — navegación interna', () => {
   /*
    * Historia: la nav fue antes una barra con scroll horizontal, y en dos
    * vueltas distintas dejó "Contacto" y el selector de idioma fuera de
-   * pantalla sin forma de llegar a ellos. Ahora por debajo de `lg` los
+   * pantalla sin forma de llegar a ellos. Ahora por debajo de `xl` los
    * enlaces se pliegan tras un botón de menú y el selector de idioma queda
    * siempre en la barra. La promesa que se prueba es la misma: en un viewport
    * estrecho el último enlace y el selector de idioma se alcanzan y se pulsan.
@@ -157,10 +172,10 @@ test.describe('RF-109 — bilingüe', () => {
 
   test('el contenido cambia realmente de idioma', async ({ page }) => {
     await gotoLocale(page, 'es')
-    await expect(page.getByRole('heading', { name: 'Perfil', exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Qué hago', exact: true })).toBeVisible()
 
     await gotoLocale(page, 'en')
-    await expect(page.getByRole('heading', { name: 'Profile', exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'What I do', exact: true })).toBeVisible()
   })
 
   test('el selector de idioma son enlaces, para que el idioma sea compartible', async ({
@@ -248,94 +263,177 @@ test.describe('RF-109 — bilingüe', () => {
   })
 })
 
-test.describe('RF-102 — cinco proyectos', () => {
-  test('los cinco proyectos se renderizan con nombre y captura', async ({ page }) => {
-    await page.goto('/')
-
-    expect(projects, 'la SRS v1.3 pide cinco proyectos').toHaveLength(5)
-
-    for (const project of projects) {
-      const article = page.locator(`article[aria-labelledby="proyecto-${project.id}"]`)
-      await expect(article, `falta el bloque del proyecto ${project.name}`).toHaveCount(1)
-      await expect(article.getByRole('heading', { name: project.name })).toBeVisible()
-      const image = article.locator('img')
-      await expect(image).toHaveCount(1)
-      await expect(image).toHaveAttribute('alt', /\S/)
-    }
-  })
-
-  test('cada proyecto lista su stack y su ángulo de seguridad', async ({ page }) => {
-    await page.goto('/')
-
-    for (const project of projects) {
-      const article = page.locator(`article[aria-labelledby="proyecto-${project.id}"]`)
-
-      const techs = article.getByRole('list', { name: 'Tecnologías' }).getByRole('listitem')
-      await expect(techs).toHaveCount(project.stack.length)
-
-      await expect(
-        article.getByRole('heading', { name: 'El ángulo de seguridad' }),
-        `${project.name} debe declarar su ángulo de seguridad (criterio RF-102)`
-      ).toBeVisible()
-    }
-  })
-
-  test('todos los enlaces de proyecto son absolutos y se abren con rel seguro', async ({
+test.describe('RF-102 / RF-111 — casos de seguridad', () => {
+  test('los cuatro casos se renderizan en la home, en el orden decidido, con captura', async ({
     page,
   }) => {
     await page.goto('/')
 
-    for (const project of projects) {
-      const article = page.locator(`article[aria-labelledby="proyecto-${project.id}"]`)
-      const links = article.getByRole('link')
-      const count = await links.count()
-      expect(count, `${project.name} debe tener al menos un enlace`).toBeGreaterThan(0)
+    // CareLink primero (2026-11-14) y SEG segundo (2026-11-19).
+    expect(securityCases.map((item) => item.slug).slice(0, 2)).toEqual(['carelink', 'seg'])
 
-      for (let i = 0; i < count; i++) {
-        const link = links.nth(i)
-        expect(await link.getAttribute('href')).toMatch(/^https:\/\//)
-        // Sin acceso a window.opener desde la pestaña nueva.
-        expect(await link.getAttribute('rel')).toContain('noopener')
+    for (const item of securityCases) {
+      const article = page.locator(`article[aria-labelledby="caso-${item.slug}"]`)
+      await expect(article, `falta la tarjeta de ${CASE_NAMES[item.slug]}`).toHaveCount(1)
+      await expect(article.getByRole('heading', { name: CASE_NAMES[item.slug] })).toBeVisible()
+      // Sin captura (datos sensibles o repo privado), la tarjeta muestra el diagrama.
+      if (item.screenshot) {
+        await expect(article.locator('img')).toHaveAttribute('alt', /\S/)
+      } else {
+        await expect(article.getByRole('list', { name: casesSection.labels.architecture.es })).toBeVisible()
+      }
+      await expect(
+        article.getByText(casesSection.labels.statuses[item.status].es).first()
+      ).toBeVisible()
+      await expect(article.getByRole('link', { name: /Ver el caso completo/ })).toHaveAttribute(
+        'href',
+        `/casos/${item.slug}`
+      )
+    }
+  })
+
+  test('cada página de caso tiene un solo H1 y los bloques de la plantilla', async ({ page }) => {
+    for (const item of securityCases) {
+      const response = await page.goto(`/casos/${item.slug}`)
+      expect(response?.status()).toBe(200)
+      await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1)
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(CASE_NAMES[item.slug])
+      for (const label of [
+        casesSection.labels.dataFlow.es,
+        (item.threatsHeading ?? casesSection.labels.threats).es,
+        casesSection.labels.controls.es,
+        casesSection.labels.verification.es,
+        // Un repo privado sin sitio público no tiene bloque de enlaces.
+        ...(item.links.length > 0 ? [casesSection.labels.links.es] : []),
+      ]) {
+        await expect(page.getByRole('heading', { level: 2, name: label })).toBeVisible()
       }
     }
   })
 
-  test('KOA Store enlaza a su versión localizada, verificada, y el resto no', async ({
+  test('cada control enlaza a código en un commit fijo, o el caso declara repo privado', async ({ page }) => {
+    for (const item of securityCases) {
+      await page.goto(`/casos/${item.slug}`)
+      if (item.privateRepo) {
+        // Repo privado: ni un enlace a github.com en la página, y el aviso visible.
+        await expect(page.getByText(casesSection.labels.privateRepo.es)).toBeVisible()
+        expect(await page.locator('main a[href*="github.com/"]').count()).toBe(0)
+        continue
+      }
+      const controls = page.locator('#controles').locator('xpath=..').locator('li:has(> h3), li:has(> h4)')
+      const count = await controls.count()
+      expect(count).toBeGreaterThan(0)
+      for (let i = 0; i < count; i++) {
+        const control = controls.nth(i)
+        const links = control.locator('a[href]')
+        const pending = control.getByRole('note')
+        expect((await links.count()) + (await pending.count())).toBeGreaterThan(0)
+        for (const href of await links.evaluateAll((all) => all.map((a) => a.getAttribute('href') ?? ''))) {
+          // Permalink a un commit (40 hex), nunca a `main`.
+          expect(href).toMatch(/^https:\/\/github\.com\/[^/]+\/[^/]+\/(blob|tree)\/[0-9a-f]{40}\//)
+        }
+      }
+    }
+  })
+
+  test('un slug desconocido responde 404', async ({ page }) => {
+    const response = await page.goto('/casos/no-existe')
+    expect(response?.status()).toBe(404)
+  })
+
+  test('la página de caso conserva el idioma y declara canónica propia', async ({ page }) => {
+    await page.goto('/casos/carelink?lang=en')
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+    await expect(page.getByRole('heading', { level: 2, name: 'Main threats' })).toBeVisible()
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href')
+    expect(canonical).toMatch(/\/casos\/carelink\?lang=en$/)
+  })
+
+  test('KOA enlaza la tienda en su versión localizada y la landing sin localizar', async ({
     page,
   }) => {
     /*
      * Solo store.koa.elevaforge.com tiene versión en inglés (/en devuelve 200).
-     * koa.elevaforge.com y elevaforge.com devuelven 404 en /en, así que sus
-     * enlaces NO deben localizarse. Criterio de RF-109: verificado por URL,
-     * nunca supuesto.
+     * koa.elevaforge.com devuelve 404 en /en, así que su enlace NO se localiza.
      */
-    await gotoLocale(page, 'en')
-    const store = page.locator('article[aria-labelledby="proyecto-koa-store"]')
-    await expect(store.getByRole('link', { name: /store\.koa\.elevaforge\.com/ })).toHaveAttribute(
+    await page.goto('/casos/koa?lang=en')
+    await expect(page.getByRole('link', { name: /store\.koa\.elevaforge\.com/ })).toHaveAttribute(
       'href',
       'https://store.koa.elevaforge.com/en'
     )
+    await expect(page.getByRole('link', { name: /^koa\.elevaforge\.com/ })).toHaveAttribute(
+      'href',
+      'https://koa.elevaforge.com/'
+    )
+  })
 
-    const landing = page.locator('article[aria-labelledby="proyecto-koa-landing"]')
-    await expect(
-      landing.getByRole('link', { name: /koa\.elevaforge\.com/ }).first()
-    ).toHaveAttribute('href', 'https://koa.elevaforge.com/')
+  test('las amenazas solo muestran STRIDE si el threat model del repo lo declara', async () => {
+    // CareLink y ElevaForge no tienen categoría por amenaza en su repo.
+    for (const slug of ['carelink', 'elevaforge'] as const) {
+      const item = securityCases.find((candidate) => candidate.slug === slug)!
+      expect(item.threats.every((threat) => !threat.stride)).toBe(true)
+    }
   })
 })
 
-test.describe('RF-106 / RF-107 — perfil, trayectoria y habilidades', () => {
-  test('la trayectoria lista todas las entradas del CV, en una lista ordenada', async ({
+test.describe('Cómo trabajo', () => {
+  test('cuatro pasos en orden, cada uno con evidencia enlazada', async ({ page }) => {
+    await page.goto('/')
+    const steps = page.locator('#proceso ol > li')
+    await expect(steps).toHaveCount(workProcess.steps.length)
+    for (const [index, step] of workProcess.steps.entries()) {
+      await expect(steps.nth(index).getByRole('heading', { name: step.title.es })).toBeVisible()
+      expect(await steps.nth(index).locator('a[href^="https://github.com/"]').count()).toBeGreaterThan(0)
+    }
+  })
+})
+
+test.describe('RF-106 / RF-107 — perfil, experiencia, habilidades y formación', () => {
+  test('la experiencia lista todas las entradas del CV, en una lista ordenada', async ({
     page,
   }) => {
     await page.goto('/')
 
-    const entries = page.locator('#trayectoria ol > li')
+    const entries = page.locator('#experiencia ol > li')
     await expect(entries).toHaveCount(timeline.entries.length)
 
     // Cada entrada muestra su periodo: una cronología sin fechas no lo es.
     for (const entry of timeline.entries) {
-      await expect(page.locator('#trayectoria')).toContainText(entry.period.es)
-      await expect(page.locator('#trayectoria')).toContainText(entry.organization)
+      await expect(page.locator('#experiencia')).toContainText(entry.period.es)
+      await expect(page.locator('#experiencia')).toContainText(entry.organization)
+    }
+  })
+
+  test('Kennedy (tiempo completo) y freelance (tiempo parcial) van separados', async ({ page }) => {
+    await page.goto('/')
+    const experiencia = page.locator('#experiencia')
+    await expect(experiencia).toContainText('Contratista de TI y Sistemas (tiempo completo)')
+    await expect(experiencia).toContainText('Desarrollador de Software Full-Stack (tiempo parcial)')
+    await expect(experiencia).toContainText('contrato por proyecto')
+    await expect(experiencia).toContainText('equipo de 2')
+    await expect(experiencia).not.toContainText('Voluntario')
+    // La Alcaldía no afirma prevención de SQLi (dato confirmado por el dueño).
+    await expect(experiencia.locator('ol > li', { hasText: 'Alcaldía de Pasto' })).not.toContainText('inyección SQL')
+  })
+
+  test('Seguridad es el primer grupo de habilidades y no hay afirmaciones retiradas', async ({ page }) => {
+    await page.goto('/')
+    expect(skills.groups[0].label.es).toBe('Seguridad')
+    const habilidades = page.locator('#habilidades')
+    for (const removed of ['Pruebas de penetración', 'C++', 'Dart', 'C#']) {
+      await expect(habilidades).not.toContainText(removed)
+    }
+  })
+
+  test('formación: estudios, solo certificaciones de seguridad e idiomas', async ({ page }) => {
+    await page.goto('/')
+    const formacion = page.locator('#formacion')
+    for (const entry of education.entries) {
+      await expect(formacion).toContainText(entry.organization)
+    }
+    await expect(formacion.locator('li', { hasText: 'Cisco' })).toHaveCount(1)
+    for (const removed of ['IBM', 'Meta', 'Microsoft']) {
+      await expect(formacion).not.toContainText(removed)
     }
   })
 
@@ -353,12 +451,31 @@ test.describe('RF-106 / RF-107 — perfil, trayectoria y habilidades', () => {
     expect(await chips.count()).toBeGreaterThanOrEqual(totalItems)
   })
 
-  test('el perfil no contradice el CV: correo y ubicación coinciden', async ({ page }) => {
+  test('el perfil no contradice el CV: ubicación, especialización e inglés', async ({ page }) => {
     await page.goto('/')
 
-    const perfil = page.locator('#perfil')
-    await expect(perfil).toContainText('luiscerontrabajos@gmail.com')
-    await expect(perfil).toContainText('Pasto, Nariño, Colombia')
+    await expect(
+      page.getByRole('region', { name: /Luis Alejandro Cerón Muñoz/ })
+    ).toContainText('Pasto, Nariño, Colombia')
+    const perfil = page.locator('#seguridad')
+    await expect(perfil).toContainText('Especialización en Gerencia de Proyectos en Seguridad de la Información')
+    await expect(perfil).toContainText('Inglés C1')
+  })
+
+  test('"Qué hago" tiene tres pilares y cada punto enlaza a un caso o a su pendiente', async ({
+    page,
+  }) => {
+    await page.goto('/')
+
+    const pillarsSection = page.locator('#seguridad')
+    await expect(pillarsSection.getByRole('article')).toHaveCount(pillars.items.length)
+    for (const pillar of pillars.items) {
+      await expect(pillarsSection.getByRole('heading', { name: pillar.title.es })).toBeVisible()
+    }
+    const caseLinks = await pillarsSection
+      .locator('a[href^="/casos/"]')
+      .evaluateAll((links) => links.map((link) => link.getAttribute('href') ?? ''))
+    expect(caseLinks.length).toBeGreaterThan(0)
   })
 })
 
@@ -410,7 +527,8 @@ test.describe('Animaciones', () => {
 
     expect(html).not.toContain('data-reveal="hidden"')
     expect(html).toContain('Politécnico Grancolombiano')
-    expect(html).toContain('KOA Store')
+    expect(html).toContain('Casos de seguridad')
+    expect(html).toContain('Tributary')
   })
 
   test('con prefers-reduced-motion el contenido es visible desde el principio', async ({

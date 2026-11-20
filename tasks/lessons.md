@@ -1,5 +1,66 @@
 # Lessons learned
 
+## 2026-11-19 — Un título largo ensanchó la home a 430 px y ningún test lo vio
+**Contexto:** la sección "Formación y certificaciones" (commit del 2026-11-14)
+desbordaba la home en móvil: la palabra "certificaciones" en `text-3xl` no
+cabía en 375 px. La comprobación manual de ese día se hizo ANTES de añadir la
+sección, así que pasó cinco días sin detectarse.
+**Solución:** títulos de sección a `text-[1.6rem]` en móvil con
+`overflow-wrap:anywhere`, y un test en `e2e/landing.spec.ts` que mide
+`scrollWidth` en la home y en cada caso. **Regla:** una comprobación de layout
+que no está en un test no protege nada de lo que se añada después.
+**Tags:** #responsive #tests #falso-verde
+
+## 2026-11-19 — Repos privados de un cliente: describir sin enlazar
+**Contexto:** las fichas de la IPS San José salen de repos privados con datos de
+salud. No se enlaza el código ni se publican rutas internas, versiones exactas
+ni hallazgos abiertos; lo que haya que corregir va a notas privadas fuera de
+Git, nunca a este repo (tampoco a este archivo). El modelo de casos admite
+`privateRepo`, y el test exige el aviso visible y cero enlaces a github.com en
+esas páginas.
+**Tags:** #contenido #privacidad #appsec
+
+## 2026-11-14 — Una afirmación del CV no estaba en el repo al que se atribuía
+**Contexto:** el CV y el sitio decían que ElevaForge tenía gates de CodeQL,
+Semgrep, audit-ci y Lighthouse CI. Al clonar el repo para enlazar cada control
+a su código, su workflow solo tenía gitleaks, lint, typecheck, tests, build y
+e2e, y el historial completo (`git fetch --unshallow`, `git log -S codeql`)
+confirmó que nunca los tuvo. Estaban en koa-landing y koa-store.
+**Regla:** cada control que se afirma se enlaza a un permalink del repo donde
+vive. Si no se puede enlazar, no se afirma o se atribuye bien. Leer el código,
+no el resumen.
+**Tags:** #contenido #verificacion #appsec
+
+## 2026-11-14 — Python escribió saltos de línea reales dentro de un string YAML entre comillas dobles
+**Contexto:** al sobrescribir `design.templates.*.main_column` en los YAML del
+CV, el script generó `"**NAME** | LOCATION<salto>SUMMARY<salto>HIGHLIGHTS"`. En
+YAML, un salto de línea dentro de comillas dobles se pliega a un ESPACIO, así
+que la primera viñeta salía pegada al resumen como "- texto". El PDF parecía
+casi bien; el texto extraído con pypdf lo delató.
+**Regla:** en plantillas YAML, escribir `\n` escapado y verificar el texto
+extraído, no solo el aspecto del PDF.
+**Tags:** #cv #rendercv #yaml #falso-verde
+
+## 2026-11-14 — Siete secciones en la nav: a 1024 px el selector de idioma quedaba fuera de pantalla
+**Contexto:** con la estructura nueva la nav pasó de 5 a 7 enlaces. En inglés
+cabía a 1024 px; en español (etiquetas más largas) el selector de idioma
+quedaba en x=1057. Medido con `getBoundingClientRect`, no a ojo.
+**Solución:** la nav en línea pasa de `lg` a `xl`; por debajo se pliega tras el
+botón de menú. **Regla:** al añadir un enlace a la nav, medir en los dos idiomas
+en el ancho donde empieza la versión en línea.
+**Tags:** #nav #responsive #i18n
+
+## 2026-11-14 — Lighthouse en Windows: `npx` sin shell y EPERM al borrar el perfil temporal de Chrome
+**Contexto:** `npm run lighthouse` fallaba en local con `spawnSync npx ENOENT`
+(en Windows es `npx.cmd`) y, ya resuelto, `lhci autorun` abortaba cada run con
+EPERM al limpiar la carpeta temporal de chrome-launcher. En CI (Linux) ninguno
+de los dos pasa.
+**Solución local:** `shell: true` en Windows dentro de run-lighthouse.mjs, y
+para medir, lanzar el Chromium de Playwright con `--remote-debugging-port` y
+pasar el puerto a la API de lighthouse. Comparar siempre contra `main` medido
+con el MISMO método: la cifra local absoluta (81-82 en la home) no es la de CI.
+**Tags:** #lighthouse #windows #medicion
+
 ## 2026-08-18 — Declarar el dominio rompió el hreflang, y el fallo solo existía CON el dominio puesto
 **Contexto:** al cerrar el `[PENDIENTE]` de `site.url` con la URL de Vercel, las
 etiquetas canónicas y de idioma pasaron de correctas a rotas. Antes, sin origen

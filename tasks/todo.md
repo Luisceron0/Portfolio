@@ -1,4 +1,40 @@
-# Active plan: Personal Portfolio Site v1
+# Active plan: Reposicionamiento AppSec (SRS v1.4)
+**Start:** 2026-11-14 · **Branch:** `reposicionamiento-appsec` (sin merge, push ni deploy sin aprobación del dueño)
+
+- [x] 1. Alcance: casos con URL propia (`/casos/<slug>`), SRS v1.4 y copilot-instructions
+- [x] 2. Corregir afirmaciones (habilidades, certificaciones, viñetas Alcaldía y Freelance)
+- [x] 3. Titular, hero, subtítulo, disponibilidad y perfil ES/EN (primera persona implícita)
+- [x] 4. "Qué hago": tres pilares
+- [x] 5. "Casos de seguridad" con plantilla fija + rutas `/casos/[slug]` → **pendiente: revisión del dueño**
+- [x] 6. "Cómo trabajo" (4 pasos + hueco de captura)
+- [x] 7. Experiencia resumida, habilidades reagrupadas, formación y certificaciones
+- [x] 8. Navegación y anclas buscables
+- [x] 9. SEO: title/description, JSON-LD, sitemap, robots, OG con next/og
+- [x] 10. Permissions-Policy ampliada, Lighthouse SEO ≥95
+- [x] 11. CV ES (principal) y EN: misma información, ATS, ≤2 páginas, prueba de orden del texto extraído
+- [x] 12. Verificación completa y lista de `[PENDIENTE: TODO-LUIS, ...]` por archivo
+
+### Actualización de experiencia (2026-11-19)
+- [x] Alcaldía, IPS San José, ElevaForge (CTO), Kennedy (tiempo completo) y freelance (tiempo parcial)
+- [x] Caso SEG; fichas del sitio de la IPS y de rx-gmail-pdf
+- [x] CV ES y EN regenerados (2 páginas, prueba de ATS)
+- [x] Responder las preguntas de `ownerQuestions` (respondidas el 2026-11-19)
+- [ ] 2026-11-20: cuando rx-gmail-pdf esté corriendo en producción, cambiar su `status` a `'produccion'` en src/content.ts
+- [ ] Revisar las notas privadas que quedaron fuera de Git
+
+### Tareas del dueño (mejoras opcionales, no bloquean el deploy)
+Regla (2026-11-14): `[PENDIENTE]` en el sitio solo para datos que impiden publicar algo verdadero; las mejoras opcionales van aquí.
+
+- [ ] CareLink: configurar el secret `NVD_API_KEY` para que OWASP dependency-check vuelva a bloquear en CI.
+- [ ] CareLink: categorizar las amenazas con STRIDE en `docs/SRS.md` §8.1 (hoy no tienen columna de categoría).
+- [ ] ElevaForge: categorizar las amenazas con STRIDE en el repo (publicar un threat model; hoy solo existen los hallazgos F-01 a F-04 del SRS).
+- [ ] KOA Landing: categorizar las amenazas con STRIDE en el repo (no tiene threat model).
+- [ ] CareLink: grabar un recorrido corto con datos sintéticos.
+- [ ] Subir una captura de un gate de CI bloqueando un despliegue y declararla en `workProcess.gateScreenshot` (src/content.ts). Hasta entonces la sección "Cómo trabajo" no muestra hueco.
+
+---
+
+# Plan anterior: Personal Portfolio Site v1
 **Start:** 2026-08-07
 **Goal:** deploy a working single-page site meeting RF-101 through RF-105 of the SRS.
 

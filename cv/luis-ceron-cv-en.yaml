@@ -1,7 +1,10 @@
+# CV in English: faithful translation of cv/luis-ceron-cv-es.yaml (the primary
+# version). Same information, same structure, American spelling.
+# Source of the facts: src/content.ts. Dates always "Mmm YYYY", no dashes.
 cv:
   name: Luis Alejandro Cerón Muñoz
-  headline: Full-Stack Software Engineer | Software Architecture and Application Security
-  location: Pasto, Nariño, Colombia (open to relocation)
+  headline: Application Security Engineer | Secure Software Architecture | DevSecOps
+  location: Pasto, Colombia. Hybrid in Medellín or Bogotá. Relocation to Germany or Spain
   email: luiscerontrabajos@gmail.com
   phone: "+57 314 4087963"
   website: https://portfolio-luisceron.vercel.app/
@@ -11,61 +14,89 @@ cv:
     - network: GitHub
       username: Luisceron0
   sections:
-    Professional Profile:
-      - 'Full-Stack Software Engineer focused on software architecture and application security. I design systems end to end (React, Angular, Vue.js, Spring Boot, Django, PostgreSQL), defining the structure before the first line of code: module boundaries, data contracts, and decisions recorded in versioned ADRs. I build security in from the design stage (RBAC, JWT, threat modelling, SAST and SCA in the pipeline) and deploy on AWS and Docker with CI/CD. Software Engineering graduate of Universidad Cooperativa de Colombia, currently pursuing a postgraduate specialization in Information Security at Politécnico Grancolombiano. Bilingual (English C1, EF SET), open to relocation.'
+    Profile:
+      - 'Application security engineer with more than 3 years building and deploying software for healthcare, the public sector and commerce. Threat modeling, access control, applied cryptography, WAF and SAST/SCA in CI, on a full-stack foundation (Java/Spring Boot, Python/Django, React/Next.js).'
 
     Experience:
+      # IPS: private repos for the IPS website (37 of 47 commits by Luis) and
+      # rx-gmail-pdf (75 of 75), reviewed 2026-11-19. Not linked.
       - company: I.P.S. San José
-        position: Software Engineer
+        position: Software Engineer (project-based contract)
         location: Villagarzón, Putumayo, Colombia
         start_date: 2026-09
         end_date: 2026-11
         highlights:
-          - 'Responsible for the development, implementation and maintenance of the information systems of a healthcare provider institution, including the administration of its databases.'
-          - 'Built an inventory manager and automations for the internal processes of the institution.'
-          - 'Started the development of a DICOM medical imaging viewer for the institution, aimed at 2D/3D multiplanar reconstruction (MPR), PET-CT study fusion and connection as a PACS client.'
-          - 'Provided technical support and incident resolution for operational and administrative processes.'
+          - 'Built, in a 2-person team, the new institutional website with an admin panel (Astro, Cloudflare Workers, D1, Better Auth), now in production: panel authentication, end-to-end patient requests, locations and configurable data retention.'
+          - 'Developed a tool that converts emailed panoramic X-rays to PDF without re-encoding, with sender verification (DKIM and DMARC), image validation, secrets in the OS credential store and fidelity checked with SHA-256.'
+          - 'Added security gates to the website CI (gitleaks across the full history, a static SQL rule, pnpm audit, coverage) and closed the findings of an internal audit.'
+          - 'Managed the databases, built an inventory manager and internal automations, and started a DICOM medical imaging viewer (in progress).'
+      # Alcaldía: facts confirmed by Luis (2026-11-19). The public repo
+      # JhonatanDV/Alcaldia is an earlier version: not linked.
       - company: Alcaldía de Pasto (City Government)
         position: Full-Stack Software Engineering Intern
         location: Pasto, Colombia
         start_date: 2025-10
         end_date: 2025-12
         highlights:
-          - 'Built the maintenance-management system of a public-sector entity end to end, covering the user interface, the backend logic and the data model, and delivered it in operation within the three months of the internship.'
-          - 'Implemented Role-Based Access Control (RBAC) and server-side input sanitization on a system holding government records, closing the SQL injection and XSS paths before it went into production.'
-          - 'Restructured the data access layer and optimized queries once response times became the bottleneck, reducing latency on the most heavily used query screens.'
+          - 'Co-developed (2-person team) an equipment maintenance management system (Django REST, Next.js, MySQL, JWT) and deployed it on Apache to the municipality’s server with production hardening: environment-based secrets, DEBUG off by default, HTTPS and CSRF trusted origins.'
+          - 'Delivered the system in operation within the 3 months of the internship, with PDF and Excel report generation.'
       - company: ElevaForge
-        position: Co-Founder and Software Engineer
+        position: Co-Founder and CTO (architecture and security)
         location: Remote
         start_date: 2025-06
         end_date: present
         highlights:
-          - 'Co-founded a 3-engineer software studio and owned the product architecture decisions: I defined the module boundaries and the data contracts, and recorded every decision and its discarded alternatives in versioned ADRs, so the team can review them without depending on me.'
-          - 'Led the migration of the corporate site from Angular to Next.js 14, planned layer by layer so the new structure absorbed the existing content instead of rebuilding it.'
-          - 'Designed the platform authorization model as deny-by-default: Row Level Security enabled with no policy at all for the anonymous or the authenticated role, and all data access routed through the server, so the public key shipped to the browser enables no query.'
-          - 'Established a CI security baseline that runs on every deploy (CodeQL, custom Semgrep rules, audit-ci and Lighthouse CI gates), so a finding stops the delivery instead of surfacing in production.'
-          - 'Built elevaforge.com and the KOA demo vertical (landing and e-commerce) with a multi-account admin panel the team uses to edit packages, projects and content without a deploy in between.'
+          - 'Co-founded a 3-engineer software studio and owned the architecture decisions, recorded in versioned ADRs with their discarded alternatives.'
+          - 'Designed deny-by-default authorization: Row Level Security enabled with no policies for anon or authenticated, and all data access routed through the server.'
+          - 'Led the migration of the corporate site from Angular to Next.js 14 and built elevaforge.com and the KOA demos (landing page and store) with a multi-account admin panel.'
+          - 'Set up the site CI with gitleaks, lint, typecheck, tests, build and e2e; on the KOA demos, CodeQL, audit-ci and Lighthouse CI (landing) and CodeQL and npm audit (store).'
       - company: Estación de Servicio Kennedy
-        position: IT and Systems Contractor
+        position: IT and Systems Contractor (full-time)
         location: Pasto, Colombia
         start_date: 2023-03
         end_date: 2026-03
         highlights:
-          - 'IT contractor for three consecutive years, responsible for the development, implementation and maintenance of the information systems of an operating fuel station.'
-          - 'Managed the business databases and optimised the inventory and sales control tools, the day to day operation the till and fuel supply depended on.'
-          - 'Was the standing technical point of contact: support for operational and administrative processes, and incident resolution on the company management systems as they came up, not under a fixed-hours contract.'
+          - 'Developed and maintained the information systems of an operating fuel station; managed the databases and optimized inventory and sales control.'
       - company: Freelance
-        position: Full-Stack Software Developer
+        position: Full-Stack Software Developer (part-time)
         location: Remote
         start_date: 2023-03
         end_date: present
         highlights:
-          - 'Served clients part-time alongside my degree and, later, alongside the internship at Alcaldía de Pasto, until I formalized that product discipline by co-founding ElevaForge in mid-2025.'
-          - 'Took on engagements of different scope depending on the client: frontend interfaces, backend services, complete builds from the interface through to deployment, internal process automation, and security audits of applications already in operation.'
-          - 'Executed data migrations to SAP and Oracle NetSuite applying encryption and prior backups, so every cutover had a tested rollback path before the first record moved.'
-          - 'Implemented custom CRM solutions (Salesforce, HubSpot) for e-commerce businesses, including role-based access control configuration so each user works only on the accounts assigned to them.'
-          - 'Built automated reporting systems with Odoo, Python and PostgreSQL that replaced manual data consolidation with periodic report generation for business analysis.'
-          - 'Part of this work is covered by confidentiality agreements, so each engagement is described by its type of work and its stack, never by the client or its data.'
+          - 'Performed information security assessments for more than 10 private clinics and SMEs, through outsourcing firms: access control, traceability and data custody.'
+          - 'Projects alongside my degree: data migrations to SAP and Oracle NetSuite, CRM (Salesforce, HubSpot) and reporting with Odoo, Python and PostgreSQL.'
+
+    Security Projects:
+      # SEG: public repo grupogpsi12/SEG, commit 63bef20. Authorship: 206 of 209
+      # commits (git shortlog -sne --all). Figures from auditoria/metricas.json
+      # (measured on commit 5fa3f32): pruebas_unitarias 2574,
+      # cobertura_ramas_dominio_pct 97.74, mutacion_dominio_pct 97.8,
+      # rnf06_dashboard_p95_ms 786 (threshold 2000). Load: 300 employees and 20
+      # concurrent users (docs/evidencia/rendimiento-2026-10-24.md).
+      # Findings: auditoria/score-global.md (39).
+      - name: SEG, JML workforce access system
+        location: github.com/grupogpsi12/SEG
+        summary: 'Postgraduate project with professional practices; fictitious company and data.'
+        highlights:
+          - 'Led the design and build (206 of 209 commits) of a system connecting HR and IT through GLPI 11: hexagonal Django 5.2 behind a ModSecurity/OWASP CRS 4 WAF, password plus TOTP and Docker secrets.'
+          - 'Verified it with 2,574 unit tests, 97.7% branch coverage and a 97.8% mutation score on the domain, and a dashboard p95 of 786 ms with 20 concurrent users.'
+          - 'Self-audited 39 DREAD-scored findings mapped to ASVS L2, each fix proven red to green, plus ZAP and sqlmap with no injectable parameters.'
+      - name: Tributary, multi-regime e-invoicing engine
+        location: github.com/Luisceron0/Tributary
+        summary: 'Sales across Colombia, Spain and Germany. Reference implementation, not certified.'
+        highlights:
+          - 'Guaranteed fiscal immutability with PostgreSQL triggers and a SHA-256 hash chain whose verifier points at the altered record.'
+          - 'Defined 13 security controls with a binary criterion and 4 independent CI gates; the quickstart brings everything up in under 3 minutes.'
+      - name: KOA Store, bilingual demo store
+        location: store.koa.elevaforge.com
+        highlights:
+          - 'Recalculated prices on the server against the catalog, ignoring any price or total sent by the browser; simulated checkout, no real payments.'
+      - name: CareLink, multi-tenant clinical platform
+        location: github.com/Luisceron0/CareLink
+        summary: 'Clinical history and triage for several institutions. Reference implementation.'
+        highlights:
+          - 'Applied AES-256-GCM encryption with a per-institution derived key and in-query suppression of aggregates with fewer than 5 distinct patients.'
+          - 'Blocked edits to signed records with a PostgreSQL trigger and revalidated each specialist access on every request.'
 
     Education:
       - institution: Universidad Cooperativa de Colombia
@@ -75,36 +106,38 @@ cv:
         start_date: 2022-02
         end_date: 2025-12
         highlights:
-          - 'Capstone project: REST API for physical space management with AI support, using JWT authentication and secure secrets management.'
-          - 'Relevant coursework: Scalable Systems Architecture, Back-End Development, Agile Methodologies (Scrum), Cybersecurity, Network Security.'
+          - 'Final degree project: AI-assisted REST API with JWT authentication and secure secrets management.'
+          - 'Relevant coursework: Software Architecture, Distributed Systems, Computer Security, Artificial Intelligence Systems.'
       - institution: Politécnico Grancolombiano
-        area: Information Security
+        area: Information Security Project Management
         degree: Postgraduate Specialization
         location: Colombia
         start_date: 2026-01
         end_date: present
         highlights:
-          - 'In progress, expected completion: 2027.'
+          - 'In progress, estimated completion in early 2027.'
+          - 'SEG project: led the design and build of a JML system with hexagonal architecture behind a WAF, audited against ASVS level 2.'
 
     Certifications:
-      - 'Cybersecurity, MinTIC Colombia (Sept 2024)'
+      - 'Cybersecurity, MinTIC Colombia (Sep 2024)'
       - 'Network Security, Cisco (Dec 2024)'
-      - 'Agile Software Development and Scrum, IBM (Jan 2025)'
-      - 'Building Scalable Systems, IBM (Feb 2025)'
-      - 'Introduction to Back-End Development, Meta (Feb 2025)'
-      - 'AI and Productivity Certifications, Microsoft & LinkedIn (Feb 2025)'
 
     Skills:
+      - label: Security
+        details: Threat modeling, OWASP Top 10, OWASP ASVS, RBAC, Row Level Security, JWT (RS256), Applied cryptography (AES-256-GCM), Secrets management, SAST (CodeQL, Semgrep, bandit), SCA (audit-ci, npm audit, Trivy, pip-audit), DAST (OWASP ZAP, sqlmap), WAF (ModSecurity, OWASP CRS), Secret scanning (gitleaks), Network security
       - label: Architecture
-        details: Scalable system design, Hexagonal architecture, Layered separation, REST API design, Data modelling, ADRs, Multi-tenant isolation
-      - label: Development
-        details: React, Next.js, Vue.js, Angular, Spring Boot, Django, JavaScript, TypeScript, Java, Python, C#
-      - label: Security & DevOps
-        details: RBAC, JWT, Threat modelling, Secure coding practices, SAST and SCA in CI (CodeQL, Semgrep), Docker, AWS (EC2, S3), CI/CD, Network security
+        details: Hexagonal architecture, Multi-tenant isolation, ADRs, Layered separation, REST API design, Data modeling, Scalable system design
+      - label: Backend
+        details: Java, Spring Boot, Python, Django, Django REST Framework, TypeScript
+      - label: Frontend
+        details: React, Next.js, Angular, Vue.js, Astro, JavaScript, Tailwind CSS, HTML5, CSS3
+      - label: Cloud and DevOps
+        details: Docker, GitHub Actions (CI/CD), Cloudflare Workers, Apache, AWS (EC2, S3), Vercel, Git
       - label: Databases
-        details: PostgreSQL, MySQL, MongoDB, Versioned migrations (Flyway)
-      - label: Languages
-        details: Spanish (Native), English (Advanced C1, EF SET Certified)
+        details: PostgreSQL, MySQL, MongoDB, SQLite, Versioned migrations (Flyway)
+
+    Languages:
+      - 'Spanish: native. English: C1 (EF SET).'
 
 # ---------------------------------------------------------------------------
 # Diseno: formato Harvard, legible por un ATS.
@@ -185,9 +218,20 @@ design:
     # Verificar visualmente tras cualquier cambio de contenido: el ajuste
     # correcto depende de cuanto texto haya, no es una constante fija.
     allow_page_break: true
+  # Fechas y separadores sin rayas, con el mismo formato que el sitio
+  # ("Mar 2023 a la actualidad"): la plantilla harvard usa "–" en los rangos y
+  # " -- " (que Typst convierte en raya) entre empresa y lugar.
   templates:
+    date_range: "START_DATE to END_DATE"
     education_entry:
       degree_column: null
+      main_column: "**INSTITUTION**, DEGREE_WITH_AREA | LOCATION\nSUMMARY\nHIGHLIGHTS"
+    normal_entry:
+      main_column: "**NAME** | LOCATION\nSUMMARY\nHIGHLIGHTS"
+    experience_entry:
+      main_column: "**COMPANY**, POSITION | LOCATION\nSUMMARY\nHIGHLIGHTS"
 
 locale:
   language: english
+  # Mismas abreviaturas que el sitio ("Jun 2025", "Sep 2026"): por defecto son "June" y "Sept".
+  month_abbreviations: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]

@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 
-import { hero, nav, type Locale } from '@/content'
+import { cv, hero, linkHref, nav, projectsSection, resolved, type Locale } from '@/content'
 import { ExternalLinkButton } from '@/components/external-link'
 import { PauseMenu } from '@/components/pause-menu'
 import { PersonaEmblem, ShardField } from '@/components/persona'
@@ -9,13 +9,16 @@ import { PointerParallax } from '@/components/pointer-parallax'
 /**
  * RF-101 (propuesta de valor) + RF-105 (enlace a GitHub).
  *
+ * Orden fijado por la SRS v1.4: titular del rol, nombre (H1), propuesta de
+ * valor, línea de apoyo, dos CTA (casos de seguridad y CV) y los enlaces a
+ * GitHub y LinkedIn.
+ *
  * Los dos criterios que condicionan el maquetado:
- *  - RF-101: legible y comprensible SIN hacer scroll en un viewport de 375 px.
+ *  - RF-101: legible SIN hacer scroll en un viewport de 375 px.
  *  - RF-105: el enlace al perfil de GitHub visible sin pasar del hero.
- * Por eso ambos CTA van dentro de esta sección, no más abajo.
  *
  * OJO al añadir cosas aquí: `e2e/landing.spec.ts` mide que el titular, la
- * propuesta de valor y los dos CTA entren en 375x667. Cualquier elemento nuevo
+ * propuesta de valor, los dos CTA y GitHub entren en 375x667. Cualquier elemento nuevo
  * por encima de los botones consume ese presupuesto. Es intencionado.
  *
  * El emblema va en posición absoluta: no aporta altura y no toca ese
@@ -30,6 +33,7 @@ function delay(ms: number): CSSProperties {
 
 export function Hero({ locale }: { locale: Locale }) {
   const words = hero.name.split(' ')
+  const cvFile = cv.downloads.find((download) => download.language === locale)?.fileName
 
   return (
     <section
@@ -83,14 +87,43 @@ export function Hero({ locale }: { locale: Locale }) {
         >
           {hero.pitch[locale]}
         </p>
+        <p
+          className="p-enter mt-3 max-w-2xl pl-5 text-base leading-relaxed text-ink-muted sm:text-lg"
+          style={delay(420)}
+        >
+          {hero.support[locale]}
+        </p>
 
         <div
-          className="p-enter mt-6 flex flex-col gap-4 sm:mt-8 sm:flex-row sm:items-center sm:gap-6"
+          className="p-enter mt-5 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center sm:gap-6"
           style={delay(480)}
         >
-          <ExternalLinkButton link={hero.contactCta} locale={locale} variant="primary" />
-          <ExternalLinkButton link={hero.githubLink} locale={locale} variant="secondary" />
+          <ExternalLinkButton link={hero.casesCta} locale={locale} variant="primary" />
+          <ExternalLinkButton link={hero.cvCta} locale={locale} variant="secondary" download={cvFile} />
         </div>
+
+        <ul
+          className="p-enter mt-2 flex gap-6 font-mono sm:mt-5 text-sm font-bold uppercase tracking-widest2"
+          style={delay(520)}
+        >
+          {[hero.githubLink, hero.linkedinLink].map((link) => {
+            const href = resolved(linkHref(link, locale))
+            if (!href) return null
+            return (
+              <li key={href}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-[44px] items-center text-ink underline decoration-tone-green decoration-2 underline-offset-4 hover:text-tone-green"
+                >
+                  {link.label[locale]}
+                  <span className="sr-only">{projectsSection.labels.newTab[locale]}</span>
+                </a>
+              </li>
+            )
+          })}
+        </ul>
 
         {/* Debajo de los CTA a propósito: no compite por el espacio de RF-101. */}
         <p

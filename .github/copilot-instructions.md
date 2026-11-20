@@ -1,9 +1,10 @@
 # Instructions for GitHub Copilot
 
 ## Project context
-Single-page personal portfolio site for Luis Alejandro Cerón Muñoz, a full-stack
-developer with a security-engineering angle. Its only job: convert a non-technical
-recruiter's first 60 seconds into a contact or a click to his GitHub. It is not a
+Personal portfolio site for Luis Alejandro Cerón Muñoz, positioned (SRS v1.4) as an
+Application Security engineer who builds: each security control is shown together
+with the project and code that implements it. Its only job: convert a recruiter's
+first 60 seconds into a contact or a click to his GitHub. It is not a
 second ElevaForge marketing site and not a repo browser.
 
 ## Tech stack
@@ -16,7 +17,9 @@ second ElevaForge marketing site and not a repo browser.
 - Node.js 18+.
 
 ## Code principles
-1. One page. Do not add routes, a blog, or a CMS unless the SRS scope changes first.
+1. The landing page plus one detail page per security case (`/casos/<slug>`, RF-111
+   of the SRS v1.4). Do not add other routes, a blog, or a CMS unless the SRS scope
+   changes first.
 2. Content (project blurbs, links) lives in a single typed config file, never
    hardcoded inline in JSX — the owner edits content via a config change, not by
    hunting through components.
@@ -70,8 +73,8 @@ turn — don't defer it to "later," it doesn't get written later.
 - CI: GitHub Actions, triggered on PR to `main`
 
 ## Boundaries
-- Do not add pages, a CMS, or an account system without first updating the SRS scope
-  section — this is a deliberate v1 constraint, not an oversight.
+- Do not add pages beyond the case pages of RF-111, a CMS, or an account system
+  without first updating the SRS scope section — this is a deliberate v1 constraint, not an oversight.
 - Do not touch the ElevaForge, CareLink, koa-landing, or koa-store repos from this
   project. This is a separate, standalone site.
 - When in doubt about scope, ask — don't guess and build past the SRS.

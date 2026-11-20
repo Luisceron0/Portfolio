@@ -13,11 +13,11 @@ import {
 } from '@/components/section'
 import { SkillsIcon } from '@/components/icons'
 
-/** RF-110: un tono por grupo, para que cinco tarjetas no se lean como una sola. */
-const GROUP_TONES: readonly Tone[] = ['green', 'violet', 'mint', 'lilac', 'silver']
+/** RF-110: un tono por grupo, para que seis tarjetas no se lean como una sola. */
+const GROUP_TONES: readonly Tone[] = ['violet', 'green', 'mint', 'lilac', 'silver', 'green']
 
 /**
- * RF-107 — habilidades y certificaciones.
+ * RF-107 — habilidades, con Seguridad primero.
  *
  * Grupos y elementos salen del YAML del CV, exactamente como están ahí. Se
  * renderizan como chips escaneables y no como prosa, que es el criterio de
@@ -33,7 +33,7 @@ export function Skills({ locale }: { locale: Locale }) {
     >
       <SectionHeading
         id="habilidades-title"
-        number="04"
+        number="05"
         title={skills.heading[locale]}
         intro={skills.intro[locale]}
         tone="lilac"
@@ -86,26 +86,6 @@ export function Skills({ locale }: { locale: Locale }) {
         })}
       </div>
 
-      <Reveal delayMs={140}>
-        <h3 className="mt-14">
-          <span className="p-slant p-display inline-block px-4 py-1 text-base text-surface [--slant-bg:#a6f13c]">
-            {skills.certificationsHeading[locale]}
-          </span>
-        </h3>
-        <ul className="mt-6 grid gap-x-8 sm:grid-cols-2">
-          {skills.certifications[locale].map((certification) => (
-            <li
-              key={certification}
-              className="flex gap-3 border-b border-tone-green/25 py-3 text-base leading-relaxed text-ink"
-            >
-              <span aria-hidden="true" className="shrink-0 text-tone-mint">
-                ★
-              </span>
-              {certification}
-            </li>
-          ))}
-        </ul>
-      </Reveal>
     </Section>
   )
 }

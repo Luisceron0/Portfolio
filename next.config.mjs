@@ -39,7 +39,12 @@ const BASELINE_SECURITY_HEADERS = [
      * Una cabecera que solo produce ruido no es defensa en profundidad, es una
      * pista falsa para quien depure otra cosa en esa consola. Fuera.
      */
-    value: 'camera=(), microphone=(), geolocation=()',
+    /*
+     * Ampliada (SRS v1.4): el sitio no usa pagos, USB, sensores ni la API de
+     * Topics. `browsing-topics=()` es el sustituto vigente de FLoC.
+     */
+    value:
+      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), browsing-topics=()',
   },
   {
     key: 'Strict-Transport-Security',
