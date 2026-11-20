@@ -394,14 +394,16 @@ test.describe('RF-106 / RF-107 — perfil, experiencia, habilidades y formación
     }
   })
 
-  test('Kennedy y freelance van agrupados como contratista independiente', async ({ page }) => {
+  test('Kennedy (tiempo completo) y freelance (tiempo parcial) van separados', async ({ page }) => {
     await page.goto('/')
     const experiencia = page.locator('#experiencia')
-    await expect(experiencia).toContainText('Contratista independiente de software y TI')
-    await expect(experiencia).toContainText('Mar 2023 a la actualidad')
-    await expect(experiencia).toContainText('medio tiempo, en paralelo a la carrera')
+    await expect(experiencia).toContainText('Contratista de TI y Sistemas (tiempo completo)')
+    await expect(experiencia).toContainText('Desarrollador de Software Full-Stack (tiempo parcial)')
     await expect(experiencia).toContainText('contrato por proyecto')
+    await expect(experiencia).toContainText('equipo de 2')
     await expect(experiencia).not.toContainText('Voluntario')
+    // La Alcaldía no afirma prevención de SQLi (dato confirmado por el dueño).
+    await expect(experiencia.locator('li', { hasText: 'Alcaldía' })).not.toContainText('inyección SQL')
   })
 
   test('Seguridad es el primer grupo de habilidades y no hay afirmaciones retiradas', async ({ page }) => {
@@ -446,7 +448,7 @@ test.describe('RF-106 / RF-107 — perfil, experiencia, habilidades y formación
       page.getByRole('region', { name: /Luis Alejandro Cerón Muñoz/ })
     ).toContainText('Pasto, Nariño, Colombia')
     const perfil = page.locator('#seguridad')
-    await expect(perfil).toContainText('Especialización en Seguridad de la Información')
+    await expect(perfil).toContainText('Especialización en Gerencia de Proyectos en Seguridad de la Información')
     await expect(perfil).toContainText('Inglés C1')
   })
 

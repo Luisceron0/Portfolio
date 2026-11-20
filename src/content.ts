@@ -351,12 +351,12 @@ export const profile = {
     es: [
       'Ingeniero de software con más de 3 años construyendo y manteniendo sistemas para salud, comercio y sector público, enfocado en seguridad de aplicaciones.',
       'Reviso arquitecturas y flujos de datos con modelado de amenazas, diseño controles de acceso (RBAC, Row Level Security deny-by-default), aplico criptografía (AES-256-GCM por tenant, gestión de secretos) e integro SAST y SCA como gates bloqueantes en CI (CodeQL, Semgrep, audit-ci).',
-      'Cursando la Especialización en Seguridad de la Información. Inglés C1.',
+      'Cursando la Especialización en Gerencia de Proyectos en Seguridad de la Información. Inglés C1.',
     ],
     en: [
       'Software engineer with more than 3 years building and maintaining systems for healthcare, commerce and the public sector, focused on application security.',
       'Review architectures and data flows with threat modeling, design access controls (RBAC, deny-by-default Row Level Security), apply cryptography (per-tenant AES-256-GCM, secrets management) and integrate SAST and SCA as blocking CI gates (CodeQL, Semgrep, audit-ci).',
-      'Pursuing a Postgraduate Specialization in Information Security. English C1.',
+      'Pursuing a Postgraduate Specialization in Information Security Project Management. English C1.',
     ],
   } satisfies LocalizedList,
 } as const
@@ -480,13 +480,26 @@ export const timeline = {
    * Fechas: siempre "Mmm AAAA a Mmm AAAA" o "Mmm AAAA a la actualidad", sin
    * rayas (check:dashes). El CV usa exactamente el mismo formato.
    *
-   * Estación de Servicio Kennedy y el trabajo freelance van agrupados como
-   * "Contratista independiente" (decisión del dueño, 2026-11-14): cinco
-   * frentes simultáneos generaban dudas; agrupados, se lee que el freelance fue
-   * a medio tiempo, en paralelo a la carrera.
+   * Estación de Servicio Kennedy y el freelance van separados, con su
+   * dedicación explícita (tiempo completo / tiempo parcial): decisión del
+   * dueño del 2026-11-19, que reemplaza el agrupamiento del 2026-11-14.
    */
   entries: [
     {
+      /*
+       * Fuentes (revisadas el 2026-11-19 en clones de solo lectura, sin copiar
+       * archivos a este repo):
+       *  - Sitio institucional: repo privado JhonatanDV/SanJoseIPS. 47 commits:
+       *    37 de Luis y 10 de Jhonatan (`git shortlog -sne --all`), así que va
+       *    "en equipo de 2". Lo de Luis según `git log --author`: autenticación
+       *    del panel (Better Auth), PQRS, sedes, middleware, cabeceras de
+       *    seguridad, retención y la CI (gitleaks, regla estática de SQL, audit).
+       *    En producción: el dominio público responde con la app nueva
+       *    (HTTP 200, comprobado el 2026-11-19).
+       *  - rx-gmail-pdf: repo privado Luisceron0/Panoramicas, 75 de 75 commits
+       *    de Luis. Pendiente de puesta en producción (decisión institucional).
+       * Repos privados: no se enlazan.
+       */
       id: 'ips-san-jose',
       kind: 'trabajo',
       title: {
@@ -501,18 +514,27 @@ export const timeline = {
       period: { es: 'Sep 2026 a Nov 2026', en: 'Sep 2026 to Nov 2026' },
       highlights: {
         es: [
-          'Desarrollé y mantuve los sistemas de información de una institución prestadora de servicios de salud, incluida la administración de sus bases de datos.',
-          'Construí un gestor de inventario y automatizaciones de procesos internos.',
-          'Inicié un visor de imágenes médicas DICOM, orientado a reconstrucción multiplanar 2D/3D, fusión PET-CT y conexión como cliente PACS.',
+          'Construí en equipo de 2 el nuevo sitio institucional con panel de administración (Astro, Cloudflare Workers, D1, Better Auth), en producción: autenticación del panel, PQRS de punta a punta, sedes y retención configurable de datos.',
+          'Desarrollé una herramienta que descarga las radiografías panorámicas de un buzón dedicado y las convierte a PDF sin recodificar, con verificación del remitente (DKIM y DMARC), validación de imágenes, secretos en el almacén de credenciales del sistema y fidelidad comprobada con SHA-256.',
+          'Integré gates de seguridad en la CI del sitio (gitleaks sobre todo el historial, regla estática de SQL, pnpm audit, cobertura) y cerré los hallazgos de una auditoría propia.',
+          'Administré las bases de datos, construí un gestor de inventario y automatizaciones internas, e inicié un visor de imágenes médicas DICOM (en desarrollo).',
         ],
         en: [
-          'Developed and maintained the information systems of a healthcare provider, including the administration of its databases.',
-          'Built an inventory manager and internal process automations.',
-          'Started a DICOM medical imaging viewer, aimed at 2D/3D multiplanar reconstruction, PET-CT fusion and connection as a PACS client.',
+          'Built, in a 2-person team, the new institutional website with an admin panel (Astro, Cloudflare Workers, D1, Better Auth), now in production: panel authentication, end-to-end patient requests (PQRS), locations and configurable data retention.',
+          'Developed a tool that downloads panoramic X-rays from a dedicated mailbox and converts them to PDF without re-encoding, with sender verification (DKIM and DMARC), image validation, secrets in the OS credential store and fidelity checked with SHA-256.',
+          'Added security gates to the website CI (gitleaks across the full history, a static SQL rule, pnpm audit, coverage) and closed the findings of an internal audit.',
+          'Managed the databases, built an inventory manager and internal automations, and started a DICOM medical imaging viewer (in progress).',
         ],
       },
     },
     {
+      /*
+       * Datos confirmados por Luis (2026-11-19): sistema codesarrollado entre 2
+       * personas; Luis lo desplegó en el servidor de la entidad (Apache) con
+       * configuración de producción. El repo público JhonatanDV/Alcaldia es una
+       * versión ANTERIOR: no se enlaza ni se sacan conclusiones de su código.
+       * No se afirma prevención de SQLi ni consultas parametrizadas aquí.
+       */
       id: 'alcaldia',
       kind: 'trabajo',
       title: {
@@ -524,27 +546,25 @@ export const timeline = {
       period: { es: 'Oct 2025 a Dic 2025', en: 'Oct 2025 to Dec 2025' },
       highlights: {
         es: [
-          'Entregué de punta a punta el sistema de gestión de mantenimientos de una entidad pública (interfaz, backend y modelo de datos), operativo en los 3 meses de la práctica.',
-          'Mitigué inyección SQL y XSS (OWASP Top 10) con consultas parametrizadas, sanitización del lado del servidor y RBAC, en un sistema con información de una entidad pública.',
-          'Optimicé la capa de acceso a datos y las consultas de las pantallas más usadas cuando los tiempos de respuesta se volvieron el cuello de botella.',
+          'Codesarrollé (equipo de 2) un sistema de gestión de mantenimiento de equipos (Django REST, Next.js, MySQL, JWT) y lo desplegué sobre Apache en el servidor de la Alcaldía con configuración endurecida: secretos por variables de entorno, DEBUG apagado por defecto, HTTPS y orígenes CSRF de confianza.',
+          'Sistema entregado y operativo dentro de los 3 meses de la práctica, con generación de reportes en PDF y Excel.',
         ],
         en: [
-          'Delivered the maintenance management system of a public sector entity end to end (interface, backend and data model), in operation within the 3 months of the internship.',
-          'Mitigated SQL injection and XSS (OWASP Top 10) with parameterized queries, server-side sanitization and RBAC, on a system holding public sector records.',
-          'Optimized the data access layer and the queries behind the most used screens once response times became the bottleneck.',
+          'Co-developed (2-person team) an equipment maintenance management system (Django REST, Next.js, MySQL, JWT) and deployed it on Apache to the municipality’s server with production hardening: environment-based secrets, DEBUG off by default, HTTPS and CSRF trusted origins.',
+          'Delivered the system in operation within the 3 months of the internship, with PDF and Excel report generation.',
         ],
       },
     },
     {
       /*
        * ElevaForge aparece también como caso de seguridad (`securityCases`).
-       * Si cambia el nombre o las fechas, hay que tocar los dos.
+       * Cargo "Cofundador y CTO": indicado por Luis el 2026-11-19.
        */
       id: 'elevaforge',
       kind: 'trabajo',
       title: {
-        es: 'Cofundador e Ingeniero de Software',
-        en: 'Co-Founder and Software Engineer',
+        es: 'Cofundador y CTO (arquitectura y seguridad)',
+        en: 'Co-Founder and CTO (architecture and security)',
       },
       organization: 'ElevaForge',
       location: { es: 'Remoto', en: 'Remote' },
@@ -566,29 +586,51 @@ export const timeline = {
     },
     {
       /*
-       * Agrupa Estación de Servicio Kennedy (constancia laboral formal, mar 2023
-       * a mar 2026) y el trabajo freelance (parte bajo confidencialidad: se
-       * describe por tipo de trabajo, nunca por cliente).
+       * Tiempo completo, confirmado por Luis el 2026-11-19. Respaldado por una
+       * constancia laboral formal del negocio.
        */
-      id: 'contratista-independiente',
+      id: 'eds-kennedy',
       kind: 'trabajo',
       title: {
-        es: 'Contratista independiente de software y TI',
-        en: 'Independent Software and IT Contractor',
+        es: 'Contratista de TI y Sistemas (tiempo completo)',
+        en: 'IT and Systems Contractor (full-time)',
       },
-      organization: 'Estación de Servicio Kennedy y clientes freelance',
-      location: { es: 'Pasto, Colombia y remoto', en: 'Pasto, Colombia and remote' },
+      organization: 'Estación de Servicio Kennedy',
+      location: { es: 'Pasto, Colombia', en: 'Pasto, Colombia' },
+      period: { es: 'Mar 2023 a Mar 2026', en: 'Mar 2023 to Mar 2026' },
+      highlights: {
+        es: [
+          'Desarrollé y mantuve los sistemas de información de una estación de servicio en funcionamiento durante tres años.',
+          'Administré las bases de datos y optimicé el control de inventario y ventas, del que dependían la caja y el abastecimiento.',
+        ],
+        en: [
+          'Developed and maintained the information systems of an operating fuel station for three years.',
+          'Managed the databases and optimized inventory and sales control, which the till and fuel supply depended on.',
+        ],
+      },
+    },
+    {
+      /*
+       * Tiempo parcial, confirmado por Luis el 2026-11-19. Parte del trabajo está
+       * bajo confidencialidad: se describe por tipo de trabajo, nunca por cliente.
+       */
+      id: 'freelance',
+      kind: 'trabajo',
+      title: {
+        es: 'Desarrollador de Software Full-Stack (tiempo parcial)',
+        en: 'Full-Stack Software Developer (part-time)',
+      },
+      organization: 'Freelance',
+      location: { es: 'Remoto', en: 'Remote' },
       period: { es: 'Mar 2023 a la actualidad', en: 'Mar 2023 to present' },
       highlights: {
         es: [
           'Realicé evaluaciones de seguridad de la información para más de 10 clínicas privadas y pymes, a través de firmas de outsourcing: control de acceso, trazabilidad y custodia de datos.',
-          'Estación de Servicio Kennedy (Mar 2023 a Mar 2026): desarrollé y mantuve sus sistemas, administré las bases de datos y optimicé el control de inventario y ventas.',
-          'Freelance a medio tiempo, en paralelo a la carrera: frontend, backend y automatización; migraciones de datos a SAP y Oracle NetSuite, CRM (Salesforce, HubSpot) y reportes con Odoo, Python y PostgreSQL.',
+          'Proyectos en paralelo a la carrera: frontend, backend y automatización; migraciones de datos a SAP y Oracle NetSuite, CRM (Salesforce, HubSpot) y reportes con Odoo, Python y PostgreSQL.',
         ],
         en: [
           'Performed information security assessments for more than 10 private clinics and SMEs, through outsourcing firms: access control, traceability and data custody.',
-          'Estación de Servicio Kennedy (Mar 2023 to Mar 2026): developed and maintained its systems, managed the databases and optimized inventory and sales control.',
-          'Part-time freelance, alongside my degree: frontend, backend and automation; data migrations to SAP and Oracle NetSuite, CRM (Salesforce, HubSpot) and reporting with Odoo, Python and PostgreSQL.',
+          'Projects alongside my degree: frontend, backend and automation; data migrations to SAP and Oracle NetSuite, CRM (Salesforce, HubSpot) and reporting with Odoo, Python and PostgreSQL.',
         ],
       },
     },
@@ -1828,15 +1870,21 @@ export const education = {
     {
       id: 'especializacion',
       title: {
-        es: 'Especialización en Seguridad de la Información',
-        en: 'Postgraduate Specialization in Information Security',
+        es: 'Especialización en Gerencia de Proyectos en Seguridad de la Información',
+        en: 'Postgraduate Specialization in Information Security Project Management',
       },
       organization: 'Politécnico Grancolombiano',
       location: { es: 'Colombia', en: 'Colombia' },
       period: { es: 'Ene 2026 a la actualidad', en: 'Jan 2026 to present' },
       highlights: {
-        es: ['En curso, finalización estimada en 2027.'],
-        en: ['In progress, estimated completion in 2027.'],
+        es: [
+          'En curso, finalización estimada en 2027.',
+          'Proyecto SEG: lideré el diseño y la construcción de un sistema JML (ingreso, cambios y retiro de personal) con arquitectura hexagonal detrás de un WAF, auditado contra ASVS nivel 2.',
+        ],
+        en: [
+          'In progress, estimated completion in 2027.',
+          'SEG project: led the design and build of a JML (joiner, mover, leaver) system with hexagonal architecture behind a WAF, audited against ASVS level 2.',
+        ],
       },
     },
     {
@@ -1986,3 +2034,22 @@ export const footer = {
     en: 'Skip to content',
   } satisfies Localized,
 } as const
+
+// ---------------------------------------------------------------------------
+// Preguntas abiertas para el dueño (no se renderizan)
+// ---------------------------------------------------------------------------
+
+/**
+ * Preguntas que el dueño pidió dejar como `[PENDIENTE]` (2026-11-19). No se
+ * muestran en el sitio: viven aquí para que `npm run check:pending` las liste
+ * y bloquee el deploy hasta que se respondan. Al responder una, se borra de
+ * aquí y el dato confirmado va a su sitio (experiencia, caso o CV).
+ */
+export const ownerQuestions: readonly Pending[] = [
+  '[PENDIENTE: TODO-LUIS, Alcaldía: ¿hay alguna cifra real de uso, como equipos registrados o reportes generados?]',
+  '[PENDIENTE: TODO-LUIS, SEG: ¿incluimos la línea de próximos pasos (implementación propia y completa a partir de este diseño)?]',
+  '[PENDIENTE: TODO-LUIS, IPS San José: ¿cuál fue tu rol formal? Hoy dice Ingeniero de Software (contrato por proyecto)]',
+  '[PENDIENTE: TODO-LUIS, IPS San José: ¿cuántos usuarios o registros tiene el sitio (PQRS, novedades, documentos)?]',
+  '[PENDIENTE: TODO-LUIS, IPS San José: confirma el trabajo en equipo con JhonatanDV en el sitio (git: 37 de 47 commits tuyos, 10 suyos)]',
+  '[PENDIENTE: TODO-LUIS, IPS San José: el sitio responde en su dominio público; rx-gmail-pdf está pendiente de la decisión institucional R-10. ¿Fecha estimada de puesta en producción?]',
+]
