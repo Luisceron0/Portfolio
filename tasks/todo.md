@@ -14,12 +14,28 @@
 - [x] 11. CV ES (principal) y EN: misma información, ATS, ≤2 páginas, prueba de orden del texto extraído
 - [x] 12. Verificación completa y lista de `[PENDIENTE: TODO-LUIS, ...]` por archivo
 
+### Portafolio v2 (2026-11-21, rama `portafolio-v2`)
+- [x] Proyectos con categorías, destacados y filtros compartibles
+- [x] Casos con "qué logra", bloque inicial, máximo 5 controles visibles y rol con autoría medida
+- [x] Espacio para proyectos nuevos (`upcomingProjects`) y sección Labs condicional
+- [x] CV con proyectos SEG, sitio IPS y CareLink
+
+### Tareas del dueño, portafolio v2
+Regla (2026-11-21): ningún punto abierto de un sistema real en producción se publica mientras no
+esté corregido; este archivo es público, así que tampoco se describe aquí.
+- [ ] Luis: cerrar los puntos privados del sitio de la IPS (detalle en `NOTAS-PRIVADAS.md`, fuera de Git). Al desplegar cada corrección, añadirla al caso como antes y después, con fecha, dentro de "Controles".
+- [ ] Luis: definir con la IPS la política de retención de las PQRS. Al cerrarla, mover el punto de "Qué quedó abierto" a "Controles" en el caso del sitio.
+- [ ] Luis: obtener la autorización escrita de la IPS para la transferencia internacional de datos (Cloudflare, Ley 1581 de 2012) y que un abogado la revise.
+- [ ] Luis: aplicar `SanJoseIPS-gitleaksignore.patch` (carpeta GitHub, fuera de este repo) en el repo del sitio y confirmar que la CI de gitleaks pasa limpia.
+- [ ] Aplicar el pipeline AppSec reusable a ElevaForge y actualizar su caso (hoy su CI tiene gitleaks, lint, typecheck, tests, build y e2e, sin SAST).
+- [ ] rx-gmail-pdf: cuando corra en producción, cambiar su `status` a `'produccion'` en src/content.ts (la puesta en producción estaba prevista para el 2026-11-20; sin confirmar).
+- [ ] Publicar cada proyecto de `upcomingProjects` cuando exista su repositorio, como `ProjectCase` con evidencia enlazada; los destacados siguen siendo 3 como máximo.
+
 ### Actualización de experiencia (2026-11-19)
 - [x] Alcaldía, IPS San José, ElevaForge (CTO), Kennedy (tiempo completo) y freelance (tiempo parcial)
 - [x] Caso SEG; fichas del sitio de la IPS y de rx-gmail-pdf
 - [x] CV ES y EN regenerados (2 páginas, prueba de ATS)
 - [x] Responder las preguntas de `ownerQuestions` (respondidas el 2026-11-19)
-- [ ] 2026-11-20: cuando rx-gmail-pdf esté corriendo en producción, cambiar su `status` a `'produccion'` en src/content.ts
 - [ ] Revisar las notas privadas que quedaron fuera de Git
 
 ### Tareas del dueño (mejoras opcionales, no bloquean el deploy)
