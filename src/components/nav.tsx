@@ -1,4 +1,4 @@
-import { HTML_LANG, LOCALES, nav, type Locale } from '@/content'
+import { HTML_LANG, LOCALES, nav, navItems, type Locale } from '@/content'
 import { homeAnchor, localeHref } from '@/lib/locale'
 import { NavLinks } from '@/components/nav-links'
 import { TONE_BG, type Tone } from '@/components/section'
@@ -87,7 +87,7 @@ export function SiteNav({ locale, path = '/' }: { locale: Locale; path?: string 
         </a>
 
         <NavLinks
-          items={nav.items.map((item) => ({
+          items={navItems().map((item) => ({
             href: homeAnchor(item.href, locale, onHome),
             label: item.label[locale],
           }))}

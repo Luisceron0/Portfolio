@@ -13,7 +13,9 @@ import {
   site,
   skills,
   timeline,
+  upcomingProjects,
   workProcess,
+  writeups,
   type Locale,
 } from '@/content'
 
@@ -365,6 +367,21 @@ test.describe('RF-102 / RF-111 — proyectos y filtros (portafolio v2)', () => {
     await page.keyboard.press('Enter')
     await expect(seguridad).toHaveAttribute('aria-pressed', 'true')
     await expect(page).toHaveURL(/categoria=seguridad/)
+  })
+
+  test('sin write-ups no hay sección Labs ni ancla en la navegación', async ({ page }) => {
+    test.skip(writeups.length > 0, 'ya hay write-ups: la sección debe existir')
+    await page.goto('/')
+    await expect(page.locator('#labs')).toHaveCount(0)
+    await expect(page.locator('nav a[href="#labs"]')).toHaveCount(0)
+  })
+
+  test('los proyectos en preparación no se renderizan', async ({ page }) => {
+    await page.goto('/')
+    const text = await page.locator('body').innerText()
+    for (const upcoming of upcomingProjects) {
+      expect(text, `${upcoming.id} aparece antes de existir`).not.toContain(upcoming.summary.es)
+    }
   })
 
   test('ningún texto del sitio contiene los puntos privados que no se publican', async ({ page }) => {

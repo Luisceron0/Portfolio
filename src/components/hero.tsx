@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 
-import { cv, hero, linkHref, nav, projectsSection, resolved, type Locale } from '@/content'
+import { cv, hero, linkHref, navItems, projectsSection, resolved, type Locale } from '@/content'
 import { ExternalLinkButton } from '@/components/external-link'
 import { PauseMenu } from '@/components/pause-menu'
 import { PersonaEmblem, ShardField } from '@/components/persona'
@@ -158,7 +158,7 @@ export function Hero({ locale }: { locale: Locale }) {
             title={hero.menu.title[locale]}
             label={hero.menu.label[locale]}
             hint={hero.menu.hint[locale]}
-            items={[...nav.items, hero.menu.extra].map((item) => ({
+            items={[...navItems(), hero.menu.extra].map((item) => ({
               href: item.href,
               label: item.label[locale],
             }))}

@@ -2911,3 +2911,135 @@ export const footer = {
  * aquí y el dato confirmado va a su sitio (experiencia, caso o CV).
  */
 export const ownerQuestions: readonly Pending[] = []
+
+// ---------------------------------------------------------------------------
+// Proyectos en preparación (portafolio v2): NO se renderizan
+// ---------------------------------------------------------------------------
+
+/**
+ * Un proyecto que todavía no existe. Vive aquí para que el contenido y la
+ * estructura estén listos, pero NINGÚN componente lo importa: regla 3, nada
+ * sin evidencia. Cuando el repositorio exista y se pueda enlazar cada control,
+ * se convierte en un `ProjectCase` (con su slug en CASE_SLUGS) y se borra de
+ * aquí. Puede reemplazar a un destacado (máximo 3).
+ */
+export interface UpcomingProject {
+  id: string
+  name: string
+  categories: readonly ProjectCategory[]
+  summary: Localized
+  /** Lo que tiene que demostrar antes de publicarse. */
+  plan: LocalizedList
+}
+
+export const upcomingProjects: readonly UpcomingProject[] = [
+  {
+    id: 'appsec-pipeline',
+    name: 'appsec-pipeline',
+    categories: ['seguridad', 'pruebas'],
+    summary: {
+      es: 'Workflows reutilizables de GitHub Actions con SAST, SCA, escaneo de secretos, SBOM y firma de artefactos.',
+      en: 'Reusable GitHub Actions workflows with SAST, SCA, secret scanning, SBOM and artifact signing.',
+    },
+    plan: {
+      es: [
+        'Cada gate probado contra un fixture vulnerable antes de confiar en su verde.',
+        'Aplicado a ElevaForge, cuyo caso se actualiza al llegar (tarea en tasks/todo.md).',
+      ],
+      en: [
+        'Every gate proven against a vulnerable fixture before trusting its green.',
+        'Applied to ElevaForge, whose case is updated when it lands (task in tasks/todo.md).',
+      ],
+    },
+  },
+  {
+    id: 'authz-matrix',
+    name: 'authz-matrix',
+    categories: ['seguridad', 'pruebas'],
+    summary: {
+      es: 'Herramienta en Python que prueba la matriz de autorización de una API, rol por rol y acción por acción.',
+      en: 'Python tool that tests an API authorization matrix, role by role and action by action.',
+    },
+    plan: {
+      es: ['La matriz se declara como datos y cada celda genera su prueba.'],
+      en: ['The matrix is declared as data and every cell generates its test.'],
+    },
+  },
+  {
+    id: 'nube-segura-aws',
+    name: 'Nube segura en AWS',
+    categories: ['seguridad', 'desarrollo'],
+    summary: {
+      es: 'Infraestructura en Terraform con IAM de mínimo privilegio y políticas como código.',
+      en: 'Terraform infrastructure with least-privilege IAM and policy as code.',
+    },
+    plan: {
+      es: ['Las políticas se verifican en la CI antes de aplicar cualquier cambio.'],
+      en: ['Policies are checked in CI before any change is applied.'],
+    },
+  },
+  {
+    id: 'labs',
+    name: 'Labs y write-ups',
+    categories: ['seguridad', 'pruebas'],
+    summary: {
+      es: 'Sección Labs con write-ups de laboratorios retirados o con divulgación permitida.',
+      en: 'Labs section with write-ups of retired labs or labs that allow disclosure.',
+    },
+    plan: {
+      es: ['Se publica sola en cuanto exista el primer write-up en `writeups`.'],
+      en: ['It publishes itself as soon as the first write-up exists in `writeups`.'],
+    },
+  },
+]
+
+// ---------------------------------------------------------------------------
+// Labs y write-ups (portafolio v2)
+// ---------------------------------------------------------------------------
+
+/**
+ * Un write-up de un laboratorio.
+ *
+ * REGLA (no negociable): solo laboratorios RETIRADOS o cuya plataforma permita
+ * la divulgación. Un write-up de una máquina activa o de un programa que lo
+ * prohíba no entra, aunque esté terminado. `link` apunta al write-up propio o a
+ * la página pública del lab, nunca a una solución de terceros.
+ */
+export interface Writeup {
+  title: string
+  platform: string
+  /** Fecha del write-up, AAAA-MM-DD. */
+  date: string
+  /** Clase de vulnerabilidad (por ejemplo, IDOR, SSRF, deserialización insegura). */
+  vulnClass: string
+  link: string
+  /** Qué aprendí, en una frase. */
+  lesson: Localized
+}
+
+/** Vacío hasta que exista el primero: sin write-ups no hay sección ni ancla. */
+export const writeups: readonly Writeup[] = []
+
+export const labsSection = {
+  heading: { es: 'Labs', en: 'Labs' } satisfies Localized,
+  intro: {
+    es: 'Laboratorios retirados o con divulgación permitida: qué clase de vulnerabilidad era y qué aprendí.',
+    en: 'Retired labs or labs that allow disclosure: what class of vulnerability it was and what I learned.',
+  } satisfies Localized,
+  labels: {
+    platform: { es: 'Plataforma', en: 'Platform' } satisfies Localized,
+    vulnClass: { es: 'Clase', en: 'Class' } satisfies Localized,
+    lesson: { es: 'Qué aprendí', en: 'What I learned' } satisfies Localized,
+  },
+  navItem: { label: { es: 'Labs', en: 'Labs' }, href: '#labs' } satisfies NavItem,
+} as const
+
+/**
+ * Anclas de la navegación: las fijas más "Labs" solo cuando hay al menos un
+ * write-up. Así nunca se enlaza a una sección vacía.
+ */
+export function navItems(): readonly NavItem[] {
+  if (writeups.length === 0) return nav.items
+  const i = nav.items.findIndex((item) => item.href === '#formacion')
+  return [...nav.items.slice(0, i), labsSection.navItem, ...nav.items.slice(i)]
+}
