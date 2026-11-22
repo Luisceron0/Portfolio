@@ -9,7 +9,7 @@ import {
   nav,
   pillars,
   resolved,
-  securityCases,
+  projectCases,
   site,
   skills,
   timeline,
@@ -263,37 +263,134 @@ test.describe('RF-109 — bilingüe', () => {
   })
 })
 
-test.describe('RF-102 / RF-111 — casos de seguridad', () => {
-  test('los cuatro casos se renderizan en la home, en el orden decidido, con captura', async ({
-    page,
+test.describe('RF-102 / RF-111 — proyectos y filtros (portafolio v2)', () => {
+  test('datos: destacados como máximo 3, rol en todos y como mucho 3 puntos abiertos', () => {
+    const featured = projectCases.filter((item) => item.featured)
+    expect(featured.length).toBeLessThanOrEqual(3)
+    expect(featured.map((item) => item.slug)[0], 'SEG es el primer destacado').toBe('seg')
+    for (const item of projectCases) {
+      expect(item.categories.length, `${item.slug} sin categoría`).toBeGreaterThan(0)
+      expect(item.role.es.length, `${item.slug} sin rol`).toBeGreaterThan(0)
+      expect((item.openItems?.es ?? []).length, `${item.slug}: más de 3 puntos abiertos`).toBeLessThanOrEqual(3)
+    }
+  })
+
+  test('el contador de la intro sale del número de proyectos', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('#casos')).toContainText(`${projectCases.length} proyectos.`)
+    await page.goto('/?lang=en')
+    await expect(page.locator('#casos')).toContainText(`${projectCases.length} projects.`)
+  })
+
+  test('sin JavaScript se ven todos los proyectos, con su contenido, y no hay filtros', async ({
+    browser,
   }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false })
+    const page = await context.newPage()
     await page.goto('/')
 
-    // CareLink primero (2026-11-14) y SEG segundo (2026-11-19).
-    expect(securityCases.map((item) => item.slug).slice(0, 2)).toEqual(['carelink', 'seg'])
-
-    for (const item of securityCases) {
+    await expect(page.getByRole('group', { name: casesSection.filters.label.es })).toHaveCount(0)
+    for (const item of projectCases) {
       const article = page.locator(`article[aria-labelledby="caso-${item.slug}"]`)
-      await expect(article, `falta la tarjeta de ${CASE_NAMES[item.slug]}`).toHaveCount(1)
+      await expect(article, `falta la tarjeta de ${CASE_NAMES[item.slug]}`).toBeVisible()
       await expect(article.getByRole('heading', { name: CASE_NAMES[item.slug] })).toBeVisible()
-      // Sin captura (datos sensibles o repo privado), la tarjeta muestra el diagrama.
+      await expect(article).toContainText(item.outcome.es)
+      await expect(article.getByText(casesSection.labels.statuses[item.status].es).first()).toBeVisible()
+      for (const category of item.categories) {
+        await expect(
+          article.getByRole('list', { name: casesSection.labels.categories.es })
+        ).toContainText(casesSection.categoryLabels[category].es)
+      }
       if (item.screenshot) {
         await expect(article.locator('img')).toHaveAttribute('alt', /\S/)
-      } else {
-        await expect(article.getByRole('list', { name: casesSection.labels.architecture.es })).toBeVisible()
       }
-      await expect(
-        article.getByText(casesSection.labels.statuses[item.status].es).first()
-      ).toBeVisible()
       await expect(article.getByRole('link', { name: /Ver el caso completo/ })).toHaveAttribute(
         'href',
         `/casos/${item.slug}`
       )
     }
+    await context.close()
+  })
+
+  test('con JavaScript, el filtro por defecto muestra solo los destacados', async ({ page }) => {
+    await page.goto('/')
+    const pressed = page.getByRole('button', { name: casesSection.filters.destacados.es })
+    await expect(pressed).toHaveAttribute('aria-pressed', 'true')
+    for (const item of projectCases) {
+      const card = page.locator(`[data-project="${item.slug}"]`)
+      if (item.featured) await expect(card).toBeVisible()
+      else await expect(card).toBeHidden()
+    }
+    expect(new URL(page.url()).searchParams.has('categoria')).toBe(false)
+  })
+
+  test('los filtros cambian la lista y la URL, y la URL se puede compartir', async ({ page }) => {
+    await page.goto('/?lang=en')
+    await page.getByRole('button', { name: casesSection.filters.pruebas.en }).click()
+    await expect(page.getByRole('button', { name: casesSection.filters.pruebas.en })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    )
+    const url = new URL(page.url())
+    expect(url.searchParams.get('categoria')).toBe('pruebas')
+    expect(url.searchParams.get('lang'), 'el filtro conserva el idioma').toBe('en')
+    for (const item of projectCases) {
+      const card = page.locator(`[data-project="${item.slug}"]`)
+      if (item.categories.includes('pruebas')) await expect(card).toBeVisible()
+      else await expect(card).toBeHidden()
+    }
+
+    // Abrir la URL compartida aplica el filtro.
+    await page.goto('/?categoria=desarrollo')
+    for (const item of projectCases) {
+      const card = page.locator(`[data-project="${item.slug}"]`)
+      if (item.categories.includes('desarrollo')) await expect(card).toBeVisible()
+      else await expect(card).toBeHidden()
+    }
+    // Las tarjetas que aparecen al filtrar terminan visibles (no se quedan
+    // a mitad de la animación de entrada).
+    await page.locator('[data-project="koa"]').scrollIntoViewIfNeeded()
+    await expect
+      .poll(async () =>
+        page.locator('[data-project="koa"] .reveal').evaluate((node) => Number(getComputedStyle(node).opacity))
+      )
+      .toBeGreaterThan(0.9)
+  })
+
+  test('los filtros se manejan con teclado', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'mobile', 'navegación por teclado: viewport de escritorio')
+    await page.goto('/')
+    const seguridad = page.getByRole('button', { name: casesSection.filters.seguridad.es })
+    await seguridad.focus()
+    await page.keyboard.press('Enter')
+    await expect(seguridad).toHaveAttribute('aria-pressed', 'true')
+    await expect(page).toHaveURL(/categoria=seguridad/)
+  })
+
+  test('ningún texto del sitio contiene los puntos privados que no se publican', async ({ page }) => {
+    // Puntos 1, 2, 9, 10 y 12 de las notas privadas (decisión del dueño,
+    // 2026-11-21): sistemas reales en producción u operación de un cliente.
+    const forbidden = [
+      /no tiene segundo factor/i,
+      /un solo rol de administrador/i,
+      /cuenta de windows compartida/i,
+      /acceso remoto que hereda la sesi/i,
+      /instrucciones para herramientas de IA/i,
+      /CLAUDE\.md/,
+      /PROMPT_EJECUCION/,
+    ]
+    const paths = ['/', '/?lang=en', ...projectCases.flatMap((item) => [`/casos/${item.slug}`, `/casos/${item.slug}?lang=en`])]
+    for (const path of paths) {
+      await page.goto(path)
+      const text = await page.locator('body').innerText()
+      for (const pattern of forbidden) {
+        expect(text, `${path} contiene ${pattern}`).not.toMatch(pattern)
+      }
+    }
   })
 
   test('cada página de caso tiene un solo H1 y los bloques de la plantilla', async ({ page }) => {
-    for (const item of securityCases) {
+    for (const item of projectCases) {
       const response = await page.goto(`/casos/${item.slug}`)
       expect(response?.status()).toBe(200)
       await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1)
@@ -312,7 +409,7 @@ test.describe('RF-102 / RF-111 — casos de seguridad', () => {
   })
 
   test('cada control enlaza a código en un commit fijo, o el caso declara repo privado', async ({ page }) => {
-    for (const item of securityCases) {
+    for (const item of projectCases) {
       await page.goto(`/casos/${item.slug}`)
       if (item.privateRepo) {
         // Repo privado: ni un enlace a github.com en la página, y el aviso visible.
@@ -370,7 +467,7 @@ test.describe('RF-102 / RF-111 — casos de seguridad', () => {
   test('las amenazas solo muestran STRIDE si el threat model del repo lo declara', async () => {
     // CareLink y ElevaForge no tienen categoría por amenaza en su repo.
     for (const slug of ['carelink', 'elevaforge'] as const) {
-      const item = securityCases.find((candidate) => candidate.slug === slug)!
+      const item = projectCases.find((candidate) => candidate.slug === slug)!
       expect(item.threats.every((threat) => !threat.stride)).toBe(true)
     }
   })
@@ -509,6 +606,8 @@ test.describe('Animaciones', () => {
 
     const stuck = await page.locator('.reveal').evaluateAll((nodes) =>
       nodes
+        // Las tarjetas ocultas por el filtro (display: none) no cuentan.
+        .filter((node) => (node as HTMLElement).offsetParent !== null)
         .filter((node) => Number(getComputedStyle(node).opacity) < 0.9)
         .map((node) => node.textContent?.slice(0, 60) ?? '')
     )
@@ -527,7 +626,9 @@ test.describe('Animaciones', () => {
 
     expect(html).not.toContain('data-reveal="hidden"')
     expect(html).toContain('Politécnico Grancolombiano')
-    expect(html).toContain('Casos de seguridad')
+    expect(html).toContain('Proyectos')
+    // Sin JavaScript, el HTML del servidor trae todos los proyectos.
+    for (const item of projectCases) expect(html).toContain(`data-project="${item.slug}"`)
     expect(html).toContain('Tributary')
   })
 

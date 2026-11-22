@@ -5,9 +5,9 @@ import {
   CASE_NAMES,
   casesSection,
   resolved,
-  securityCases,
+  projectCases,
   type Locale,
-  type SecurityCase,
+  type ProjectCase,
 } from '@/content'
 import { caseHref } from '@/lib/locale'
 import { PendingNote } from '@/components/pending'
@@ -16,6 +16,7 @@ import {
   Section,
   SectionHeading,
   TONE_BG,
+  TONE_BORDER,
   TONE_HOVER_BORDER,
   TONE_TEXT,
   toneVar,
@@ -23,12 +24,14 @@ import {
 } from '@/components/section'
 import { ProjectsIcon } from '@/components/icons'
 import { ArchitectureDiagram } from '@/components/architecture-diagram'
+import { ProjectFilter } from '@/components/project-filter'
+import { FILTER_VALUES, type FilterValue } from '@/lib/project-filter-values'
 
-/** RF-110: un tono por caso, en el orden de `securityCases`. */
+/** RF-110: un tono por caso, en el orden de `projectCases`. */
 export const CASE_TONES: readonly Tone[] = ['violet', 'green', 'mint', 'lilac', 'silver', 'mint', 'green']
 
 /** Insignia de estado: en producción, demo en vivo o repositorio. */
-export function StatusBadge({ item, locale }: { item: SecurityCase; locale: Locale }) {
+export function StatusBadge({ item, locale }: { item: ProjectCase; locale: Locale }) {
   const tone =
     item.status === 'produccion'
       ? 'text-surface [--slant-bg:#a6f13c]'
@@ -57,7 +60,7 @@ export function CaseScreenshot({
   locale,
   sizes,
 }: {
-  item: SecurityCase
+  item: ProjectCase
   locale: Locale
   sizes: string
 }) {
@@ -83,13 +86,13 @@ export function CaseScreenshot({
   )
 }
 
-function CaseCard({ item, index, locale }: { item: SecurityCase; index: number; locale: Locale }) {
+function CaseCard({ item, index, locale }: { item: ProjectCase; index: number; locale: Locale }) {
   const tone = CASE_TONES[index % CASE_TONES.length]
   const headingId = `caso-${item.slug}`
-  const ref = `CASO-${String(index + 1).padStart(2, '0')}`
-  // En la tarjeta, solo los títulos de los controles: el porqué y el código
-  // están en la página del caso.
-  const controls = item.controlGroups.flatMap((group) => group.controls)
+  const ref = `PRY-${String(index + 1).padStart(2, '0')}`
+  // En la tarjeta, solo los títulos de los tres primeros controles: el resto,
+  // el porqué y el código están en la página del caso.
+  const controls = item.controlGroups.flatMap((group) => group.controls).slice(0, 3)
 
   return (
     <div className="p-lift group h-full" style={toneVar(tone)}>
@@ -130,7 +133,21 @@ function CaseCard({ item, index, locale }: { item: SecurityCase; index: number; 
         <h3 id={headingId} className="p-display p-glitch mt-2 text-3xl leading-none sm:text-4xl">
           {CASE_NAMES[item.slug]}
         </h3>
-        <p className="mt-4 text-base leading-relaxed text-ink-muted">{item.summary[locale]}</p>
+        <ul aria-label={casesSection.labels.categories[locale]} className="mt-3 flex flex-wrap gap-2">
+          {item.categories.map((category) => (
+            <li
+              key={category}
+              className={`border-b-2 pb-0.5 font-mono text-[0.68rem] font-bold uppercase tracking-widest2 text-ink ${TONE_BORDER[tone]}`}
+            >
+              {casesSection.categoryLabels[category][locale]}
+            </li>
+          ))}
+        </ul>
+
+        <p className="mt-5 font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
+          {casesSection.labels.outcome[locale]}
+        </p>
+        <p className="mt-1 text-base leading-relaxed text-ink">{item.outcome[locale]}</p>
 
         <ul aria-label={casesSection.labels.stack[locale]} className="mt-5 flex flex-wrap gap-2">
           {item.stack.map((tech, techIndex) => (
@@ -173,32 +190,76 @@ function CaseCard({ item, index, locale }: { item: SecurityCase; index: number; 
   )
 }
 
+/** Orden de los estados dentro de cada filtro, después de los destacados. */
+const STATUS_ORDER: Record<ProjectCase['status'], number> = {
+  produccion: 0,
+  preproduccion: 1,
+  repositorio: 2,
+  demo: 3,
+}
+
 /**
- * RF-102 — los cuatro casos de seguridad, en resumen.
+ * Orden de la lista: destacados primero (en el orden de content.ts) y luego por
+ * estado. Como cada filtro solo oculta tarjetas, todos conservan este orden.
+ */
+export function orderedProjects(): readonly ProjectCase[] {
+  return [...projectCases].sort((a, b) => {
+    if (Boolean(a.featured) !== Boolean(b.featured)) return a.featured ? -1 : 1
+    if (a.featured) return 0
+    return STATUS_ORDER[a.status] - STATUS_ORDER[b.status]
+  })
+}
+
+/**
+ * RF-102 — Proyectos (portafolio v2): todos en resumen, con filtros por
+ * categoría. La tarjeta muestra estado, categorías, "qué logra", stack y los
+ * primeros controles; la plantilla completa vive en `/casos/<slug>` (RF-111).
  *
- * La tarjeta muestra problema, estado, stack y los controles por nombre; el
- * detalle completo de la plantilla (flujo de datos, amenazas, porqué de cada
- * control con su código, verificación) vive en `/casos/<slug>` (RF-111).
+ * El conteo de la intro sale de `projectCases.length`, nunca de un texto fijo.
  */
 export function Cases({ locale }: { locale: Locale }) {
+  const items = orderedProjects()
+  const labels = casesSection.filters
+  const counts: Record<FilterValue, number> = {
+    destacados: items.filter((item) => item.featured).length,
+    seguridad: items.filter((item) => item.categories.includes('seguridad')).length,
+    desarrollo: items.filter((item) => item.categories.includes('desarrollo')).length,
+    pruebas: items.filter((item) => item.categories.includes('pruebas')).length,
+  }
+
   return (
     <Section id="casos" labelledBy="casos-title">
       <SectionHeading
         id="casos-title"
         number="02"
         title={casesSection.heading[locale]}
-        intro={casesSection.intro[locale]}
+        intro={`${casesSection.count[locale](projectCases.length)} ${casesSection.intro[locale]}`}
         tone="mint"
         icon={<ProjectsIcon />}
       />
 
-      <div className="mt-12 grid gap-10 lg:grid-cols-2">
-        {securityCases.map((item, index) => (
-          <Reveal key={item.slug} delayMs={(index % 2) * 80} className="h-full">
-            <CaseCard item={item} index={index} locale={locale} />
-          </Reveal>
-        ))}
-      </div>
+      <ProjectFilter
+        label={labels.label[locale]}
+        options={FILTER_VALUES.map((value) => ({ value, label: labels[value][locale] }))}
+        counts={counts}
+        announce={labels.announce[locale]}
+      >
+        <div className="mt-10 grid gap-10 lg:grid-cols-2">
+          {items.map((item, index) => (
+            <div
+              key={item.slug}
+              data-project={item.slug}
+              data-categories={item.categories.join(' ')}
+              data-featured={item.featured ? 'true' : 'false'}
+              className="h-full"
+            >
+              <Reveal delayMs={(index % 2) * 80} className="h-full">
+                <CaseCard item={item} index={index} locale={locale} />
+              </Reveal>
+            </div>
+          ))}
+        </div>
+      </ProjectFilter>
     </Section>
   )
 }

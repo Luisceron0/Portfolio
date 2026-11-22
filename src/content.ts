@@ -116,7 +116,7 @@ export interface ProjectImage {
 /**
  * Identificadores de los casos de seguridad (RF-102/RF-111). Son también el
  * segmento de su URL: `/casos/<slug>`. El orden de este array NO es el orden de
- * la página; ese lo manda `securityCases`.
+ * la página; ese lo manda `projectCases`.
  */
 export const CASE_SLUGS = [
   'carelink',
@@ -236,7 +236,7 @@ export const nav = {
    */
   items: [
     { label: { es: 'Qué hago', en: 'What I do' }, href: '#seguridad' },
-    { label: { es: 'Casos', en: 'Cases' }, href: '#casos' },
+    { label: { es: 'Proyectos', en: 'Projects' }, href: '#casos' },
     { label: { es: 'Cómo trabajo', en: 'How I work' }, href: '#proceso' },
     { label: { es: 'Experiencia', en: 'Experience' }, href: '#experiencia' },
     { label: { es: 'Habilidades', en: 'Skills' }, href: '#habilidades' },
@@ -362,12 +362,12 @@ export const profile = {
   summary: {
     es: [
       'Ingeniero de software con más de 3 años construyendo y manteniendo sistemas para salud, comercio y sector público, enfocado en seguridad de aplicaciones.',
-      'Reviso arquitecturas y flujos de datos con modelado de amenazas, diseño controles de acceso (RBAC, Row Level Security deny-by-default), aplico criptografía (AES-256-GCM por tenant, gestión de secretos) e integro SAST y SCA como gates bloqueantes en CI (CodeQL, Semgrep, audit-ci).',
+      'Reviso arquitecturas y flujos de datos con modelado de amenazas, diseño controles de acceso (RBAC, Row Level Security deny-by-default), aplico criptografía (AES-256-GCM por tenant, gestión de secretos) e integro SAST y SCA como gates bloqueantes en CI en los proyectos que lo requieren (CodeQL, Semgrep, audit-ci).',
       'Cursando la Especialización en Gerencia de Proyectos en Seguridad de la Información. Inglés C1.',
     ],
     en: [
       'Software engineer with more than 3 years building and maintaining systems for healthcare, commerce and the public sector, focused on application security.',
-      'Review architectures and data flows with threat modeling, design access controls (RBAC, deny-by-default Row Level Security), apply cryptography (per-tenant AES-256-GCM, secrets management) and integrate SAST and SCA as blocking CI gates (CodeQL, Semgrep, audit-ci).',
+      'Review architectures and data flows with threat modeling, design access controls (RBAC, deny-by-default Row Level Security), apply cryptography (per-tenant AES-256-GCM, secrets management) and integrate SAST and SCA as blocking CI gates in the projects that need them (CodeQL, Semgrep, audit-ci).',
       'Pursuing a Postgraduate Specialization in Information Security Project Management. English C1.',
     ],
   } satisfies LocalizedList,
@@ -580,7 +580,7 @@ export const timeline = {
     },
     {
       /*
-       * ElevaForge aparece también como caso de seguridad (`securityCases`).
+       * ElevaForge aparece también como caso de seguridad (`projectCases`).
        * Cargo "Cofundador y CTO": indicado por Luis el 2026-11-19.
        */
       id: 'elevaforge',
@@ -769,8 +769,19 @@ export interface CaseCheck {
   evidence: readonly ExternalLink[]
 }
 
-export interface SecurityCase {
+/**
+ * Categorías de un proyecto (portafolio v2). Un proyecto puede tener varias;
+ * los filtros de la sección Proyectos se basan en ellas.
+ */
+export const PROJECT_CATEGORIES = ['seguridad', 'desarrollo', 'pruebas'] as const
+export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number]
+
+export interface ProjectCase {
   slug: CaseSlug
+  /** Una o varias categorías. */
+  categories: readonly ProjectCategory[]
+  /** Aparece en "Destacados" (máximo 3, lo mide un test). */
+  featured?: boolean
   kicker: Localized
   /** Una frase para la tarjeta de la home. */
   summary: Localized
@@ -778,6 +789,10 @@ export interface SecurityCase {
   seoDescription: Localized
   /** El problema, en una frase. */
   problem: Localized
+  /** "Qué logra": el resultado, concreto y medible si hay cifra con fuente. */
+  outcome: Localized
+  /** "Qué construí": lo que hizo Luis, en una frase (bloque inicial del caso). */
+  built: Localized
   stack: readonly string[]
   status: CaseStatus
   dataFlow: Localized
@@ -800,10 +815,15 @@ export interface SecurityCase {
   screenshot?: ProjectImage
   /** Diagrama simple de capas, de fuera hacia dentro. */
   architecture?: readonly CaseLayer[]
-  /** Lo que quedó abierto, resumido sin detalles explotables. */
+  /**
+   * Lo que quedó abierto, resumido y sin nada explotable: máximo 3 puntos (lo
+   * mide un test). Regla del dueño (2026-11-21): un punto abierto de un sistema
+   * real EN PRODUCCIÓN no se publica mientras no esté corregido; al corregirse
+   * vuelve como "antes y después" dentro de los controles, con fecha.
+   */
   openItems?: LocalizedList
-  /** Qué hizo Luis, con la autoría medida en Git. */
-  role?: Localized
+  /** Qué hizo Luis, con la autoría medida en Git. Obligatorio. */
+  role: Localized
   /**
    * Repositorio privado (sistemas de un cliente): no se enlaza el código y los
    * controles se describen sin rutas internas ni versiones expuestas.
@@ -812,11 +832,34 @@ export interface SecurityCase {
 }
 
 export const casesSection = {
-  heading: { es: 'Casos de seguridad', en: 'Security cases' } satisfies Localized,
+  heading: { es: 'Proyectos', en: 'Projects' } satisfies Localized,
+  /**
+   * La intro NO lleva el número escrito: el componente antepone el conteo con
+   * `projectCases.length` (se desactualizó una vez: decía "Cuatro sistemas"
+   * cuando ya había siete).
+   */
   intro: {
-    es: 'Cuatro sistemas que diseñé y construí. Cada caso sigue la misma plantilla: problema, flujo de datos, amenazas, controles enlazados al código que los implementa y cómo se verificaron.',
-    en: 'Four systems I designed and built. Every case follows the same template: problem, data flow, threats, controls linked to the code that implements them, and how they were verified.',
+    es: 'Software que diseñé, construí y llevé a producción, y cómo lo protegí y lo verifiqué.',
+    en: 'Software I designed, built and took to production, and how I secured and verified it.',
   } satisfies Localized,
+  count: {
+    es: (n: number) => `${n} proyectos.`,
+    en: (n: number) => `${n} projects.`,
+  },
+  filters: {
+    label: { es: 'Filtrar proyectos', en: 'Filter projects' } satisfies Localized,
+    destacados: { es: 'Destacados', en: 'Featured' } satisfies Localized,
+    seguridad: { es: 'Seguridad', en: 'Security' } satisfies Localized,
+    desarrollo: { es: 'Desarrollo', en: 'Development' } satisfies Localized,
+    pruebas: { es: 'Pruebas', en: 'Testing' } satisfies Localized,
+    /** Anuncio para lectores de pantalla; `{n}` es el número de proyectos. */
+    announce: { es: 'Mostrando {n} proyectos', en: 'Showing {n} projects' } satisfies Localized,
+  },
+  categoryLabels: {
+    seguridad: { es: 'Seguridad', en: 'Security' },
+    desarrollo: { es: 'Desarrollo', en: 'Development' },
+    pruebas: { es: 'Pruebas', en: 'Testing' },
+  } satisfies Record<ProjectCategory, Localized>,
   labels: {
     problem: { es: 'Problema', en: 'Problem' } satisfies Localized,
     stack: { es: 'Stack', en: 'Stack' } satisfies Localized,
@@ -847,7 +890,14 @@ export const casesSection = {
       en: 'Private repository owned by the institution: the code is not linked and controls are described without internal details.',
     } satisfies Localized,
     readCase: { es: 'Ver el caso completo', en: 'Read the full case' } satisfies Localized,
-    backToCases: { es: 'Volver a los casos', en: 'Back to the cases' } satisfies Localized,
+    outcome: { es: 'Qué logra', en: 'What it delivers' } satisfies Localized,
+    built: { es: 'Qué construí', en: 'What I built' } satisfies Localized,
+    categories: { es: 'Categorías', en: 'Categories' } satisfies Localized,
+    moreControls: {
+      es: (n: number) => `Ver ${n} controles más`,
+      en: (n: number) => `Show ${n} more controls`,
+    },
+    backToCases: { es: 'Volver a los proyectos', en: 'Back to the projects' } satisfies Localized,
     newTab: {
       es: ' (se abre en una pestaña nueva)',
       en: ' (opens in a new tab)',
@@ -862,9 +912,9 @@ export const casesSection = {
 export const projectsSection = { labels: { newTab: casesSection.labels.newTab } } as const
 
 /**
- * Los cuatro casos, en el orden de la página (decisión del dueño, 2026-11-14):
- * CareLink primero, porque es el que mejor muestra flujo de datos, criptografía
- * y control de acceso.
+ * Los proyectos, en el orden de la página (portafolio v2, 2026-11-21): primero
+ * los destacados (SEG, sitio IPS, CareLink) y luego por estado: producción,
+ * preproducción, repositorio y demo. Cada filtro conserva este orden.
  *
  * Reglas de este bloque:
  *  - Cada control enlaza a un archivo o línea de su repositorio, en un commit
@@ -876,210 +926,7 @@ export const projectsSection = { labels: { newTab: casesSection.labels.newTab } 
  *    mejoras opcionales van a tasks/todo.md, no al sitio (dueño, 2026-11-14).
  *  - Nada de absolutos de seguridad.
  */
-export const securityCases: readonly SecurityCase[] = [
-  {
-    slug: 'carelink',
-    kicker: {
-      es: 'Plataforma clínica multi-tenant, implementación de referencia',
-      en: 'Multi-tenant clinical platform, reference implementation',
-    },
-    summary: {
-      es: 'Historia clínica, triage y coordinación entre especialistas para varias instituciones sobre una misma base, con el control de acceso y el cifrado aplicados en la base de datos y en cada petición.',
-      en: 'Clinical history, triage and specialist coordination for several institutions on a shared database, with access control and encryption enforced in the database and on every request.',
-    },
-    seoDescription: {
-      es: 'CareLink: plataforma clínica multi-tenant con cifrado AES-256-GCM por tenant, autorización revalidada en cada petición y registros firmados inmutables.',
-      en: 'CareLink: multi-tenant clinical platform with per-tenant AES-256-GCM encryption, per-request authorization and immutable signed records.',
-    },
-    problem: {
-      es: 'Varias instituciones de salud comparten una base de datos, y ningún registro clínico firmado puede editarse ni ningún especialista puede leer pacientes que no le corresponden.',
-      en: 'Several healthcare institutions share one database, and no signed clinical record may be edited and no specialist may read patients outside their care.',
-    },
-    stack: ['Java', 'Spring Boot', 'PostgreSQL 16', 'React 18', 'Vite', 'Docker', 'Flyway'],
-    status: 'repositorio',
-    dataFlow: {
-      es: 'Navegador (SPA en React) → API en Spring Boot: el filtro JWT valida la firma RS256 antes de leer el payload → casos de uso que validan institución (tenant) y servicio en cada petición → adaptador de cifrado AES-256-GCM → PostgreSQL con un schema por institución y una bitácora de auditoría append-only.',
-      en: 'Browser (React SPA) → Spring Boot API: the JWT filter validates the RS256 signature before reading the payload → use cases that validate institution (tenant) and service on every request → AES-256-GCM encryption adapter → PostgreSQL with one schema per institution and an append-only audit log.',
-    },
-    assets: {
-      es: [
-        'Información de salud (notas clínicas), cifrada en reposo',
-        'Encuentros clínicos firmados',
-        'Bitácora de auditoría',
-        'Clave maestra de cifrado y claves derivadas por institución',
-        'Par de claves RS256 de los JWT',
-      ],
-      en: [
-        'Health information (clinical notes), encrypted at rest',
-        'Signed clinical encounters',
-        'Audit log',
-        'Master encryption key and per-institution derived keys',
-        'RS256 JWT key pair',
-      ],
-    },
-    threatModel: doc(
-      'carelink',
-      'docs/SRS.md',
-      { es: 'Threat model, docs/SRS.md §8.1', en: 'Threat model, docs/SRS.md §8.1' },
-      '81-threat-model-stride-merged'
-    ),
-    threats: [
-      {
-        text: {
-          es: 'Acceso a información de salud de otra institución por IDOR en la API.',
-          en: 'Access to another institution’s health information through IDOR in the API.',
-        },
-      },
-      {
-        text: {
-          es: 'Un especialista conserva el acceso al paciente después de cerrarse la interconsulta.',
-          en: 'A specialist keeps access to the patient after the referral closes.',
-        },
-      },
-      {
-        text: {
-          es: 'Re-identificación de pacientes cruzando agregados del motor de conocimiento.',
-          en: 'Patient re-identification by cross-referencing knowledge engine aggregates.',
-        },
-      },
-      {
-        text: {
-          es: 'Alteración de la bitácora de auditoría con acceso directo a la base.',
-          en: 'Audit log tampering through direct database access.',
-        },
-      },
-      {
-        text: {
-          es: 'JWT manipulado para escalar de rol.',
-          en: 'Tampered JWT used to escalate role.',
-        },
-      },
-    ],
-    controlGroups: [
-      {
-        controls: [
-          {
-            title: {
-              es: 'Trigger de PostgreSQL que bloquea la edición de encuentros firmados',
-              en: 'PostgreSQL trigger that blocks edits to signed encounters',
-            },
-            why: {
-              es: 'La regla vive en la base: rechaza el UPDATE aunque llegue desde un cliente SQL o una migración, no solo desde la API.',
-              en: 'The rule lives in the database: it rejects the UPDATE even when it comes from a SQL client or a migration, not only from the API.',
-            },
-            evidence: [
-              code('carelink', 'services/identity-service/src/main/resources/db/tenant/tenant_template.sql', 'L127-L140'),
-            ],
-          },
-          {
-            title: {
-              es: 'Cifrado AES-256-GCM con clave derivada por institución',
-              en: 'AES-256-GCM encryption with a per-institution derived key',
-            },
-            why: {
-              es: 'IV aleatorio en cada operación y una clave por institución derivada con HMAC-SHA256: un volcado sin claves no se lee, y la clave de una institución no abre otra. Deuda declarada en el repo: la clave maestra vive en una variable de entorno, no en un KMS.',
-              en: 'Random IV per operation and a per-institution key derived with HMAC-SHA256: a dump without keys cannot be read, and one institution’s key does not open another. Debt stated in the repo: the master key lives in an environment variable, not in a KMS.',
-            },
-            evidence: [
-              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/encryption/AesGcmEncryptionService.java', 'L45'),
-              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/encryption/AesGcmEncryptionService.java', 'L116-L118'),
-            ],
-          },
-          {
-            title: {
-              es: 'Autorización revalidada en cada petición contra el estado de la interconsulta',
-              en: 'Authorization revalidated on every request against the referral status',
-            },
-            why: {
-              es: 'El permiso del especialista es un EXISTS sobre la interconsulta abierta, sin caché: cerrarla revoca el acceso en la siguiente petición, sin esperar a que caduque el token.',
-              en: 'The specialist’s permission is an EXISTS over the open referral, with no cache: closing it revokes access on the next request, without waiting for the token to expire.',
-            },
-            evidence: [
-              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/persistence/JdbcInterconsultationRepository.java', 'L44-L63'),
-            ],
-          },
-          {
-            title: {
-              es: 'Supresión de agregados clínicos con menos de 5 pacientes distintos',
-              en: 'Suppression of clinical aggregates with fewer than 5 distinct patients',
-            },
-            why: {
-              es: 'El umbral va dentro de la consulta (HAVING COUNT(DISTINCT patient_id)), así que el grupo pequeño nunca sale de la base: defensa contra la re-identificación.',
-              en: 'The threshold sits inside the query (HAVING COUNT(DISTINCT patient_id)), so the small group never leaves the database: a defense against re-identification.',
-            },
-            evidence: [
-              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/persistence/JdbcKnowledgeEngineRepository.java', 'L89-L91'),
-            ],
-          },
-          {
-            title: {
-              es: 'Bitácora de auditoría append-only',
-              en: 'Append-only audit log',
-            },
-            why: {
-              es: 'Triggers que rechazan UPDATE y DELETE sobre la bitácora: quién hizo qué queda registrado aunque alguien tenga acceso a la base.',
-              en: 'Triggers that reject UPDATE and DELETE on the log: who did what stays recorded even for someone with database access.',
-            },
-            evidence: [
-              code('carelink', 'services/identity-service/src/main/resources/db/tenant/tenant_template.sql', 'L63-L76'),
-            ],
-          },
-        ],
-      },
-    ],
-    verification: [
-      {
-        text: {
-          es: 'Tests de integración contra PostgreSQL real: un encuentro firmado rechaza la edición, el acceso se revoca al cerrar la interconsulta, una columna con información de salud no se lee en claro y un paciente es invisible entre servicios.',
-          en: 'Integration tests against real PostgreSQL: a signed encounter rejects edits, access is revoked when the referral closes, a health information column cannot be read in plain text and a patient is invisible across services.',
-        },
-        evidence: [
-          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/ClinicalEncounterLifecycleIT.java', 'L65'),
-          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/InterconsultationLifecycleIT.java', 'L57'),
-          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/infrastructure/encryption/PhiColumnCannotBeReadAsPlaintextIT.java'),
-          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/ServiceScopeIsolationIT.java', 'L71'),
-        ],
-      },
-      {
-        text: {
-          es: 'CI en cada push: build con tests, Semgrep con reglas propias y gitleaks. OWASP dependency-check configurado; hoy no bloqueante hasta configurar la clave de NVD.',
-          en: 'CI on every push: build with tests, Semgrep with custom rules and gitleaks. OWASP dependency-check configured; not blocking until the NVD key is set up.',
-        },
-        evidence: [
-          code('carelink', '.github/workflows/ci.yml', 'L71-L101'),
-          tree('carelink', '.semgrep', { es: 'Reglas Semgrep propias', en: 'Custom Semgrep rules' }),
-        ],
-      },
-      {
-        text: {
-          es: 'Dos auditorías documentadas contra el sistema en ejecución: SAST, sqlmap y barrido de secretos; después, una batería manual de autorización (IDOR, bypass de rol, JWT, límite de intentos) que encontró y corrigió un hallazgo de severidad alta.',
-          en: 'Two documented audits against the running system: SAST, sqlmap and a secrets sweep; then a manual authorization battery (IDOR, role bypass, JWT, rate limiting) that found and fixed one high severity finding.',
-        },
-        evidence: [
-          code('carelink', 'docs/security/AUDIT-2026-08-06.md'),
-          code('carelink', 'docs/security/AUDIT-2026-08-07.md'),
-        ],
-      },
-    ],
-    links: [
-      { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.carelink },
-      doc(
-        'carelink',
-        'docs/SRS.md',
-        { es: 'Sin demo pública, por diseño (SRS §1.6)', en: 'No public demo, by design (SRS §1.6)' },
-        '16-nature-of-the-artifact-and-limits-of-use'
-      ),
-      tree('carelink', 'docs/adr', { es: 'ADRs', en: 'ADRs' }),
-      doc('carelink', 'docs/portfolio/SCREENSHOTS.md', { es: 'Capturas del sistema', en: 'System screenshots' }),
-    ],
-    screenshot: {
-      src: '/proyectos/carelink.png',
-      alt: {
-        es: 'Pantalla de CareLink mostrando el intento de editar un encuentro clínico ya firmado, rechazado con un error 409 por un trigger de la base de datos.',
-        en: 'CareLink screen showing an attempt to edit an already signed clinical encounter, rejected with a 409 error by a database trigger.',
-      },
-    },
-  },
+export const projectCases: readonly ProjectCase[] = [
   {
     /*
      * Fuente: repo público grupogpsi12/SEG, commit 63bef20 (revisado el
@@ -1091,6 +938,8 @@ export const securityCases: readonly SecurityCase[] = [
      * docs/evidencia/rendimiento-2026-10-24.md.
      */
     slug: 'seg',
+    categories: ['seguridad', 'pruebas', 'desarrollo'],
+    featured: true,
     kicker: {
       es: 'Sistema JML de ingreso, cambios y retiro de personal. Proyecto de la especialización',
       en: 'JML system for joiners, movers and leavers. Postgraduate project',
@@ -1106,6 +955,14 @@ export const securityCases: readonly SecurityCase[] = [
     problem: {
       es: 'Cuando RRHH registra un ingreso, un cambio o un retiro, TI tiene que crear, ajustar o revocar accesos sin perder ni duplicar tareas, aunque el sistema de tickets esté caído. Empresa ficticia (Andina Servicios S.A.S.) y datos ficticios.',
       en: 'When HR records a joiner, a mover or a leaver, IT has to create, adjust or revoke access without losing or duplicating tasks, even when the ticketing system is down. Fictitious company (Andina Servicios S.A.S.) and fictitious data.',
+    },
+    outcome: {
+      es: 'Ingresos, cambios y retiros que generan sus tickets en GLPI, verificados con 2.574 pruebas y una auditoría de 39 hallazgos.',
+      en: 'Joiners, movers and leavers that create their GLPI tickets, verified with 2,574 tests and a 39-finding audit.',
+    },
+    built: {
+      es: 'Diseñé y construí el sistema completo: dominio hexagonal en Django, WAF en el borde, integración con GLPI por bandeja de salida y la auditoría con evidencia.',
+      en: 'Designed and built the whole system: hexagonal Django domain, WAF at the edge, GLPI integration through an outbox and the evidence-based audit.',
     },
     stack: ['Python 3.12', 'Django 5.2 LTS', 'PostgreSQL 17', 'Docker Compose', 'BunkerWeb (ModSecurity, OWASP CRS 4)', 'Supabase Auth', 'GLPI 11'],
     status: 'repositorio',
@@ -1336,15 +1193,15 @@ export const securityCases: readonly SecurityCase[] = [
       },
     ],
     openItems: {
+      // Clasificación por estado de auditoria/score-global.md y el campo
+      // "Estado" de cada hallazgo (auditoria/hallazgos/B-nn.md), 2026-11-21.
       es: [
-        '17 de los 39 hallazgos siguen abiertos o aceptados: ninguno crítico ni alto (4 medios, 9 bajos y 4 informativos). Score global 1,2 de 100 sobre 147 controles ASVS verificados.',
-        'Los abiertos son sobre todo decisiones de endurecimiento pendientes de ADR (segmentación de la red interna y ejecución de contenedores) y la protección de la rama principal.',
-        'Vulnerabilidades sin parche disponible en la imagen base y en imágenes de terceros, aceptadas con exención escrita y pendientes de un procedimiento de actualización.',
+        '17 de los 39 hallazgos siguen en pie, ninguno crítico ni alto: 3 aceptados (1 con exención escrita), 5 abiertos por decisión del equipo, 4 por endurecimiento pendiente y 5 de documentación, métricas o pruebas. Score global 1,2 de 100 sobre 147 controles ASVS verificados.',
+        'La versión propia que cierre estos puntos está planeada después de los proyectos actuales.',
       ],
       en: [
-        '17 of the 39 findings remain open or accepted: none critical or high (4 medium, 9 low and 4 informational). Global score 1.2 out of 100 over 147 verified ASVS controls.',
-        'The open ones are mostly hardening decisions pending an ADR (internal network segmentation and container runtime) and main branch protection.',
-        'Vulnerabilities with no patch available in the base image and in third-party images, accepted with a written exemption and pending an update procedure.',
+        '17 of the 39 findings remain, none critical or high: 3 accepted (1 with a written exemption), 5 open by team decision, 4 pending hardening and 5 about documentation, metrics or tests. Global score 1.2 out of 100 over 147 verified ASVS controls.',
+        'My own version that closes these points is planned after the current projects.',
       ],
     },
     role: {
@@ -1359,7 +1216,442 @@ export const securityCases: readonly SecurityCase[] = [
     ],
   },
   {
+    /*
+     * Fuente: repo PRIVADO del sitio de la IPS (no se enlaza), revisado el
+     * 2026-11-19 en un clon de solo lectura. Autoría: 37 de 47 commits de Luis,
+     * 10 de Jhonatan. Lo de Luis según `git log --author`: autenticación del
+     * panel, PQRS, sedes, middleware, cabeceras, retención, aprovisionamiento y
+     * CI. De Jhonatan: validación de adjuntos, respaldos cifrados y copia de
+     * PQRS por correo. STRIDE: SRS-SanJose-IPS-Putumayo-v0.3.docx §7.2.
+     * Regla 4 del dueño: sin rutas internas, versiones exactas ni hallazgos
+     * abiertos (esos están en NOTAS-PRIVADAS.md, fuera de Git).
+     */
+    slug: 'sitio-ips-san-jose',
+    categories: ['desarrollo', 'seguridad'],
+    featured: true,
+    kicker: {
+      es: 'Sitio institucional y panel de administración de una IPS',
+      en: 'Institutional website and admin panel for a healthcare provider',
+    },
+    summary: {
+      es: 'Reemplaza el WordPress de un proveedor externo por un sitio propio con panel de administración, PQRS y documentos regulatorios, en producción sobre Cloudflare.',
+      en: 'Replaces a vendor-run WordPress site with an in-house website with an admin panel, patient requests (PQRS) and regulatory documents, in production on Cloudflare.',
+    },
+    seoDescription: {
+      es: 'Sitio de una IPS en producción: panel con sesión obligatoria, PQRS con radicado no secuencial, límites de solicitudes, CSP estricta y gates en CI.',
+      en: 'Healthcare provider website in production: session-gated panel, PQRS with non-sequential IDs, rate limits, strict CSP and CI gates.',
+    },
+    problem: {
+      es: 'Una institución de salud necesita publicar información y recibir PQRS con datos personales (Ley 1581 de 2012) sin depender de un proveedor externo, con un panel que solo opere el personal autorizado.',
+      en: 'A healthcare institution needs to publish information and receive patient requests containing personal data (Colombian Law 1581 of 2012) without depending on an outside vendor, with a panel only authorized staff can operate.',
+    },
+    outcome: {
+      es: 'Sitio institucional y PQRS en producción para una IPS, sin depender de un proveedor externo.',
+      en: 'Institutional website and patient requests in production for a healthcare provider, with no outside vendor.',
+    },
+    built: {
+      es: 'Construí en equipo de 2 la autenticación del panel, las PQRS de punta a punta, las sedes y los gates de seguridad de la CI.',
+      en: 'Built, in a 2-person team, panel authentication, end-to-end patient requests, locations and the CI security gates.',
+    },
+    stack: ['Astro', 'TypeScript', 'Cloudflare Workers', 'D1', 'R2', 'KV', 'Better Auth', 'Drizzle', 'Zod'],
+    status: 'produccion',
+    privateRepo: true,
+    dataFlow: {
+      es: 'Navegador → Cloudflare Workers (Astro en modo servidor; un middleware exige sesión en todo el panel y se valida el origen de cada mutación) → D1 para contenido y PQRS, R2 para documentos e imágenes, KV para sesiones y límites de solicitudes. Una tarea aparte exporta respaldos cifrados de la base. El sitio corre en Cloudflare; los datos se alojan fuera de Colombia, lo que bajo la Ley 1581 de 2012 implica una transferencia internacional de datos que la institución debe autorizar.',
+      en: 'Browser → Cloudflare Workers (Astro in server mode; a middleware requires a session across the whole panel and every mutation has its origin validated) → D1 for content and PQRS, R2 for documents and images, KV for sessions and rate limits. A separate job exports encrypted database backups. The site runs on Cloudflare; data is hosted outside Colombia, which under Colombian Law 1581 of 2012 is an international data transfer the institution must authorize.',
+    },
+    assets: {
+      es: [
+        'Datos personales de quienes envían PQRS',
+        'Cuenta del panel de administración',
+        'Documentos regulatorios publicados',
+        'Respaldos de la base de datos',
+      ],
+      en: [
+        'Personal data of people who submit PQRS',
+        'Admin panel account',
+        'Published regulatory documents',
+        'Database backups',
+      ],
+    },
+    architecture: [
+      {
+        label: { es: 'Borde', en: 'Edge' },
+        detail: {
+          es: 'Cloudflare: HTTPS forzado, cabeceras de seguridad y CSP sin unsafe-inline.',
+          en: 'Cloudflare: forced HTTPS, security headers and a CSP without unsafe-inline.',
+        },
+      },
+      {
+        label: { es: 'Aplicación', en: 'Application' },
+        detail: {
+          es: 'Astro en Workers: sitio público y panel en un solo artefacto; sesión obligatoria en el panel y validación de entradas con Zod.',
+          en: 'Astro on Workers: public site and panel in a single artifact; mandatory session on the panel and input validation with Zod.',
+        },
+      },
+      {
+        label: { es: 'Datos', en: 'Data' },
+        detail: {
+          es: 'D1 (contenido, PQRS, auditoría), R2 (documentos e imágenes), KV (sesiones y límites).',
+          en: 'D1 (content, PQRS, audit), R2 (documents and images), KV (sessions and limits).',
+        },
+      },
+      {
+        label: { es: 'Respaldo', en: 'Backup' },
+        detail: {
+          es: 'Exportación cifrada con AES-256-GCM y rotación de copias.',
+          en: 'Export encrypted with AES-256-GCM and copy rotation.',
+        },
+      },
+    ],
+    threatNote: {
+      es: 'Modelo de amenazas STRIDE del SRS del proyecto (repositorio privado).',
+      en: 'STRIDE threat model in the project SRS (private repository).',
+    },
+    threats: [
+      {
+        ref: 'T-03',
+        stride: 'Tampering / Information Disclosure',
+        text: {
+          es: 'Inyección SQL a través de los datos de IP y User-Agent que guarda el control de abuso.',
+          en: 'SQL injection through the IP and User-Agent data stored by the abuse control.',
+        },
+      },
+      {
+        ref: 'T-05',
+        stride: 'Information Disclosure',
+        text: {
+          es: 'Exposición de PQRS por enumeración de identificadores, logs o mensajes de error detallados.',
+          en: 'PQRS exposure through ID enumeration, logs or detailed error messages.',
+        },
+      },
+      {
+        ref: 'T-07',
+        stride: 'Denial of Service',
+        text: {
+          es: 'Envío masivo automatizado a los formularios de PQRS o de encuesta.',
+          en: 'Automated mass submission to the PQRS or survey forms.',
+        },
+      },
+      {
+        ref: 'T-09',
+        stride: 'Tampering',
+        text: {
+          es: 'Carga de un archivo malicioso desde el panel.',
+          en: 'Upload of a malicious file from the panel.',
+        },
+      },
+      {
+        ref: 'T-10',
+        stride: 'Spoofing',
+        text: {
+          es: 'Suplantación de las cabeceras Host o X-Forwarded-For para envenenar enlaces o falsear el control de abuso.',
+          en: 'Spoofed Host or X-Forwarded-For headers to poison links or defeat the abuse control.',
+        },
+      },
+    ],
+    controlGroups: [
+      {
+        controls: [
+          {
+            title: { es: 'Sesión obligatoria en todo el panel', en: 'Mandatory session across the panel' },
+            why: {
+              es: 'Un middleware responde sin sesión válida a cualquier ruta del panel o de su API, salvo el ingreso. El rol no se puede fijar desde una solicitud: solo desde el servidor.',
+              en: 'A middleware rejects any panel or panel API route without a valid session, except sign-in. The role cannot be set from a request: only from the server.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Límites que cuentan lo que importa', en: 'Limits that count what matters' },
+            why: {
+              es: 'El límite de ingreso cuenta intentos fallidos, no peticiones; los formularios públicos tienen límite por IP y campo trampa.',
+              en: 'The sign-in limit counts failed attempts, not requests; public forms have a per-IP limit and a honeypot field.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'PQRS sin rastro innecesario', en: 'PQRS with no unnecessary trail' },
+            why: {
+              es: 'Radicado no secuencial ni predecible, páginas de error genéricas y logs sin contenido de las PQRS.',
+              en: 'Non-sequential, unpredictable request IDs, generic error pages and logs without PQRS content.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Cabeceras, origen y dominio permitidos', en: 'Headers, origin and allowed hosts' },
+            why: {
+              es: 'CSP sin unsafe-inline, nosniff y HTTPS forzado; validación de origen en las mutaciones y lista de dominios permitidos para la cabecera Host.',
+              en: 'CSP without unsafe-inline, nosniff and forced HTTPS; origin validation on mutations and an allowlist for the Host header.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Archivos validados por su contenido', en: 'Files validated by their content' },
+            why: {
+              es: 'El tipo se decide por la firma de bytes, no por la extensión, con límite de tamaño por clase de archivo.',
+              en: 'The type is decided by the byte signature, not the extension, with a size limit per file class.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Respaldos cifrados', en: 'Encrypted backups' },
+            why: {
+              es: 'La base se exporta cifrada con AES-256-GCM, con rotación de copias.',
+              en: 'The database is exported encrypted with AES-256-GCM, with copy rotation.',
+            },
+            evidence: [],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: 'CI en cada cambio: lint, una regla estática que rechaza SQL sin parametrizar, pruebas con cobertura, build, una matriz de humo y pnpm audit; gitleaks sobre todo el historial.',
+          en: 'CI on every change: lint, a static rule that rejects non-parameterized SQL, tests with coverage, build, a smoke matrix and pnpm audit; gitleaks across the full history.',
+        },
+        evidence: [],
+      },
+      {
+        text: {
+          es: 'Auditoría propia con checklist ejecutable y verificación contra el entorno desplegado, y corrección de sus hallazgos antes de la entrega.',
+          en: 'Internal audit with an executable checklist and verification against the deployed environment, with its findings fixed before delivery.',
+        },
+        evidence: [],
+      },
+    ],
+    openItems: {
+      es: ['La política de retención de las PQRS está en definición con la institución.'],
+      en: ['The PQRS retention policy is being defined with the institution.'],
+    },
+    role: {
+      es: 'En equipo de 2 (37 de 47 commits): autenticación del panel, PQRS de punta a punta, sedes, middleware, cabeceras de seguridad, retención, aprovisionamiento del entorno y gates de CI. La validación de adjuntos, los respaldos cifrados y la copia de PQRS por correo son del otro integrante.',
+      en: 'In a 2-person team (37 of 47 commits): panel authentication, end-to-end PQRS, locations, middleware, security headers, retention, environment provisioning and CI gates. File validation, encrypted backups and the PQRS email copy belong to the other team member.',
+    },
+    links: [
+      { label: { es: 'Sitio público', en: 'Public website' }, href: 'https://sanjoseipsputumayo.com.co/' },
+    ],
+  },
+  {
+    slug: 'carelink',
+    categories: ['seguridad', 'desarrollo'],
+    featured: true,
+    kicker: {
+      es: 'Plataforma clínica multi-tenant, implementación de referencia',
+      en: 'Multi-tenant clinical platform, reference implementation',
+    },
+    summary: {
+      es: 'Historia clínica, triage y coordinación entre especialistas para varias instituciones sobre una misma base, con el control de acceso y el cifrado aplicados en la base de datos y en cada petición.',
+      en: 'Clinical history, triage and specialist coordination for several institutions on a shared database, with access control and encryption enforced in the database and on every request.',
+    },
+    seoDescription: {
+      es: 'CareLink: plataforma clínica multi-tenant con cifrado AES-256-GCM por tenant, autorización revalidada en cada petición y registros firmados inmutables.',
+      en: 'CareLink: multi-tenant clinical platform with per-tenant AES-256-GCM encryption, per-request authorization and immutable signed records.',
+    },
+    problem: {
+      es: 'Varias instituciones de salud comparten una base de datos, y ningún registro clínico firmado puede editarse ni ningún especialista puede leer pacientes que no le corresponden.',
+      en: 'Several healthcare institutions share one database, and no signed clinical record may be edited and no specialist may read patients outside their care.',
+    },
+    outcome: {
+      es: 'Registros clínicos firmados que no se editan ni desde la base de datos, acceso de especialistas que se revoca en la petición siguiente y cifrado por institución.',
+      en: 'Signed clinical records that cannot be edited even from the database, specialist access revoked on the next request and per-institution encryption.',
+    },
+    built: {
+      es: 'Diseñé y construí el backend en Spring Boot, el esquema por institución y los controles de acceso y cifrado, con pruebas de integración contra PostgreSQL real.',
+      en: 'Designed and built the Spring Boot backend, the per-institution schema and the access and encryption controls, with integration tests against real PostgreSQL.',
+    },
+    stack: ['Java', 'Spring Boot', 'PostgreSQL 16', 'React 18', 'Vite', 'Docker', 'Flyway'],
+    status: 'repositorio',
+    dataFlow: {
+      es: 'Navegador (SPA en React) → API en Spring Boot: el filtro JWT valida la firma RS256 antes de leer el payload → casos de uso que validan institución (tenant) y servicio en cada petición → adaptador de cifrado AES-256-GCM → PostgreSQL con un schema por institución y una bitácora de auditoría append-only.',
+      en: 'Browser (React SPA) → Spring Boot API: the JWT filter validates the RS256 signature before reading the payload → use cases that validate institution (tenant) and service on every request → AES-256-GCM encryption adapter → PostgreSQL with one schema per institution and an append-only audit log.',
+    },
+    assets: {
+      es: [
+        'Información de salud (notas clínicas), cifrada en reposo',
+        'Encuentros clínicos firmados',
+        'Bitácora de auditoría',
+        'Clave maestra de cifrado y claves derivadas por institución',
+        'Par de claves RS256 de los JWT',
+      ],
+      en: [
+        'Health information (clinical notes), encrypted at rest',
+        'Signed clinical encounters',
+        'Audit log',
+        'Master encryption key and per-institution derived keys',
+        'RS256 JWT key pair',
+      ],
+    },
+    threatModel: doc(
+      'carelink',
+      'docs/SRS.md',
+      { es: 'Threat model, docs/SRS.md §8.1', en: 'Threat model, docs/SRS.md §8.1' },
+      '81-threat-model-stride-merged'
+    ),
+    threats: [
+      {
+        text: {
+          es: 'Acceso a información de salud de otra institución por IDOR en la API.',
+          en: 'Access to another institution’s health information through IDOR in the API.',
+        },
+      },
+      {
+        text: {
+          es: 'Un especialista conserva el acceso al paciente después de cerrarse la interconsulta.',
+          en: 'A specialist keeps access to the patient after the referral closes.',
+        },
+      },
+      {
+        text: {
+          es: 'Re-identificación de pacientes cruzando agregados del motor de conocimiento.',
+          en: 'Patient re-identification by cross-referencing knowledge engine aggregates.',
+        },
+      },
+      {
+        text: {
+          es: 'Alteración de la bitácora de auditoría con acceso directo a la base.',
+          en: 'Audit log tampering through direct database access.',
+        },
+      },
+      {
+        text: {
+          es: 'JWT manipulado para escalar de rol.',
+          en: 'Tampered JWT used to escalate role.',
+        },
+      },
+    ],
+    controlGroups: [
+      {
+        controls: [
+          {
+            title: {
+              es: 'Trigger de PostgreSQL que bloquea la edición de encuentros firmados',
+              en: 'PostgreSQL trigger that blocks edits to signed encounters',
+            },
+            why: {
+              es: 'La regla vive en la base: rechaza el UPDATE aunque llegue desde un cliente SQL o una migración, no solo desde la API.',
+              en: 'The rule lives in the database: it rejects the UPDATE even when it comes from a SQL client or a migration, not only from the API.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/resources/db/tenant/tenant_template.sql', 'L127-L140'),
+            ],
+          },
+          {
+            title: {
+              es: 'Cifrado AES-256-GCM con clave derivada por institución',
+              en: 'AES-256-GCM encryption with a per-institution derived key',
+            },
+            why: {
+              es: 'IV aleatorio en cada operación y una clave por institución derivada con HMAC-SHA256: un volcado sin claves no se lee, y la clave de una institución no abre otra. Deuda declarada en el repo: la clave maestra vive en una variable de entorno, no en un KMS.',
+              en: 'Random IV per operation and a per-institution key derived with HMAC-SHA256: a dump without keys cannot be read, and one institution’s key does not open another. Debt stated in the repo: the master key lives in an environment variable, not in a KMS.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/encryption/AesGcmEncryptionService.java', 'L45'),
+              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/encryption/AesGcmEncryptionService.java', 'L116-L118'),
+            ],
+          },
+          {
+            title: {
+              es: 'Autorización revalidada en cada petición contra el estado de la interconsulta',
+              en: 'Authorization revalidated on every request against the referral status',
+            },
+            why: {
+              es: 'El permiso del especialista es un EXISTS sobre la interconsulta abierta, sin caché: cerrarla revoca el acceso en la siguiente petición, sin esperar a que caduque el token.',
+              en: 'The specialist’s permission is an EXISTS over the open referral, with no cache: closing it revokes access on the next request, without waiting for the token to expire.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/persistence/JdbcInterconsultationRepository.java', 'L44-L63'),
+            ],
+          },
+          {
+            title: {
+              es: 'Supresión de agregados clínicos con menos de 5 pacientes distintos',
+              en: 'Suppression of clinical aggregates with fewer than 5 distinct patients',
+            },
+            why: {
+              es: 'El umbral va dentro de la consulta (HAVING COUNT(DISTINCT patient_id)), así que el grupo pequeño nunca sale de la base: defensa contra la re-identificación.',
+              en: 'The threshold sits inside the query (HAVING COUNT(DISTINCT patient_id)), so the small group never leaves the database: a defense against re-identification.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/java/com/carelink/clinical/infrastructure/persistence/JdbcKnowledgeEngineRepository.java', 'L89-L91'),
+            ],
+          },
+          {
+            title: {
+              es: 'Bitácora de auditoría append-only',
+              en: 'Append-only audit log',
+            },
+            why: {
+              es: 'Triggers que rechazan UPDATE y DELETE sobre la bitácora: quién hizo qué queda registrado aunque alguien tenga acceso a la base.',
+              en: 'Triggers that reject UPDATE and DELETE on the log: who did what stays recorded even for someone with database access.',
+            },
+            evidence: [
+              code('carelink', 'services/identity-service/src/main/resources/db/tenant/tenant_template.sql', 'L63-L76'),
+            ],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: 'Tests de integración contra PostgreSQL real: un encuentro firmado rechaza la edición, el acceso se revoca al cerrar la interconsulta, una columna con información de salud no se lee en claro y un paciente es invisible entre servicios.',
+          en: 'Integration tests against real PostgreSQL: a signed encounter rejects edits, access is revoked when the referral closes, a health information column cannot be read in plain text and a patient is invisible across services.',
+        },
+        evidence: [
+          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/ClinicalEncounterLifecycleIT.java', 'L65'),
+          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/InterconsultationLifecycleIT.java', 'L57'),
+          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/infrastructure/encryption/PhiColumnCannotBeReadAsPlaintextIT.java'),
+          code('carelink', 'services/identity-service/src/test/java/com/carelink/clinical/ServiceScopeIsolationIT.java', 'L71'),
+        ],
+      },
+      {
+        text: {
+          es: 'CI en cada push: build con tests, Semgrep con reglas propias y gitleaks. OWASP dependency-check configurado; hoy no bloqueante hasta configurar la clave de NVD.',
+          en: 'CI on every push: build with tests, Semgrep with custom rules and gitleaks. OWASP dependency-check configured; not blocking until the NVD key is set up.',
+        },
+        evidence: [
+          code('carelink', '.github/workflows/ci.yml', 'L71-L101'),
+          tree('carelink', '.semgrep', { es: 'Reglas Semgrep propias', en: 'Custom Semgrep rules' }),
+        ],
+      },
+      {
+        text: {
+          es: 'Dos auditorías documentadas contra el sistema en ejecución: SAST, sqlmap y barrido de secretos; después, una batería manual de autorización (IDOR, bypass de rol, JWT, límite de intentos) que encontró y corrigió un hallazgo de severidad alta.',
+          en: 'Two documented audits against the running system: SAST, sqlmap and a secrets sweep; then a manual authorization battery (IDOR, role bypass, JWT, rate limiting) that found and fixed one high severity finding.',
+        },
+        evidence: [
+          code('carelink', 'docs/security/AUDIT-2026-08-06.md'),
+          code('carelink', 'docs/security/AUDIT-2026-08-07.md'),
+        ],
+      },
+    ],
+    role: {
+      es: 'Solo: 46 de 46 commits del repositorio. Especificación, arquitectura, backend, pruebas de integración y las dos auditorías.',
+      en: 'Solo: 46 of the 46 commits in the repository. Specification, architecture, backend, integration tests and both audits.',
+    },
+    links: [
+      { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.carelink },
+      doc(
+        'carelink',
+        'docs/SRS.md',
+        { es: 'Sin demo pública, por diseño (SRS §1.6)', en: 'No public demo, by design (SRS §1.6)' },
+        '16-nature-of-the-artifact-and-limits-of-use'
+      ),
+      tree('carelink', 'docs/adr', { es: 'ADRs', en: 'ADRs' }),
+      doc('carelink', 'docs/portfolio/SCREENSHOTS.md', { es: 'Capturas del sistema', en: 'System screenshots' }),
+    ],
+    screenshot: {
+      src: '/proyectos/carelink.png',
+      alt: {
+        es: 'Pantalla de CareLink mostrando el intento de editar un encuentro clínico ya firmado, rechazado con un error 409 por un trigger de la base de datos.',
+        en: 'CareLink screen showing an attempt to edit an already signed clinical encounter, rejected with a 409 error by a database trigger.',
+      },
+    },
+  },
+  {
     slug: 'elevaforge',
+    categories: ['desarrollo'],
     kicker: {
       es: 'Sitio y panel de administración de un estudio de software',
       en: 'Site and admin panel for a software studio',
@@ -1375,6 +1667,14 @@ export const securityCases: readonly SecurityCase[] = [
     problem: {
       es: 'El equipo edita el contenido del sitio desde un panel, y ni ese panel ni la clave pública que viaja al navegador deben convertirse en la vía de acceso a los datos de clientes potenciales.',
       en: 'The team edits the site content from a panel, and neither that panel nor the public key shipped to the browser may become the way into prospective clients’ data.',
+    },
+    outcome: {
+      es: 'Sitio en producción que el equipo edita desde su propio panel, sin que la clave pública del navegador habilite ninguna consulta.',
+      en: 'Production site the team edits from its own panel, with the browser public key enabling no query.',
+    },
+    built: {
+      es: 'Construí el sitio y el panel multi-cuenta, dirigí la migración de Angular a Next.js 14 y diseñé la autorización deny-by-default.',
+      en: 'Built the site and the multi-account panel, led the migration from Angular to Next.js 14 and designed deny-by-default authorization.',
     },
     stack: ['Next.js', 'TypeScript', 'Supabase', 'PostgreSQL', 'Upstash', 'Vercel'],
     status: 'produccion',
@@ -1532,6 +1832,10 @@ export const securityCases: readonly SecurityCase[] = [
         ],
       },
     ],
+    role: {
+      es: 'En equipo de 3: 99 de 114 commits son míos (medido en Git). Arquitectura, autorización deny-by-default, migración a Next.js 14, panel de administración y CI.',
+      en: 'In a 3-person team: 99 of the 114 commits are mine (measured in Git). Architecture, deny-by-default authorization, migration to Next.js 14, admin panel and CI.',
+    },
     links: [
       { label: { es: 'elevaforge.com', en: 'elevaforge.com' }, href: 'https://www.elevaforge.com' },
       { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.elevaforge },
@@ -1551,7 +1855,210 @@ export const securityCases: readonly SecurityCase[] = [
     },
   },
   {
+    /*
+     * Fuente: repo PRIVADO de rx-gmail-pdf (no se enlaza), revisado el
+     * 2026-11-19. Autoría: 75 de 75 commits de Luis. STRIDE: docs/SRS.md §7.
+     * Estado: el SRS v2.8 dice que un pendiente institucional (R-10) bloquea
+     * solo la puesta en producción. Luis confirma la puesta en producción para
+     * el 2026-11-20: cambiar `status` a 'produccion' cuando esté corriendo, no
+     * antes (tarea en tasks/todo.md). Sin remitente, rutas ni versiones exactas.
+     */
+    slug: 'radiografias-ips-san-jose',
+    categories: ['desarrollo', 'pruebas'],
+    kicker: {
+      es: 'Herramienta interna de una IPS: radiografías del correo a PDF',
+      en: 'Internal tool for a healthcare provider: X-rays from email to PDF',
+    },
+    summary: {
+      es: 'Descarga cada hora hábil las radiografías panorámicas que un prestador envía por correo y las deja en PDF sin recodificar, listas para facturar, con el remitente verificado y la fidelidad comprobada.',
+      en: 'Every business hour, downloads the panoramic X-rays a provider sends by email and stores them as PDF without re-encoding, ready for billing, with the sender verified and fidelity checked.',
+    },
+    seoDescription: {
+      es: 'Herramienta que pasa radiografías del correo a PDF sin recodificar: OAuth de solo lectura, DKIM y DMARC, validación de imágenes y SHA-256.',
+      en: 'Tool that turns emailed X-rays into PDF without re-encoding: read-only OAuth, DKIM and DMARC checks, image validation and SHA-256.',
+    },
+    problem: {
+      es: 'Facturación necesita como soporte las radiografías que llegan por correo, y buscarlas a mano dejaba servicios sin facturar. Son datos de salud (Ley 1581 de 2012): la herramienta no puede alterar la imagen ni exponer el nombre del paciente.',
+      en: 'Billing needs the X-rays that arrive by email as supporting documents, and finding them by hand left services unbilled. They are health data (Colombian Law 1581 of 2012): the tool cannot alter the image or expose the patient name.',
+    },
+    outcome: {
+      es: 'Cada radiografía que llega por correo queda en un PDF idéntico al original, lista para facturar, sin búsquedas manuales.',
+      en: 'Every X-ray that arrives by email ends up in a PDF identical to the original, ready for billing, with no manual searching.',
+    },
+    built: {
+      es: 'Construí solo la herramienta completa: especificación con modelo de amenazas, código, pruebas y runbook.',
+      en: 'Built the whole tool on my own: specification with a threat model, code, tests and runbook.',
+    },
+    stack: ['Python', 'Gmail API', 'OAuth 2.0', 'img2pdf', 'Pillow', 'SQLite', 'Windows'],
+    status: 'preproduccion',
+    privateRepo: true,
+    dataFlow: {
+      es: 'Programador de tareas (cada hora hábil) → lectura del buzón dedicado con OAuth de solo lectura → verificación del veredicto DKIM y DMARC del servidor de correo → validación del JPEG → conversión a PDF sin recodificar y comparación SHA-256 → escritura en una carpeta local con disco cifrado, organizada por año y mes. Un monitor externo avisa si deja de correr.',
+      en: 'Task Scheduler (every business hour) → read-only OAuth access to the dedicated mailbox → check of the mail server DKIM and DMARC verdict → JPEG validation → PDF conversion without re-encoding and SHA-256 comparison → write to a local folder on an encrypted disk, organized by year and month. An external monitor alerts if it stops running.',
+    },
+    assets: {
+      es: [
+        'Radiografías e identidad del paciente',
+        'Token de acceso al buzón',
+        'Integridad y disponibilidad de los PDF',
+        'Estado local que relaciona correos y archivos',
+      ],
+      en: [
+        'X-rays and patient identity',
+        'Mailbox access token',
+        'Integrity and availability of the PDFs',
+        'Local state linking emails and files',
+      ],
+    },
+    architecture: [
+      {
+        label: { es: 'Entrada', en: 'Input' },
+        detail: {
+          es: 'Buzón dedicado, OAuth con permiso de solo lectura.',
+          en: 'Dedicated mailbox, OAuth with read-only scope.',
+        },
+      },
+      {
+        label: { es: 'Verificación', en: 'Verification' },
+        detail: {
+          es: 'Remitente exacto, DKIM y DMARC; JPEG válido y dentro de los límites.',
+          en: 'Exact sender, DKIM and DMARC; valid JPEG within limits.',
+        },
+      },
+      {
+        label: { es: 'Conversión', en: 'Conversion' },
+        detail: {
+          es: 'PDF sin recodificar; SHA-256 del JPEG incrustado igual al original.',
+          en: 'PDF without re-encoding; SHA-256 of the embedded JPEG equal to the original.',
+        },
+      },
+      {
+        label: { es: 'Salida', en: 'Output' },
+        detail: {
+          es: 'Carpeta local en disco cifrado, archivos completos e inmutables; monitor externo y avisos locales de catálogo cerrado.',
+          en: 'Local folder on an encrypted disk, complete and immutable files; external monitor and closed-catalog local alerts.',
+        },
+      },
+    ],
+    threatNote: {
+      es: 'Modelo de amenazas STRIDE del SRS del proyecto (repositorio privado).',
+      en: 'STRIDE threat model in the project SRS (private repository).',
+    },
+    threats: [
+      {
+        ref: 'T-01',
+        stride: 'Spoofing',
+        text: { es: 'Correo falsificado del remitente.', en: 'Forged email from the sender.' },
+      },
+      {
+        ref: 'T-03',
+        stride: 'Tampering / Elevation of Privilege',
+        text: {
+          es: 'Recorrido de rutas o nombre de archivo reservado.',
+          en: 'Path traversal or reserved file name.',
+        },
+      },
+      {
+        ref: 'T-04',
+        stride: 'Denial of Service / Elevation of Privilege',
+        text: {
+          es: 'JPEG malformado o bomba de descompresión.',
+          en: 'Malformed JPEG or decompression bomb.',
+        },
+      },
+      {
+        ref: 'T-05',
+        stride: 'Information Disclosure',
+        text: { es: 'Robo del token de acceso al buzón.', en: 'Theft of the mailbox access token.' },
+      },
+      {
+        ref: 'T-06',
+        stride: 'Information Disclosure',
+        text: {
+          es: 'Nombre del paciente en la pantalla de bloqueo, los logs o el monitor.',
+          en: 'Patient name on the lock screen, in logs or in the monitor.',
+        },
+      },
+    ],
+    controlGroups: [
+      {
+        controls: [
+          {
+            title: { es: 'Autenticidad del remitente', en: 'Sender authenticity' },
+            why: {
+              es: 'Solo cuenta el primer veredicto de autenticación del servidor de correo, y exige DMARC y DKIM del dominio del remitente: un veredicto inyectado más abajo en las cabeceras no pasa.',
+              en: 'Only the first authentication verdict from the mail server counts, and it requires DMARC and DKIM for the sender domain: a verdict injected further down the headers does not pass.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Validación de imagen sin atajos', en: 'Image validation without shortcuts' },
+            why: {
+              es: 'Límite de tamaño y límite de píxeles activo; incluso el aviso de bomba de descompresión se trata como rechazo.',
+              en: 'Size limit and an active pixel limit; even the decompression bomb warning is treated as a rejection.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Conversión sin pérdida, comprobada', en: 'Lossless conversion, checked' },
+            why: {
+              es: 'El PDF incrusta los bytes originales del JPEG y se compara el SHA-256 del JPEG extraído con el original: en una imagen diagnóstica, recodificar es un riesgo de integridad.',
+              en: 'The PDF embeds the original JPEG bytes and the SHA-256 of the extracted JPEG is compared with the original: in a diagnostic image, re-encoding is an integrity risk.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Nombres saneados y escritura atómica', en: 'Sanitized names and atomic writes' },
+            why: {
+              es: 'Se neutralizan el recorrido de rutas y los nombres reservados de Windows, y los temporales nunca se escriben en la carpeta que leen los usuarios.',
+              en: 'Path traversal and reserved Windows names are neutralized, and temporary files are never written to the folder users read.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Secretos fuera de archivos', en: 'Secrets out of files' },
+            why: {
+              es: 'Los cuatro secretos viven en el almacén de credenciales del sistema operativo, nunca en archivos, variables de entorno, logs ni el repositorio.',
+              en: 'The four secrets live in the operating system credential store, never in files, environment variables, logs or the repository.',
+            },
+            evidence: [],
+          },
+          {
+            title: { es: 'Avisos y logs sin datos del paciente', en: 'Alerts and logs without patient data' },
+            why: {
+              es: 'Las notificaciones salen de un catálogo cerrado de mensajes fijos (solo se pasa un índice) y los logs nunca registran nombres de archivo ni asuntos.',
+              en: 'Notifications come from a closed catalog of fixed messages (only an index is passed) and logs never record file names or subjects.',
+            },
+            evidence: [],
+          },
+        ],
+      },
+    ],
+    verification: [
+      {
+        text: {
+          es: 'La CI instala dependencias con hash obligatorio y exige cobertura de ramas del 85 % global y del 100 % en los módulos de saneamiento y autenticidad, además de pip-audit y gitleaks sobre el historial.',
+          en: 'CI installs dependencies with mandatory hashes and requires 85% overall branch coverage and 100% on the sanitization and authenticity modules, plus pip-audit and gitleaks across the history.',
+        },
+        evidence: [],
+      },
+      {
+        text: {
+          es: 'Desarrollo aislado de los datos reales: entornos de producción y prueba separados, sin acceso del entorno de desarrollo a radiografías ni a secretos de producción.',
+          en: 'Development isolated from real data: separate production and test environments, with no access from the development environment to X-rays or production secrets.',
+        },
+        evidence: [],
+      },
+    ],
+    role: {
+      es: 'Solo (75 de 75 commits): especificación con modelo de amenazas STRIDE y 13 ADR, código, pruebas y runbook de operación.',
+      en: 'Solo (75 of 75 commits): specification with a STRIDE threat model and 13 ADRs, code, tests and operations runbook.',
+    },
+    links: [],
+  },
+  {
     slug: 'tributary',
+    categories: ['desarrollo', 'pruebas', 'seguridad'],
     kicker: {
       es: 'Motor de facturación electrónica multirrégimen, implementación de referencia',
       en: 'Multi-regime e-invoicing engine, reference implementation',
@@ -1567,6 +2074,14 @@ export const securityCases: readonly SecurityCase[] = [
     problem: {
       es: 'Una venta transfronteriza se emite bajo tres regímenes fiscales incompatibles, y un registro emitido no puede alterarse sin que se detecte ni duplicarse por una respuesta perdida. Implementación de referencia, no certificada para producción.',
       en: 'One cross-border sale is issued under three incompatible fiscal regimes, and an issued record cannot be altered undetected or duplicated by a lost response. Reference implementation, not certified for production.',
+    },
+    outcome: {
+      es: 'Una venta, tres regímenes fiscales: registros inmutables con una cadena de hashes verificable y 13 controles con criterio binario.',
+      en: 'One sale, three fiscal regimes: immutable records with a verifiable hash chain and 13 controls with a binary criterion.',
+    },
+    built: {
+      es: 'Diseñé y construí el motor, los adaptadores por país y su verificación: Testcontainers, reglas de Semgrep probadas contra fixtures y 4 gates en CI.',
+      en: 'Designed and built the engine, the per-country adapters and their verification: Testcontainers, Semgrep rules proven against fixtures and 4 CI gates.',
     },
     stack: ['Java 21', 'Spring Boot', 'PostgreSQL 16', 'Flyway', 'React 19', 'Testcontainers', 'Docker'],
     status: 'repositorio',
@@ -1765,6 +2280,10 @@ export const securityCases: readonly SecurityCase[] = [
         evidence: [doc('tributary', 'README.md', { es: 'Quickstart', en: 'Quickstart' }, 'quickstart')],
       },
     ],
+    role: {
+      es: 'Solo: 80 de 80 commits del repositorio. Especificación, dominio, adaptadores, verificación y CI.',
+      en: 'Solo: 80 of the 80 commits in the repository. Specification, domain, adapters, verification and CI.',
+    },
     links: [
       { label: { es: 'Repositorio', en: 'Repository' }, href: REPO.tributary },
       doc(
@@ -1793,6 +2312,7 @@ export const securityCases: readonly SecurityCase[] = [
   },
   {
     slug: 'koa',
+    categories: ['desarrollo'],
     kicker: {
       es: 'Landing de lista de espera y tienda bilingüe de demostración',
       en: 'Waitlist landing page and bilingual demo store',
@@ -1808,6 +2328,14 @@ export const securityCases: readonly SecurityCase[] = [
     problem: {
       es: 'Un formulario público y un checkout son lo primero que encuentran los bots y quien manipula peticiones: la lista de espera tiene que medir interés real y el total de la compra no puede salir del navegador.',
       en: 'A public form and a checkout are the first things bots and request tamperers find: the waitlist has to measure real interest and the purchase total cannot come from the browser.',
+    },
+    outcome: {
+      es: 'Demo de lanzamiento y tienda: el precio siempre sale del servidor y la lista de espera solo cuenta correos confirmados.',
+      en: 'Launch demo and store: the price always comes from the server and the waitlist only counts confirmed addresses.',
+    },
+    built: {
+      es: 'Construí la landing y la tienda con sus controles de abuso y de lógica de negocio.',
+      en: 'Built the landing page and the store with their abuse and business logic controls.',
     },
     stack: ['Astro', 'React', 'TypeScript', 'Neon Postgres', 'Upstash', 'Turnstile', 'Resend', 'Vercel'],
     status: 'demo',
@@ -1980,6 +2508,10 @@ export const securityCases: readonly SecurityCase[] = [
         ],
       },
     ],
+    role: {
+      es: 'Solo: todos los commits de los dos repositorios (17 de la landing y 6 de la tienda), desde mi cuenta de portafolio.',
+      en: 'Solo: every commit in both repositories (17 on the landing page and 6 on the store), from my portfolio account.',
+    },
     links: [
       { label: { es: 'koa.elevaforge.com', en: 'koa.elevaforge.com' }, href: 'https://koa.elevaforge.com/' },
       {
@@ -2002,402 +2534,6 @@ export const securityCases: readonly SecurityCase[] = [
         en: 'KOA store with the headline "Seis productos. Ninguno de más." and the Spanish/English language switcher.',
       },
     },
-  },
-  {
-    /*
-     * Fuente: repo PRIVADO del sitio de la IPS (no se enlaza), revisado el
-     * 2026-11-19 en un clon de solo lectura. Autoría: 37 de 47 commits de Luis,
-     * 10 de Jhonatan. Lo de Luis según `git log --author`: autenticación del
-     * panel, PQRS, sedes, middleware, cabeceras, retención, aprovisionamiento y
-     * CI. De Jhonatan: validación de adjuntos, respaldos cifrados y copia de
-     * PQRS por correo. STRIDE: SRS-SanJose-IPS-Putumayo-v0.3.docx §7.2.
-     * Regla 4 del dueño: sin rutas internas, versiones exactas ni hallazgos
-     * abiertos (esos están en NOTAS-PRIVADAS.md, fuera de Git).
-     */
-    slug: 'sitio-ips-san-jose',
-    kicker: {
-      es: 'Sitio institucional y panel de administración de una IPS',
-      en: 'Institutional website and admin panel for a healthcare provider',
-    },
-    summary: {
-      es: 'Reemplaza el WordPress de un proveedor externo por un sitio propio con panel de administración, PQRS y documentos regulatorios, en producción sobre Cloudflare.',
-      en: 'Replaces a vendor-run WordPress site with an in-house website with an admin panel, patient requests (PQRS) and regulatory documents, in production on Cloudflare.',
-    },
-    seoDescription: {
-      es: 'Sitio de una IPS en producción: panel con sesión obligatoria, PQRS con radicado no secuencial, límites de solicitudes, CSP estricta y gates en CI.',
-      en: 'Healthcare provider website in production: session-gated panel, PQRS with non-sequential IDs, rate limits, strict CSP and CI gates.',
-    },
-    problem: {
-      es: 'Una institución de salud necesita publicar información y recibir PQRS con datos personales (Ley 1581 de 2012) sin depender de un proveedor externo, con un panel que solo opere el personal autorizado.',
-      en: 'A healthcare institution needs to publish information and receive patient requests containing personal data (Colombian Law 1581 of 2012) without depending on an outside vendor, with a panel only authorized staff can operate.',
-    },
-    stack: ['Astro', 'TypeScript', 'Cloudflare Workers', 'D1', 'R2', 'KV', 'Better Auth', 'Drizzle', 'Zod'],
-    status: 'produccion',
-    privateRepo: true,
-    dataFlow: {
-      es: 'Navegador → Cloudflare Workers (Astro en modo servidor; un middleware exige sesión en todo el panel y se valida el origen de cada mutación) → D1 para contenido y PQRS, R2 para documentos e imágenes, KV para sesiones y límites de solicitudes. Una tarea aparte exporta respaldos cifrados de la base.',
-      en: 'Browser → Cloudflare Workers (Astro in server mode; a middleware requires a session across the whole panel and every mutation has its origin validated) → D1 for content and PQRS, R2 for documents and images, KV for sessions and rate limits. A separate job exports encrypted database backups.',
-    },
-    assets: {
-      es: [
-        'Datos personales de quienes envían PQRS',
-        'Cuenta del panel de administración',
-        'Documentos regulatorios publicados',
-        'Respaldos de la base de datos',
-      ],
-      en: [
-        'Personal data of people who submit PQRS',
-        'Admin panel account',
-        'Published regulatory documents',
-        'Database backups',
-      ],
-    },
-    architecture: [
-      {
-        label: { es: 'Borde', en: 'Edge' },
-        detail: {
-          es: 'Cloudflare: HTTPS forzado, cabeceras de seguridad y CSP sin unsafe-inline.',
-          en: 'Cloudflare: forced HTTPS, security headers and a CSP without unsafe-inline.',
-        },
-      },
-      {
-        label: { es: 'Aplicación', en: 'Application' },
-        detail: {
-          es: 'Astro en Workers: sitio público y panel en un solo artefacto; sesión obligatoria en el panel y validación de entradas con Zod.',
-          en: 'Astro on Workers: public site and panel in a single artifact; mandatory session on the panel and input validation with Zod.',
-        },
-      },
-      {
-        label: { es: 'Datos', en: 'Data' },
-        detail: {
-          es: 'D1 (contenido, PQRS, auditoría), R2 (documentos e imágenes), KV (sesiones y límites).',
-          en: 'D1 (content, PQRS, audit), R2 (documents and images), KV (sessions and limits).',
-        },
-      },
-      {
-        label: { es: 'Respaldo', en: 'Backup' },
-        detail: {
-          es: 'Exportación cifrada con AES-256-GCM y rotación de copias.',
-          en: 'Export encrypted with AES-256-GCM and copy rotation.',
-        },
-      },
-    ],
-    threatNote: {
-      es: 'Modelo de amenazas STRIDE del SRS del proyecto (repositorio privado).',
-      en: 'STRIDE threat model in the project SRS (private repository).',
-    },
-    threats: [
-      {
-        ref: 'T-03',
-        stride: 'Tampering / Information Disclosure',
-        text: {
-          es: 'Inyección SQL a través de los datos de IP y User-Agent que guarda el control de abuso.',
-          en: 'SQL injection through the IP and User-Agent data stored by the abuse control.',
-        },
-      },
-      {
-        ref: 'T-05',
-        stride: 'Information Disclosure',
-        text: {
-          es: 'Exposición de PQRS por enumeración de identificadores, logs o mensajes de error detallados.',
-          en: 'PQRS exposure through ID enumeration, logs or detailed error messages.',
-        },
-      },
-      {
-        ref: 'T-07',
-        stride: 'Denial of Service',
-        text: {
-          es: 'Envío masivo automatizado a los formularios de PQRS o de encuesta.',
-          en: 'Automated mass submission to the PQRS or survey forms.',
-        },
-      },
-      {
-        ref: 'T-09',
-        stride: 'Tampering',
-        text: {
-          es: 'Carga de un archivo malicioso desde el panel.',
-          en: 'Upload of a malicious file from the panel.',
-        },
-      },
-      {
-        ref: 'T-10',
-        stride: 'Spoofing',
-        text: {
-          es: 'Suplantación de las cabeceras Host o X-Forwarded-For para envenenar enlaces o falsear el control de abuso.',
-          en: 'Spoofed Host or X-Forwarded-For headers to poison links or defeat the abuse control.',
-        },
-      },
-    ],
-    controlGroups: [
-      {
-        controls: [
-          {
-            title: { es: 'Sesión obligatoria en todo el panel', en: 'Mandatory session across the panel' },
-            why: {
-              es: 'Un middleware responde sin sesión válida a cualquier ruta del panel o de su API, salvo el ingreso. El rol no se puede fijar desde una solicitud: solo desde el servidor.',
-              en: 'A middleware rejects any panel or panel API route without a valid session, except sign-in. The role cannot be set from a request: only from the server.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'Límites que cuentan lo que importa', en: 'Limits that count what matters' },
-            why: {
-              es: 'El límite de ingreso cuenta intentos fallidos, no peticiones; los formularios públicos tienen límite por IP y campo trampa.',
-              en: 'The sign-in limit counts failed attempts, not requests; public forms have a per-IP limit and a honeypot field.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'PQRS sin rastro innecesario', en: 'PQRS with no unnecessary trail' },
-            why: {
-              es: 'Radicado no secuencial ni predecible, páginas de error genéricas y logs sin contenido de las PQRS.',
-              en: 'Non-sequential, unpredictable request IDs, generic error pages and logs without PQRS content.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'Cabeceras, origen y dominio permitidos', en: 'Headers, origin and allowed hosts' },
-            why: {
-              es: 'CSP sin unsafe-inline, nosniff y HTTPS forzado; validación de origen en las mutaciones y lista de dominios permitidos para la cabecera Host.',
-              en: 'CSP without unsafe-inline, nosniff and forced HTTPS; origin validation on mutations and an allowlist for the Host header.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'Archivos validados por su contenido', en: 'Files validated by their content' },
-            why: {
-              es: 'El tipo se decide por la firma de bytes, no por la extensión, con límite de tamaño por clase de archivo.',
-              en: 'The type is decided by the byte signature, not the extension, with a size limit per file class.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'Retención configurable y respaldos cifrados', en: 'Configurable retention and encrypted backups' },
-            why: {
-              es: 'El plazo de retención de las PQRS se fija desde el panel, y la base se respalda cifrada con AES-256-GCM.',
-              en: 'The PQRS retention period is set from the panel, and the database is backed up encrypted with AES-256-GCM.',
-            },
-            evidence: [],
-          },
-        ],
-      },
-    ],
-    verification: [
-      {
-        text: {
-          es: 'CI en cada cambio: lint, una regla estática que rechaza SQL sin parametrizar, pruebas con cobertura, build, una matriz de humo y pnpm audit; gitleaks sobre todo el historial.',
-          en: 'CI on every change: lint, a static rule that rejects non-parameterized SQL, tests with coverage, build, a smoke matrix and pnpm audit; gitleaks across the full history.',
-        },
-        evidence: [],
-      },
-      {
-        text: {
-          es: 'Auditoría propia con checklist ejecutable y verificación contra el entorno desplegado, y corrección de sus hallazgos antes de la entrega.',
-          en: 'Internal audit with an executable checklist and verification against the deployed environment, with its findings fixed before delivery.',
-        },
-        evidence: [],
-      },
-    ],
-    role: {
-      es: 'En equipo de 2 (37 de 47 commits): autenticación del panel, PQRS de punta a punta, sedes, middleware, cabeceras de seguridad, retención, aprovisionamiento del entorno y gates de CI. La validación de adjuntos, los respaldos cifrados y la copia de PQRS por correo son del otro integrante.',
-      en: 'In a 2-person team (37 of 47 commits): panel authentication, end-to-end PQRS, locations, middleware, security headers, retention, environment provisioning and CI gates. File validation, encrypted backups and the PQRS email copy belong to the other team member.',
-    },
-    links: [
-      { label: { es: 'Sitio público', en: 'Public website' }, href: 'https://sanjoseipsputumayo.com.co/' },
-    ],
-  },
-  {
-    /*
-     * Fuente: repo PRIVADO de rx-gmail-pdf (no se enlaza), revisado el
-     * 2026-11-19. Autoría: 75 de 75 commits de Luis. STRIDE: docs/SRS.md §7.
-     * Estado: el SRS v2.8 dice que un pendiente institucional (R-10) bloquea
-     * solo la puesta en producción. Luis confirma la puesta en producción para
-     * el 2026-11-20: cambiar `status` a 'produccion' cuando esté corriendo, no
-     * antes (tarea en tasks/todo.md). Sin remitente, rutas ni versiones exactas.
-     */
-    slug: 'radiografias-ips-san-jose',
-    kicker: {
-      es: 'Herramienta interna de una IPS: radiografías del correo a PDF',
-      en: 'Internal tool for a healthcare provider: X-rays from email to PDF',
-    },
-    summary: {
-      es: 'Descarga cada hora hábil las radiografías panorámicas que un prestador envía por correo y las deja en PDF sin recodificar, listas para facturar, con el remitente verificado y la fidelidad comprobada.',
-      en: 'Every business hour, downloads the panoramic X-rays a provider sends by email and stores them as PDF without re-encoding, ready for billing, with the sender verified and fidelity checked.',
-    },
-    seoDescription: {
-      es: 'Herramienta que pasa radiografías del correo a PDF sin recodificar: OAuth de solo lectura, DKIM y DMARC, validación de imágenes y SHA-256.',
-      en: 'Tool that turns emailed X-rays into PDF without re-encoding: read-only OAuth, DKIM and DMARC checks, image validation and SHA-256.',
-    },
-    problem: {
-      es: 'Facturación necesita como soporte las radiografías que llegan por correo, y buscarlas a mano dejaba servicios sin facturar. Son datos de salud (Ley 1581 de 2012): la herramienta no puede alterar la imagen ni exponer el nombre del paciente.',
-      en: 'Billing needs the X-rays that arrive by email as supporting documents, and finding them by hand left services unbilled. They are health data (Colombian Law 1581 of 2012): the tool cannot alter the image or expose the patient name.',
-    },
-    stack: ['Python', 'Gmail API', 'OAuth 2.0', 'img2pdf', 'Pillow', 'SQLite', 'Windows'],
-    status: 'preproduccion',
-    privateRepo: true,
-    dataFlow: {
-      es: 'Programador de tareas (cada hora hábil) → lectura del buzón dedicado con OAuth de solo lectura → verificación del veredicto DKIM y DMARC del servidor de correo → validación del JPEG → conversión a PDF sin recodificar y comparación SHA-256 → escritura en una carpeta local con disco cifrado, organizada por año y mes. Un monitor externo avisa si deja de correr.',
-      en: 'Task Scheduler (every business hour) → read-only OAuth access to the dedicated mailbox → check of the mail server DKIM and DMARC verdict → JPEG validation → PDF conversion without re-encoding and SHA-256 comparison → write to a local folder on an encrypted disk, organized by year and month. An external monitor alerts if it stops running.',
-    },
-    assets: {
-      es: [
-        'Radiografías e identidad del paciente',
-        'Token de acceso al buzón',
-        'Integridad y disponibilidad de los PDF',
-        'Estado local que relaciona correos y archivos',
-      ],
-      en: [
-        'X-rays and patient identity',
-        'Mailbox access token',
-        'Integrity and availability of the PDFs',
-        'Local state linking emails and files',
-      ],
-    },
-    architecture: [
-      {
-        label: { es: 'Entrada', en: 'Input' },
-        detail: {
-          es: 'Buzón dedicado, OAuth con permiso de solo lectura.',
-          en: 'Dedicated mailbox, OAuth with read-only scope.',
-        },
-      },
-      {
-        label: { es: 'Verificación', en: 'Verification' },
-        detail: {
-          es: 'Remitente exacto, DKIM y DMARC; JPEG válido y dentro de los límites.',
-          en: 'Exact sender, DKIM and DMARC; valid JPEG within limits.',
-        },
-      },
-      {
-        label: { es: 'Conversión', en: 'Conversion' },
-        detail: {
-          es: 'PDF sin recodificar; SHA-256 del JPEG incrustado igual al original.',
-          en: 'PDF without re-encoding; SHA-256 of the embedded JPEG equal to the original.',
-        },
-      },
-      {
-        label: { es: 'Salida', en: 'Output' },
-        detail: {
-          es: 'Carpeta local en disco cifrado, archivos completos e inmutables; monitor externo y avisos locales de catálogo cerrado.',
-          en: 'Local folder on an encrypted disk, complete and immutable files; external monitor and closed-catalog local alerts.',
-        },
-      },
-    ],
-    threatNote: {
-      es: 'Modelo de amenazas STRIDE del SRS del proyecto (repositorio privado).',
-      en: 'STRIDE threat model in the project SRS (private repository).',
-    },
-    threats: [
-      {
-        ref: 'T-01',
-        stride: 'Spoofing',
-        text: { es: 'Correo falsificado del remitente.', en: 'Forged email from the sender.' },
-      },
-      {
-        ref: 'T-03',
-        stride: 'Tampering / Elevation of Privilege',
-        text: {
-          es: 'Recorrido de rutas o nombre de archivo reservado.',
-          en: 'Path traversal or reserved file name.',
-        },
-      },
-      {
-        ref: 'T-04',
-        stride: 'Denial of Service / Elevation of Privilege',
-        text: {
-          es: 'JPEG malformado o bomba de descompresión.',
-          en: 'Malformed JPEG or decompression bomb.',
-        },
-      },
-      {
-        ref: 'T-05',
-        stride: 'Information Disclosure',
-        text: { es: 'Robo del token de acceso al buzón.', en: 'Theft of the mailbox access token.' },
-      },
-      {
-        ref: 'T-06',
-        stride: 'Information Disclosure',
-        text: {
-          es: 'Nombre del paciente en la pantalla de bloqueo, los logs o el monitor.',
-          en: 'Patient name on the lock screen, in logs or in the monitor.',
-        },
-      },
-    ],
-    controlGroups: [
-      {
-        controls: [
-          {
-            title: { es: 'Autenticidad del remitente', en: 'Sender authenticity' },
-            why: {
-              es: 'Solo cuenta el primer veredicto de autenticación del servidor de correo, y exige DMARC y DKIM del dominio del remitente: un veredicto inyectado más abajo en las cabeceras no pasa.',
-              en: 'Only the first authentication verdict from the mail server counts, and it requires DMARC and DKIM for the sender domain: a verdict injected further down the headers does not pass.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'Validación de imagen sin atajos', en: 'Image validation without shortcuts' },
-            why: {
-              es: 'Límite de tamaño y límite de píxeles activo; incluso el aviso de bomba de descompresión se trata como rechazo.',
-              en: 'Size limit and an active pixel limit; even the decompression bomb warning is treated as a rejection.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'Conversión sin pérdida, comprobada', en: 'Lossless conversion, checked' },
-            why: {
-              es: 'El PDF incrusta los bytes originales del JPEG y se compara el SHA-256 del JPEG extraído con el original: en una imagen diagnóstica, recodificar es un riesgo de integridad.',
-              en: 'The PDF embeds the original JPEG bytes and the SHA-256 of the extracted JPEG is compared with the original: in a diagnostic image, re-encoding is an integrity risk.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'Nombres saneados y escritura atómica', en: 'Sanitized names and atomic writes' },
-            why: {
-              es: 'Se neutralizan el recorrido de rutas y los nombres reservados de Windows, y los temporales nunca se escriben en la carpeta que leen los usuarios.',
-              en: 'Path traversal and reserved Windows names are neutralized, and temporary files are never written to the folder users read.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'Secretos fuera de archivos', en: 'Secrets out of files' },
-            why: {
-              es: 'Los cuatro secretos viven en el almacén de credenciales del sistema operativo, nunca en archivos, variables de entorno, logs ni el repositorio.',
-              en: 'The four secrets live in the operating system credential store, never in files, environment variables, logs or the repository.',
-            },
-            evidence: [],
-          },
-          {
-            title: { es: 'Avisos y logs sin datos del paciente', en: 'Alerts and logs without patient data' },
-            why: {
-              es: 'Las notificaciones salen de un catálogo cerrado de mensajes fijos (solo se pasa un índice) y los logs nunca registran nombres de archivo ni asuntos.',
-              en: 'Notifications come from a closed catalog of fixed messages (only an index is passed) and logs never record file names or subjects.',
-            },
-            evidence: [],
-          },
-        ],
-      },
-    ],
-    verification: [
-      {
-        text: {
-          es: 'La CI instala dependencias con hash obligatorio y exige cobertura de ramas del 85 % global y del 100 % en los módulos de saneamiento y autenticidad, además de pip-audit y gitleaks sobre el historial.',
-          en: 'CI installs dependencies with mandatory hashes and requires 85% overall branch coverage and 100% on the sanitization and authenticity modules, plus pip-audit and gitleaks across the history.',
-        },
-        evidence: [],
-      },
-      {
-        text: {
-          es: 'Desarrollo aislado de los datos reales: entornos de producción y prueba separados, sin acceso del entorno de desarrollo a radiografías ni a secretos de producción.',
-          en: 'Development isolated from real data: separate production and test environments, with no access from the development environment to X-rays or production secrets.',
-        },
-        evidence: [],
-      },
-    ],
-    role: {
-      es: 'Solo (75 de 75 commits): especificación con modelo de amenazas STRIDE y 13 ADR, código, pruebas y runbook de operación.',
-      en: 'Solo (75 of 75 commits): specification with a STRIDE threat model and 13 ADRs, code, tests and operations runbook.',
-    },
-    links: [],
   },
 ] as const
 

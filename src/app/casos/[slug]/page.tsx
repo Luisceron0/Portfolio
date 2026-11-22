@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { CASE_NAMES, HTML_LANG, LOCALES, securityCases } from '@/content'
+import { CASE_NAMES, HTML_LANG, LOCALES, projectCases } from '@/content'
 import { CaseDetail } from '@/components/case-detail'
 import { Footer } from '@/components/footer'
 import { SiteNav } from '@/components/nav'
@@ -13,13 +13,13 @@ import { absoluteUrl, previewImages } from '@/lib/seo'
  *
  * `force-dynamic` por el mismo motivo que la home: la CSP lleva un nonce por
  * petición (src/middleware.ts) y el idioma se resuelve por petición. Un slug
- * que no está en `securityCases` responde 404, nunca una página vacía.
+ * que no está en `projectCases` responde 404, nunca una página vacía.
  */
 export const dynamic = 'force-dynamic'
 
 function findCase(slug: string) {
-  const index = securityCases.findIndex((item) => item.slug === slug)
-  return index === -1 ? null : { item: securityCases[index], index }
+  const index = projectCases.findIndex((item) => item.slug === slug)
+  return index === -1 ? null : { item: projectCases[index], index }
 }
 
 /** Misma regla que el layout: URLs absolutas desde `site.url`, nunca desde `Host`. */

@@ -807,3 +807,16 @@
     }
   }
 }
+
+/*
+ * Filtros de proyectos (portafolio v2, src/components/project-filter.tsx).
+ * Sin JavaScript el contenedor no tiene `data-filter` y se ve todo. Con JS, el
+ * componente pone el filtro activo y aquí se ocultan las tarjetas que no
+ * coinciden. `~=` compara palabras sueltas de `data-categories`.
+ */
+[data-filter='destacados'] [data-project]:not([data-featured='true']),
+[data-filter='seguridad'] [data-project]:not([data-categories~='seguridad']),
+[data-filter='desarrollo'] [data-project]:not([data-categories~='desarrollo']),
+[data-filter='pruebas'] [data-project]:not([data-categories~='pruebas']) {
+  display: none;
+}

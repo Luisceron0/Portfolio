@@ -1,6 +1,16 @@
 import type { ReactNode } from 'react'
 
-import { CASE_NAMES, casesSection, type Locale, type SecurityCase } from '@/content'
+import {
+  CASE_NAMES,
+  casesSection,
+  type CaseControl,
+  type CaseControlGroup,
+  type Locale,
+  type ProjectCase,
+} from '@/content'
+
+/** Controles a la vista en la página del caso; el resto va plegado. */
+const VISIBLE_CONTROLS = 5
 import { homeAnchor } from '@/lib/locale'
 import { CASE_TONES, CaseScreenshot, StatusBadge } from '@/components/cases'
 import { ArchitectureDiagram } from '@/components/architecture-diagram'
@@ -36,7 +46,7 @@ function EvidenceList({
   locale,
   label,
 }: {
-  links: SecurityCase['verification'][number]['evidence']
+  links: ProjectCase['verification'][number]['evidence']
   locale: Locale
   label: string
 }) {
@@ -67,13 +77,41 @@ export function CaseDetail({
   index,
   locale,
 }: {
-  item: SecurityCase
+  item: ProjectCase
   index: number
   locale: Locale
 }) {
   const tone = CASE_TONES[index % CASE_TONES.length]
   const labels = casesSection.labels
   const name = CASE_NAMES[item.slug]
+
+  // Reparte los controles: los VISIBLE_CONTROLS primeros (en orden, por grupo)
+  // quedan a la vista y el resto pasa al <details>.
+  let shown = 0
+  const visibleGroups: { heading?: CaseControlGroup['heading']; controls: CaseControl[] }[] = []
+  const hiddenControls: { control: CaseControl; heading: 'h3' | 'h4' }[] = []
+  for (const group of item.controlGroups) {
+    const visible: CaseControl[] = []
+    for (const control of group.controls) {
+      if (shown < VISIBLE_CONTROLS) {
+        visible.push(control)
+        shown += 1
+      } else {
+        hiddenControls.push({ control, heading: group.heading ? 'h4' : 'h3' })
+      }
+    }
+    if (visible.length > 0) visibleGroups.push({ heading: group.heading, controls: visible })
+  }
+
+  function ControlCard({ control, heading: Heading }: { control: CaseControl; heading: 'h3' | 'h4' }) {
+    return (
+      <li className={`border-t-4 bg-surface-card/90 p-5 ${TONE_BORDER[tone]}`}>
+        <Heading className="text-lg font-bold leading-snug text-ink">{control.title[locale]}</Heading>
+        <p className="mt-2 text-base leading-relaxed text-ink-muted">{control.why[locale]}</p>
+        <EvidenceList links={control.evidence} locale={locale} label={labels.evidence[locale]} />
+      </li>
+    )
+  }
 
   return (
     <article aria-labelledby="caso-title" className="mx-auto max-w-content px-5 pb-20 pt-10 sm:px-8 sm:pt-14">
@@ -94,12 +132,25 @@ export function CaseDetail({
           </h1>
 
           <dl className="mt-8 space-y-5">
-            <div className={`border-l-4 pl-4 ${TONE_BORDER[tone]}`}>
-              <dt className="font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
-                {labels.problem[locale]}
-              </dt>
-              <dd className="mt-1 text-lg leading-relaxed text-ink">{item.problem[locale]}</dd>
-            </div>
+            {/*
+              Bloque inicial de tres líneas (portafolio v2): problema, qué
+              construí y resultado. La plantilla completa va debajo para quien
+              quiera profundidad.
+            */}
+            {(
+              [
+                [labels.problem, item.problem],
+                [labels.built, item.built],
+                [labels.outcome, item.outcome],
+              ] as const
+            ).map(([label, text]) => (
+              <div key={label.es} className={`border-l-4 pl-4 ${TONE_BORDER[tone]}`}>
+                <dt className="font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
+                  {label[locale]}
+                </dt>
+                <dd className="mt-1 text-lg leading-relaxed text-ink">{text[locale]}</dd>
+              </div>
+            ))}
             <div className={`border-l-4 pl-4 ${TONE_BORDER[tone]}`}>
               <dt className="font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
                 {labels.stack[locale]}
@@ -209,8 +260,12 @@ export function CaseDetail({
       </Block>
 
       <Block id="controles" title={labels.controls[locale]} tone={tone}>
+        {/*
+          Máximo VISIBLE_CONTROLS a la vista; el resto, plegado en un
+          <details> nativo (sin JavaScript, accesible con teclado).
+        */}
         <div className="space-y-10">
-          {item.controlGroups.map((group) => {
+          {visibleGroups.map((group) => {
             const ControlHeading = group.heading ? 'h4' : 'h3'
             return (
               <div key={group.heading?.es ?? 'controles'}>
@@ -221,19 +276,25 @@ export function CaseDetail({
                 )}
                 <ul className={`grid gap-5 md:grid-cols-2 ${group.heading ? 'mt-5' : ''}`}>
                   {group.controls.map((control) => (
-                    <li key={control.title.es} className={`border-t-4 bg-surface-card/90 p-5 ${TONE_BORDER[tone]}`}>
-                      <ControlHeading className="text-lg font-bold leading-snug text-ink">
-                        {control.title[locale]}
-                      </ControlHeading>
-                      <p className="mt-2 text-base leading-relaxed text-ink-muted">{control.why[locale]}</p>
-                      <EvidenceList links={control.evidence} locale={locale} label={labels.evidence[locale]} />
-                    </li>
+                    <ControlCard key={control.title.es} control={control} heading={ControlHeading} />
                   ))}
                 </ul>
               </div>
             )
           })}
         </div>
+        {hiddenControls.length > 0 && (
+          <details className="mt-8">
+            <summary className="inline-flex min-h-[44px] cursor-pointer items-center font-mono text-xs font-bold uppercase tracking-widest2 text-ink underline decoration-2 underline-offset-4 hover:text-tone-green">
+              {labels.moreControls[locale](hiddenControls.length)}
+            </summary>
+            <ul className="mt-5 grid gap-5 md:grid-cols-2">
+              {hiddenControls.map(({ control, heading }) => (
+                <ControlCard key={control.title.es} control={control} heading={heading} />
+              ))}
+            </ul>
+          </details>
+        )}
       </Block>
 
       <Block id="verificacion" title={labels.verification[locale]} tone={tone}>
