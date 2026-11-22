@@ -51,7 +51,7 @@ test.describe('Landing', () => {
     for (const locator of [
       page.getByRole('heading', { level: 1 }),
       page.getByText(/seguridad decidida desde la arquitectura/),
-      heroSection.getByRole('link', { name: /Ver casos de seguridad/ }),
+      heroSection.getByRole('link', { name: /Ver proyectos/ }),
       heroSection.getByRole('link', { name: /Descargar CV/ }),
       heroSection.getByRole('link', { name: /^GitHub/ }),
     ]) {

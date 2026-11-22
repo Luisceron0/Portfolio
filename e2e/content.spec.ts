@@ -18,7 +18,7 @@ import {
 } from '@/content'
 
 /**
- * Criterios de aceptación de RF-102/RF-111 (4 casos de seguridad), RF-106 (perfil y
+ * Criterios de aceptación de RF-102/RF-111 (proyectos y filtros), RF-106 (perfil y
  * trayectoria), RF-107 (habilidades), RF-108 (navegación interna) y RF-109
  * (bilingüe).
  *

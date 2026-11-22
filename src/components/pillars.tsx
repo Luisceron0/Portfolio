@@ -19,7 +19,7 @@ const PILLAR_TONES: readonly Tone[] = ['violet', 'green', 'mint']
  * "Qué hago" (SRS v1.4): el perfil y los tres pilares de igual peso.
  *
  * Abre con el resumen del perfil (ver la nota de TONO en `profile.summary`) y
- * sigue con los pilares. Cada punto enlaza a los casos de seguridad que lo
+ * sigue con los pilares. Cada punto enlaza a los proyectos que lo
  * demuestran: así el desarrollo queda como evidencia de la seguridad y no
  * como una lista de habilidades suelta. Un punto sin caso que lo respalde
  * muestra su `[PENDIENTE]`, nunca un enlace vacío.

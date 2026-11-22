@@ -1,5 +1,5 @@
 # SRS — Personal Portfolio Site
-**Version:** 1.4
+**Version:** 1.5
 **Date:** 2026-08-07
 **Author:** Luis Alejandro Cerón Muñoz | **Technical reviewer:** Arch-Sentinel
 **Status:** Draft — pending [PENDIENTE] items before build starts
@@ -58,7 +58,7 @@ what does he build, why does security matter in his work, and how do I reach him
 ### RF-101: Hero + value proposition
 - **Description:** above the fold: the headline (Application Security Engineer |
   Secure Software Architecture | DevSecOps), one supporting line about the stack he
-  builds with, and two CTAs (security cases, CV download) plus GitHub and LinkedIn.
+  builds with, and two CTAs (projects, CV download) plus GitHub and LinkedIn.
 - **Changed in v1.4:** the audience is now security hiring managers, so standard
   role terms (AppSec, DevSecOps) are allowed in the headline. The supporting line
   stays in plain language.
@@ -66,7 +66,7 @@ what does he build, why does security matter in his work, and how do I reach him
   - [ ] Readable without scrolling on a 375px viewport.
   - [ ] No security absolutes ("unbreachable", "100% secure").
 
-### RF-102: Security cases (4)
+### RF-102: Projects (count derived from the content, never hardcoded)
 - **Description:** CareLink, Tributary, ElevaForge, KOA Landing and KOA Store,
   each with a blurb, a screenshot, a technology list, and links to the live site
   and/or the repository.
@@ -88,6 +88,14 @@ what does he build, why does security matter in his work, and how do I reach him
   and why (each linked to a file or line of its repository), how it was verified,
   and links. STRIDE categories appear only where the project repository publishes
   a threat model that backs them; otherwise the field is a `[PENDIENTE]`.
+- **Scope change (v1.5, 2026-11-21):** the section is titled **Projects**. Each
+  project has one or more categories (security, development, testing) and up to
+  3 are featured. Filters (Featured by default, Security, Development, Testing)
+  are accessible buttons with `aria-pressed`, the URL reflects the filter
+  (`?categoria=`) and, without JavaScript, the full list is shown. Every case
+  states its role with authorship measured in Git. A real system in production
+  never shows an exploitable open point until it is fixed; it then returns as a
+  dated before and after inside its controls.
 - **Precondition:** the unified GitHub account (portfolio SRS RF-001) exists, since
   both project links ultimately point there.
 - **Acceptance criteria:**
@@ -308,5 +316,6 @@ is not retained.
 | 1.0 | 2026-08-07 | Arch-Sentinel + Luis | Initial version, split from the portfolio-wide SRS per user request |
 | 1.1 | 2026-08-09 | Luis | Scope widened at the owner's request: RF-102 goes from 2 to 4 projects (ElevaForge, CareLink, KOA Landing, KOA Store shown separately); new RF-106 (profile + career timeline), RF-107 (skills), RF-108 (in-page nav). Still one page, still no CMS, still no routes — §3's out-of-scope list is unchanged. |
 | 1.2 | 2026-08-09 | Luis | RF-109 (bilingüe ES/EN por query param, sin rutas nuevas) y RF-110 (dinamismo visual) añadidos a petición del dueño. El toggle multilingüe sale de la lista de fuera de alcance del §3. |
+| 1.5 | 2026-11-21 | Luis | Portfolio v2: Projects section with categories, featured projects and shareable filters; outcome and built fields; mandatory role; no exploitable open points of production systems; prepared (unrendered) upcoming projects and a Labs section that appears only with at least one write-up. |
 | 1.4 | 2026-11-14 | Luis | Repositioning towards Application Security / secure architecture. Case-study pages move into scope (RF-111, `/casos/<slug>`), discoverability added (RF-112). RF-102 becomes 4 security cases with a fixed template (KOA Landing and KOA Store merged). RF-101 audience changes to security hiring managers. Still no CMS, no blog, no accounts. |
 | 1.3 | 2026-08-18 | Luis | RF-102 pasa de 4 a 5 proyectos: entra Tributary (motor de facturación electrónica multi-régimen), a petición del dueño. Es el primer proyecto sin URL en vivo y sin intención de tenerla, así que el criterio de aceptación de los enlaces deja de asumir que todo proyecto tiene demo. Sigue siendo una sola página, sin CMS y sin rutas nuevas. |

@@ -10,7 +10,7 @@ import { PointerParallax } from '@/components/pointer-parallax'
  * RF-101 (propuesta de valor) + RF-105 (enlace a GitHub).
  *
  * Orden fijado por la SRS v1.4: titular del rol, nombre (H1), propuesta de
- * valor, línea de apoyo, dos CTA (casos de seguridad y CV) y los enlaces a
+ * valor, línea de apoyo, dos CTA (proyectos y CV) y los enlaces a
  * GitHub y LinkedIn.
  *
  * Los dos criterios que condicionan el maquetado:

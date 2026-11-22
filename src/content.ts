@@ -17,7 +17,7 @@
  *  - Perfil, experiencia, formación, certificaciones y habilidades: los hechos
  *    verificados por el dueño (2026-11-14, SRS v1.4). El CV (cv/*.yaml) usa
  *    EXACTAMENTE los mismos textos: si cambia uno, cambia el otro.
- *  - Casos de seguridad: el código de cada repo, leído en un commit fijo y
+ *  - Proyectos: el código de cada repo, leído en un commit fijo y
  *    enlazado con permalinks (ver REPO y COMMIT más abajo), y las URLs en vivo
  *    verificadas antes de escribirlas aquí.
  *
@@ -114,7 +114,7 @@ export interface ProjectImage {
 
 
 /**
- * Identificadores de los casos de seguridad (RF-102/RF-111). Son también el
+ * Identificadores de los proyectos (RF-102/RF-111). Son también el
  * segmento de su URL: `/casos/<slug>`. El orden de este array NO es el orden de
  * la página; ese lo manda `projectCases`.
  */
@@ -290,7 +290,7 @@ export const hero = {
   } satisfies Localized,
   /**
    * Línea de apoyo: el desarrollo como evidencia de la seguridad. Nombra solo
-   * el stack que aparece en los casos de seguridad (decisión del dueño,
+   * el stack que aparece en los proyectos (decisión del dueño,
    * 2026-11-14). Python/Django volvió el 2026-11-19: lo respaldan SEG
    * (Django 5.2) y la Alcaldía (Django REST Framework).
    */
@@ -306,9 +306,9 @@ export const hero = {
     es: 'Híbrido en Medellín o Bogotá · Relocalización a Alemania o España',
     en: 'Hybrid in Medellín or Bogotá · Relocation to Germany or Spain',
   } satisfies Localized,
-  /** CTA principal: lleva a los casos de seguridad de esta misma página. */
+  /** CTA principal: lleva a la sección Proyectos de esta misma página. */
   casesCta: {
-    label: { es: 'Ver casos de seguridad', en: 'View security cases' },
+    label: { es: 'Ver proyectos', en: 'View projects' },
     href: '#casos',
   } satisfies ExternalLink,
   /**
@@ -661,7 +661,7 @@ export const timeline = {
 } as const
 
 // ---------------------------------------------------------------------------
-// RF-102 / RF-111 — Casos de seguridad (4)
+// RF-102 / RF-111 — Proyectos (el número sale de projectCases.length)
 // ---------------------------------------------------------------------------
 
 /**

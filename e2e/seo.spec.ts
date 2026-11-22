@@ -48,7 +48,7 @@ test.describe('RF-112 — SEO', () => {
     expect(raw).not.toContain('+57')
   })
 
-  test('sitemap.xml lista la home y los cuatro casos; robots.txt lo declara', async ({ request }) => {
+  test('sitemap.xml lista la home y cada proyecto; robots.txt lo declara', async ({ request }) => {
     const sitemap = await (await request.get('/sitemap.xml')).text()
     for (const item of projectCases) {
       expect(sitemap).toContain(`/casos/${item.slug}`)
