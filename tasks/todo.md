@@ -32,7 +32,10 @@ CSP ni servidor; cero dependencias nuevas.
 - [x] 6. Gestos (cinta, sello, trazo) y movimiento reducido quieto
 - [x] 7. Verificación: Lighthouse móvil 99/100 en home y /casos/carelink (main: 99/96 y 99/100); 147 elementos enfocables con anillo visible en negro, papel y magenta; capturas a 375, 768, 1280 y 1920 en ES y EN (fuera del repo, `capturas-zine/`); e2e 179 en verde
 - [x] 8. Documentación: esta entrada, lessons.md y la cabecera de tailwind.config.ts
-- [ ] Luis: revisar las capturas y aprobar antes de cualquier merge (esta rama incluye portafolio v2, tampoco aprobado aún)
+- [x] 9. Ajuste Persona punk (referencias del dueño, 2026-11-24): rótulos en sans negra cursiva del sistema, azul P3R en "Cómo trabajo" y en el menú de pausa, violeta con abanico de palabras en Habilidades, paneles de esquinas cortadas en lugar de notas, renglones y grapas. Sin glitch.
+- [x] 10. Decisiones del dueño: rol debajo del nombre; se quedan los números de las tarjetas; portafolio v2 y el zine se integran juntos en un solo PR.
+- [x] 11. Reverificación: Lighthouse móvil 99/100 en home y /casos/carelink, anillo de foco en los 147 enfocables, e2e en verde, DESIGN.md al día.
+- [ ] Luis: revisar el PR y hacer el merge (no se hace merge sin su aprobación)
 
 ### Tareas del dueño, portafolio v2
 Regla (2026-11-21): ningún punto abierto de un sistema real en producción se publica mientras no

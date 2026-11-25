@@ -48,25 +48,12 @@ export function Hero({ locale }: { locale: Locale }) {
       <div className="relative mx-auto grid max-w-content items-center gap-12 px-5 pb-12 pt-8 sm:px-8 sm:pb-16 sm:pt-14 lg:grid-cols-[1.35fr_1fr]">
         <div className="relative">
           {/*
-            Una tira Dymo por rol: la cinta real no se parte en dos líneas.
-            Los separadores quedan para lectores de pantalla.
-          */}
-          <p className="p-enter flex flex-wrap gap-x-1.5 gap-y-2 text-[0.7rem] sm:text-xs" style={delay(0)}>
-            {hero.role[locale].split(' | ').map((part, i) => (
-              <span key={part} className="contents">
-                {i > 0 && <span className="sr-only"> | </span>}
-                <span className={`m-dymo whitespace-nowrap ${i % 2 ? '-rotate-1' : 'rotate-[0.5deg]'}`}>{part}</span>
-              </span>
-            ))}
-          </p>
-
-          {/*
             Nombre en "nota de rescate": cada palabra recortada de una revista
             distinta (ver `.p-ransom`). Los recortes son `aria-hidden` y el
             nombre legible va en un `sr-only`. La región del hero toma su nombre
             de aquí.
           */}
-          <h1 id="hero-title" className="p-display mt-3 text-[1.9rem] leading-none sm:mt-6 sm:text-6xl md:text-7xl">
+          <h1 id="hero-title" className="p-display text-[1.9rem] leading-none sm:text-6xl md:text-7xl">
             <span className="sr-only">{hero.name}</span>
             <span aria-hidden="true">
               {words.map((word, index) => (
@@ -76,6 +63,20 @@ export function Hero({ locale }: { locale: Locale }) {
               ))}
             </span>
           </h1>
+
+          {/*
+            Una tira Dymo por rol, debajo del nombre: la cinta real no se parte
+            en dos líneas.
+            Los separadores quedan para lectores de pantalla.
+          */}
+          <p className="p-enter mt-3 flex flex-wrap gap-x-1.5 gap-y-2 text-[0.7rem] sm:mt-5 sm:text-xs" style={delay(300)}>
+            {hero.role[locale].split(' | ').map((part, i) => (
+              <span key={part} className="contents">
+                {i > 0 && <span className="sr-only"> | </span>}
+                <span className={`m-dymo whitespace-nowrap ${i % 2 ? '-rotate-1' : 'rotate-[0.5deg]'}`}>{part}</span>
+              </span>
+            ))}
+          </p>
 
           <div className="p-enter relative mt-5 max-w-2xl sm:mt-7" style={delay(380)}>
             <p className="m-sheet px-4 py-2.5 text-lg leading-snug sm:px-5 sm:py-3 sm:text-xl">{hero.pitch[locale]}</p>

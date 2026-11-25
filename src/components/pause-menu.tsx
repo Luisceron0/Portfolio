@@ -134,7 +134,7 @@ export function PauseMenu({
           const layout = LAYOUT[index % LAYOUT.length]
           const isSelected = index === selected
           return (
-            <li key={item.href} className={`${layout.indent} py-2`}>
+            <li key={item.href} className={`${layout.indent} py-[0.7rem]`}>
               <a
                 ref={(element) => {
                   linkRefs.current[index] = element

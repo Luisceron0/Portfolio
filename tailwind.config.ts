@@ -74,8 +74,6 @@ const config: Config = {
         },
         /** Nota adhesiva amarilla (estado). Tinta encima. */
         warn: '#ffd23f',
-        /** Grapas y metal: solo decoración. */
-        steel: '#8d8a92',
       },
       fontFamily: {
         /*

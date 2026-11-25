@@ -54,8 +54,6 @@
     --marker-cyan: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C20 2 40 5 58 3 S88 2 98 5 L97 13 99 22 C80 27 60 24 42 27 S12 26 3 25 L1 15Z' fill='%2346C3D8'/%3E%3C/svg%3E");
     /* Brochazo magenta estirable: el cursor del menú de pausa. */
     --brush-magenta: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40' preserveAspectRatio='none'%3E%3Cpath d='M4 12 C30 4 62 9 96 5 S160 3 196 8 L192 19 197 31 C170 37 138 33 104 36 S40 37 8 33 L2 22Z' fill='%23D903D5'/%3E%3Cpath d='M14 9 C50 6 90 8 130 6' stroke='%23A8009F' stroke-width='1.6' fill='none' opacity='.5'/%3E%3C/svg%3E");
-    /* Trama de semitonos de tinta (solo en esquinas de papel magenta). */
-    --halftone: radial-gradient(rgba(11, 10, 15, 0.32) 1.1px, transparent 1.5px);
     /* Bordes rasgados: arriba y abajo de las bandas (16 puntos por lado). */
     --torn-y: polygon(
       0 10px, 6% 2px, 11% 9px, 17% 0, 24% 8px, 31% 3px, 38% 11px, 45% 1px, 52% 8px,
@@ -224,13 +222,6 @@
     color: #0b0a0f;
     box-shadow: 6px 6px 0 #5a1257;
   }
-
-  /* Fotocopia vieja (lila). Solo tinta encima: tinta-muted no llega. */
-  .m-sheet--lilac {
-    background-color: #b6a6b6;
-  }
-
-  /* Hoja de cuaderno rayada con margen magenta (habilidades, listas). */
 
   /* Papel magenta a sangre: bordes rasgados y semitonos solo en las esquinas. */
   .m-magenta {

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-25T03:42:54.078Z",
+  "generatedAt": "2026-11-25T04:18:28.447Z",
   "title": "Design System: Portafolio Luis Alejandro Cerón Muñoz",
   "extensions": {
     "colorMeta": {
@@ -197,6 +197,57 @@
           "oklch(95% 0.132 329.9)"
         ]
       },
+      "blue": {
+        "role": "secondary",
+        "displayName": "Azul P3R",
+        "canonical": "#1E3BFF",
+        "oklch": "oklch(49.9% 0.281 266.2)",
+        "tonalRamp": [
+          "oklch(15% 0.281 266.2)",
+          "oklch(26% 0.281 266.2)",
+          "oklch(37% 0.281 266.2)",
+          "oklch(48% 0.281 266.2)",
+          "oklch(60% 0.281 266.2)",
+          "oklch(72% 0.281 266.2)",
+          "oklch(84% 0.281 266.2)",
+          "oklch(95% 0.281 266.2)"
+        ],
+        "note": "Parte clara de la banda Cómo trabajo. Solo papel encima (5.85:1); tone-pink no llega (3.6:1)."
+      },
+      "blue-deep": {
+        "role": "secondary",
+        "displayName": "Azul Profundo",
+        "canonical": "#0B1A8C",
+        "oklch": "oklch(31.7% 0.182 266.3)",
+        "tonalRamp": [
+          "oklch(15% 0.182 266.3)",
+          "oklch(26% 0.182 266.3)",
+          "oklch(37% 0.182 266.3)",
+          "oklch(48% 0.182 266.3)",
+          "oklch(60% 0.182 266.3)",
+          "oklch(72% 0.182 266.3)",
+          "oklch(84% 0.182 266.3)",
+          "oklch(95% 0.182 266.3)"
+        ],
+        "note": "Arriba de la banda azul y panel del menú de pausa. Papel 11.87:1, ink-muted 6.55:1, tone-pink 7.35:1."
+      },
+      "violet": {
+        "role": "secondary",
+        "displayName": "Violeta del Menú",
+        "canonical": "#4F1BC4",
+        "oklch": "oklch(42.9% 0.23 285.3)",
+        "tonalRamp": [
+          "oklch(15% 0.23 285.3)",
+          "oklch(26% 0.23 285.3)",
+          "oklch(37% 0.23 285.3)",
+          "oklch(48% 0.23 285.3)",
+          "oklch(60% 0.23 285.3)",
+          "oklch(72% 0.23 285.3)",
+          "oklch(84% 0.23 285.3)",
+          "oklch(95% 0.23 285.3)"
+        ],
+        "note": "Banda de Habilidades. Solo papel encima (8.00:1)."
+      },
       "tone-pink": {
         "role": "tertiary",
         "displayName": "Papel Rosa",
@@ -247,7 +298,7 @@
       },
       "tone-lilac": {
         "role": "tertiary",
-        "displayName": "Fotocopia Vieja Lila",
+        "displayName": "Papel Lila",
         "canonical": "#B6A6B6",
         "oklch": "oklch(74.4% 0.029 325.9)",
         "tonalRamp": [
@@ -263,7 +314,7 @@
       },
       "warn": {
         "role": "tertiary",
-        "displayName": "Nota Adhesiva",
+        "displayName": "Amarillo de Panel",
         "canonical": "#ffd23f",
         "oklch": "oklch(87.9% 0.162 90.9)",
         "tonalRamp": [
@@ -276,36 +327,20 @@
           "oklch(84% 0.162 90.9)",
           "oklch(95% 0.162 90.9)"
         ]
-      },
-      "steel": {
-        "role": "neutral",
-        "displayName": "Acero de Grapa",
-        "canonical": "#8d8a92",
-        "oklch": "oklch(63.9% 0.012 303)",
-        "tonalRamp": [
-          "oklch(15% 0.012 303)",
-          "oklch(26% 0.012 303)",
-          "oklch(37% 0.012 303)",
-          "oklch(48% 0.012 303)",
-          "oklch(60% 0.012 303)",
-          "oklch(72% 0.012 303)",
-          "oklch(84% 0.012 303)",
-          "oklch(95% 0.012 303)"
-        ]
       }
     },
     "typographyMeta": {
       "display": {
-        "displayName": "Rotulador",
-        "purpose": "Nombre del hero en recortes de nota de rescate y números de sección."
+        "displayName": "Rótulo Persona",
+        "purpose": "Nombre del hero en recortes de nota de rescate, números de sección y título del caso. Sans negra del sistema en cursiva, cero bytes."
       },
       "headline": {
-        "displayName": "Rotulador de título",
-        "purpose": "h2 de sección en tira de fotocopia, títulos de proyecto, menú de pausa, marquesina, sellos y títulos cortos de tarjeta."
+        "displayName": "Rótulo de título",
+        "purpose": "h2 de sección en tira sesgada, títulos de proyecto, opciones del menú de pausa, nav, marquesina y títulos cortos de tarjeta y de paso."
       },
       "title": {
         "displayName": "Sans extrabold",
-        "purpose": "Cargos y grados; títulos largos que el rotulador no puede llevar."
+        "purpose": "Cargos y grados; títulos largos que el rótulo no lleva."
       },
       "body": {
         "displayName": "Texto impreso",
@@ -313,11 +348,15 @@
       },
       "label": {
         "displayName": "Mecanografiado",
-        "purpose": "Etiquetas de formulario, dt, flujo de datos, enlaces de evidencia."
+        "purpose": "Etiquetas de formulario, dt, flujo de datos, enlaces de evidencia, pista del menú."
       },
       "dymo": {
         "displayName": "Dymo",
-        "purpose": "Chips, estado, idioma, filtros y letra de botones."
+        "purpose": "Roles del hero, chips, estado, idioma, filtros y letra de botones."
+      },
+      "brush": {
+        "displayName": "Brochazo",
+        "purpose": "Solo la palabra MENÚ vertical del menú de pausa (Permanent Marker autoalojada, aria-hidden)."
       }
     },
     "shadows": [
@@ -327,14 +366,14 @@
         "purpose": "Fotocopias, fotos y tira del título."
       },
       {
+        "name": "panel",
+        "value": "capa tinta con --cut-panel, translate 6px 6px",
+        "purpose": "Paneles de color con esquinas cortadas."
+      },
+      {
         "name": "recorte",
         "value": "drop-shadow(3px 3px 0 #5a1257)",
         "purpose": "Palabras del nombre en nota de rescate."
-      },
-      {
-        "name": "nota-adhesiva",
-        "value": "3px 3px 0 #0b0a0f",
-        "purpose": "Notas adhesivas."
       },
       {
         "name": "levantar-tarjeta",
@@ -401,12 +440,17 @@
       {
         "name": "marquee",
         "value": "28s linear infinite",
-        "purpose": "Marquesina a rotulador."
+        "purpose": "Marquesina en sans negra cursiva."
       },
       {
         "name": "parallax",
         "value": "animation-timeline: view(), translateX(-24px a 24px)",
         "purpose": "Número de sección que se desliza."
+      },
+      {
+        "name": "static-bands",
+        "value": "sin animación",
+        "purpose": "Luz de agua de la banda azul, cuña violeta y palabras en abanico quedan quietas."
       },
       {
         "name": "reduced-motion",
@@ -474,9 +518,9 @@
       "name": "Enlace de navegación",
       "kind": "nav",
       "refersTo": "nav",
-      "description": "Enlace a rotulador que barre un resaltador magenta irregular en hover, foco y página actual.",
+      "description": "Enlace en sans negra cursiva que barre un resaltador magenta irregular en hover, foco y sección actual.",
       "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\" aria-current=\"page\">Proyectos</a><a class=\"ds-nav-link\" href=\"#\">Contacto</a></nav>",
-      "css": ".ds-nav { display: flex; gap: 8px; background: #121014; padding: 12px; } .ds-nav-link { padding: 6px 12px; font-family: 'Permanent Marker', 'Arial Black', sans-serif; text-transform: uppercase; letter-spacing: 0.01em; font-size: 0.875rem; color: #b9b3ab; text-decoration: none; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C20 2 40 5 58 3 S88 2 98 5 L97 13 99 22 C80 27 60 24 42 27 S12 26 3 25 L1 15Z' fill='%23D903D5'/%3E%3C/svg%3E\"); background-repeat: no-repeat; background-position: left center; background-size: 0% 92%; transition: background-size 0.25s cubic-bezier(0.2, 0.9, 0.1, 1), color 0.15s; } .ds-nav-link:hover, .ds-nav-link:focus-visible, .ds-nav-link[aria-current] { background-size: 100% 92%; color: #0b0a0f; } .ds-nav-link:focus-visible { outline: none; box-shadow: 0 0 0 2px #121014, 0 0 0 4px #F25CEB; }"
+      "css": ".ds-nav { display: flex; gap: 8px; background: #121014; padding: 12px; } .ds-nav-link { padding: 6px 12px; font-family: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -0.03em; font-size: 0.875rem; color: #b9b3ab; text-decoration: none; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C20 2 40 5 58 3 S88 2 98 5 L97 13 99 22 C80 27 60 24 42 27 S12 26 3 25 L1 15Z' fill='%23D903D5'/%3E%3C/svg%3E\"); background-repeat: no-repeat; background-position: left center; background-size: 0% 92%; transition: background-size 0.25s cubic-bezier(0.2, 0.9, 0.1, 1), color 0.15s; } .ds-nav-link:hover, .ds-nav-link:focus-visible, .ds-nav-link[aria-current] { background-size: 100% 92%; color: #0b0a0f; } .ds-nav-link:focus-visible { outline: none; box-shadow: 0 0 0 2px #121014, 0 0 0 4px #F25CEB; }"
     },
     {
       "name": "Chip Dymo",
@@ -492,7 +536,7 @@
       "refersTo": "card",
       "description": "Cartulina negra recortada con borde de papel de 3px; sube con sombra plum sólida.",
       "html": "<article class=\"ds-card\"><h3 class=\"ds-card-title\">SEG</h3><p class=\"ds-card-body\">Controles enlazados a código con permalink fijado a commit.</p></article>",
-      "css": ".ds-card { position: relative; isolation: isolate; padding: 28px; color: #f2efe8; transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.1, 1), filter 0.3s; } .ds-card::before, .ds-card::after { content: ''; position: absolute; z-index: -1; clip-path: polygon(0.6% 1.2%, 30% 0, 62% 0.8%, 99.2% 0, 100% 34%, 99.4% 70%, 100% 99%, 66% 100%, 34% 99.2%, 0 100%, 0.8% 64%, 0 30%); } .ds-card::before { inset: -3px; background: #f2efe8; } .ds-card::after { inset: 0; background: #1b181e; } .ds-card:hover { transform: translate(4px, -4px); filter: drop-shadow(-8px 8px 0 #5a1257); } .ds-card-title { margin: 0; font-family: 'Permanent Marker', 'Arial Black', sans-serif; font-weight: 400; text-transform: uppercase; font-size: 2.25rem; line-height: 1; } .ds-card-body { margin: 12px 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.625; color: #f2efe8; }"
+      "css": ".ds-card { position: relative; isolation: isolate; padding: 28px; color: #f2efe8; transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.1, 1), filter 0.3s; } .ds-card::before, .ds-card::after { content: ''; position: absolute; z-index: -1; clip-path: polygon(0.6% 1.2%, 30% 0, 62% 0.8%, 99.2% 0, 100% 34%, 99.4% 70%, 100% 99%, 66% 100%, 34% 99.2%, 0 100%, 0.8% 64%, 0 30%); } .ds-card::before { inset: -3px; background: #f2efe8; } .ds-card::after { inset: 0; background: #1b181e; } .ds-card:hover { transform: translate(4px, -4px); filter: drop-shadow(-8px 8px 0 #5a1257); } .ds-card-title { margin: 0; font-family: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-style: italic; letter-spacing: -0.03em; text-transform: uppercase; font-size: 2.25rem; line-height: 1; } .ds-card-body { margin: 12px 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.625; color: #f2efe8; }"
     },
     {
       "name": "Fotocopia con cinta",
@@ -506,9 +550,9 @@
       "name": "Sello de goma",
       "kind": "custom",
       "refersTo": "stamp",
-      "description": "Rotulador con doble recuadro, giro y tinta magenta-text sobre negro.",
+      "description": "Sans negra cursiva con doble recuadro, giro y tinta magenta-text sobre negro.",
       "html": "<div class=\"ds-stamp-bg\"><span class=\"ds-stamp\">Disponible</span></div>",
-      "css": ".ds-stamp-bg { background: #121014; padding: 24px; } .ds-stamp { display: inline-block; padding: 0.36em 0.7em 0.3em; font-family: 'Permanent Marker', 'Arial Black', sans-serif; text-transform: uppercase; line-height: 1.05; font-size: 1.25rem; color: #F25CEB; border: 2px solid currentColor; outline: 1.5px solid currentColor; outline-offset: -6px; transform: rotate(-4deg); }"
+      "css": ".ds-stamp-bg { background: #121014; padding: 24px; } .ds-stamp { display: inline-block; padding: 0.36em 0.7em 0.3em; font-family: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-style: italic; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1.05; font-size: 1.25rem; color: #F25CEB; border: 2px solid currentColor; outline: 1.5px solid currentColor; outline-offset: -6px; transform: rotate(-4deg); }"
     },
     {
       "name": "Banda de papel magenta",
@@ -516,18 +560,42 @@
       "refersTo": "band-magenta",
       "description": "Papel magenta a sangre con bordes rasgados y solo tinta encima.",
       "html": "<section class=\"ds-band\"><h2 class=\"ds-band-title\">Contacto</h2><p class=\"ds-band-body\">Tinta sobre magenta: 4.63:1.</p></section>",
-      "css": ".ds-band { padding: 48px 32px; background-color: #D903D5; color: #0b0a0f; clip-path: polygon(0 10px, 6% 2px, 11% 9px, 17% 0, 24% 8px, 31% 3px, 38% 11px, 45% 1px, 52% 8px, 60% 2px, 67% 11px, 74% 4px, 81% 10px, 88% 1px, 94% 8px, 100% 3px, 100% calc(100% - 9px), 89% calc(100% - 10px), 75% calc(100% - 8px), 61% calc(100% - 11px), 47% calc(100% - 9px), 33% calc(100% - 10px), 19% calc(100% - 9px), 6% calc(100% - 8px), 0 calc(100% - 2px)); } .ds-band-title { margin: 0; font-family: 'Permanent Marker', 'Arial Black', sans-serif; font-weight: 400; text-transform: uppercase; font-size: 3rem; line-height: 1; } .ds-band-body { margin: 12px 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1.125rem; }"
+      "css": ".ds-band { padding: 48px 32px; background-color: #D903D5; color: #0b0a0f; clip-path: polygon(0 10px, 6% 2px, 11% 9px, 17% 0, 24% 8px, 31% 3px, 38% 11px, 45% 1px, 52% 8px, 60% 2px, 67% 11px, 74% 4px, 81% 10px, 88% 1px, 94% 8px, 100% 3px, 100% calc(100% - 9px), 89% calc(100% - 10px), 75% calc(100% - 8px), 61% calc(100% - 11px), 47% calc(100% - 9px), 33% calc(100% - 10px), 19% calc(100% - 9px), 6% calc(100% - 8px), 0 calc(100% - 2px)); } .ds-band-title { margin: 0; font-family: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-style: italic; letter-spacing: -0.03em; text-transform: uppercase; font-size: 3rem; line-height: 1; } .ds-band-body { margin: 12px 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1.125rem; }"
+    },
+    {
+      "name": "Panel Persona",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Papel de color con dos esquinas cortadas y sombra tinta sólida de 6px; pasos del proceso, alertas, nota privada y [PENDIENTE].",
+      "html": "<div class=\"ds-panel-bg\"><div class=\"ds-panel\"><strong class=\"ds-panel-n\">1</strong><p class=\"ds-panel-t\">Modelar amenazas antes de escribir código.</p></div></div>",
+      "css": ".ds-panel-bg { background: #121014; padding: 24px; } .ds-panel { position: relative; isolation: isolate; max-width: 18rem; padding: 24px 20px 20px; color: #0b0a0f; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; } .ds-panel::before, .ds-panel::after { content: ''; position: absolute; inset: 0; clip-path: polygon(0 0, calc(100% - 1.4rem) 0, 100% 1.4rem, 100% 100%, 1.4rem 100%, 0 calc(100% - 1.4rem)); pointer-events: none; } .ds-panel::before { z-index: -1; background-color: var(--panel-bg, #ffd23f); background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"); } .ds-panel::after { z-index: -2; background: #0b0a0f; translate: 6px 6px; } .ds-panel-n { display: block; font-family: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-style: italic; font-size: 2.25rem; line-height: 1; } .ds-panel-t { margin: 12px 0 0; line-height: 1.625; }"
+    },
+    {
+      "name": "Banda azul P3R",
+      "kind": "custom",
+      "refersTo": "band-blue",
+      "description": "Azul profundo a azul eléctrico a sangre, bordes rasgados y luz de agua plana y quieta arriba; solo papel encima.",
+      "html": "<section class=\"ds-band-blue\"><h2 class=\"ds-band-blue-title\">Cómo trabajo</h2><p class=\"ds-band-blue-body\">Papel sobre azul: 5.85:1 en la parte clara.</p></section>",
+      "css": ".ds-band-blue { position: relative; padding: 48px 32px; background-color: #0b1a8c; background-image: linear-gradient(180deg, #0b1a8c 10%, #1e3bff 100%); color: #f2efe8; clip-path: polygon(0 10px, 6% 2px, 11% 9px, 17% 0, 24% 8px, 31% 3px, 38% 11px, 45% 1px, 52% 8px, 60% 2px, 67% 11px, 74% 4px, 81% 10px, 88% 1px, 94% 8px, 100% 3px, 100% calc(100% - 9px), 89% calc(100% - 10px), 75% calc(100% - 8px), 61% calc(100% - 11px), 47% calc(100% - 9px), 33% calc(100% - 10px), 19% calc(100% - 9px), 6% calc(100% - 8px), 0 calc(100% - 2px)); } .ds-band-blue-title { margin: 0; font-family: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-style: italic; letter-spacing: -0.03em; text-transform: uppercase; font-size: 3rem; line-height: 1; } .ds-band-blue-body { margin: 12px 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1.125rem; }"
+    },
+    {
+      "name": "Banda violeta",
+      "kind": "custom",
+      "refersTo": "band-violet",
+      "description": "Violeta del menú P3R con cuña diagonal azul; palabras gigantes en abanico detrás, solo decoración.",
+      "html": "<section class=\"ds-band-violet\"><div class=\"ds-fan\" aria-hidden=\"true\"><span style=\"--i:0\">Seguridad</span><span style=\"--i:1\">Backend</span><span style=\"--i:2\">Frontend</span></div><h2 class=\"ds-band-violet-title\">Habilidades</h2></section>",
+      "css": ".ds-band-violet { position: relative; isolation: isolate; overflow: hidden; padding: 48px 32px; background-color: #4f1bc4; background-image: linear-gradient(112deg, transparent 58%, rgba(30, 59, 255, 0.5) 58% 74%, transparent 74%); color: #f2efe8; clip-path: polygon(0 10px, 6% 2px, 11% 9px, 17% 0, 24% 8px, 31% 3px, 38% 11px, 45% 1px, 52% 8px, 60% 2px, 67% 11px, 74% 4px, 81% 10px, 88% 1px, 94% 8px, 100% 3px, 100% calc(100% - 9px), 89% calc(100% - 10px), 75% calc(100% - 8px), 61% calc(100% - 11px), 47% calc(100% - 9px), 33% calc(100% - 10px), 19% calc(100% - 9px), 6% calc(100% - 8px), 0 calc(100% - 2px)); } .ds-fan { position: absolute; left: 46%; top: 0; z-index: -1; } .ds-fan span { display: block; font-family: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-style: italic; text-transform: uppercase; white-space: nowrap; line-height: 0.84; letter-spacing: -0.04em; font-size: 4rem; color: #d9c8ff; opacity: 0.16; transform-origin: 0 50%; transform: rotate(calc((var(--i) - 2.5) * -6deg)) translateX(calc(var(--i) * 1.4rem)); } .ds-band-violet-title { margin: 0; font-family: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-style: italic; letter-spacing: -0.03em; text-transform: uppercase; font-size: 3rem; line-height: 1; }"
     }
   ],
   "narrative": {
-    "northStar": "El zine sobre la mesa de trabajo",
-    "overview": "Cada superficie es un material que podría estar físicamente sobre una mesa: cartulina negra con grano como lienzo, fotocopias con sombra sólida plum, bandas de papel magenta a sangre con bordes rasgados, cinta kraft, sellos de goma, etiquetas Dymo en relieve y notas adhesivas. El texto se reparte en tres voces impresas: rotulador a mano para lo que se grita, mecanografiado para los datos y cuerpo sans recto para lo que se lee. La densidad es de recorte pegado: piezas giradas uno o dos grados, solapadas con cinta, nunca un tablero de paneles alineados.\n\nEl movimiento conserva la mecánica de los menús de Persona 3 Reload (curvas de golpe y de rebote, entradas laterales, cursor que salta), pero lo que se mueve es papel: una cortina de papel magenta, títulos que se despliegan, cintas que se pegan y sellos que golpean. Con movimiento reducido todo queda quieto y visible.\n\nRechazo confirmado: el panel de luz neón con glow, glitch, separación RGB, desenfoque, vidrio y mono de terminal con tracking abierto. Tampoco esquinas redondeadas ni sombras difusas: el papel se corta, no se redondea.",
+    "northStar": "El zine sobre la mesa de trabajo, pasado por el menú de Persona",
+    "overview": "Cada superficie es un material que podría estar físicamente sobre una mesa: cartulina negra con grano como lienzo, fotocopias con sombra sólida plum, bandas a sangre con bordes rasgados (papel magenta, azul P3R y violeta del menú), paneles de color con esquinas cortadas, cinta kraft, sellos de goma y etiquetas Dymo en relieve. El ajuste Persona punk cambia la voz que grita: rótulos en sans negra en cursiva, apretados y en mayúsculas, como los menús de Persona 3 Reload. El texto se reparte en tres voces impresas: sans negra en cursiva para lo que se grita, mecanografiado para los datos y cuerpo sans recto para lo que se lee. El rotulador a mano queda solo como un brochazo: la palabra vertical MENÚ del menú de pausa. La densidad es de recorte pegado: piezas giradas uno o dos grados, solapadas con cinta, nunca un tablero de paneles alineados.\n\nEl movimiento conserva la mecánica de los menús de Persona 3 Reload (curvas de golpe y de rebote, entradas laterales, cursor que salta), pero lo que se mueve es papel: una cortina de papel magenta, títulos que se despliegan, cintas que se pegan y sellos que golpean. Con movimiento reducido todo queda quieto y visible.\n\nRechazo confirmado: el panel de luz neón con glow, glitch, separación RGB, desenfoque, vidrio y mono de terminal con tracking abierto. Tampoco esquinas redondeadas ni sombras difusas: el papel se corta, no se redondea. La luz de agua de la banda azul es plana, de borde duro y quieta, nunca un brillo.",
     "keyCharacteristics": [
-      "Materiales, no paneles: cada color es un papel, una tinta o una cinta.",
+      "Materiales, no paneles de interfaz: cada color es un papel, una tinta o una cinta.",
       "Sombras sólidas desplazadas (plum o tinta), nunca difusas.",
-      "Recortes con `clip-path` irregular: bordes rasgados, cartulina cortada, extremos de cinta en zigzag.",
-      "Tres voces: rotulador, mecanografiado y sans impreso.",
-      "Contraste medido por script, no estimado.",
+      "Recortes con `clip-path`: bordes rasgados, cartulina cortada, panel con dos esquinas en diagonal, extremos de cinta en zigzag.",
+      "Tres voces: sans negra en cursiva, mecanografiado y sans impreso; cero bytes de fuente salvo el brochazo.",
+      "Contraste medido por script (39 pares), no estimado.",
       "Movimiento P3R con materiales de papel; quieto con movimiento reducido."
     ],
     "rules": [
@@ -542,18 +610,23 @@
         "section": "colors"
       },
       {
+        "name": "The Solo Papel Sobre Azul Rule",
+        "body": "Sobre la banda azul y la violeta el texto es papel. tone-pink sobre blue da 3.6:1 y no pasa; el rosa vive solo sobre blue-deep (panel del menú). Las tarjetas dentro de una banda son su propio material (panel, hoja) y llevan su propia tinta.",
+        "section": "colors"
+      },
+      {
         "name": "The Muted Por Superficie Rule",
-        "body": "ink-muted vive solo sobre negro; nunca sobre papel. tinta-muted vive solo sobre papel, paper-dark, warn, rosa y cian.",
+        "body": "ink-muted vive solo sobre negro y blue-deep; nunca sobre papel. tinta-muted vive solo sobre papel, paper-dark, warn, rosa y cian.",
         "section": "colors"
       },
       {
         "name": "The Lila Solo Tinta Rule",
-        "body": "Sobre tone-lilac (banda o fotocopia vieja) solo tinta: tinta-muted da 4.11:1 y magenta-deep 2.88:1.",
+        "body": "Sobre tone-lilac (pie, panel lila) solo tinta: tinta-muted da 4.11:1 y magenta-deep 2.88:1.",
         "section": "colors"
       },
       {
         "name": "The Textura Solo Sube Rule",
-        "body": "Una textura sobre un fondo cercano al umbral solo puede subir el contraste. El papel magenta lleva motas claras (no grano oscuro, que lo apagaba a ~#C903C5 y dejaba la tinta en ~4.0:1); medido renderizado queda en ~#DB13D8. Su trama de semitonos es de puntos de papel y solo en las esquinas.",
+        "body": "Una textura sobre un fondo cercano al umbral solo puede subir el contraste. El papel magenta y el violeta llevan motas claras (no grano oscuro, que apagaba el magenta a ~#C903C5 y dejaba la tinta en ~4.0:1); el magenta renderizado queda en ~#DB13D8. Su trama de semitonos es de puntos de papel y solo en las esquinas. Las manchas de luz de la banda azul quedan sobre el azul profundo de arriba, para que el papel siga por encima de 4.5:1.",
         "section": "colors"
       },
       {
@@ -562,8 +635,13 @@
         "section": "colors"
       },
       {
-        "name": "The Rotulador Escaso Rule",
-        "body": "Permanent Marker solo en el nombre del hero, los h2 de sección y sus números, títulos de proyecto, menú de pausa, marquesina, sellos y títulos cortos de tarjeta. Nunca en párrafos, inputs, chips, código ni títulos largos de varias líneas: los cargos y grados van en el sans, extrabold.",
+        "name": "The Rótulo Escaso Rule",
+        "body": "La sans negra en cursiva solo en el nombre del hero, los h2 de sección y sus números, títulos de proyecto y de caso, menú de pausa, nav, marquesina, sellos y títulos cortos de tarjeta. Nunca en párrafos, inputs, chips ni código; los títulos largos de varias líneas (cargos y grados) van en el sans del cuerpo, extrabold.",
+        "section": "typography"
+      },
+      {
+        "name": "The Brochazo Único Rule",
+        "body": "Permanent Marker no es texto de lectura: solo el acento vertical del menú de pausa, decorativo y oculto a lectores de pantalla.",
         "section": "typography"
       },
       {
@@ -578,32 +656,40 @@
       },
       {
         "name": "The Recorte En Pseudo Rule",
-        "body": "En elementos interactivos nunca se recorta el propio elemento (recortaría el anillo de foco): la forma va en `::before`, la sombra en `::after`, y el elemento queda rectangular.",
+        "body": "En elementos interactivos y contenedores con contenido enfocable nunca se recorta el propio elemento (recortaría el anillo de foco): la forma va en `::before`, la sombra en `::after`, y el elemento queda rectangular.",
         "section": "shapes"
       },
       {
         "name": "The Tres Adornos Rule",
-        "body": "Como máximo 3 adornos (brochazo, garabato o salpicadura) por pantalla. La cinta y las grapas no cuentan: son construcción.",
+        "body": "Como máximo 3 adornos (brochazo, garabato o salpicadura) por pantalla. La cinta es construcción y no cuenta.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Sesgo Solo En Capas Rule",
+        "body": "El sesgo vive en pseudo-elementos de piezas bajas (la tira del título, `skewX(-12deg) rotate(-1.5deg)`) o en la cortina a pantalla completa; nunca en contenedores altos.",
         "section": "shapes"
       }
     ],
     "dos": [
       "Do poner solo tinta sobre papel magenta (4.63:1); para letra clara usar magenta-deep con papel (5.78:1).",
+      "Do poner solo papel sobre las bandas azul y violeta; tone-pink e ink-muted solo sobre blue-deep.",
       "Do usar tinta, tinta-muted o magenta-deep sobre papel, y solo tinta sobre lila.",
       "Do hacer que cualquier textura sobre un fondo cercano al umbral solo suba el contraste (motas claras en el magenta, medido ~#DB13D8).",
       "Do usar sombras sólidas desplazadas en plum (#5a1257) o tinta, 3px a 8px, sin desenfoque.",
-      "Do recortar con `clip-path` en pseudo-elementos en todo lo interactivo, para que el foco quede entero.",
-      "Do dar anillo de foco magenta-text con separación negra sobre cartulina, y anillo tinta sobre papel, magenta, notas, kraft y la banda lila.",
+      "Do recortar con `clip-path` en pseudo-elementos en todo lo interactivo y en paneles con contenido enfocable, para que el foco quede entero.",
+      "Do dar anillo de foco magenta-text con separación negra sobre cartulina, anillo papel sobre las bandas azul y violeta, y anillo tinta sobre papel, magenta, paneles y kraft.",
       "Do añadir cada par nuevo de texto y fondo a `npm run check:contrast`.",
       "Do dejar todo quieto y visible con `prefers-reduced-motion`: sin cortina, sin marquesina, sin parallax, sin entradas."
     ],
     "donts": [
-      "Don't poner papel ni ink sobre magenta (3.71:1).",
+      "Don't poner papel ni ink sobre magenta (3.71:1), ni tone-pink sobre blue (3.6:1).",
       "Don't usar ink-muted sobre papel, ni tinta-muted o magenta-deep sobre lila.",
-      "Don't usar Permanent Marker en párrafos, inputs, chips, código ni títulos largos de varias líneas; cargos y grados van en sans extrabold.",
-      "Don't pasar de 3 adornos (brochazo, garabato, salpicadura) por pantalla; la cinta y las grapas no cuentan.",
+      "Don't usar la sans negra cursiva en párrafos, inputs, chips, código ni títulos largos de varias líneas; cargos y grados van en sans extrabold.",
+      "Don't usar Permanent Marker como texto de lectura; solo el MENÚ vertical.",
+      "Don't pasar de 3 adornos (brochazo, garabato, salpicadura) por pantalla; la cinta no cuenta.",
       "Don't usar esquinas redondeadas, sombras difusas, vidrio, blur, glow ni neón.",
-      "Don't aplicar skewX a contenedores altos: desbordan en móvil. El sesgo vive solo en la cortina a pantalla completa.",
+      "Don't usar glitch ni separación RGB, ni animar la luz de agua.",
+      "Don't aplicar skewX a contenedores altos: desbordan en móvil. El sesgo vive en la tira del título y en la cortina a pantalla completa.",
       "Don't animar filtros ni el grano: el ruido es un `feTurbulence` estático.",
       "Don't usar grano oscuro sobre el papel magenta: lo apaga por debajo del umbral."
     ]
