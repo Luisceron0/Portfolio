@@ -1,10 +1,25 @@
 import type { Metadata, Viewport } from 'next'
+import localFont from 'next/font/local'
 import { headers } from 'next/headers'
 
 import './globals.css'
 import { footer, HTML_LANG, LOCALES, resolved, site } from '@/content'
 import { getLocale, localeHref } from '@/lib/locale'
 import { personJsonLd, previewImages, serializeJsonLd } from '@/lib/seo'
+
+/**
+ * RF-110 v5 (D-05): la ÚNICA fuente autoalojada, la voz de rótulo a marcador.
+ * Permanent Marker (Apache 2.0, licencia junto al archivo), subset Latin +
+ * Latin-1 en `.woff2` de 28 KB. `next/font/local` la sirve desde el mismo
+ * origen con `font-display: swap`, así que la CSP (`font-src 'self'`) no cambia.
+ */
+const marker = localFont({
+  src: './fonts/permanent-marker-latin.woff2',
+  variable: '--font-display',
+  display: 'swap',
+  weight: '400',
+  fallback: ['Arial Black', 'sans-serif'],
+})
 
 /**
  * T-104: `metadataBase` sale del dominio declarado en content.ts, nunca del
@@ -35,7 +50,7 @@ function absolute(path: string): string {
  * de `metadata` está deprecado y se ignora con un aviso en build.
  */
 export const viewport: Viewport = {
-  themeColor: '#09080d',
+  themeColor: '#121014',
 }
 
 /**
@@ -114,13 +129,13 @@ export default function RootLayout({
 
   return (
     // El `lang` refleja el idioma realmente renderizado, resuelto en servidor.
-    <html lang={HTML_LANG[locale]}>
-      {/* `p-curtain`: barrido violeta de entrada, una vez (ver globals.css). */}
+    <html lang={HTML_LANG[locale]} className={marker.variable}>
+      {/* `p-curtain`: barrido de papeles de entrada, una vez (ver globals.css). */}
       <body className="p-curtain">
         {/* Salto al contenido: primer elemento tabulable de la página (WCAG 2.4.1). */}
         <a
           href="#contenido"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-tone-violet focus:px-4 focus:py-2 focus:font-bold focus:text-surface"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-magenta-deep focus:px-4 focus:py-2 focus:font-bold focus:text-paper"
         >
           {footer.skipToContent[locale]}
         </a>
