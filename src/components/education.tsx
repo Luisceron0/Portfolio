@@ -1,7 +1,6 @@
 import { education, type Locale } from '@/content'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
-import { ProfileIcon } from '@/components/icons'
 
 /**
  * Formación y certificaciones (SRS v1.4), en papel (RF-110 v5): los estudios
@@ -17,7 +16,6 @@ export function Education({ locale }: { locale: Locale }) {
         number="06"
         title={education.heading[locale]}
         tone="cyan"
-        icon={<ProfileIcon />}
       />
 
       <ul className="mt-12 grid gap-6 md:grid-cols-2">
@@ -26,7 +24,7 @@ export function Education({ locale }: { locale: Locale }) {
             <Reveal delayMs={index * 70} className="h-full">
               <article aria-labelledby={`formacion-${entry.id}`} className="m-card m-ticket h-full py-6 pl-8 pr-5 sm:pr-6">
                 <span className="m-stamp text-sm [--stamp-r:-3deg]">{entry.period[locale]}</span>
-                <h3 id={`formacion-${entry.id}`} className="p-display mt-4 text-xl leading-tight sm:text-2xl">
+                <h3 id={`formacion-${entry.id}`} className="mt-4 text-lg font-extrabold leading-snug tracking-tight sm:text-xl">
                   {entry.title[locale]}
                 </h3>
                 <p className="mt-1.5 text-base font-bold text-tone-cyan">

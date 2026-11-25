@@ -37,6 +37,9 @@
     /* Grano de papel claro (sobre cartulina negra). */
     --grain-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     /* Grano de papel oscuro (sobre fotocopia, magenta y kraft). */
+    /* Motas claras para el papel magenta: el grano oscuro lo apagaba hasta
+       ~#C903C5 y la tinta encima bajaba a ~4.0:1. Aclarar solo sube el contraste. */
+    --grain-specks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     --grain-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     /* Tinta gastada de los sellos: alfa entre 0.7 y 1, nunca menos (legible). */
     --worn-ink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .3 .7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
@@ -216,7 +219,7 @@
     position: relative;
     isolation: isolate;
     background-color: #d903d5;
-    background-image: var(--grain-dark);
+    background-image: var(--grain-specks);
     color: #0b0a0f;
     clip-path: var(--torn-y);
   }
@@ -227,7 +230,8 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-image: var(--halftone);
+    /* Trama de fotocopia en puntos de papel, no de tinta: no apaga el magenta. */
+    background-image: radial-gradient(rgba(242, 239, 232, 0.3) 1.1px, transparent 1.5px);
     background-size: 6px 6px;
     -webkit-mask-image:
       radial-gradient(22rem 16rem at 0 0, #000, transparent 70%),
@@ -264,8 +268,11 @@
     width: 80px;
     height: 24px;
     pointer-events: none;
-    background-color: rgba(242, 239, 232, 0.55);
-    background-image: var(--grain-dark);
+    /* Cinta de enmascarar kraft, translúcida: se ve lo que hay debajo. */
+    background-color: rgba(224, 162, 74, 0.72);
+    background-image:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.12), transparent 30% 70%, rgba(11, 10, 15, 0.1)),
+      var(--grain-dark);
     transform: rotate(var(--tape-r, -6deg));
     clip-path: polygon(
       0 10%, 4% 0, 8% 12%, 12% 0, 88% 0, 92% 10%, 96% 0, 100% 12%,

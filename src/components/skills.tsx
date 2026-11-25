@@ -3,7 +3,6 @@ import type { CSSProperties } from 'react'
 import { skills, type Locale } from '@/content'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
-import { SkillsIcon } from '@/components/icons'
 import { Staple } from '@/components/zine'
 
 /** Giro leve de cada ficha: una pila de fichas, no una rejilla de UI. */
@@ -25,7 +24,6 @@ export function Skills({ locale }: { locale: Locale }) {
         title={skills.heading[locale]}
         intro={skills.intro[locale]}
         tone="lilac"
-        icon={<SkillsIcon />}
         onPaper
       />
 

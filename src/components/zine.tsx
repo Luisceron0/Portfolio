@@ -62,23 +62,6 @@ export function BrushStroke({
   )
 }
 
-/** Garabato de margen: una espiral apurada. */
-export function Scribble({ className = '', color = '#5a1257' }: { className?: string; color?: string }) {
-  return (
-    <svg {...base} viewBox="0 0 80 60" className={cls(`p-draw ${className}`)}>
-      <path
-        pathLength={1}
-        d="M8 40c6-14 22-28 34-24 10 3 4 18-6 20-9 2-12-9-4-16 9-8 26-9 33 1 7 10-2 25-16 29-16 4-34-3-37-15"
-        fill="none"
-        stroke={color}
-        strokeWidth="2.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
 /** Salpicadura en estrella de tinta: el "golpe" del zine. */
 export function SplatStar({ className = '', color = '#0b0a0f' }: { className?: string; color?: string }) {
   return (
@@ -133,45 +116,13 @@ export function ArrowDoodle({
   )
 }
 
-/** Tachón en X, al final de una regla. */
-export function CrossOut({ className = '', color = 'currentColor' }: { className?: string; color?: string }) {
-  return (
-    <svg {...base} viewBox="0 0 30 30" className={cls(className)}>
-      <path d="M5 6c6 5 13 11 20 19M25 5c-6 6-12 13-19 20" fill="none" stroke={color} strokeWidth="3.2" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-/** Check a mano. */
-export function HandCheck({ className = '', color = 'currentColor' }: { className?: string; color?: string }) {
-  return (
-    <svg {...base} viewBox="0 0 20 20" className={cls(className)}>
-      <path d="M2.6 11.1c1.4 1 2.6 2.4 3.9 4.6 2.3-5 5.6-9 10.9-12.6" fill="none" stroke={color} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-/** Asterisco a mano. */
-export function HandAsterisk({ className = '', color = 'currentColor' }: { className?: string; color?: string }) {
-  return (
-    <svg {...base} viewBox="0 0 20 20" className={cls(className)}>
-      <path
-        d="M10.3 2.2c-.3 2.6-.1 5.4.2 8.1M10.6 10.4c-.2 2.5.1 5 .4 7.4M3.4 6.1c2.4 1.2 4.7 2.7 7 4.1M10.4 10.2c2.2 1.6 4.4 2.8 6.6 3.7M16.6 5.4c-2.1 1.5-4.2 3.3-6.2 4.8M10.4 10.2c-2.3 1.4-4.6 3-6.8 4.6"
-        fill="none"
-        stroke={color}
-        strokeWidth="2.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  )
-}
-
-/** Grapa metálica con su línea de luz (18 x 6). */
+/** Grapa metálica con patas, su sombra y su línea de luz (30 x 10). */
 export function Staple({ className = '', style }: { className?: string; style?: CSSProperties }) {
   return (
-    <svg {...base} viewBox="0 0 18 6" width="18" height="6" className={cls(`absolute ${className}`)} style={style}>
-      <path d="M1 5V1.6C1 1.2 1.3 1 1.7 1h14.6c.4 0 .7.2.7.6V5" fill="none" stroke="#8d8a92" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M2.4 1.6h12.8" stroke="#f2efe8" strokeWidth="0.6" opacity="0.7" />
+    <svg {...base} viewBox="0 0 30 10" width="30" height="10" className={cls(`absolute ${className}`)} style={style}>
+      <path d="M2 9V3.2C2 2.5 2.5 2 3.2 2h23.6c.7 0 1.2.5 1.2 1.2V9" fill="none" stroke="#0b0a0f" strokeWidth="3.4" strokeLinecap="round" opacity="0.35" transform="translate(1 1)" />
+      <path d="M2 9V3.2C2 2.5 2.5 2 3.2 2h23.6c.7 0 1.2.5 1.2 1.2V9" fill="none" stroke="#8d8a92" strokeWidth="2.6" strokeLinecap="round" />
+      <path d="M4 2.6h22" stroke="#f2efe8" strokeWidth="0.9" opacity="0.8" />
     </svg>
   )
 }

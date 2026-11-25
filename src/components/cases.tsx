@@ -14,7 +14,6 @@ import { PendingNote } from '@/components/pending'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading, TONE_TEXT, toneVar, type Tone } from '@/components/section'
 import { BrushStroke, Tape } from '@/components/zine'
-import { ProjectsIcon } from '@/components/icons'
 import { ArchitectureDiagram } from '@/components/architecture-diagram'
 import { ProjectFilter } from '@/components/project-filter'
 import { FILTER_VALUES, type FilterValue } from '@/lib/project-filter-values'
@@ -229,7 +228,6 @@ export function Cases({ locale }: { locale: Locale }) {
         title={casesSection.heading[locale]}
         intro={`${casesSection.count[locale](projectCases.length)} ${casesSection.intro[locale]}`}
         tone="cyan"
-        icon={<ProjectsIcon />}
       />
 
       <ProjectFilter

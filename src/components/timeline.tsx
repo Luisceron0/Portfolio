@@ -1,7 +1,6 @@
 import { timeline, type Locale, type TimelineEntry } from '@/content'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
-import { TimelineIcon } from '@/components/icons'
 import { Pushpin } from '@/components/zine'
 
 /**
@@ -35,7 +34,7 @@ function Entry({ entry, locale }: { entry: TimelineEntry; locale: Locale }) {
           <div className="relative">
             <span className="m-stamp text-sm group-hover:text-magenta-deep sm:text-base">{entry.period[locale]}</span>
 
-            <h3 className="p-display mt-4 text-2xl leading-tight transition-colors duration-200 group-hover:text-tinta sm:text-3xl">
+            <h3 className="mt-4 text-xl font-extrabold leading-snug tracking-tight transition-colors duration-200 group-hover:text-tinta sm:text-2xl">
               {entry.title[locale]}
             </h3>
 
@@ -73,7 +72,6 @@ export function Timeline({ locale }: { locale: Locale }) {
         title={timeline.heading[locale]}
         intro={timeline.intro[locale]}
         tone="pink"
-        icon={<TimelineIcon />}
       />
 
       <div className="relative mt-12">

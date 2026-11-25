@@ -5,7 +5,6 @@ import { resolved, workProcess, type Locale } from '@/content'
 import { EvidenceLink } from '@/components/evidence-link'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
-import { TimelineIcon } from '@/components/icons'
 import { Tape } from '@/components/zine'
 
 /**
@@ -35,7 +34,6 @@ export function Process({ locale }: { locale: Locale }) {
         title={workProcess.heading[locale]}
         intro={workProcess.intro[locale]}
         tone="ochre"
-        icon={<TimelineIcon />}
         onPaper
       />
 

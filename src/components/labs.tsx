@@ -1,7 +1,6 @@
 import { labsSection, writeups, type Locale } from '@/content'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
-import { ProjectsIcon } from '@/components/icons'
 
 /**
  * Labs (portafolio v2). Sin write-ups no renderiza nada: ni sección ni ancla
@@ -20,7 +19,6 @@ export function Labs({ locale }: { locale: Locale }) {
         title={labsSection.heading[locale]}
         intro={labsSection.intro[locale]}
         tone="lilac"
-        icon={<ProjectsIcon />}
       />
       <ul className="mt-12 grid gap-5 md:grid-cols-2">
         {writeups.map((writeup) => (

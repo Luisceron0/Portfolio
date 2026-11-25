@@ -3,7 +3,6 @@ import { ContactForm } from '@/components/contact-form'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
 import { isTestMode, TURNSTILE_TEST_KEYS } from '@/lib/test-mode'
-import { ContactIcon } from '@/components/icons'
 import { Tape } from '@/components/zine'
 
 /**
@@ -35,7 +34,6 @@ export function Contact({ locale }: { locale: Locale }) {
         title={contact.heading[locale]}
         intro={contact.intro[locale]}
         tone="pink"
-        icon={<ContactIcon />}
       />
 
       {/*

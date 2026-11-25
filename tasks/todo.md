@@ -20,6 +20,20 @@
 - [x] Espacio para proyectos nuevos (`upcomingProjects`) y sección Labs condicional
 - [x] CV con proyectos SEG, sitio IPS y CareLink
 
+### RF-110 v5: rediseño zine de papel (2026-11-24, rama `rediseno-zine`, sale de `portafolio-v2`)
+Material físico (cartulina negra, fotocopia, papel magenta, cinta, sellos, Dymo, notas adhesivas,
+grapas, marcador) con el movimiento P3R conservado. Sin cambios de contenido, rutas, formulario,
+CSP ni servidor; cero dependencias nuevas.
+- [x] 1. Fundaciones: tokens, Permanent Marker (28 KB, mismo origen, Apache 2.0), check:contrast con 34 pares
+- [x] 2. Limpieza: sin glitch, agua, esquirlas, emblema, marca de agua, p-outline, brillos ni blur (grep vacío)
+- [x] 3. Materiales `.m-*` en globals.css y adornos dibujados en `zine.tsx`
+- [x] 4. Hero y nav; RF-101 a 375x667 en verde
+- [x] 5. Secciones, `/casos`, OG y favicon
+- [x] 6. Gestos (cinta, sello, trazo) y movimiento reducido quieto
+- [x] 7. Verificación: Lighthouse móvil 99/100 en home y /casos/carelink (main: 99/96 y 99/100); 147 elementos enfocables con anillo visible en negro, papel y magenta; capturas a 375, 768, 1280 y 1920 en ES y EN (fuera del repo, `capturas-zine/`); e2e 179 en verde
+- [x] 8. Documentación: esta entrada, lessons.md y la cabecera de tailwind.config.ts
+- [ ] Luis: revisar las capturas y aprobar antes de cualquier merge (esta rama incluye portafolio v2, tampoco aprobado aún)
+
 ### Tareas del dueño, portafolio v2
 Regla (2026-11-21): ningún punto abierto de un sistema real en producción se publica mientras no
 esté corregido; este archivo es público, así que tampoco se describe aquí.

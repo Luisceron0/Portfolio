@@ -1,7 +1,7 @@
 import { cv, type Locale } from '@/content'
 import { ExternalLinkButton } from '@/components/external-link'
 import { Reveal } from '@/components/reveal'
-import { BrushStroke, Staple } from '@/components/zine'
+import { BrushStroke } from '@/components/zine'
 
 /**
  * RF-103 — descarga del CV.
@@ -22,10 +22,6 @@ export function CvDownloads({ locale }: { locale: Locale }) {
     <section aria-labelledby="cv-title" id="cv" className="m-magenta relative my-8 overflow-x-clip py-20 sm:py-24">
       {/* Tira de kraft cruzada en diagonal: solo decoración, detrás del texto. */}
       <div aria-hidden="true" className="m-kraft pointer-events-none absolute -right-10 top-10 hidden h-10 w-[28rem] rotate-[-14deg] opacity-90 md:block" />
-      <Staple className="left-6 top-6" />
-      <Staple className="right-6 top-6" />
-      <Staple className="bottom-6 left-6" />
-      <Staple className="bottom-6 right-6" />
 
       <div className="relative mx-auto max-w-content px-5 sm:px-8">
         <Reveal>

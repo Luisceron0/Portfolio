@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 
 import { Reveal } from '@/components/reveal'
-import { BrushStroke, CrossOut, MarkerCircle, SplatStar } from '@/components/zine'
+import { BrushStroke, SplatStar } from '@/components/zine'
 
 /**
  * RF-110 v5: cada sección tiene su tono de MATERIAL (tinta magenta, papel rosa,
@@ -77,7 +77,6 @@ export function SectionHeading({
   title,
   intro,
   tone,
-  icon,
   onPaper = false,
 }: {
   id: string
@@ -85,7 +84,6 @@ export function SectionHeading({
   title: string
   intro?: string
   tone: Tone
-  icon?: ReactNode
   onPaper?: boolean
 }) {
   return (
@@ -106,11 +104,6 @@ export function SectionHeading({
         </span>
 
         <div className="min-w-0 pb-1">
-          {icon && (
-            <MarkerCircle className={`mb-3 h-10 w-10 ${onPaper ? 'text-tinta' : TONE_TEXT[tone]}`}>
-              {icon}
-            </MarkerCircle>
-          )}
           <h2 id={id} className="p-display text-[clamp(1.1rem,5.4vw,1.6rem)] leading-none [overflow-wrap:anywhere] sm:text-5xl md:text-6xl">
             <span className="p-title-box">{title}</span>
           </h2>
@@ -119,7 +112,6 @@ export function SectionHeading({
 
       <div aria-hidden="true" className={`mt-6 flex items-center gap-2 ${onPaper ? 'text-tinta' : 'text-paper'}`}>
         <BrushStroke className="h-3 w-full max-w-md" color={onPaper ? '#0b0a0f' : '#f2efe8'} draw />
-        <CrossOut className="h-5 w-5 shrink-0" />
       </div>
 
       {intro && (

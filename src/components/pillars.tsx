@@ -3,8 +3,6 @@ import { caseHref } from '@/lib/locale'
 import { PendingNote } from '@/components/pending'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading, TONE_BG, TONE_TEXT, type Tone } from '@/components/section'
-import { Scribble, Staple } from '@/components/zine'
-import { ProfileIcon } from '@/components/icons'
 
 /** Un tono por pilar: tres frentes de igual peso, tres colores distintos. */
 const PILLAR_TONES: readonly Tone[] = ['magenta', 'cyan', 'ochre']
@@ -37,15 +35,12 @@ export function Pillars({ locale }: { locale: Locale }) {
         number="01"
         title={pillars.heading[locale]}
         tone="magenta"
-        icon={<ProfileIcon />}
       />
 
       <Reveal>
         {/* Carta fotocopiada: el perfil, en primera persona implícita. */}
         <div className="relative mt-12 max-w-4xl">
           <div className="m-sheet -rotate-[0.6deg] p-6 sm:p-8">
-            <Staple className="-top-1 left-5" />
-            <Staple className="-top-1 left-9" />
             <div className="space-y-4">
               {profile.summary[locale].map((paragraph) => (
                 <p key={paragraph} className="text-lg leading-relaxed text-tinta">
@@ -54,7 +49,6 @@ export function Pillars({ locale }: { locale: Locale }) {
               ))}
             </div>
           </div>
-          <Scribble className="absolute -right-6 -top-10 hidden h-16 w-20 md:block" color="#F25CEB" />
         </div>
       </Reveal>
 

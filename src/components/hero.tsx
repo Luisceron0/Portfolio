@@ -47,8 +47,17 @@ export function Hero({ locale }: { locale: Locale }) {
 
       <div className="relative mx-auto grid max-w-content items-center gap-12 px-5 pb-12 pt-8 sm:px-8 sm:pb-16 sm:pt-14 lg:grid-cols-[1.35fr_1fr]">
         <div className="relative">
-          <p className="p-enter m-dymo text-[0.7rem] sm:text-xs" style={delay(0)}>
-            {hero.role[locale]}
+          {/*
+            Una tira Dymo por rol: la cinta real no se parte en dos líneas.
+            Los separadores quedan para lectores de pantalla.
+          */}
+          <p className="p-enter flex flex-wrap gap-x-1.5 gap-y-2 text-[0.7rem] sm:text-xs" style={delay(0)}>
+            {hero.role[locale].split(' | ').map((part, i) => (
+              <span key={part} className="contents">
+                {i > 0 && <span className="sr-only"> | </span>}
+                <span className={`m-dymo whitespace-nowrap ${i % 2 ? '-rotate-1' : 'rotate-[0.5deg]'}`}>{part}</span>
+              </span>
+            ))}
           </p>
 
           {/*
@@ -119,7 +128,7 @@ export function Hero({ locale }: { locale: Locale }) {
           <div className="m-card px-6 py-8 sm:px-10">
             <span
               aria-hidden="true"
-              className="p-display pointer-events-none absolute -left-1 top-4 select-none text-6xl leading-none text-magenta-text [writing-mode:vertical-rl]"
+              className="p-display pointer-events-none absolute left-2 top-4 select-none text-6xl leading-none text-magenta-text [writing-mode:vertical-rl]"
             >
               {hero.menu.title[locale]}
             </span>
@@ -136,7 +145,6 @@ export function Hero({ locale }: { locale: Locale }) {
             </div>
           </div>
           <Tape className="-top-3 left-8" rotate={-8} />
-          <Tape className="-bottom-3 right-10" rotate={5} />
         </div>
       </div>
     </section>
