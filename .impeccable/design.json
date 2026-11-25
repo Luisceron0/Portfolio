@@ -1,0 +1,611 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-25T03:42:54.078Z",
+  "title": "Design System: Portafolio Luis Alejandro Cerón Muñoz",
+  "extensions": {
+    "colorMeta": {
+      "surface": {
+        "role": "neutral",
+        "displayName": "Cartulina Negra",
+        "canonical": "#121014",
+        "oklch": "oklch(17.7% 0.009 307.9)",
+        "tonalRamp": [
+          "oklch(15% 0.009 307.9)",
+          "oklch(26% 0.009 307.9)",
+          "oklch(37% 0.009 307.9)",
+          "oklch(48% 0.009 307.9)",
+          "oklch(60% 0.009 307.9)",
+          "oklch(72% 0.009 307.9)",
+          "oklch(84% 0.009 307.9)",
+          "oklch(95% 0.009 307.9)"
+        ]
+      },
+      "surface-card": {
+        "role": "neutral",
+        "displayName": "Cartulina de Tarjeta",
+        "canonical": "#1b181e",
+        "oklch": "oklch(21.5% 0.012 307.8)",
+        "tonalRamp": [
+          "oklch(15% 0.012 307.8)",
+          "oklch(26% 0.012 307.8)",
+          "oklch(37% 0.012 307.8)",
+          "oklch(48% 0.012 307.8)",
+          "oklch(60% 0.012 307.8)",
+          "oklch(72% 0.012 307.8)",
+          "oklch(84% 0.012 307.8)",
+          "oklch(95% 0.012 307.8)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Fotocopia",
+        "canonical": "#f2efe8",
+        "oklch": "oklch(95.3% 0.01 87.5)",
+        "tonalRamp": [
+          "oklch(15% 0.01 87.5)",
+          "oklch(26% 0.01 87.5)",
+          "oklch(37% 0.01 87.5)",
+          "oklch(48% 0.01 87.5)",
+          "oklch(60% 0.01 87.5)",
+          "oklch(72% 0.01 87.5)",
+          "oklch(84% 0.01 87.5)",
+          "oklch(95% 0.01 87.5)"
+        ]
+      },
+      "paper-dark": {
+        "role": "neutral",
+        "displayName": "Papel Oscuro",
+        "canonical": "#e6e2d8",
+        "oklch": "oklch(91.3% 0.014 88.7)",
+        "tonalRamp": [
+          "oklch(15% 0.014 88.7)",
+          "oklch(26% 0.014 88.7)",
+          "oklch(37% 0.014 88.7)",
+          "oklch(48% 0.014 88.7)",
+          "oklch(60% 0.014 88.7)",
+          "oklch(72% 0.014 88.7)",
+          "oklch(84% 0.014 88.7)",
+          "oklch(95% 0.014 88.7)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Texto Claro",
+        "canonical": "#f2efe8",
+        "oklch": "oklch(95.3% 0.01 87.5)",
+        "tonalRamp": [
+          "oklch(15% 0.01 87.5)",
+          "oklch(26% 0.01 87.5)",
+          "oklch(37% 0.01 87.5)",
+          "oklch(48% 0.01 87.5)",
+          "oklch(60% 0.01 87.5)",
+          "oklch(72% 0.01 87.5)",
+          "oklch(84% 0.01 87.5)",
+          "oklch(95% 0.01 87.5)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Texto Secundario Claro",
+        "canonical": "#b9b3ab",
+        "oklch": "oklch(76.9% 0.013 75.3)",
+        "tonalRamp": [
+          "oklch(15% 0.013 75.3)",
+          "oklch(26% 0.013 75.3)",
+          "oklch(37% 0.013 75.3)",
+          "oklch(48% 0.013 75.3)",
+          "oklch(60% 0.013 75.3)",
+          "oklch(72% 0.013 75.3)",
+          "oklch(84% 0.013 75.3)",
+          "oklch(95% 0.013 75.3)"
+        ]
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#0b0a0f",
+        "oklch": "oklch(14.9% 0.011 294.2)",
+        "tonalRamp": [
+          "oklch(15% 0.011 294.2)",
+          "oklch(26% 0.011 294.2)",
+          "oklch(37% 0.011 294.2)",
+          "oklch(48% 0.011 294.2)",
+          "oklch(60% 0.011 294.2)",
+          "oklch(72% 0.011 294.2)",
+          "oklch(84% 0.011 294.2)",
+          "oklch(95% 0.011 294.2)"
+        ]
+      },
+      "tinta-muted": {
+        "role": "neutral",
+        "displayName": "Tinta Secundaria",
+        "canonical": "#4a4540",
+        "oklch": "oklch(39.4% 0.011 67.5)",
+        "tonalRamp": [
+          "oklch(15% 0.011 67.5)",
+          "oklch(26% 0.011 67.5)",
+          "oklch(37% 0.011 67.5)",
+          "oklch(48% 0.011 67.5)",
+          "oklch(60% 0.011 67.5)",
+          "oklch(72% 0.011 67.5)",
+          "oklch(84% 0.011 67.5)",
+          "oklch(95% 0.011 67.5)"
+        ]
+      },
+      "magenta": {
+        "role": "primary",
+        "displayName": "Papel Magenta",
+        "canonical": "#D903D5",
+        "oklch": "oklch(61.9% 0.282 329.4)",
+        "tonalRamp": [
+          "oklch(15% 0.158 329.4)",
+          "oklch(26% 0.185 329.4)",
+          "oklch(37% 0.212 329.4)",
+          "oklch(48% 0.24 329.4)",
+          "oklch(60% 0.27 329.4)",
+          "oklch(72% 0.24 329.4)",
+          "oklch(84% 0.21 329.4)",
+          "oklch(95% 0.182 329.4)"
+        ],
+        "note": "Renderizado con motas claras queda en ~#DB13D8; nunca grano oscuro (lo apagaba a ~#C903C5)."
+      },
+      "magenta-deep": {
+        "role": "primary",
+        "displayName": "Magenta Profundo",
+        "canonical": "#A8009F",
+        "oklch": "oklch(50.8% 0.23 331.3)",
+        "tonalRamp": [
+          "oklch(15% 0.158 331.3)",
+          "oklch(26% 0.185 331.3)",
+          "oklch(37% 0.212 331.3)",
+          "oklch(48% 0.23 331.3)",
+          "oklch(60% 0.23 331.3)",
+          "oklch(72% 0.23 331.3)",
+          "oklch(84% 0.21 331.3)",
+          "oklch(95% 0.182 331.3)"
+        ]
+      },
+      "magenta-text": {
+        "role": "primary",
+        "displayName": "Tinta Magenta",
+        "canonical": "#F25CEB",
+        "oklch": "oklch(71.9% 0.242 329.6)",
+        "tonalRamp": [
+          "oklch(15% 0.158 329.6)",
+          "oklch(26% 0.185 329.6)",
+          "oklch(37% 0.212 329.6)",
+          "oklch(48% 0.24 329.6)",
+          "oklch(60% 0.242 329.6)",
+          "oklch(72% 0.24 329.6)",
+          "oklch(84% 0.21 329.6)",
+          "oklch(95% 0.182 329.6)"
+        ]
+      },
+      "plum": {
+        "role": "secondary",
+        "displayName": "Plum de Sombra",
+        "canonical": "#5a1257",
+        "oklch": "oklch(33.8% 0.132 329.9)",
+        "tonalRamp": [
+          "oklch(15% 0.132 329.9)",
+          "oklch(26% 0.132 329.9)",
+          "oklch(37% 0.132 329.9)",
+          "oklch(48% 0.132 329.9)",
+          "oklch(60% 0.132 329.9)",
+          "oklch(72% 0.132 329.9)",
+          "oklch(84% 0.132 329.9)",
+          "oklch(95% 0.132 329.9)"
+        ]
+      },
+      "tone-pink": {
+        "role": "tertiary",
+        "displayName": "Papel Rosa",
+        "canonical": "#FF9CF5",
+        "oklch": "oklch(82.2% 0.161 330.6)",
+        "tonalRamp": [
+          "oklch(15% 0.158 330.6)",
+          "oklch(26% 0.161 330.6)",
+          "oklch(37% 0.161 330.6)",
+          "oklch(48% 0.161 330.6)",
+          "oklch(60% 0.161 330.6)",
+          "oklch(72% 0.161 330.6)",
+          "oklch(84% 0.161 330.6)",
+          "oklch(95% 0.161 330.6)"
+        ]
+      },
+      "tone-ochre": {
+        "role": "tertiary",
+        "displayName": "Kraft Ocre",
+        "canonical": "#E0A24A",
+        "oklch": "oklch(75.5% 0.127 73.1)",
+        "tonalRamp": [
+          "oklch(15% 0.127 73.1)",
+          "oklch(26% 0.127 73.1)",
+          "oklch(37% 0.127 73.1)",
+          "oklch(48% 0.127 73.1)",
+          "oklch(60% 0.127 73.1)",
+          "oklch(72% 0.127 73.1)",
+          "oklch(84% 0.127 73.1)",
+          "oklch(95% 0.127 73.1)"
+        ]
+      },
+      "tone-cyan": {
+        "role": "tertiary",
+        "displayName": "Resaltador Cian",
+        "canonical": "#46C3D8",
+        "oklch": "oklch(75.7% 0.111 210.8)",
+        "tonalRamp": [
+          "oklch(15% 0.111 210.8)",
+          "oklch(26% 0.111 210.8)",
+          "oklch(37% 0.111 210.8)",
+          "oklch(48% 0.111 210.8)",
+          "oklch(60% 0.111 210.8)",
+          "oklch(72% 0.111 210.8)",
+          "oklch(84% 0.111 210.8)",
+          "oklch(95% 0.111 210.8)"
+        ]
+      },
+      "tone-lilac": {
+        "role": "tertiary",
+        "displayName": "Fotocopia Vieja Lila",
+        "canonical": "#B6A6B6",
+        "oklch": "oklch(74.4% 0.029 325.9)",
+        "tonalRamp": [
+          "oklch(15% 0.029 325.9)",
+          "oklch(26% 0.029 325.9)",
+          "oklch(37% 0.029 325.9)",
+          "oklch(48% 0.029 325.9)",
+          "oklch(60% 0.029 325.9)",
+          "oklch(72% 0.029 325.9)",
+          "oklch(84% 0.029 325.9)",
+          "oklch(95% 0.029 325.9)"
+        ]
+      },
+      "warn": {
+        "role": "tertiary",
+        "displayName": "Nota Adhesiva",
+        "canonical": "#ffd23f",
+        "oklch": "oklch(87.9% 0.162 90.9)",
+        "tonalRamp": [
+          "oklch(15% 0.158 90.9)",
+          "oklch(26% 0.162 90.9)",
+          "oklch(37% 0.162 90.9)",
+          "oklch(48% 0.162 90.9)",
+          "oklch(60% 0.162 90.9)",
+          "oklch(72% 0.162 90.9)",
+          "oklch(84% 0.162 90.9)",
+          "oklch(95% 0.162 90.9)"
+        ]
+      },
+      "steel": {
+        "role": "neutral",
+        "displayName": "Acero de Grapa",
+        "canonical": "#8d8a92",
+        "oklch": "oklch(63.9% 0.012 303)",
+        "tonalRamp": [
+          "oklch(15% 0.012 303)",
+          "oklch(26% 0.012 303)",
+          "oklch(37% 0.012 303)",
+          "oklch(48% 0.012 303)",
+          "oklch(60% 0.012 303)",
+          "oklch(72% 0.012 303)",
+          "oklch(84% 0.012 303)",
+          "oklch(95% 0.012 303)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Rotulador",
+        "purpose": "Nombre del hero en recortes de nota de rescate y números de sección."
+      },
+      "headline": {
+        "displayName": "Rotulador de título",
+        "purpose": "h2 de sección en tira de fotocopia, títulos de proyecto, menú de pausa, marquesina, sellos y títulos cortos de tarjeta."
+      },
+      "title": {
+        "displayName": "Sans extrabold",
+        "purpose": "Cargos y grados; títulos largos que el rotulador no puede llevar."
+      },
+      "body": {
+        "displayName": "Texto impreso",
+        "purpose": "Párrafos, pitch, resultados."
+      },
+      "label": {
+        "displayName": "Mecanografiado",
+        "purpose": "Etiquetas de formulario, dt, flujo de datos, enlaces de evidencia."
+      },
+      "dymo": {
+        "displayName": "Dymo",
+        "purpose": "Chips, estado, idioma, filtros y letra de botones."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hoja-apilada",
+        "value": "6px 6px 0 #5a1257",
+        "purpose": "Fotocopias, fotos y tira del título."
+      },
+      {
+        "name": "recorte",
+        "value": "drop-shadow(3px 3px 0 #5a1257)",
+        "purpose": "Palabras del nombre en nota de rescate."
+      },
+      {
+        "name": "nota-adhesiva",
+        "value": "3px 3px 0 #0b0a0f",
+        "purpose": "Notas adhesivas."
+      },
+      {
+        "name": "levantar-tarjeta",
+        "value": "drop-shadow(-8px 8px 0 #5a1257)",
+        "purpose": "Hover de tarjetas, con translate(4px, -4px)."
+      },
+      {
+        "name": "boton-hover",
+        "value": "capa recortada desplazada translate(-5px, 5px)",
+        "purpose": "Sombra del botón, solo en hover."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-snap",
+        "value": "cubic-bezier(0.2, 0.9, 0.1, 1)",
+        "purpose": "Entradas, hovers, resaltador, cortina."
+      },
+      {
+        "name": "ease-spring",
+        "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "purpose": "Cursor del menú, sellos, cintas, chips, golpe del título."
+      },
+      {
+        "name": "curtain",
+        "value": "0.85s ease-snap con 0.12s de retraso; tiras 0.7s",
+        "purpose": "Cortina de papel magenta en diagonal al cargar; oculta con movimiento reducido."
+      },
+      {
+        "name": "p-enter",
+        "value": "0.55s ease-snap, translateX(-28px)",
+        "purpose": "Entrada escalonada del hero, sin sesgo."
+      },
+      {
+        "name": "reveal",
+        "value": "opacity 0.45s, transform 0.6s ease-snap, translateX(-32px)",
+        "purpose": "Aparición al hacer scroll."
+      },
+      {
+        "name": "title-unfold",
+        "value": "0.5s ease-snap, golpe 0.6s ease-spring",
+        "purpose": "La tira del título se despliega y el texto golpea."
+      },
+      {
+        "name": "p-tape-stick",
+        "value": "0.35s ease-spring, 0.12s",
+        "purpose": "Cinta que se pega después de su hoja."
+      },
+      {
+        "name": "p-stamp-hit",
+        "value": "0.4s ease-spring",
+        "purpose": "Sello que golpea."
+      },
+      {
+        "name": "p-draw",
+        "value": "stroke-dashoffset 0.6s ease-snap",
+        "purpose": "Trazos a mano que se dibujan."
+      },
+      {
+        "name": "p-wipe",
+        "value": "clip-path 0.9s ease-snap",
+        "purpose": "Capturas descubiertas con tajo dentado."
+      },
+      {
+        "name": "marquee",
+        "value": "28s linear infinite",
+        "purpose": "Marquesina a rotulador."
+      },
+      {
+        "name": "parallax",
+        "value": "animation-timeline: view(), translateX(-24px a 24px)",
+        "purpose": "Número de sección que se desliza."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "todo quieto y visible",
+        "purpose": "Sin cortina, marquesina, parallax, entradas ni progreso."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "400px"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón primario",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Etiqueta magenta-deep recortada con letra papel; CTA sobre cartulina negra.",
+      "html": "<button class=\"ds-btn-primary\">Ver proyectos</button>",
+      "css": ".ds-btn-primary { position: relative; isolation: isolate; display: inline-flex; align-items: center; min-height: 48px; padding: 10px 28px; border: 0; border-radius: 0; background: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 0.875rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #f2efe8; cursor: pointer; transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.1, 1); } .ds-btn-primary::before, .ds-btn-primary::after { content: ''; position: absolute; inset: 0; clip-path: polygon(1.5% 6%, 30% 0, 70% 3%, 99% 0, 100% 52%, 98.5% 100%, 62% 96%, 28% 100%, 0 97%, 1% 48%); transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.1, 1), opacity 0.2s; } .ds-btn-primary::before { z-index: -1; background-color: #A8009F; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"); } .ds-btn-primary::after { z-index: -2; background: #0b0a0f; opacity: 0; } .ds-btn-primary:hover { transform: translate(3px, -2px); } .ds-btn-primary:hover::before { transform: scaleX(1.04); } .ds-btn-primary:hover::after { opacity: 1; transform: translate(-5px, 5px) scaleX(1.04); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px #121014, 0 0 0 4px #F25CEB; }"
+    },
+    {
+      "name": "Botón secundario",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Fotocopia recortada con letra tinta y sombra magenta al hover.",
+      "html": "<button class=\"ds-btn-secondary\">Descargar CV</button>",
+      "css": ".ds-btn-secondary { position: relative; isolation: isolate; display: inline-flex; align-items: center; min-height: 48px; padding: 10px 28px; border: 0; border-radius: 0; background: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 0.875rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #0b0a0f; cursor: pointer; transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.1, 1); } .ds-btn-secondary::before, .ds-btn-secondary::after { content: ''; position: absolute; inset: 0; clip-path: polygon(1.5% 6%, 30% 0, 70% 3%, 99% 0, 100% 52%, 98.5% 100%, 62% 96%, 28% 100%, 0 97%, 1% 48%); transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.1, 1), opacity 0.2s; } .ds-btn-secondary::before { z-index: -1; background-color: #f2efe8; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"); } .ds-btn-secondary::after { z-index: -2; background: #d903d5; opacity: 0; } .ds-btn-secondary:hover { transform: translate(3px, -2px); } .ds-btn-secondary:hover::before { transform: scaleX(1.04); } .ds-btn-secondary:hover::after { opacity: 1; transform: translate(-5px, 5px) scaleX(1.04); } .ds-btn-secondary:focus-visible { outline: none; box-shadow: 0 0 0 2px #121014, 0 0 0 4px #F25CEB; }"
+    },
+    {
+      "name": "Botón oscuro",
+      "kind": "button",
+      "refersTo": "button-dark",
+      "description": "Cartulina tinta con letra papel; el primario sobre papel magenta.",
+      "html": "<button class=\"ds-btn-dark\">Escribir</button>",
+      "css": ".ds-btn-dark { position: relative; isolation: isolate; display: inline-flex; align-items: center; min-height: 48px; padding: 10px 28px; border: 0; border-radius: 0; background: none; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 0.875rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #f2efe8; cursor: pointer; transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.1, 1); } .ds-btn-dark::before, .ds-btn-dark::after { content: ''; position: absolute; inset: 0; clip-path: polygon(1.5% 6%, 30% 0, 70% 3%, 99% 0, 100% 52%, 98.5% 100%, 62% 96%, 28% 100%, 0 97%, 1% 48%); transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.1, 1), opacity 0.2s; } .ds-btn-dark::before { z-index: -1; background-color: #0b0a0f; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"); } .ds-btn-dark::after { z-index: -2; background: #f2efe8; opacity: 0; } .ds-btn-dark:hover { transform: translate(3px, -2px); } .ds-btn-dark:hover::before { transform: scaleX(1.04); } .ds-btn-dark:hover::after { opacity: 1; transform: translate(-5px, 5px) scaleX(1.04); } .ds-btn-dark:focus-visible { outline: none; box-shadow: 0 0 0 2px #121014, 0 0 0 4px #F25CEB; }"
+    },
+    {
+      "name": "Campo de texto",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Papel oscuro con línea inferior de tinta y etiqueta mecanografiada.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-n\">nombre</label><input id=\"ds-n\" class=\"ds-input\" placeholder=\"Tu nombre\"></div>",
+      "css": ".ds-field { background: #f2efe8; padding: 16px; } .ds-field-label { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.01em; color: #0b0a0f; } .ds-input { margin-top: 6px; display: block; width: 100%; border: 0; border-bottom: 2px solid #0b0a0f; border-radius: 0; background: #e6e2d8; padding: 10px 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1rem; color: #0b0a0f; transition: border-color 0.15s; } .ds-input::placeholder { color: #4a4540; } .ds-input:focus-visible { outline: none; border-bottom-color: #A8009F; box-shadow: 0 0 0 2px #f2efe8, 0 0 0 4px #0b0a0f; }"
+    },
+    {
+      "name": "Enlace de navegación",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Enlace a rotulador que barre un resaltador magenta irregular en hover, foco y página actual.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\" aria-current=\"page\">Proyectos</a><a class=\"ds-nav-link\" href=\"#\">Contacto</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 8px; background: #121014; padding: 12px; } .ds-nav-link { padding: 6px 12px; font-family: 'Permanent Marker', 'Arial Black', sans-serif; text-transform: uppercase; letter-spacing: 0.01em; font-size: 0.875rem; color: #b9b3ab; text-decoration: none; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C20 2 40 5 58 3 S88 2 98 5 L97 13 99 22 C80 27 60 24 42 27 S12 26 3 25 L1 15Z' fill='%23D903D5'/%3E%3C/svg%3E\"); background-repeat: no-repeat; background-position: left center; background-size: 0% 92%; transition: background-size 0.25s cubic-bezier(0.2, 0.9, 0.1, 1), color 0.15s; } .ds-nav-link:hover, .ds-nav-link:focus-visible, .ds-nav-link[aria-current] { background-size: 100% 92%; color: #0b0a0f; } .ds-nav-link:focus-visible { outline: none; box-shadow: 0 0 0 2px #121014, 0 0 0 4px #F25CEB; }"
+    },
+    {
+      "name": "Chip Dymo",
+      "kind": "chip",
+      "refersTo": "dymo",
+      "description": "Etiqueta Dymo en relieve para stack, categorías, estado y filtros.",
+      "html": "<div class=\"ds-chips\"><span class=\"ds-dymo\">Next.js</span> <span class=\"ds-dymo ds-dymo-magenta\">Seguridad</span> <span class=\"ds-dymo ds-dymo-edge\">Playwright</span></div>",
+      "css": ".ds-chips { background: #121014; padding: 16px; display: flex; gap: 8px; } .ds-dymo { position: relative; isolation: isolate; display: inline-flex; align-items: center; padding: 0.28em 0.9em; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #f2efe8; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); } .ds-dymo::before { content: ''; position: absolute; inset: 0; z-index: -1; background: #0b0a0f; clip-path: polygon(0 0, 100% 0, calc(100% - 0.45em) 50%, 100% 100%, 0 100%, 0.45em 50%); } .ds-dymo-magenta::before { background: #A8009F; } .ds-dymo-edge::before { box-shadow: inset 0 0 0 1px #f2efe8; } .ds-dymo:hover { transform: translateY(-3px) scale(1.06); }"
+    },
+    {
+      "name": "Tarjeta de cartulina",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Cartulina negra recortada con borde de papel de 3px; sube con sombra plum sólida.",
+      "html": "<article class=\"ds-card\"><h3 class=\"ds-card-title\">SEG</h3><p class=\"ds-card-body\">Controles enlazados a código con permalink fijado a commit.</p></article>",
+      "css": ".ds-card { position: relative; isolation: isolate; padding: 28px; color: #f2efe8; transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.1, 1), filter 0.3s; } .ds-card::before, .ds-card::after { content: ''; position: absolute; z-index: -1; clip-path: polygon(0.6% 1.2%, 30% 0, 62% 0.8%, 99.2% 0, 100% 34%, 99.4% 70%, 100% 99%, 66% 100%, 34% 99.2%, 0 100%, 0.8% 64%, 0 30%); } .ds-card::before { inset: -3px; background: #f2efe8; } .ds-card::after { inset: 0; background: #1b181e; } .ds-card:hover { transform: translate(4px, -4px); filter: drop-shadow(-8px 8px 0 #5a1257); } .ds-card-title { margin: 0; font-family: 'Permanent Marker', 'Arial Black', sans-serif; font-weight: 400; text-transform: uppercase; font-size: 2.25rem; line-height: 1; } .ds-card-body { margin: 12px 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.625; color: #f2efe8; }"
+    },
+    {
+      "name": "Fotocopia con cinta",
+      "kind": "custom",
+      "refersTo": "sheet",
+      "description": "Hoja de papel con sombra sólida plum y un trozo de cinta kraft; pitch y fichas.",
+      "html": "<div class=\"ds-sheet-wrap\"><p class=\"ds-sheet\">Desarrollador con software en producción pasando a AppSec.</p><span class=\"ds-tape\"></span></div>",
+      "css": ".ds-sheet-wrap { position: relative; padding: 20px; background: #121014; } .ds-sheet { margin: 0; padding: 12px 20px; background-color: #f2efe8; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"); color: #0b0a0f; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1.125rem; line-height: 1.375; box-shadow: 6px 6px 0 #5a1257; } .ds-tape { position: absolute; right: 6px; top: 6px; width: 80px; height: 24px; background-color: rgba(224, 162, 74, 0.72); transform: rotate(8deg); clip-path: polygon(0 10%, 4% 0, 8% 12%, 12% 0, 88% 0, 92% 10%, 96% 0, 100% 12%, 100% 88%, 96% 100%, 92% 90%, 88% 100%, 12% 100%, 8% 88%, 4% 100%, 0 90%); }"
+    },
+    {
+      "name": "Sello de goma",
+      "kind": "custom",
+      "refersTo": "stamp",
+      "description": "Rotulador con doble recuadro, giro y tinta magenta-text sobre negro.",
+      "html": "<div class=\"ds-stamp-bg\"><span class=\"ds-stamp\">Disponible</span></div>",
+      "css": ".ds-stamp-bg { background: #121014; padding: 24px; } .ds-stamp { display: inline-block; padding: 0.36em 0.7em 0.3em; font-family: 'Permanent Marker', 'Arial Black', sans-serif; text-transform: uppercase; line-height: 1.05; font-size: 1.25rem; color: #F25CEB; border: 2px solid currentColor; outline: 1.5px solid currentColor; outline-offset: -6px; transform: rotate(-4deg); }"
+    },
+    {
+      "name": "Banda de papel magenta",
+      "kind": "custom",
+      "refersTo": "band-magenta",
+      "description": "Papel magenta a sangre con bordes rasgados y solo tinta encima.",
+      "html": "<section class=\"ds-band\"><h2 class=\"ds-band-title\">Contacto</h2><p class=\"ds-band-body\">Tinta sobre magenta: 4.63:1.</p></section>",
+      "css": ".ds-band { padding: 48px 32px; background-color: #D903D5; color: #0b0a0f; clip-path: polygon(0 10px, 6% 2px, 11% 9px, 17% 0, 24% 8px, 31% 3px, 38% 11px, 45% 1px, 52% 8px, 60% 2px, 67% 11px, 74% 4px, 81% 10px, 88% 1px, 94% 8px, 100% 3px, 100% calc(100% - 9px), 89% calc(100% - 10px), 75% calc(100% - 8px), 61% calc(100% - 11px), 47% calc(100% - 9px), 33% calc(100% - 10px), 19% calc(100% - 9px), 6% calc(100% - 8px), 0 calc(100% - 2px)); } .ds-band-title { margin: 0; font-family: 'Permanent Marker', 'Arial Black', sans-serif; font-weight: 400; text-transform: uppercase; font-size: 3rem; line-height: 1; } .ds-band-body { margin: 12px 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1.125rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El zine sobre la mesa de trabajo",
+    "overview": "Cada superficie es un material que podría estar físicamente sobre una mesa: cartulina negra con grano como lienzo, fotocopias con sombra sólida plum, bandas de papel magenta a sangre con bordes rasgados, cinta kraft, sellos de goma, etiquetas Dymo en relieve y notas adhesivas. El texto se reparte en tres voces impresas: rotulador a mano para lo que se grita, mecanografiado para los datos y cuerpo sans recto para lo que se lee. La densidad es de recorte pegado: piezas giradas uno o dos grados, solapadas con cinta, nunca un tablero de paneles alineados.\n\nEl movimiento conserva la mecánica de los menús de Persona 3 Reload (curvas de golpe y de rebote, entradas laterales, cursor que salta), pero lo que se mueve es papel: una cortina de papel magenta, títulos que se despliegan, cintas que se pegan y sellos que golpean. Con movimiento reducido todo queda quieto y visible.\n\nRechazo confirmado: el panel de luz neón con glow, glitch, separación RGB, desenfoque, vidrio y mono de terminal con tracking abierto. Tampoco esquinas redondeadas ni sombras difusas: el papel se corta, no se redondea.",
+    "keyCharacteristics": [
+      "Materiales, no paneles: cada color es un papel, una tinta o una cinta.",
+      "Sombras sólidas desplazadas (plum o tinta), nunca difusas.",
+      "Recortes con `clip-path` irregular: bordes rasgados, cartulina cortada, extremos de cinta en zigzag.",
+      "Tres voces: rotulador, mecanografiado y sans impreso.",
+      "Contraste medido por script, no estimado.",
+      "Movimiento P3R con materiales de papel; quieto con movimiento reducido."
+    ],
+    "rules": [
+      {
+        "name": "The Tinta Sobre Magenta Rule",
+        "body": "Sobre el papel magenta el texto es SIEMPRE tinta. Papel sobre magenta da 3.71:1 y no pasa. Para letra clara sobre magenta se usa magenta-deep.",
+        "section": "colors"
+      },
+      {
+        "name": "The Un Magenta No Basta Rule",
+        "body": "Ningún magenta pasa las tres pruebas: papel magenta para bandas, magenta-deep para rellenos con letra papel y magenta sobre papel, magenta-text para texto sobre negro. No se intercambian.",
+        "section": "colors"
+      },
+      {
+        "name": "The Muted Por Superficie Rule",
+        "body": "ink-muted vive solo sobre negro; nunca sobre papel. tinta-muted vive solo sobre papel, paper-dark, warn, rosa y cian.",
+        "section": "colors"
+      },
+      {
+        "name": "The Lila Solo Tinta Rule",
+        "body": "Sobre tone-lilac (banda o fotocopia vieja) solo tinta: tinta-muted da 4.11:1 y magenta-deep 2.88:1.",
+        "section": "colors"
+      },
+      {
+        "name": "The Textura Solo Sube Rule",
+        "body": "Una textura sobre un fondo cercano al umbral solo puede subir el contraste. El papel magenta lleva motas claras (no grano oscuro, que lo apagaba a ~#C903C5 y dejaba la tinta en ~4.0:1); medido renderizado queda en ~#DB13D8. Su trama de semitonos es de puntos de papel y solo en las esquinas.",
+        "section": "colors"
+      },
+      {
+        "name": "The Contraste Medido Rule",
+        "body": "Todo par texto y fondo nuevo entra en `scripts/check-contrast.mjs` con 4.5:1 mínimo; un hex que cambia en `tailwind.config.ts` cambia también allí.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rotulador Escaso Rule",
+        "body": "Permanent Marker solo en el nombre del hero, los h2 de sección y sus números, títulos de proyecto, menú de pausa, marquesina, sellos y títulos cortos de tarjeta. Nunca en párrafos, inputs, chips, código ni títulos largos de varias líneas: los cargos y grados van en el sans, extrabold.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mecanografiado Sin Aire Rule",
+        "body": "La monoespaciada lleva tracking de 0.01em, no el tracking abierto de terminal. El aire en mayúsculas es exclusivo de la Dymo (0.08em).",
+        "section": "typography"
+      },
+      {
+        "name": "The Sombra Sólida Rule",
+        "body": "Toda sombra es sólida, con desplazamiento y sin desenfoque, en plum o tinta. Nada de sombra difusa, glow, blur ni backdrop-filter.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Recorte En Pseudo Rule",
+        "body": "En elementos interactivos nunca se recorta el propio elemento (recortaría el anillo de foco): la forma va en `::before`, la sombra en `::after`, y el elemento queda rectangular.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Tres Adornos Rule",
+        "body": "Como máximo 3 adornos (brochazo, garabato o salpicadura) por pantalla. La cinta y las grapas no cuentan: son construcción.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do poner solo tinta sobre papel magenta (4.63:1); para letra clara usar magenta-deep con papel (5.78:1).",
+      "Do usar tinta, tinta-muted o magenta-deep sobre papel, y solo tinta sobre lila.",
+      "Do hacer que cualquier textura sobre un fondo cercano al umbral solo suba el contraste (motas claras en el magenta, medido ~#DB13D8).",
+      "Do usar sombras sólidas desplazadas en plum (#5a1257) o tinta, 3px a 8px, sin desenfoque.",
+      "Do recortar con `clip-path` en pseudo-elementos en todo lo interactivo, para que el foco quede entero.",
+      "Do dar anillo de foco magenta-text con separación negra sobre cartulina, y anillo tinta sobre papel, magenta, notas, kraft y la banda lila.",
+      "Do añadir cada par nuevo de texto y fondo a `npm run check:contrast`.",
+      "Do dejar todo quieto y visible con `prefers-reduced-motion`: sin cortina, sin marquesina, sin parallax, sin entradas."
+    ],
+    "donts": [
+      "Don't poner papel ni ink sobre magenta (3.71:1).",
+      "Don't usar ink-muted sobre papel, ni tinta-muted o magenta-deep sobre lila.",
+      "Don't usar Permanent Marker en párrafos, inputs, chips, código ni títulos largos de varias líneas; cargos y grados van en sans extrabold.",
+      "Don't pasar de 3 adornos (brochazo, garabato, salpicadura) por pantalla; la cinta y las grapas no cuentan.",
+      "Don't usar esquinas redondeadas, sombras difusas, vidrio, blur, glow ni neón.",
+      "Don't aplicar skewX a contenedores altos: desbordan en móvil. El sesgo vive solo en la cortina a pantalla completa.",
+      "Don't animar filtros ni el grano: el ruido es un `feTurbulence` estático.",
+      "Don't usar grano oscuro sobre el papel magenta: lo apaga por debajo del umbral."
+    ]
+  }
+}

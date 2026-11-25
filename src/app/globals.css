@@ -137,6 +137,11 @@
     @apply ring-offset-magenta;
   }
 
+  /* Banda lila: el magenta del fondo negro casi no se ve sobre lila. */
+  .m-band-lilac :focus-visible {
+    @apply ring-tinta ring-offset-tone-lilac;
+  }
+
   [id] {
     scroll-margin-top: 5rem;
   }
