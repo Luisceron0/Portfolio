@@ -18,7 +18,7 @@ decisión de aquí cambia, se actualiza aquí antes de tocar código.
 | D-02 | Todo el copy en `src/content.ts` | Texto en JSX | Regla 2: el dueño edita un archivo, no busca strings |
 | D-03 | CSP con nonce por petición vía middleware | CSP estática con `'unsafe-inline'` | `'unsafe-inline'` en `script-src` anula la defensa contra XSS |
 | D-04 | `force-dynamic` en la página | Render estático | Un nonce prerenderizado en build no coincide con el de la petición |
-| D-05 | Fuentes del sistema | `next/font` + Google Fonts | Cero descarga externa, cero bytes de fuente, `font-src 'self'` estricto |
+| D-05 | Fuentes del sistema para cuerpo y mecanografiado, más **una sola** fuente de rótulo autoalojada (Permanent Marker, Apache 2.0, subset Latin + Latin-1, 28 KB `.woff2`, `next/font/local`, `display: swap`). Actualizada el 2026-11-24 (RF-110 v5) | `next/font/google` o un CDN de fuentes | Se sirve desde el mismo origen: `font-src 'self'` no cambia y no hay descarga externa. Es la única fuente con descarga; el resto sigue en cero bytes |
 | D-06 | Resend vía `fetch` a su API REST | Paquete `resend` de npm | Una dependencia menos en la única superficie con secretos |
 | D-07 | Validación escrita a mano | `zod` | El shape es de 3 campos; una dependencia en el camino del secreto no se justifica |
 | D-08 | Rate limit en memoria por instancia | Redis / Upstash | Sin infra externa en v1. **Limitación asumida y documentada**, ver D-08b |

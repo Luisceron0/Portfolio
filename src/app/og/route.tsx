@@ -26,15 +26,15 @@ export function GET() {
           flexDirection: 'column',
           justifyContent: 'center',
           padding: '72px 80px',
-          background: '#09080d',
-          color: '#f5f3fa',
+          background: '#121014',
+          color: '#f2efe8',
           fontFamily: 'sans-serif',
         }}
       >
-        <div style={{ display: 'flex', width: 140, height: 14, background: '#7a1fff', marginBottom: 40 }} />
+        <div style={{ display: 'flex', width: 180, height: 22, background: '#D903D5', marginBottom: 40, transform: 'rotate(-2deg)' }} />
         <div style={{ display: 'flex', fontSize: 76, fontWeight: 800, lineHeight: 1.05 }}>{hero.name}</div>
-        <div style={{ display: 'flex', fontSize: 31, marginTop: 36, color: '#a6f13c' }}>{hero.role.en}</div>
-        <div style={{ display: 'flex', fontSize: 27, marginTop: 14, color: '#c3c0cf' }}>{hero.role.es}</div>
+        <div style={{ display: 'flex', fontSize: 31, marginTop: 36, color: '#f2efe8' }}>{hero.role.en}</div>
+        <div style={{ display: 'flex', fontSize: 27, marginTop: 14, color: '#b9b3ab' }}>{hero.role.es}</div>
       </div>
     ),
     { ...OG_IMAGE_SIZE }

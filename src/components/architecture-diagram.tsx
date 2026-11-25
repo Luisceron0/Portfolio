@@ -1,40 +1,41 @@
 import type { CaseLayer, Locale } from '@/content'
-import { TONE_BORDER, TONE_TEXT, type Tone } from '@/components/section'
+import type { Tone } from '@/components/section'
+import { ArrowDoodle } from '@/components/zine'
 
 /**
- * Diagrama simple de capas de un caso, de fuera hacia dentro.
+ * Diagrama de capas de un caso, de fuera hacia dentro, como fichas de papel
+ * apiladas (RF-110 v5): cada capa es una fotocopia pequeña en tinta, con giro
+ * alterno, una grapa en la primera y una flecha dibujada entre capas.
  *
  * Es HTML y no una imagen: una lista ordenada se lee igual con lector de
  * pantalla que a la vista, no necesita texto alternativo aparte y no puede
- * desincronizarse del contenido de content.ts. Las flechas son decorativas.
+ * desincronizarse del contenido de content.ts. Grapas y flechas son
+ * decorativas. El modo compacto conserva el material y omite el detalle.
  */
 export function ArchitectureDiagram({
   layers,
   locale,
-  tone,
   label,
   compact = false,
 }: {
   layers: readonly CaseLayer[]
   locale: Locale
-  tone: Tone
+  /** Se acepta por compatibilidad con los llamadores; el material es el mismo. */
+  tone?: Tone
   label: string
   compact?: boolean
 }) {
   return (
-    <ol aria-label={label} className="flex flex-col items-stretch">
+    <ol aria-label={label} className="flex flex-col items-stretch px-1">
       {layers.map((layer, index) => (
         <li key={layer.label.es} className="flex flex-col items-stretch">
-          {index > 0 && (
-            <span aria-hidden="true" className={`self-center py-1 font-mono text-sm leading-none ${TONE_TEXT[tone]}`}>
-              ↓
-            </span>
-          )}
-          <div className={`border-l-4 bg-surface px-4 ${compact ? 'py-2' : 'py-3'} ${TONE_BORDER[tone]}`}>
-            <p className={`font-mono text-[0.68rem] font-bold uppercase tracking-spec ${TONE_TEXT[tone]}`}>
-              {layer.label[locale]}
-            </p>
-            {!compact && <p className="mt-1 text-sm leading-relaxed text-ink">{layer.detail[locale]}</p>}
+          {index > 0 && <ArrowDoodle className="h-6 w-5 self-center text-ink-muted" />}
+          <div
+            className={`m-sheet px-4 ${compact ? 'py-2' : 'py-3'}`}
+            style={{ rotate: `${index % 2 === 0 ? -1 : 1}deg` }}
+          >
+            <p className="p-type text-xs font-bold text-tinta">{layer.label[locale]}</p>
+            {!compact && <p className="mt-1 text-sm leading-relaxed text-tinta">{layer.detail[locale]}</p>}
           </div>
         </li>
       ))}

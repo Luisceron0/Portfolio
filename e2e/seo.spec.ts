@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { LOCALES, securityCases, site } from '@/content'
+import { LOCALES, projectCases, site } from '@/content'
 
 /**
  * RF-112 — descubrimiento: longitudes de título y descripción, Open Graph,
@@ -13,7 +13,7 @@ test.describe('RF-112 — SEO', () => {
       expect(site.title[locale].length).toBeLessThanOrEqual(60)
       expect(site.description[locale].length).toBeLessThanOrEqual(155)
     }
-    for (const item of securityCases) {
+    for (const item of projectCases) {
       for (const locale of LOCALES) {
         expect(item.seoDescription[locale].length).toBeLessThanOrEqual(155)
       }
@@ -48,9 +48,9 @@ test.describe('RF-112 — SEO', () => {
     expect(raw).not.toContain('+57')
   })
 
-  test('sitemap.xml lista la home y los cuatro casos; robots.txt lo declara', async ({ request }) => {
+  test('sitemap.xml lista la home y cada proyecto; robots.txt lo declara', async ({ request }) => {
     const sitemap = await (await request.get('/sitemap.xml')).text()
-    for (const item of securityCases) {
+    for (const item of projectCases) {
       expect(sitemap).toContain(`/casos/${item.slug}`)
     }
     const robots = await (await request.get('/robots.txt')).text()
@@ -58,7 +58,7 @@ test.describe('RF-112 — SEO', () => {
   })
 
   test('cada página tiene un solo H1', async ({ page }) => {
-    for (const path of ['/', ...securityCases.map((item) => `/casos/${item.slug}`)]) {
+    for (const path of ['/', ...projectCases.map((item) => `/casos/${item.slug}`)]) {
       await page.goto(path)
       await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1)
     }

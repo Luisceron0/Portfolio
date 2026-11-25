@@ -3,7 +3,7 @@ import { ContactForm } from '@/components/contact-form'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
 import { isTestMode, TURNSTILE_TEST_KEYS } from '@/lib/test-mode'
-import { ContactIcon } from '@/components/icons'
+import { Tape } from '@/components/zine'
 
 /**
  * RF-104 — sección de contacto.
@@ -33,24 +33,26 @@ export function Contact({ locale }: { locale: Locale }) {
         number="07"
         title={contact.heading[locale]}
         intro={contact.intro[locale]}
-        tone="violet"
-        icon={<ContactIcon />}
+        tone="pink"
       />
 
       {/*
-        La "carta de aviso" de P5R: el formulario en un panel negro con borde
-        blanco, una cuña violeta en la esquina y la sombra sólida violeta. Es marco,
-        no control: nada aquí recorta el foco de los campos.
+        Formulario fotocopiado: una hoja de papel con texto tinta, pegada con
+        cinta y con el título sellado en la esquina. Es marco, no control: nada
+        aquí recorta el foco de los campos.
       */}
       <Reveal>
-        <div className="relative mt-10 max-w-2xl border-2 border-ink bg-surface p-5 shadow-[10px_10px_0_#7a1fff] sm:p-8">
-          <span
-            aria-hidden="true"
-            className="absolute -right-3 -top-4 rotate-6 bg-violet px-3 py-1 font-display text-xs font-black uppercase italic text-ink"
-          >
-            ★ ★ ★
-          </span>
-          <ContactForm sitekey={resolveSitekey()} locale={locale} />
+        <div className="relative mt-10 max-w-2xl">
+          <div className="m-sheet -rotate-[0.5deg] p-5 sm:p-8">
+            <span
+              aria-hidden="true"
+              className="m-stamp m-stamp--paper absolute -right-2 -top-5 bg-paper text-sm [--stamp-r:6deg]"
+            >
+              {contact.heading[locale]}
+            </span>
+            <ContactForm sitekey={resolveSitekey()} locale={locale} />
+          </div>
+          <Tape className="-top-3 left-10" rotate={-5} />
         </div>
       </Reveal>
     </Section>

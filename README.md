@@ -109,7 +109,7 @@ no debe llevar texto nunca.
 ## Estado
 
 **Reposicionamiento AppSec (rama `reposicionamiento-appsec`, 2026-11-14):**
-casos de seguridad con plantilla fija y controles enlazados a código en commits
+proyectos con plantilla fija y controles enlazados a código en commits
 fijos, sección "Cómo trabajo", experiencia agrupada, SEO (JSON-LD, sitemap,
 Open Graph generado con next/og) y CV ES/EN regenerados con RenderCV. Sin
 `[PENDIENTE]` abiertos (2026-11-19): `check:pending` pasa en verde. Las mejoras
@@ -118,7 +118,7 @@ opcionales del dueño están en `tasks/todo.md`.
 **Historial anterior:**
 
 Fases 1-3 completas (andamiaje, formulario de contacto, contenido real de los
-cinco proyectos, perfil y trayectoria, bilingüe ES/EN) y desplegadas en GitHub
+proyectos, perfil y trayectoria, bilingüe ES/EN) y desplegadas en GitHub
 con CI en verde ([Actions](https://github.com/Luisceron0/Portfolio/actions)):
 128 tests de Playwright, Semgrep y ESLint validados contra fixtures vulnerables
 propios, Lighthouse CI en el gate ≥95/≥95, todo verificado en un run real de

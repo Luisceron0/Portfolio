@@ -694,4 +694,67 @@ comportamiento era correcto, solo la aserción estaba desactualizada.
 completa antes de darse por cerrado: los tests de e2e citan copy literal.
 **Tags:** #testing #copy
 
+## 2026-11-24 — Un fallback de `next/font` sin comillas invalidó toda la variable de la fuente
+**Contexto:** el rediseño zine cargó Permanent Marker con `next/font/local` y
+`fallback: ['Arial Black', 'sans-serif']`. Los títulos salían en la fuente sans
+del cuerpo, sin error en consola ni en el build.
+**Causa:** next/font escribe el fallback sin comillas y el minificador de CSS
+leyó `Black` como el color con nombre y lo cambió por `#000`. La declaración de
+`--font-display` quedó inválida y todo lo que la usaba heredó la fuente del padre.
+**Corrección:** `fallback: ["'Arial Black'", 'sans-serif']`. Se verificó con
+`document.fonts` (estado `loaded`) y con una captura, no con el build.
+**Regla para el futuro:** un nombre de familia con espacios o con una palabra
+que también sea un color o una palabra clave de CSS va entre comillas dentro
+del string. Y una fuente nueva se da por cargada al verla en pantalla.
+**Tags:** #css #fuentes #next
+
+## 2026-11-24 — `mask-image` recorta también el `outline` del propio elemento
+**Contexto:** el sello de goma (`.m-stamp`) usa una máscara de tinta gastada y
+un segundo borde con `outline` separado hacia fuera. El segundo borde no salía.
+**Causa:** la máscara se aplica a todo lo que pinta el elemento, incluido el
+outline fuera de su caja.
+**Corrección:** `outline-offset` negativo, para que el segundo borde quede
+dentro de la caja enmascarada.
+**Regla para el futuro:** con `mask-image` o `clip-path`, todo adorno del
+elemento (outline, sombra, pseudo-elementos que sobresalen) va dentro de su
+caja, o en un hermano que no lleve la máscara.
+**Tags:** #css #rf-110
+
+## 2026-11-24 — Un `transform` en línea pisa las utilidades de transformación de Tailwind
+**Contexto:** las tarjetas de habilidades se giraban con `style={{ transform:
+'rotate(...)' }}` y además tenían `hover:-translate-y-1`. El hover no hacía nada.
+**Causa:** las utilidades de Tailwind componen todo en la propiedad
+`transform`, y el estilo en línea gana.
+**Corrección:** la propiedad independiente `rotate` en el estilo en línea; las
+utilidades siguen siendo dueñas de `transform`.
+**Regla para el futuro:** para una rotación o escala por elemento junto a
+utilidades de Tailwind, usar las propiedades individuales (`rotate`, `scale`,
+`translate`), nunca `transform` en línea.
+**Tags:** #css #tailwind
+
+## 2026-11-24 — El contraste del token pasaba; el del píxel, no
+**Contexto:** `check:contrast` daba tinta sobre magenta en 4.63:1. La revisión
+final midió el magenta en pantalla: `#C903C5`, y la tinta encima en ~4.0:1.
+**Causa:** el grano oscuro y la trama de puntos de tinta de `.m-magenta`
+apagaban el color de fondo. El script mide el hex del token, no lo que se pinta.
+**Corrección:** en el papel magenta, motas claras (`--grain-specks`) y trama
+de puntos de papel. Medido sobre la captura: ~`#DB13D8`, ~4.8:1.
+**Regla para el futuro:** una textura sobre un fondo cuyo contraste está cerca
+de 4.5 solo puede aclararlo (si el texto es oscuro) u oscurecerlo (si es
+claro), nunca al revés. Tras cambiar una textura, medir un píxel de la
+captura, no el token.
+**Tags:** #contraste #a11y #rf-110
+
+## 2026-11-24 — Una foto en blanco en la captura de página completa era carga diferida
+**Contexto:** en la captura completa de la home, la foto de un caso salía como
+un papel en blanco y parecía un fallo del recorte del barrido.
+**Causa:** `next/image` carga en diferido y la captura completa no desplaza la
+página, así que la imagen nunca entró en el viewport.
+**Corrección:** ninguna en el sitio. El script de capturas recorre la página
+antes de disparar, y la comprobación se hizo desplazando hasta la imagen.
+**Regla para el futuro:** antes de tocar CSS por una imagen vacía en una
+captura completa, desplazar hasta ella y mirar `naturalWidth`. Es la misma
+familia que la lección de las revelaciones por scroll del 2026-08-10.
+**Tags:** #capturas #imagenes
+
 <!-- New entries go above this line, most recent first. -->

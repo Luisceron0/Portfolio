@@ -14,12 +14,45 @@
 - [x] 11. CV ES (principal) y EN: misma información, ATS, ≤2 páginas, prueba de orden del texto extraído
 - [x] 12. Verificación completa y lista de `[PENDIENTE: TODO-LUIS, ...]` por archivo
 
+### Portafolio v2 (2026-11-21, rama `portafolio-v2`)
+- [x] Proyectos con categorías, destacados y filtros compartibles
+- [x] Casos con "qué logra", bloque inicial, máximo 5 controles visibles y rol con autoría medida
+- [x] Espacio para proyectos nuevos (`upcomingProjects`) y sección Labs condicional
+- [x] CV con proyectos SEG, sitio IPS y CareLink
+
+### RF-110 v5: rediseño zine de papel (2026-11-24, rama `rediseno-zine`, sale de `portafolio-v2`)
+Material físico (cartulina negra, fotocopia, papel magenta, cinta, sellos, Dymo, notas adhesivas,
+grapas, marcador) con el movimiento P3R conservado. Sin cambios de contenido, rutas, formulario,
+CSP ni servidor; cero dependencias nuevas.
+- [x] 1. Fundaciones: tokens, Permanent Marker (28 KB, mismo origen, Apache 2.0), check:contrast con 34 pares
+- [x] 2. Limpieza: sin glitch, agua, esquirlas, emblema, marca de agua, p-outline, brillos ni blur (grep vacío)
+- [x] 3. Materiales `.m-*` en globals.css y adornos dibujados en `zine.tsx`
+- [x] 4. Hero y nav; RF-101 a 375x667 en verde
+- [x] 5. Secciones, `/casos`, OG y favicon
+- [x] 6. Gestos (cinta, sello, trazo) y movimiento reducido quieto
+- [x] 7. Verificación: Lighthouse móvil 99/100 en home y /casos/carelink (main: 99/96 y 99/100); 147 elementos enfocables con anillo visible en negro, papel y magenta; capturas a 375, 768, 1280 y 1920 en ES y EN (fuera del repo, `capturas-zine/`); e2e 179 en verde
+- [x] 8. Documentación: esta entrada, lessons.md y la cabecera de tailwind.config.ts
+- [x] 9. Ajuste Persona punk (referencias del dueño, 2026-11-24): rótulos en sans negra cursiva del sistema, azul P3R en "Cómo trabajo" y en el menú de pausa, violeta con abanico de palabras en Habilidades, paneles de esquinas cortadas en lugar de notas, renglones y grapas. Sin glitch.
+- [x] 10. Decisiones del dueño: rol debajo del nombre; se quedan los números de las tarjetas; portafolio v2 y el zine se integran juntos en un solo PR.
+- [x] 11. Reverificación: Lighthouse móvil 99/100 en home y /casos/carelink, anillo de foco en los 147 enfocables, e2e en verde, DESIGN.md al día.
+- [ ] Luis: revisar el PR y hacer el merge (no se hace merge sin su aprobación)
+
+### Tareas del dueño, portafolio v2
+Regla (2026-11-21): ningún punto abierto de un sistema real en producción se publica mientras no
+esté corregido; este archivo es público, así que tampoco se describe aquí.
+- [ ] Luis: cerrar los puntos privados del sitio de la IPS (detalle en `NOTAS-PRIVADAS.md`, fuera de Git). Al desplegar cada corrección, añadirla al caso como antes y después, con fecha, dentro de "Controles".
+- [ ] Luis: definir con la IPS la política de retención de las PQRS. Al cerrarla, mover el punto de "Qué quedó abierto" a "Controles" en el caso del sitio.
+- [ ] Luis: obtener la autorización escrita de la IPS para la transferencia internacional de datos (Cloudflare, Ley 1581 de 2012) y que un abogado la revise.
+- [ ] Luis: aplicar `SanJoseIPS-gitleaksignore.patch` (carpeta GitHub, fuera de este repo) en el repo del sitio y confirmar que la CI de gitleaks pasa limpia.
+- [ ] Aplicar el pipeline AppSec reusable a ElevaForge y actualizar su caso (hoy su CI tiene gitleaks, lint, typecheck, tests, build y e2e, sin SAST).
+- [ ] rx-gmail-pdf: cuando corra en producción, cambiar su `status` a `'produccion'` en src/content.ts (la puesta en producción estaba prevista para el 2026-11-20; sin confirmar).
+- [ ] Publicar cada proyecto de `upcomingProjects` cuando exista su repositorio, como `ProjectCase` con evidencia enlazada; los destacados siguen siendo 3 como máximo.
+
 ### Actualización de experiencia (2026-11-19)
 - [x] Alcaldía, IPS San José, ElevaForge (CTO), Kennedy (tiempo completo) y freelance (tiempo parcial)
 - [x] Caso SEG; fichas del sitio de la IPS y de rx-gmail-pdf
 - [x] CV ES y EN regenerados (2 páginas, prueba de ATS)
 - [x] Responder las preguntas de `ownerQuestions` (respondidas el 2026-11-19)
-- [ ] 2026-11-20: cuando rx-gmail-pdf esté corriendo en producción, cambiar su `status` a `'produccion'` en src/content.ts
 - [ ] Revisar las notas privadas que quedaron fuera de Git
 
 ### Tareas del dueño (mejoras opcionales, no bloquean el deploy)

@@ -2,33 +2,88 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * RF-110 v5 — zine de papel.
+ *
+ * Regla de todo este archivo: cada superficie tiene que poder existir sobre una
+ * mesa de trabajo (cartulina, fotocopia, papel magenta, cinta, sello, Dymo,
+ * nota adhesiva). Nada de brillo, contorno de neón, desenfoque, separación RGB
+ * ni gradiente luminoso. El MOVIMIENTO sigue siendo el de Persona 3 Reload:
+ * mismas curvas (`--ease-snap`, `--ease-spring`) y mismos disparadores; solo
+ * cambia lo que se mueve.
+ *
+ * Texturas: SVG dibujados aquí en data URI (`img-src 'self' data:` ya los
+ * cubre). El ruido es un `feTurbulence` ESTÁTICO: se rasteriza una vez como
+ * imagen y nunca se anima.
+ */
+
 @layer base {
   :root {
     /*
-     * Tres stacks, todos del sistema. No usamos next/font con Google Fonts:
-     * obligaría a una descarga en build y a ampliar font-src en la CSP. Cero
-     * bytes de fuente = mejor Performance en Lighthouse (D-05 de tasks/plan.md).
-     *
-     * `--font-display` es la voz de Persona: rótulos en la letra más negra que
-     * trae el sistema, siempre en mayúsculas y en cursiva. Arial Black existe
-     * de serie en Windows y macOS.
+     * Cuerpo (texto impreso) y mecanografiado: stacks del sistema, cero bytes.
+     * `--font-display` (rotulador) lo define next/font/local en <html>
+     * (layout.tsx, D-05).
      */
     --font-sans: 'Helvetica Neue', Helvetica, Arial, ui-sans-serif, system-ui,
       sans-serif;
+    /* Rótulos Persona: sans negra en cursiva, del sistema (cero bytes). Arial
+       Black en Windows; en macOS, Helvetica Neue a peso 900. */
+    --font-heavy: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
       'Liberation Mono', monospace;
-    --font-display: 'Arial Black', 'Arial Bold', Gadget, 'Helvetica Neue',
-      Impact, sans-serif;
 
     /* Curva "de golpe" de los menús de Persona: arranca rápida y frena seco. */
     --ease-snap: cubic-bezier(0.2, 0.9, 0.1, 1);
     /* Curva con sobrepaso: el rebote del cursor de P3R al llegar. */
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Grano de papel claro (sobre cartulina negra). */
+    --grain-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    /* Grano de papel oscuro (sobre fotocopia, magenta y kraft). */
+    /* Motas claras para el papel magenta: el grano oscuro lo apagaba hasta
+       ~#C903C5 y la tinta encima bajaba a ~4.0:1. Aclarar solo sube el contraste. */
+    --grain-specks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --grain-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    /* Tinta gastada de los sellos: alfa entre 0.7 y 1, nunca menos (legible). */
+    --worn-ink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .3 .7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
+    /* Trazo de rotulador para subrayar (papel sobre negro, tinta sobre papel). */
+    --underline-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' preserveAspectRatio='none'%3E%3Cpath d='M1 5.2c14-2.6 27 1.4 41-.6S69 2 83 3.9s24 .4 36-1.1' fill='none' stroke='%23f2efe8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E");
+    --underline-ink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' preserveAspectRatio='none'%3E%3Cpath d='M1 5.2c14-2.6 27 1.4 41-.6S69 2 83 3.9s24 .4 36-1.1' fill='none' stroke='%230b0a0f' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E");
+    /* Resaltador de bordes irregulares, opaco para no bajar el contraste. */
+    --marker-magenta: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C20 2 40 5 58 3 S88 2 98 5 L97 13 99 22 C80 27 60 24 42 27 S12 26 3 25 L1 15Z' fill='%23D903D5'/%3E%3C/svg%3E");
+    --marker-cyan: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C20 2 40 5 58 3 S88 2 98 5 L97 13 99 22 C80 27 60 24 42 27 S12 26 3 25 L1 15Z' fill='%2346C3D8'/%3E%3C/svg%3E");
+    /* Brochazo magenta estirable: el cursor del menú de pausa. */
+    --brush-magenta: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40' preserveAspectRatio='none'%3E%3Cpath d='M4 12 C30 4 62 9 96 5 S160 3 196 8 L192 19 197 31 C170 37 138 33 104 36 S40 37 8 33 L2 22Z' fill='%23D903D5'/%3E%3Cpath d='M14 9 C50 6 90 8 130 6' stroke='%23A8009F' stroke-width='1.6' fill='none' opacity='.5'/%3E%3C/svg%3E");
+    /* Bordes rasgados: arriba y abajo de las bandas (16 puntos por lado). */
+    --torn-y: polygon(
+      0 10px, 6% 2px, 11% 9px, 17% 0, 24% 8px, 31% 3px, 38% 11px, 45% 1px, 52% 8px,
+      60% 2px, 67% 11px, 74% 4px, 81% 10px, 88% 1px, 94% 8px, 100% 3px,
+      100% calc(100% - 9px), 95% calc(100% - 2px), 89% calc(100% - 10px),
+      82% calc(100% - 1px), 75% calc(100% - 8px), 68% calc(100% - 3px),
+      61% calc(100% - 11px), 54% calc(100% - 2px), 47% calc(100% - 9px),
+      40% calc(100% - 1px), 33% calc(100% - 10px), 26% calc(100% - 3px),
+      19% calc(100% - 9px), 12% calc(100% - 1px), 6% calc(100% - 8px), 0 calc(100% - 2px)
+    );
+    /* Panel Persona: dos esquinas cortadas en diagonal. */
+    --cut-panel: polygon(
+      0 0, calc(100% - 1.4rem) 0, 100% 1.4rem, 100% 100%, 1.4rem 100%, 0 calc(100% - 1.4rem)
+    );
+    /* Recorte irregular de cartulina (12 puntos): tarjetas. */
+    --cut: polygon(
+      0.6% 1.2%, 30% 0, 62% 0.8%, 99.2% 0, 100% 34%, 99.4% 70%, 100% 99%,
+      66% 100%, 34% 99.2%, 0 100%, 0.8% 64%, 0 30%
+    );
+    /* Tira rasgada en los lados (títulos). */
+    --torn-x: polygon(
+      2% 0, 98% 0, 100% 14%, 97.5% 30%, 100% 47%, 98% 63%, 100% 80%, 97% 100%,
+      3% 100%, 0 84%, 2.5% 66%, 0 49%, 2% 33%, 0 16%
+    );
   }
 
   html {
     scroll-behavior: smooth;
     color-scheme: dark;
+    scrollbar-color: #d903d5 #121014;
   }
 
   /* Respeta a quien pide menos animación (WCAG 2.3.3). */
@@ -47,36 +102,51 @@
   }
 
   /*
-   * RF-110 v3 — el lienzo Persona.
-   *
-   *   1. TRAMA DE MEDIOS TONOS. Puntos violeta diminutos cada 7px, la textura de
-   *      cómic impreso que recorre toda la interfaz de P5R. A una opacidad que
-   *      se nota sin estorbar la lectura.
-   *   2. DOS RESPLANDORES. Violeta arriba a la derecha y verde tenue abajo a la
-   *      izquierda: los dos colores principales desde el primer vistazo.
-   *
-   * Todo `fixed`: el contenido se desliza por encima. CSS puro, cero imágenes.
+   * El lienzo: cartulina negra con grano (`.m-board`). Sin resplandores ni
+   * trama en toda la página: los semitonos viven solo en el papel magenta.
    */
   body {
     @apply bg-surface text-ink antialiased;
     font-family: var(--font-sans);
-    background-image:
-      radial-gradient(48rem 36rem at 92% -6%, rgba(122, 31, 255, 0.22), transparent 62%),
-      radial-gradient(44rem 34rem at -6% 78%, rgba(166, 241, 60, 0.07), transparent 60%),
-      radial-gradient(rgba(176, 124, 255, 0.09) 1px, transparent 1.4px);
-    background-size: auto, auto, 7px 7px;
-    background-attachment: fixed, fixed, fixed;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    pointer-events: none;
+    background-image: var(--grain-light);
+    opacity: 0.04;
   }
 
   ::selection {
-    background: #7a1fff;
-    color: #f5f3fa;
+    background: #d903d5;
+    color: #0b0a0f;
   }
 
-  /* Foco siempre visible y con contraste suficiente: navegación por teclado. */
+  /* Foco: anillo magenta sobre negro; en papel, magenta o notas, anillo tinta. */
   :focus-visible {
-    @apply outline-none ring-2 ring-tone-green ring-offset-2 ring-offset-surface;
+    @apply outline-none ring-2 ring-magenta-text ring-offset-2 ring-offset-surface;
   }
+
+  .m-blue :focus-visible,
+  .m-violet :focus-visible {
+    @apply ring-paper ring-offset-[#0b1a8c];
+  }
+
+  .m-sheet :focus-visible,
+  .m-magenta :focus-visible,
+  .m-panel :focus-visible,
+  .m-kraft :focus-visible,
+  .p-on-paper:focus-visible {
+    @apply ring-tinta ring-offset-paper;
+  }
+
+  .m-magenta :focus-visible {
+    @apply ring-offset-magenta;
+  }
+
 
   [id] {
     scroll-margin-top: 5rem;
@@ -84,89 +154,481 @@
 }
 
 @layer components {
-  /* ---------------------------------------------------------------------
-   * Rótulos
-   * ------------------------------------------------------------------- */
+  /* =====================================================================
+   * Voces impresas
+   * =================================================================== */
 
+  /* Rótulo a rotulador: nombre, títulos, números, menú de pausa. */
+  /* Rótulo Persona: negra, cursiva, mayúsculas, apretada. */
   .p-display {
-    font-family: var(--font-display);
+    font-family: var(--font-heavy);
     font-weight: 900;
     font-style: italic;
     text-transform: uppercase;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
 
-  /*
-   * Rótulo hueco, en contorno: referencias de proyecto, números de grupo y el
-   * "MENÚ" vertical. Decorativo: siempre va con `aria-hidden`. Los números de
-   * sección van RELLENOS a propósito, para que pesen más que todo lo demás.
-   */
-  .p-outline {
-    /* `text-fill-color` y no `color`: así el `text-tone-*` que lo acompaña
-       sigue dando el color del trazo (`currentColor`) y el relleno se vacía. */
-    -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 2px currentColor;
-    paint-order: stroke fill;
+  /* Brochazo a rotulador: solo acentos (MENÚ vertical), nunca texto de lectura. */
+  .p-brush {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
   }
 
-  /*
-   * Título en caja blanca inclinada con sombra sólida del tono de la sección.
-   * El fondo se inclina en un pseudo-elemento y el texto NO: se lee recto.
-   * La sombra es un `box-shadow` (no `clip-path`), así que no recorta nada.
-   */
-  .p-title-box {
+  /* Mecanografiado: kickers, dt, flujo de datos, metadatos. */
+  .p-type {
+    font-family: var(--font-mono);
+    letter-spacing: 0.01em;
+  }
+
+  /* =====================================================================
+   * ZINE v5: materiales
+   * =================================================================== */
+
+  /* Cartulina negra recortada: borde de papel de 3px por detrás del recorte. */
+  .m-card {
     position: relative;
-    display: inline-block;
-    padding: 0.1em 0.45em 0.12em;
-    color: #09080d;
     isolation: isolate;
   }
 
-  .p-title-box::before {
+  .m-card::before,
+  .m-card::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    clip-path: var(--cut);
+    pointer-events: none;
+  }
+
+  .m-card::before {
+    inset: -3px;
+    background: #f2efe8;
+  }
+
+  .m-card::after {
+    inset: 0;
+    background-color: #1b181e;
+    background-image: var(--grain-light);
+    background-blend-mode: soft-light;
+  }
+
+  /* Fotocopia: papel con grano y sombra SÓLIDA plum. Texto en tinta. */
+  .m-sheet {
+    position: relative;
+    background-color: #f2efe8;
+    background-image: var(--grain-dark);
+    color: #0b0a0f;
+    box-shadow: 6px 6px 0 #5a1257;
+  }
+
+  /* Papel magenta a sangre: bordes rasgados y semitonos solo en las esquinas. */
+  .m-magenta {
+    position: relative;
+    isolation: isolate;
+    background-color: #d903d5;
+    background-image: var(--grain-specks);
+    color: #0b0a0f;
+    clip-path: var(--torn-y);
+  }
+
+  .m-magenta::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: #f5f3fa;
-    transform: skewX(-12deg) rotate(-1.5deg);
-    box-shadow: 0.32em 0.22em 0 var(--tone, #7a1fff);
+    pointer-events: none;
+    /* Trama de fotocopia en puntos de papel, no de tinta: no apaga el magenta. */
+    background-image: radial-gradient(rgba(242, 239, 232, 0.3) 1.1px, transparent 1.5px);
+    background-size: 6px 6px;
+    -webkit-mask-image:
+      radial-gradient(22rem 16rem at 0 0, #000, transparent 70%),
+      radial-gradient(22rem 16rem at 100% 100%, #000, transparent 70%);
+    mask-image:
+      radial-gradient(22rem 16rem at 0 0, #000, transparent 70%),
+      radial-gradient(22rem 16rem at 100% 100%, #000, transparent 70%);
+  }
+
+  /* Banda de fotocopia vieja lila (alterna con la magenta). */
+  /*
+   * Azul P3R a sangre: de azul profundo arriba a azul eléctrico abajo, con
+   * manchas de luz de agua en la parte alta, planas y de borde duro (cel), sin
+   * animación. Las manchas quedan sobre el azul profundo y por encima de la
+   * intro, para que el papel siga por encima de 4.5:1. Texto SIEMPRE paper.
+   */
+  .m-blue {
+    position: relative;
+    isolation: isolate;
+    background-color: #0b1a8c;
+    background-image: linear-gradient(180deg, #0b1a8c 10%, #1e3bff 100%);
+    color: #f2efe8;
+    clip-path: var(--torn-y);
+  }
+
+  .m-blue::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 7.5rem;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='720' height='120' viewBox='0 0 720 120'%3E%3Cg fill='%2346C3D8'%3E%3Cpath fill-opacity='.42' d='M14 26c22-12 58-10 84-3 14 4 10 13-6 15-26 3-46 1-66 6-18 5-30-9-12-18z'/%3E%3Cpath fill-opacity='.3' d='M150 14c40-8 92-4 126 4 12 3 6 12-10 12-30 0-50 4-82 8-30 4-52-16-34-24z'/%3E%3Cpath fill-opacity='.36' d='M318 52c18-10 46-12 66-4 10 4 4 12-8 13-18 2-30 6-46 4-14-2-20-8-12-13z'/%3E%3Cpath fill-opacity='.4' d='M430 20c30-10 70-9 98 0 12 4 6 11-8 12-22 1-38 7-64 7-26 0-44-11-26-19z'/%3E%3Cpath fill-opacity='.26' d='M570 64c20-8 50-8 70 0 8 3 2 10-10 10-16 0-28 4-44 3-16-1-26-8-16-13z'/%3E%3Cpath fill-opacity='.34' d='M602 10c26-6 66-4 92 4 10 3 4 10-8 10-20 1-34 4-56 4-22 0-40-12-28-18z'/%3E%3Cpath fill-opacity='.22' d='M80 80c14-6 36-6 50 0 6 3 0 8-8 8-12 0-20 3-32 2-12-1-18-6-10-10z'/%3E%3Cpath fill-opacity='.24' d='M236 92c12-5 30-5 42 0 5 2 0 7-7 7-10 0-17 2-27 1-10-1-15-5-8-8z'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 720px 120px;
   }
 
   /*
-   * Nombre en "nota de rescate": cada palabra en su propio recorte, con giro y
-   * colores distintos, como las tarjetas de aviso de los Phantom Thieves. La
-   * versión legible del nombre va en un `sr-only` aparte (ver hero.tsx).
+   * Violeta del menú P3R, con la cuña diagonal en azul y motas claras.
+   * Texto SIEMPRE paper.
+   */
+  .m-violet {
+    position: relative;
+    isolation: isolate;
+    background-color: #4f1bc4;
+    background-image:
+      linear-gradient(112deg, transparent 58%, rgba(30, 59, 255, 0.5) 58% 74%, transparent 74%),
+      var(--grain-specks);
+    color: #f2efe8;
+    clip-path: var(--torn-y);
+  }
+
+  /*
+   * Palabras gigantes en abanico (menú P3R): fondo tipográfico de la banda
+   * violeta. Solo decoración (`aria-hidden`); son líneas, no bloques altos, y
+   * la banda recorta lo que sobresale.
+   */
+  .p-fan span {
+    display: block;
+    font-family: var(--font-heavy);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 0.84;
+    letter-spacing: -0.04em;
+    font-size: clamp(3.2rem, 10vw, 9rem);
+    color: #d9c8ff;
+    opacity: 0.16;
+    transform-origin: 0 50%;
+    transform: rotate(calc((var(--i) - 2.5) * -6deg)) translateX(calc(var(--i) * 1.4rem));
+  }
+
+  /* Cinta de embalaje / kraft, con extremos dentados. */
+  .m-kraft {
+    background-color: rgba(224, 162, 74, 0.94);
+    background-image: var(--grain-dark);
+    color: #0b0a0f;
+    clip-path: polygon(
+      0 8%, 1.2% 0, 98.8% 0, 100% 10%, 99% 30%, 100% 50%, 99% 70%, 100% 90%,
+      98.8% 100%, 1.2% 100%, 0 92%, 1% 70%, 0 50%, 1% 30%
+    );
+  }
+
+  /* Cinta adhesiva: un trozo de papel translúcido con extremos en zigzag. */
+  .m-tape {
+    position: absolute;
+    width: 80px;
+    height: 24px;
+    pointer-events: none;
+    /* Cinta de enmascarar kraft, translúcida: se ve lo que hay debajo. */
+    background-color: rgba(224, 162, 74, 0.72);
+    background-image:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.12), transparent 30% 70%, rgba(11, 10, 15, 0.1)),
+      var(--grain-dark);
+    transform: rotate(var(--tape-r, -6deg));
+    clip-path: polygon(
+      0 10%, 4% 0, 8% 12%, 12% 0, 88% 0, 92% 10%, 96% 0, 100% 12%,
+      100% 88%, 96% 100%, 92% 90%, 88% 100%, 12% 100%, 8% 88%, 4% 100%, 0 90%
+    );
+  }
+
+  /* Nota adhesiva: tinta, giro leve, sombra sólida tinta y franja adhesiva. */
+  /*
+   * Panel Persona: papel de color con dos esquinas cortadas y sombra sólida
+   * tinta desplazada. Forma y sombra en pseudo-elementos, así el foco de lo que
+   * va dentro no se recorta. Texto en tinta.
+   */
+  .m-panel {
+    position: relative;
+    isolation: isolate;
+    color: #0b0a0f;
+  }
+
+  .m-panel::before,
+  .m-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    clip-path: var(--cut-panel);
+    pointer-events: none;
+  }
+
+  .m-panel::before {
+    z-index: -1;
+    background-color: var(--panel-bg, #ffd23f);
+    background-image: var(--grain-dark);
+  }
+
+  .m-panel::after {
+    z-index: -2;
+    background: #0b0a0f;
+    translate: 6px 6px;
+  }
+
+  /* Panel del menú de pausa: cartulina en azul P3R profundo. */
+  .m-card--blue::after {
+    background-color: #0b1a8c;
+  }
+
+  /* Etiqueta Dymo: cinta con letra en relieve y extremos en V. */
+  .m-dymo {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.28em 0.9em;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #f2efe8;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+
+  .m-dymo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--dymo-bg, #0b0a0f);
+    box-shadow: inset 0 0 0 var(--dymo-edge, 0) #f2efe8;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 0.45em) 50%, 100% 100%, 0 100%, 0.45em 50%);
+  }
+
+  .m-dymo--magenta {
+    --dymo-bg: #a8009f;
+  }
+
+  .m-dymo--edge {
+    --dymo-edge: 1px;
+  }
+
+  /* Sello de goma: recuadro doble, giro y tinta gastada. */
+  .m-stamp {
+    display: inline-block;
+    padding: 0.36em 0.7em 0.3em;
+    font-family: var(--font-heavy);
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    line-height: 1.05;
+    color: #f25ceb;
+    /* Recuadro doble: el borde y, por DENTRO, el outline. Por fuera, la
+       máscara de tinta gastada lo recortaría (pinta solo la caja del borde). */
+    border: 2px solid currentColor;
+    outline: 1.5px solid currentColor;
+    outline-offset: -6px;
+    transform: rotate(var(--stamp-r, -4deg));
+    -webkit-mask-image: var(--worn-ink);
+    mask-image: var(--worn-ink);
+  }
+
+  .m-stamp--paper {
+    color: #a8009f;
+  }
+
+  /* Sobre papel magenta el sello va en tinta (el magenta no se vería). */
+  .m-stamp--ink {
+    color: #0b0a0f;
+  }
+
+  /* Foto pegada: borde polaroid, giro y sombra sólida plum. */
+  .m-photo {
+    position: relative;
+    padding: 9px 9px 14px;
+    background-color: #f2efe8;
+    transform: rotate(var(--tilt, -1deg));
+    box-shadow: 6px 6px 0 #5a1257;
+    transition: transform 0.3s var(--ease-snap);
+  }
+
+  .group:hover .m-photo {
+    transform: rotate(0deg);
+  }
+
+  /* Resaltador que barre (hover de enlaces y de la nav). */
+  .m-marker {
+    background-image: var(--marker-magenta);
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 0% 92%;
+    transition:
+      background-size 0.25s var(--ease-snap),
+      color 0.15s ease;
+  }
+
+  .m-marker--cyan {
+    background-image: var(--marker-cyan);
+  }
+
+  .m-marker:hover,
+  .m-marker:focus-visible,
+  .m-marker[aria-current] {
+    background-size: 100% 92%;
+    color: #0b0a0f;
+  }
+
+  /* Enlace subrayado a rotulador; en hover entra el resaltador. */
+  .p-link {
+    background-image: var(--underline-paper), var(--marker-magenta);
+    background-repeat: no-repeat;
+    background-position:
+      left bottom,
+      left center;
+    background-size:
+      100% 6px,
+      0% 92%;
+    padding-bottom: 3px;
+    transition:
+      background-size 0.25s var(--ease-snap),
+      color 0.15s ease;
+  }
+
+  .p-link:hover,
+  .p-link:focus-visible {
+    background-size:
+      100% 6px,
+      100% 92%;
+    color: #0b0a0f;
+  }
+
+  .p-link--cyan {
+    background-image: var(--underline-paper), var(--marker-cyan);
+  }
+
+  /* Sobre papel o papel magenta: subrayado en tinta. */
+  .p-link--ink {
+    background-image: var(--underline-ink), var(--marker-magenta);
+  }
+
+  /* Sobre papel magenta el resaltador magenta no se vería: barre en cian. */
+  .p-link--ink.p-link--cyan {
+    background-image: var(--underline-ink), var(--marker-cyan);
+  }
+
+  /* Línea vertical del timeline: trazo de rotulador papel al 40 %, irregular. */
+  .p-timeline-line {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 120'%3E%3Cpath d='M4 0c-1.4 14 1.6 27 .2 41-1.3 13 1.5 26 .4 40-1 14 .9 26-.3 39' fill='none' stroke='%23f2efe8' stroke-opacity='.4' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: repeat-y;
+    background-size: 8px 120px;
+  }
+
+  /* Boleta con borde izquierdo perforado (formación). */
+  .m-ticket {
+    -webkit-mask: radial-gradient(circle 5px at 0 50%, transparent 96%, #000) 0 0 / 100% 22px repeat-y;
+    mask: radial-gradient(circle 5px at 0 50%, transparent 96%, #000) 0 0 / 100% 22px repeat-y;
+  }
+
+  /* Viñeta dibujada a mano (asterisco o check) coloreada con `currentColor`. */
+  .p-bullet {
+    position: relative;
+    padding-left: 1.6rem;
+  }
+
+  .p-bullet::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.3em;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--bullet, currentColor);
+    -webkit-mask: var(--bullet-shape, var(--shape-asterisk)) center / contain no-repeat;
+    mask: var(--bullet-shape, var(--shape-asterisk)) center / contain no-repeat;
+  }
+
+  .p-bullet--check {
+    --bullet-shape: var(--shape-check);
+  }
+
+  /* =====================================================================
+   * Piezas compuestas
+   * =================================================================== */
+
+  /*
+   * Título de sección: una tira de fotocopia rasgada en los lados con su
+   * sombra sólida plum. Las dos capas son pseudo-elementos con el mismo
+   * recorte, así la sombra no se la come el `clip-path`. El texto, recto.
+   */
+  .p-title-box {
+    position: relative;
+    display: inline-block;
+    padding: 0.14em 0.55em 0.1em;
+    color: #0b0a0f;
+    isolation: isolate;
+  }
+
+  .p-title-box::before,
+  .p-title-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    clip-path: var(--torn-x);
+    transform: skewX(-12deg) rotate(-1.5deg);
+  }
+
+  .p-title-box::before {
+    z-index: -1;
+    background-color: #f2efe8;
+    background-image: var(--grain-dark);
+  }
+
+  .p-title-box::after {
+    z-index: -2;
+    background: #5a1257;
+    translate: 6px 6px;
+  }
+
+  /*
+   * Nombre en "nota de rescate": cada palabra recortada de una revista
+   * distinta, con su propio corte irregular y sombra sólida plum.
    */
   .p-ransom {
     display: inline-block;
-    padding: 0.02em 0.22em 0.06em;
+    padding: 0.06em 0.24em 0.02em;
     margin: 0.06em 0.06em;
     line-height: 1;
+    filter: drop-shadow(3px 3px 0 #5a1257);
     animation: p-ransom-in 0.6s var(--ease-snap) both;
   }
 
   .p-ransom:nth-child(4n + 1) {
-    background: #f5f3fa;
-    color: #09080d;
+    background: #f2efe8;
+    color: #0b0a0f;
+    clip-path: polygon(1% 4%, 99% 0, 100% 96%, 0 100%);
     transform: rotate(-2.5deg);
   }
 
   .p-ransom:nth-child(4n + 2) {
-    background: #7a1fff;
-    color: #f5f3fa;
+    background: #0b0a0f;
+    color: #f2efe8;
+    clip-path: polygon(0 0, 97% 6%, 100% 100%, 3% 94%);
     transform: rotate(1.8deg) translateY(0.04em);
   }
 
   .p-ransom:nth-child(4n + 3) {
-    background: #09080d;
-    color: #f5f3fa;
-    box-shadow: inset 0 0 0 0.06em #f5f3fa;
+    background: #ff9cf5;
+    color: #0b0a0f;
+    clip-path: polygon(3% 0, 100% 3%, 98% 100%, 0 97%);
     transform: rotate(-1deg);
   }
 
   .p-ransom:nth-child(4n + 4) {
-    background: #a6f13c;
-    color: #09080d;
+    background: #e0a24a;
+    color: #0b0a0f;
+    clip-path: polygon(0 5%, 100% 0, 97% 97%, 2% 100%);
     transform: rotate(2.4deg) translateY(-0.03em);
   }
 
@@ -177,38 +639,44 @@
     }
   }
 
-  /* ---------------------------------------------------------------------
-   * Formas anguladas
+  /* =====================================================================
+   * Botones: etiquetas recortadas
    *
    * En elementos interactivos NUNCA se recorta el propio elemento con
-   * `clip-path`: recortaría también el anillo de foco. La forma inclinada va en
-   * un `::before` y el elemento queda rectangular para el foco.
-   * ------------------------------------------------------------------- */
+   * `clip-path` (recortaría el anillo de foco). La forma va en `::before` y la
+   * sombra sólida en `::after`, los dos con el mismo recorte; el elemento
+   * queda rectangular para el foco.
+   * =================================================================== */
 
-  .p-slant {
+  .p-btn {
     position: relative;
     isolation: isolate;
-  }
-
-  .p-slant::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--slant-bg, transparent);
-    border: var(--slant-border, 0 solid transparent);
-    transform: skewX(-14deg);
-    transition:
-      background-color 0.18s ease,
-      transform 0.22s var(--ease-snap);
-  }
-
-  /* Botones de llamada a la acción. */
-  .p-btn {
-    --slant-bg: #7a1fff;
+    color: var(--btn-ink, #f2efe8);
     transition:
       color 0.18s ease,
       transform 0.22s var(--ease-snap);
+  }
+
+  .p-btn::before,
+  .p-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(1.5% 6%, 30% 0, 70% 3%, 99% 0, 100% 52%, 98.5% 100%, 62% 96%, 28% 100%, 0 97%, 1% 48%);
+    transition: transform 0.22s var(--ease-snap);
+  }
+
+  .p-btn::before {
+    z-index: -1;
+    background-color: var(--btn-bg, #a8009f);
+    background-image: var(--grain-dark);
+  }
+
+  .p-btn::after {
+    z-index: -2;
+    background: var(--btn-shadow, #0b0a0f);
+    transform: translate(0, 0);
+    opacity: 0;
   }
 
   .p-btn:hover {
@@ -216,8 +684,18 @@
   }
 
   .p-btn:hover::before {
-    transform: skewX(-14deg) scaleX(1.04);
-    box-shadow: -5px 5px 0 #f5f3fa;
+    transform: scaleX(1.04);
+  }
+
+  .p-btn:hover::after {
+    opacity: 1;
+    transform: translate(-5px, 5px) scaleX(1.04);
+  }
+
+  .p-btn:disabled {
+    --btn-bg: #b6a6b6;
+    --btn-ink: #0b0a0f;
+    cursor: not-allowed;
   }
 
   .p-btn:disabled:hover {
@@ -225,52 +703,27 @@
   }
 
   .p-btn:disabled:hover::before {
-    transform: skewX(-14deg);
-    box-shadow: none;
+    transform: none;
   }
 
-  .p-btn--primary:hover {
-    --slant-bg: #6420cf;
+  .p-btn:disabled:hover::after {
+    opacity: 0;
   }
 
   .p-btn--secondary {
-    --slant-bg: #09080d;
-    --slant-border: 2px solid #f5f3fa;
+    --btn-bg: #f2efe8;
+    --btn-ink: #0b0a0f;
+    --btn-shadow: #d903d5;
   }
 
-  .p-btn--secondary:hover {
-    --slant-bg: #f5f3fa;
-    color: #09080d;
-  }
-
-  .p-btn--secondary:hover::before {
-    box-shadow: -5px 5px 0 #7a1fff;
-  }
-
-  /* Variante para fondos violeta (banda del CV): negro sólido. */
+  /* Sobre papel magenta: cartulina tinta con letra papel. */
   .p-btn--dark {
-    --slant-bg: #09080d;
+    --btn-bg: #0b0a0f;
+    --btn-ink: #f2efe8;
+    --btn-shadow: #f2efe8;
   }
 
-  .p-btn--dark:hover {
-    --slant-bg: #f5f3fa;
-    color: #09080d;
-  }
-
-  .p-btn--dark:hover::before {
-    box-shadow: -5px 5px 0 #09080d;
-  }
-
-  /*
-   * Tarjeta con la esquina inferior derecha cortada. Aquí SÍ se usa
-   * `clip-path`: es un contenedor, no un control, y el corte es de 28px, lejos
-   * de cualquier enlace. La sombra va en el envoltorio con `drop-shadow`,
-   * porque `clip-path` se come el `box-shadow` del propio elemento.
-   */
-  .p-notch {
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%);
-  }
-
+  /* Tarjeta que sube con sombra sólida plum (P3R, mismo gesto). */
   .p-lift {
     transition:
       transform 0.3s var(--ease-snap),
@@ -279,47 +732,43 @@
 
   .p-lift:hover {
     transform: translate(4px, -4px);
-    filter: drop-shadow(-8px 8px 0 var(--tone, #7a1fff));
+    filter: drop-shadow(-8px 8px 0 #5a1257);
   }
 
-  /*
-   * Banda a sangre con cortes diagonales arriba y abajo: el "panel" de P3R que
-   * entra de lado. Contenedor, no control: el `clip-path` es seguro aquí.
-   */
-  .p-band {
-    clip-path: polygon(0 3.5vw, 100% 0, 100% calc(100% - 3.5vw), 0 100%);
-    padding-block: calc(3.5vw + 3rem);
+  /* Brochazo que se desliza bajo el título de la tarjeta al pasar por ella. */
+  .p-swipe-under {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease-snap);
   }
 
-  /* Trama de medios tonos local, para paneles que la quieran más marcada. */
-  .p-halftone {
-    background-image: radial-gradient(rgba(245, 243, 250, 0.08) 1px, transparent 1.4px);
-    background-size: 6px 6px;
+  .group:hover .p-swipe-under,
+  .group:focus-within .p-swipe-under {
+    transform: scaleX(1);
   }
 
-  /* ---------------------------------------------------------------------
+  /* =====================================================================
    * Movimiento
-   * ------------------------------------------------------------------- */
+   * =================================================================== */
 
   /*
-   * Cortina de entrada: una franja violeta inclinada barre la pantalla una sola
-   * vez al cargar, como las transiciones entre menús de P5R. Es un
-   * pseudo-elemento sin eventos de puntero, así que nunca bloquea un clic, y
-   * bajo `prefers-reduced-motion` no existe.
+   * Cortina de entrada: misma diagonal y mismos tiempos de siempre, pero las
+   * capas son papeles. Primero una hoja magenta con el borde rasgado; detrás,
+   * una tira de cinta tinta y una tira de papel. Sin eventos de puntero y sin
+   * existir bajo `prefers-reduced-motion`.
    */
-  /* Primero entra el panel abismo con su filo verde; el tajo violeta lo barre. */
   .p-curtain::before {
     content: '';
     position: fixed;
     inset: -10vh -40vw;
     z-index: 59;
     pointer-events: none;
-    background: linear-gradient(90deg, transparent 37%, #a6f13c 37% 40%, #1e1238 40%);
+    background: linear-gradient(90deg, transparent 36%, #0b0a0f 36% 39%, #f2efe8 39% 41%, transparent 41%);
     transform: skewX(14deg) translateX(-130%);
-    animation: p-curtain-blue 0.7s var(--ease-snap) both;
+    animation: p-curtain-tape 0.7s var(--ease-snap) both;
   }
 
-  @keyframes p-curtain-blue {
+  @keyframes p-curtain-tape {
     from {
       transform: skewX(14deg) translateX(10%);
     }
@@ -334,8 +783,12 @@
     inset: -10vh -40vw;
     z-index: 60;
     pointer-events: none;
-    background:
-      linear-gradient(90deg, #7a1fff 0 72%, #09080d 72% 80%, #f5f3fa 80% 82%, transparent 82%);
+    background-color: #d903d5;
+    background-image: var(--grain-dark);
+    clip-path: polygon(
+      0 0, 72% 0, 73.5% 8%, 71.8% 17%, 74% 26%, 72.2% 35%, 74.5% 44%, 72% 53%,
+      74.2% 62%, 72.4% 71%, 74.6% 80%, 72.1% 89%, 73.8% 100%, 0 100%
+    );
     transform: skewX(-18deg) translateX(130%);
     animation: p-curtain 0.85s var(--ease-snap) 0.12s both;
   }
@@ -356,7 +809,7 @@
     }
   }
 
-  /* Entrada escalonada de los bloques del hero. */
+  /* Entrada escalonada del hero. Sin sesgo: hay bloques altos. */
   .p-enter {
     animation: p-enter 0.55s var(--ease-snap) both;
     animation-delay: var(--delay, 0ms);
@@ -365,15 +818,11 @@
   @keyframes p-enter {
     from {
       opacity: 0;
-      transform: translateX(-28px) skewX(-8deg);
+      transform: translateX(-28px);
     }
   }
 
-  /*
-   * Cinta de texto en bucle. Igual que el ASCII anterior: dos copias seguidas
-   * y un desplazamiento del 50%, así que el final encaja con el principio.
-   * Solo se anima `transform`.
-   */
+  /* Cinta de texto en bucle: dos copias y un desplazamiento del 50%. */
   .p-marquee__track {
     display: flex;
     width: max-content;
@@ -390,41 +839,10 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .p-marquee__track,
-    .p-ransom,
-    .p-enter,
-    .p-spin {
-      animation: none;
-    }
-  }
-
-  /* En SVG, `fill-box` hace que el centro sea el de la figura, no el del lienzo. */
-  .p-spin {
-    animation: p-spin 40s linear infinite;
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-
-  @keyframes p-spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
   /*
-   * Aparición al hacer scroll — ver src/components/reveal.tsx.
-   *
-   * El estado por defecto NO lleva estilo: el contenido es visible. Ocultarlo
-   * lo decide el cliente, solo bajo el pliegue. Entra deslizándose desde la
-   * izquierda con un leve sesgo, que es el gesto de los menús de Persona.
-   * Solo opacidad y transform: cero Cumulative Layout Shift.
-   */
-  /*
-   * Solo desplazamiento, SIN sesgo. Con `skewX` un bloque alto sobresale por
-   * los dos lados (tan 6° x media altura: ~50px en una tarjeta de proyecto) y,
-   * mientras espera oculto bajo el pliegue, abría scroll horizontal en móvil.
-   * Medido: 107px de desborde a 375px. El sesgo queda para piezas pequeñas.
+   * Aparición al hacer scroll — ver src/components/reveal.tsx. El estado por
+   * defecto es visible; solo el cliente oculta lo que está bajo el pliegue.
+   * Solo desplazamiento (sin sesgo: los bloques altos desbordarían en móvil).
    */
   .reveal[data-reveal='hidden'] {
     opacity: 0;
@@ -439,25 +857,8 @@
       transform 0.6s var(--ease-snap);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .reveal[data-reveal='hidden'],
-    .reveal[data-reveal='shown'] {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
-  }
-
-  /* =====================================================================
-   * MOVIMIENTO P3R / P5R
-   *
-   * Todo lo que sigue anima solo `transform`, `opacity` o `clip-path` (que la
-   * GPU compone sin recalcular layout), y todo se apaga bajo
-   * `prefers-reduced-motion` en el bloque del final.
-   * =================================================================== */
-
   /* ---------------------------------------------------------------------
-   * Menú de pausa (pause-menu.tsx)
+   * Menú de pausa (pause-menu.tsx): misma mecánica, otro material
    * ------------------------------------------------------------------- */
 
   .p-menu-item {
@@ -472,11 +873,6 @@
     transform: rotate(var(--r, 0deg)) translateX(10px) scale(1.12);
   }
 
-  /*
-   * El cursor viaja: se interpolan posición, giro y tamaño a la vez, con
-   * rebote. `width`/`height` sí recalculan layout, pero de UN elemento
-   * absoluto y sin hijos en flujo: el coste es despreciable.
-   */
   .p-menu-cursor {
     transition:
       transform 0.42s var(--ease-spring),
@@ -485,131 +881,43 @@
       opacity 0.2s ease;
   }
 
+  /* Un brochazo magenta estirado con un trozo de cinta como "punta". */
   .p-menu-cursor__shape {
     position: relative;
-    transform: skewX(-18deg);
+    background-image: var(--brush-magenta);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
     animation:
       p-cursor-hit 0.4s var(--ease-snap),
       p-cursor-breathe 2.4s ease-in-out 0.4s infinite;
   }
 
-  /*
-   * Dos capas en pseudo-elementos, en este orden de pintado: primero la punta
-   * blanca (`::before`), encima el violeta (`::after`). Con el violeta como fondo
-   * del propio elemento, un `::before` con z-index negativo se pinta ENCIMA
-   * del fondo (el elemento crea su contexto de apilamiento al transformarse) y
-   * tapaba el texto elegido. La punta blanca solo asoma por la derecha y por
-   * arriba, fuera de la caja del rótulo: nunca queda letra blanca sobre blanco.
-   */
-  .p-menu-cursor__shape::before,
-  .p-menu-cursor__shape::after {
+  .p-menu-cursor__shape::before {
     content: '';
     position: absolute;
+    left: -14px;
+    top: 50%;
+    width: 30px;
+    height: 16px;
+    background-color: rgba(242, 239, 232, 0.75);
+    transform: translateY(-50%) rotate(-12deg);
+    clip-path: polygon(0 12%, 15% 0, 30% 12%, 100% 0, 100% 100%, 30% 88%, 15% 100%, 0 88%);
   }
 
-  .p-menu-cursor__shape::before {
-    inset: -10px -34px 35% 70%;
-    background: #f5f3fa;
-    clip-path: polygon(0 100%, 100% 0, 78% 100%);
-  }
-
-  .p-menu-cursor__shape::after {
-    inset: 0;
-    background: #7a1fff;
-  }
-
-  /* Golpe al cambiar de elemento: se estira y vuelve. */
   @keyframes p-cursor-hit {
     from {
-      transform: skewX(-18deg) scaleX(0.2);
+      transform: scaleX(0.2);
       opacity: 0.4;
     }
   }
 
-  /* "Respira" mientras está quieto, como el pulso del cursor del juego. */
   @keyframes p-cursor-breathe {
     50% {
-      transform: skewX(-18deg) scale(1.04, 1.12);
+      transform: scale(1.04, 1.12);
     }
   }
 
-  /* ---------------------------------------------------------------------
-   * Agua de P3R: manchas de luz que derivan y rayos que laten. Dos capas,
-   * ambas solo `transform`/`opacity`.
-   * ------------------------------------------------------------------- */
-
-  .p-water {
-    overflow: hidden;
-  }
-
-  .p-water::before {
-    content: '';
-    position: absolute;
-    inset: -40%;
-    background:
-      radial-gradient(18rem 12rem at 30% 30%, rgba(166, 241, 60, 0.22), transparent 70%),
-      radial-gradient(22rem 14rem at 70% 60%, rgba(122, 31, 255, 0.4), transparent 70%),
-      radial-gradient(14rem 10rem at 55% 20%, rgba(215, 196, 255, 0.18), transparent 70%);
-    animation: p-water-drift 18s ease-in-out infinite alternate;
-  }
-
-  .p-water::after {
-    content: '';
-    position: absolute;
-    inset: -20% -50%;
-    background: repeating-linear-gradient(
-      100deg,
-      transparent 0 60px,
-      rgba(166, 241, 60, 0.07) 60px 74px,
-      transparent 74px 150px
-    );
-    animation: p-water-rays 9s ease-in-out infinite alternate;
-  }
-
-  @keyframes p-water-drift {
-    to {
-      transform: translate(8%, -6%) rotate(8deg) scale(1.08);
-    }
-  }
-
-  @keyframes p-water-rays {
-    from {
-      transform: translateX(-6%) skewX(-6deg);
-      opacity: 0.6;
-    }
-    to {
-      transform: translateX(6%) skewX(6deg);
-      opacity: 1;
-    }
-  }
-
-  /* ---------------------------------------------------------------------
-   * Fragmentos flotantes (ShardField)
-   * ------------------------------------------------------------------- */
-
-  .p-shard {
-    position: absolute;
-    clip-path: polygon(50% 0, 100% 40%, 60% 100%, 0 70%);
-    opacity: 0.7;
-    animation: p-shard-float 10s ease-in-out infinite;
-  }
-
-  @keyframes p-shard-float {
-    0%,
-    100% {
-      transform: translateY(0) rotate(var(--r, 0deg));
-      opacity: 0.25;
-    }
-    50% {
-      transform: translateY(-34px) rotate(calc(var(--r, 0deg) + 160deg));
-      opacity: 0.85;
-    }
-  }
-
-  /* ---------------------------------------------------------------------
-   * Profundidad con el puntero (PointerParallax publica --mx/--my)
-   * ------------------------------------------------------------------- */
-
+  /* Profundidad con el puntero (PointerParallax publica --mx/--my). */
   .p-depth-1 {
     transform: translate(calc(var(--mx, 0) * -18px), calc(var(--my, 0) * -14px));
     transition: transform 0.6s var(--ease-snap);
@@ -621,32 +929,12 @@
   }
 
   /* ---------------------------------------------------------------------
-   * Rótulo vertical deslizante (VerticalWatermark)
-   * ------------------------------------------------------------------- */
-
-  .p-vertical {
-    writing-mode: vertical-rl;
-    color: transparent;
-    -webkit-text-stroke: 1.5px rgba(166, 241, 60, 0.16);
-  }
-
-  .p-vertical-track {
-    animation: p-vertical 40s linear infinite;
-  }
-
-  @keyframes p-vertical {
-    to {
-      transform: translateY(-50%);
-    }
-  }
-
-  /* ---------------------------------------------------------------------
    * Entradas al hacer scroll (sobre el `.reveal` de reveal.tsx)
    * ------------------------------------------------------------------- */
 
-  /* El título de sección "golpea": la caja blanca se despliega desde la
-     izquierda y el texto llega con un sobrepaso. */
-  .reveal[data-reveal='shown'] .p-title-box::before {
+  /* El título "golpea": la tira de papel se despliega y el texto llega. */
+  .reveal[data-reveal='shown'] .p-title-box::before,
+  .reveal[data-reveal='shown'] .p-title-box::after {
     transform-origin: left;
     animation: p-box-unfold 0.5s var(--ease-snap) 0.1s both;
   }
@@ -657,7 +945,7 @@
 
   @keyframes p-box-unfold {
     from {
-      transform: skewX(-12deg) rotate(-1.5deg) scaleX(0);
+      transform: rotate(-1.5deg) scaleX(0);
     }
   }
 
@@ -668,76 +956,87 @@
     }
   }
 
-  /* Capturas de proyecto: se descubren con un tajo diagonal. */
+  /* Cinta que se pega: entra grande y girada, 120 ms después de su hoja. */
+  .reveal[data-reveal='shown'] .m-tape {
+    animation: p-tape-stick 0.35s var(--ease-spring) 0.12s both;
+  }
+
+  @keyframes p-tape-stick {
+    from {
+      opacity: 0;
+      transform: scale(1.3) rotate(calc(var(--tape-r, -6deg) + 10deg));
+    }
+  }
+
+  /* Sello que golpea al revelarse. */
+  .reveal[data-reveal='shown'] .m-stamp {
+    animation: p-stamp-hit 0.4s var(--ease-spring) 0.1s both;
+  }
+
+  @keyframes p-stamp-hit {
+    0% {
+      opacity: 0;
+      transform: rotate(var(--stamp-r, -4deg)) scale(1.8);
+    }
+    70% {
+      opacity: 1;
+      transform: rotate(var(--stamp-r, -4deg)) scale(0.94);
+    }
+    100% {
+      transform: rotate(var(--stamp-r, -4deg)) scale(1);
+    }
+  }
+
+  /* Trazo que se dibuja (pathLength="1" en los SVG de zine.tsx). */
+  .p-draw path {
+    stroke-dasharray: 1;
+  }
+
+  .reveal[data-reveal='hidden'] .p-draw path {
+    stroke-dashoffset: 1;
+  }
+
+  .reveal[data-reveal='shown'] .p-draw path {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.6s var(--ease-snap) 0.15s;
+  }
+
+  /* Capturas: se descubren con un tajo diagonal de borde dentado. */
   .reveal[data-reveal='hidden'] .p-wipe {
-    clip-path: polygon(0 0, 0 0, -30% 100%, -30% 100%);
+    clip-path: polygon(0 0, 0 0, -4% 20%, 0 40%, -4% 60%, 0 80%, -30% 100%, -30% 100%);
   }
 
   .reveal[data-reveal='shown'] .p-wipe {
-    clip-path: polygon(0 0, 130% 0, 100% 100%, -30% 100%);
+    clip-path: polygon(0 0, 130% 0, 126% 20%, 130% 40%, 126% 60%, 130% 80%, 100% 100%, -30% 100%);
     transition: clip-path 0.9s var(--ease-snap) 0.15s;
   }
 
-  /* Chips de tecnología: saltan uno detrás de otro (--i = posición). */
+  /* Chips Dymo: saltan uno detrás de otro (--i = posición). */
   .p-chip {
-    transform: skewX(-10deg);
-    transition:
-      transform 0.25s var(--ease-spring),
-      border-color 0.2s ease;
+    transition: transform 0.25s var(--ease-spring);
   }
 
   .reveal[data-reveal='hidden'] .p-chip {
     opacity: 0;
-    transform: translateY(12px) skewX(-10deg) scale(0.6);
+    transform: translateY(12px) scale(0.6);
   }
 
   .reveal[data-reveal='shown'] .p-chip {
     transition:
       opacity 0.3s ease calc(var(--i, 0) * 40ms + 0.15s),
-      transform 0.45s var(--ease-spring) calc(var(--i, 0) * 40ms + 0.15s),
-      border-color 0.2s ease;
+      transform 0.45s var(--ease-spring) calc(var(--i, 0) * 40ms + 0.15s);
   }
 
   .p-chip:hover {
-    transform: skewX(-10deg) translateY(-3px) scale(1.06);
-  }
-
-  /*
-   * Glitch de color en los títulos de proyecto al pasar por la tarjeta:
-   * separación violeta/verde con saltos en escalón, unas pocas décimas.
-   */
-  .group:hover .p-glitch {
-    animation: p-glitch 0.45s steps(2, end) 2;
-  }
-
-  @keyframes p-glitch {
-    0% {
-      text-shadow: 3px 0 #b07cff, -3px 0 #a6f13c;
-      transform: translateX(0);
-    }
-    33% {
-      text-shadow: -3px 1px #b07cff, 3px -1px #a6f13c;
-      transform: translateX(2px) skewX(-6deg);
-    }
-    66% {
-      text-shadow: 2px -1px #b07cff, -2px 1px #a6f13c;
-      transform: translateX(-2px);
-    }
-    100% {
-      text-shadow: none;
-      transform: none;
-    }
+    transform: translateY(-3px) scale(1.06);
   }
 
   /* ---------------------------------------------------------------------
    * Ligado al scroll (solo navegadores con `animation-timeline`)
-   *
-   * Mejora progresiva: donde no hay soporte, simplemente no se mueve. No hay
-   * JavaScript de scroll que mantener.
    * ------------------------------------------------------------------- */
 
   @supports (animation-timeline: view()) {
-    /* El número gigante de cada sección se desliza mientras la cruzas. */
+    /* El número de cada sección se desliza mientras la cruzas (sin sesgo). */
     .p-parallax {
       animation: p-parallax linear both;
       animation-timeline: view();
@@ -745,14 +1044,14 @@
 
     @keyframes p-parallax {
       from {
-        transform: translateX(-24px) skewX(6deg);
+        transform: translateX(-24px) rotate(1.5deg);
       }
       to {
-        transform: translateX(24px) skewX(-6deg);
+        transform: translateX(24px) rotate(-1.5deg);
       }
     }
 
-    /* Barra de progreso de lectura: la franja verde crece con el scroll. */
+    /* Progreso de lectura: la tira de cinta magenta crece con el scroll. */
     .p-progress {
       transform-origin: left;
       animation: p-progress linear both;
@@ -770,26 +1069,38 @@
   }
 
   /* ---------------------------------------------------------------------
-   * Menos movimiento: todo lo anterior se queda quieto y visible.
+   * Menos movimiento: todo quieto y visible.
    * ------------------------------------------------------------------- */
 
   @media (prefers-reduced-motion: reduce) {
+    .p-marquee__track,
+    .p-ransom,
+    .p-enter,
     .p-menu-cursor__shape,
-    .p-water::before,
-    .p-water::after,
-    .p-shard,
-    .p-vertical-track,
     .p-parallax,
     .reveal .p-title-box,
     .reveal .p-title-box::before,
-    .group:hover .p-glitch {
+    .reveal .p-title-box::after,
+    .reveal .m-tape,
+    .reveal .m-stamp {
       animation: none !important;
+    }
+
+    .reveal[data-reveal='hidden'],
+    .reveal[data-reveal='shown'] {
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
 
     .p-menu-cursor,
     .p-menu-item,
     .p-depth-1,
-    .p-depth-2 {
+    .p-depth-2,
+    .m-marker,
+    .p-link,
+    .p-swipe-under,
+    .m-photo {
       transition: none;
     }
 
@@ -799,11 +1110,34 @@
 
     .reveal[data-reveal='hidden'] .p-chip {
       opacity: 1;
-      transform: skewX(-10deg);
+      transform: none;
+    }
+
+    .reveal[data-reveal='hidden'] .p-draw path {
+      stroke-dashoffset: 0;
     }
 
     .p-progress {
       display: none;
     }
   }
+}
+
+/* Formas dibujadas a mano para las viñetas (máscaras, coloreadas con el tono). */
+:root {
+  --shape-asterisk: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10.3 2.2c-.3 2.6-.1 5.4.2 8.1M10.6 10.4c-.2 2.5.1 5 .4 7.4M3.4 6.1c2.4 1.2 4.7 2.7 7 4.1M10.4 10.2c2.2 1.6 4.4 2.8 6.6 3.7M16.6 5.4c-2.1 1.5-4.2 3.3-6.2 4.8M10.4 10.2c-2.3 1.4-4.6 3-6.8 4.6' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  --shape-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M2.6 11.1c1.4 1 2.6 2.4 3.9 4.6 2.3-5 5.6-9 10.9-12.6' fill='none' stroke='%23000' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/*
+ * Filtros de proyectos (portafolio v2, src/components/project-filter.tsx).
+ * Sin JavaScript el contenedor no tiene `data-filter` y se ve todo. Con JS, el
+ * componente pone el filtro activo y aquí se ocultan las tarjetas que no
+ * coinciden. `~=` compara palabras sueltas de `data-categories`.
+ */
+[data-filter='destacados'] [data-project]:not([data-featured='true']),
+[data-filter='seguridad'] [data-project]:not([data-categories~='seguridad']),
+[data-filter='desarrollo'] [data-project]:not([data-categories~='desarrollo']),
+[data-filter='pruebas'] [data-project]:not([data-categories~='pruebas']) {
+  display: none;
 }

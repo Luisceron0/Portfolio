@@ -1,12 +1,12 @@
 import { education, type Locale } from '@/content'
 import { Reveal } from '@/components/reveal'
 import { Section, SectionHeading } from '@/components/section'
-import { ProfileIcon } from '@/components/icons'
 
 /**
- * Formación y certificaciones (SRS v1.4): estudios, certificaciones vigentes
- * relacionadas con seguridad e idiomas. Mismo contenido que las secciones
- * Educación, Certificaciones e Idiomas del CV.
+ * Formación y certificaciones (SRS v1.4), en papel (RF-110 v5): los estudios
+ * como boletas de cartulina con el borde izquierdo perforado y la fecha
+ * sellada; certificaciones e idiomas en hojas rayadas con encabezado Dymo y
+ * checks a mano. Mismo contenido que las secciones del CV.
  */
 export function Education({ locale }: { locale: Locale }) {
   return (
@@ -15,35 +15,25 @@ export function Education({ locale }: { locale: Locale }) {
         id="formacion-title"
         number="06"
         title={education.heading[locale]}
-        tone="mint"
-        icon={<ProfileIcon />}
+        tone="cyan"
       />
 
-      <ul className="mt-12 grid gap-5 md:grid-cols-2">
+      <ul className="mt-12 grid gap-6 md:grid-cols-2">
         {education.entries.map((entry, index) => (
           <li key={entry.id}>
             <Reveal delayMs={index * 70} className="h-full">
-              <article
-                aria-labelledby={`formacion-${entry.id}`}
-                className="h-full border-t-4 border-tone-mint bg-surface-card/90 p-5 sm:p-6"
-              >
-                <p className="p-slant inline-block px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest2 text-surface [--slant-bg:#5ef0a8]">
-                  {entry.period[locale]}
-                </p>
-                <h3 id={`formacion-${entry.id}`} className="p-display mt-4 text-xl leading-tight sm:text-2xl">
+              <article aria-labelledby={`formacion-${entry.id}`} className="m-card m-ticket h-full py-6 pl-8 pr-5 sm:pr-6">
+                <span className="m-stamp text-sm [--stamp-r:-3deg]">{entry.period[locale]}</span>
+                <h3 id={`formacion-${entry.id}`} className="mt-4 text-lg font-extrabold leading-snug tracking-tight sm:text-xl">
                   {entry.title[locale]}
                 </h3>
-                <p className="mt-1.5 text-base font-bold text-tone-mint">
+                <p className="mt-1.5 text-base font-bold text-tone-cyan">
                   {entry.organization}
                   <span className="font-normal text-ink-muted"> · {entry.location[locale]}</span>
                 </p>
                 <ul className="mt-4 space-y-2">
                   {entry.highlights[locale].map((highlight) => (
-                    <li key={highlight} className="relative pl-5 text-base leading-relaxed text-ink-muted">
-                      <span
-                        aria-hidden="true"
-                        className="absolute left-0 top-[0.55em] h-2 w-2 -skew-x-[20deg] bg-tone-mint"
-                      />
+                    <li key={highlight} className="p-bullet text-base leading-relaxed text-ink-muted [--bullet:#46C3D8]">
                       {highlight}
                     </li>
                   ))}
@@ -54,41 +44,26 @@ export function Education({ locale }: { locale: Locale }) {
         ))}
       </ul>
 
-      <div className="mt-12 grid gap-10 md:grid-cols-2">
-        <Reveal>
-          <h3>
-            <span className="p-slant p-display inline-block px-4 py-1 text-base text-surface [--slant-bg:#a6f13c]">
-              {education.certificationsHeading[locale]}
-            </span>
-          </h3>
-          <ul className="mt-5">
-            {education.certifications[locale].map((certification) => (
-              <li
-                key={certification}
-                className="flex gap-3 border-b border-tone-green/25 py-3 text-base leading-relaxed text-ink"
-              >
-                <span aria-hidden="true" className="shrink-0 text-tone-mint">
-                  ★
-                </span>
-                {certification}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-        <Reveal delayMs={80}>
-          <h3>
-            <span className="p-slant p-display inline-block px-4 py-1 text-base text-surface [--slant-bg:#d7c4ff]">
-              {education.languagesHeading[locale]}
-            </span>
-          </h3>
-          <ul className="mt-5">
-            {education.languages[locale].map((language) => (
-              <li key={language} className="border-b border-tone-lilac/25 py-3 text-base leading-relaxed text-ink">
-                {language}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+      <div className="mt-14 grid gap-10 md:grid-cols-2">
+        {(
+          [
+            [education.certificationsHeading, education.certifications],
+            [education.languagesHeading, education.languages],
+          ] as const
+        ).map(([heading, list], index) => (
+          <Reveal key={heading.es} delayMs={index * 80}>
+            <h3>
+              <span className={`m-dymo text-xs ${index === 0 ? 'm-dymo--magenta' : ''}`}>{heading[locale]}</span>
+            </h3>
+            <ul className="m-sheet mt-4 px-6 py-4">
+              {list[locale].map((item) => (
+                <li key={item} className="p-bullet p-bullet--check py-1.5 text-base leading-relaxed text-tinta">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        ))}
       </div>
     </Section>
   )

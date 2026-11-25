@@ -82,16 +82,15 @@ cv:
           - 'Lideré el diseño y la construcción (206 de 209 commits) de un sistema que conecta RRHH con TI vía GLPI 11: Django 5.2 hexagonal detrás de un WAF ModSecurity/OWASP CRS 4, contraseña con TOTP y Docker secrets.'
           - 'Lo verifiqué con 2.574 pruebas unitarias, 97,7 % de cobertura de ramas y 97,8 % de puntaje de mutación en el dominio, y un p95 de 786 ms en el dashboard con 20 usuarios concurrentes.'
           - 'Audité 39 hallazgos priorizados con DREAD y mapeados a ASVS nivel 2, cada corrección probada de rojo a verde, más ZAP y sqlmap sin parámetros inyectables.'
-      - name: Tributary, facturación electrónica multirrégimen
-        location: github.com/Luisceron0/Tributary
-        summary: 'Ventas entre Colombia, España y Alemania. Implementación de referencia, no certificada.'
+      # Sitio IPS: repo privado (no se enlaza). Autoría: 37 de 47 commits de Luis
+      # (git shortlog -sne --all). Regla del dueño (2026-11-21): ningún punto
+      # abierto de este sistema en producción se publica hasta estar corregido.
+      - name: Sitio IPS San José, sitio institucional en producción
+        location: sanjoseipsputumayo.com.co
+        summary: 'Reemplaza el sitio de un proveedor externo; recibe PQRS con datos personales (Ley 1581 de 2012).'
         highlights:
-          - 'Garanticé la inmutabilidad fiscal con triggers de PostgreSQL y una cadena de hashes SHA-256 cuyo verificador señala el registro alterado.'
-          - 'Definí 13 controles de seguridad con criterio binario y 4 gates independientes en CI; el quickstart levanta todo en menos de 3 minutos.'
-      - name: KOA Store, tienda bilingüe de demostración
-        location: store.koa.elevaforge.com
-        highlights:
-          - 'Recalculé los precios en el servidor contra el catálogo, ignorando cualquier precio o total enviado por el navegador; checkout simulado, sin pagos reales.'
+          - 'Construí en equipo de 2 (37 de 47 commits) la autenticación del panel y las PQRS de punta a punta, con radicado no secuencial y logs sin su contenido.'
+          - 'Endurecí el borde y la CI: CSP sin unsafe-inline, validación de origen, límite de ingreso que cuenta fallos, gitleaks sobre el historial y una regla estática que rechaza SQL sin parametrizar.'
       - name: CareLink, plataforma clínica multi-tenant
         location: github.com/Luisceron0/CareLink
         summary: 'Historia clínica y triage para varias instituciones. Implementación de referencia.'

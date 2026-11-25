@@ -81,16 +81,15 @@ cv:
           - 'Led the design and build (206 of 209 commits) of a system connecting HR and IT through GLPI 11: hexagonal Django 5.2 behind a ModSecurity/OWASP CRS 4 WAF, password plus TOTP and Docker secrets.'
           - 'Verified it with 2,574 unit tests, 97.7% branch coverage and a 97.8% mutation score on the domain, and a dashboard p95 of 786 ms with 20 concurrent users.'
           - 'Self-audited 39 DREAD-scored findings mapped to ASVS L2, each fix proven red to green, plus ZAP and sqlmap with no injectable parameters.'
-      - name: Tributary, multi-regime e-invoicing engine
-        location: github.com/Luisceron0/Tributary
-        summary: 'Sales across Colombia, Spain and Germany. Reference implementation, not certified.'
+      # IPS website: private repo (not linked). Authorship: 37 of 47 commits by
+      # Luis (git shortlog -sne --all). Owner rule (2026-11-21): no open point of
+      # this production system is published until it is fixed.
+      - name: IPS San José website, institutional site in production
+        location: sanjoseipsputumayo.com.co
+        summary: 'Replaces a vendor-run site; receives patient requests with personal data (Colombian Law 1581 of 2012).'
         highlights:
-          - 'Guaranteed fiscal immutability with PostgreSQL triggers and a SHA-256 hash chain whose verifier points at the altered record.'
-          - 'Defined 13 security controls with a binary criterion and 4 independent CI gates; the quickstart brings everything up in under 3 minutes.'
-      - name: KOA Store, bilingual demo store
-        location: store.koa.elevaforge.com
-        highlights:
-          - 'Recalculated prices on the server against the catalog, ignoring any price or total sent by the browser; simulated checkout, no real payments.'
+          - 'Built, in a 2-person team (37 of 47 commits), panel authentication and end-to-end patient requests, with non-sequential IDs and logs without their content.'
+          - 'Hardened the edge and the CI: CSP without unsafe-inline, origin validation, a sign-in limit that counts failures, gitleaks across the history and a static rule that rejects non-parameterized SQL.'
       - name: CareLink, multi-tenant clinical platform
         location: github.com/Luisceron0/CareLink
         summary: 'Clinical history and triage for several institutions. Reference implementation.'

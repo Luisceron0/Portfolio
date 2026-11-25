@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-import { HTML_LANG, LOCALES, securityCases } from '@/content'
+import { HTML_LANG, LOCALES, projectCases } from '@/content'
 import { casePath, localeHref } from '@/lib/locale'
 import { absoluteUrl } from '@/lib/seo'
 
@@ -9,7 +9,7 @@ import { absoluteUrl } from '@/lib/seo'
  * su alternativa en el otro idioma. Las URLs salen de `site.url` (T-104).
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = ['/', ...securityCases.map((item) => casePath(item.slug))]
+  const paths = ['/', ...projectCases.map((item) => casePath(item.slug))]
 
   return paths.map((path) => ({
     url: absoluteUrl(localeHref('es', path)),

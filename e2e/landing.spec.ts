@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { securityCases } from '@/content'
+import { projectCases } from '@/content'
 
 /**
  * Criterios de aceptación de RF-101, RF-102, RF-103 y RF-105 que se pueden
@@ -51,7 +51,7 @@ test.describe('Landing', () => {
     for (const locator of [
       page.getByRole('heading', { level: 1 }),
       page.getByText(/seguridad decidida desde la arquitectura/),
-      heroSection.getByRole('link', { name: /Ver casos de seguridad/ }),
+      heroSection.getByRole('link', { name: /Ver proyectos/ }),
       heroSection.getByRole('link', { name: /Descargar CV/ }),
       heroSection.getByRole('link', { name: /^GitHub/ }),
     ]) {
@@ -65,7 +65,7 @@ test.describe('Landing', () => {
     test.skip(testInfo.project.name !== 'mobile', 'solo aplica al viewport móvil')
     // Un título largo ("Formación y certificaciones") llegó a ensanchar la página
     // a 430 px sin que ningún test lo viera.
-    for (const path of ['/', '/?lang=en', ...securityCases.map((item) => `/casos/${item.slug}`)]) {
+    for (const path of ['/', '/?lang=en', ...projectCases.map((item) => `/casos/${item.slug}`)]) {
       await page.goto(path)
       const width = await page.evaluate(() => document.documentElement.scrollWidth)
       expect(width, `${path} desborda en horizontal`).toBeLessThanOrEqual(page.viewportSize()!.width)

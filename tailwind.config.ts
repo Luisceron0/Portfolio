@@ -6,105 +6,98 @@ const config: Config = {
     extend: {
       colors: {
         /*
-         * RF-110 v4 — paleta EVA: dos colores principales sobre negro violáceo.
+         * RF-110 v5 — zine de papel: magenta + negro + papel.
          *
-         *   - Violeta eléctrico: la identidad. Botones, banda del CV, cursor
-         *     del menú, cuñas y reglas.
-         *   - Verde lima: el contrapunto. Pestañas de fecha, foco, progreso y
-         *     los acentos de las bandas `abyss` (trayectoria, habilidades).
+         * Cada color es un MATERIAL que podría estar sobre una mesa de trabajo:
+         * cartulina negra (lienzo y tarjetas), fotocopia (papel), papel magenta
+         * (bandas), tinta (texto sobre papel y sobre magenta), papel kraft,
+         * papel rosa, resaltador cian, fotocopia vieja lila y la nota adhesiva
+         * amarilla. Sin neón, sin brillo, sin gradientes luminosos.
          *
-         * Los secundarios (`tone.lilac`, `tone.mint`, `tone.silver`) son tintes
-         * de esos dos y un gris frío: dan variedad a las tarjetas sin abrir una
-         * tercera familia de color. `warn` es la única excepción, y es de
-         * estado, no de marca.
+         * Reglas que el contraste obliga (medidas en `npm run check:contrast`):
+         *   - Sobre `magenta` el texto es SIEMPRE `tinta` (4.63:1); `paper` no
+         *     llega (3.71:1).
+         *   - Sobre papel, el texto va en `tinta`, `tinta.muted` o
+         *     `magenta.deep`. NUNCA `ink.muted`.
+         *   - Sobre `tone.lilac` solo `tinta`: `tinta.muted` (4.11:1) y
+         *     `magenta.deep` (2.88:1) no llegan.
+         *   - `magenta.text` es la tinta magenta para TEXTO sobre negro;
+         *     `magenta.deep` es el relleno con letra papel y el magenta como
+         *     texto sobre papel. Un solo magenta no pasa las tres pruebas.
          *
-         * Hay DOS violetas y no es redundancia: `tone.violet` es violeta para
-         * TEXTO sobre negro (6.8:1) y `violet` es violeta de RELLENO con letra
-         * blanca encima (5.5:1). Un solo violeta no pasa las dos pruebas. El
-         * verde no tiene ese problema: es tan claro que vale como texto sobre
-         * negro y como relleno con letra `surface` encima.
-         *
-         * Los ratios se miden con `npm run check:contrast`, que falla por
-         * debajo de 4.5:1. Si cambias un hex, cámbialo también en ese script.
+         * Si cambias un hex, cámbialo también en scripts/check-contrast.mjs.
          */
-        ink: {
-          DEFAULT: '#f5f3fa', // blanco con un punto de lila
-          muted: '#aaa6b8', // gris lavanda para texto secundario
-          dim: '#3a3448', // gris oscuro: texto secundario sobre fondo `ink`
-        },
         surface: {
-          DEFAULT: '#09080d', // negro violáceo
-          card: '#15121d',
-          subtle: '#1d1a27',
-          inverse: '#f5f3fa',
+          DEFAULT: '#121014', // cartulina negra (lienzo)
+          card: '#1b181e', // cartulina negra de tarjeta
         },
-        /** Fondo de las bandas de trayectoria y habilidades. Medido con texto encima. */
-        abyss: {
-          DEFAULT: '#130a26',
-          card: '#1e1238',
+        paper: {
+          DEFAULT: '#f2efe8', // fotocopia
+          dark: '#e6e2d8', // papel un punto más oscuro: campos del formulario
         },
-        hairline: {
-          DEFAULT: '#2b2738',
-          strong: '#47405a',
+        ink: {
+          DEFAULT: '#f2efe8', // texto claro sobre negro (igual que paper)
+          muted: '#b9b3ab', // texto secundario SOLO sobre negro
         },
-        /** SOLO decoración: no llega a 4.5:1. Para texto gris, `ink.muted`. */
-        deco: '#5a536b',
-        /** Violeta eléctrico de relleno (botones, banda del CV). Letra SIEMPRE `ink`. */
-        violet: {
-          DEFAULT: '#7a1fff',
-          hover: '#6420cf',
+        tinta: {
+          DEFAULT: '#0b0a0f', // tinta negra: texto sobre papel y sobre magenta
+          muted: '#4a4540', // texto secundario SOLO sobre papel
         },
+        magenta: {
+          DEFAULT: '#D903D5', // papel magenta (bandas), letra tinta
+          deep: '#A8009F', // relleno con letra papel; magenta como texto sobre papel
+          text: '#F25CEB', // tinta magenta como texto sobre negro
+        },
+        /** SOLO decoración: sombras sólidas y papeles de fondo. */
+        plum: '#5a1257',
         /**
-         * Tonos de sección y de tarjeta, todos legibles como texto sobre negro
-         * y sobre `abyss`, y con letra `surface` encima cuando se rellenan.
+         * Azul P3R (ajuste Persona punk): banda "Cómo trabajo" y panel del menú
+         * de pausa. Encima, SOLO `paper` (o `ink.muted` y `tone.pink` sobre
+         * `blue.deep`): `tone.pink` sobre `blue` no llega (3.6:1).
+         */
+        blue: {
+          DEFAULT: '#1E3BFF',
+          deep: '#0B1A8C',
+        },
+        /** Violeta del menú P3R: banda de Habilidades. Encima, SOLO `paper`. */
+        violet: '#4F1BC4',
+        /**
+         * Tonos de material. Todos legibles como texto sobre negro y con tinta
+         * encima cuando son papel (rosa, kraft, cian, lila).
          */
         tone: {
-          violet: '#b07cff',
-          green: '#a6f13c',
-          mint: '#5ef0a8',
-          lilac: '#d7c4ff',
-          silver: '#c3c0cf',
+          magenta: '#F25CEB',
+          pink: '#FF9CF5',
+          ochre: '#E0A24A',
+          cyan: '#46C3D8',
+          lilac: '#B6A6B6',
         },
-        warn: {
-          DEFAULT: '#ffd23f',
-          surface: '#241d0c',
-          border: '#4a3a12',
-        },
+        /** Nota adhesiva amarilla (estado). Tinta encima. */
+        warn: '#ffd23f',
       },
       fontFamily: {
         /*
-         * Estilo suizo con tipografía del sistema: Helvetica Neue en macOS,
-         * Arial en Windows, y en Linux el clon métrico que el sistema mapee a
-         * Arial. Ninguna descarga, ninguna ampliación de `font-src` en la CSP,
-         * cero bytes de fuente. La restricción D-05 se mantiene intacta y aun
-         * así se consigue la familia que define el estilo.
+         * Tres voces impresas (D-05 actualizada en tasks/plan.md):
+         *   - sans: texto impreso, del sistema.
+         *   - mono: máquina de escribir, del sistema, sin tracking abierto.
+         *   - display: rotulador a mano. ÚNICA fuente autoalojada (Permanent
+         *     Marker, Apache 2.0, subset Latin, 28 KB) con next/font/local:
+         *     sale del mismo origen, así que `font-src 'self'` no cambia.
          */
         sans: ['var(--font-sans)', 'Helvetica', 'Arial', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
-        /*
-         * Rótulos estilo Persona: la letra más pesada que trae el sistema.
-         * Arial Black en Windows y macOS; en Linux cae en el sans más negro
-         * disponible. Sigue sin haber descarga de fuentes (D-05).
-         */
-        display: ['var(--font-display)', 'sans-serif'],
+        display: ['var(--font-display)', 'Arial Black', 'sans-serif'],
       },
       maxWidth: {
         content: '72rem',
       },
       letterSpacing: {
-        widest2: '0.18em',
-        // Etiquetas de ficha técnica: tracking aún más abierto en mayúsculas.
-        spec: '0.24em',
+        /* Etiqueta Dymo: mayúsculas con aire, sin el tracking de terminal. */
+        dymo: '0.08em',
       },
       /*
-       * Ángulo recto en todo el sistema.
-       *
-       * El estilo suizo no tiene esquinas redondeadas, y una ficha técnica
-       * tampoco. Esto invalida a propósito la píldora y el `rounded-3xl` de la
-       * versión anterior: el override está en el tema para que ninguna clase
-       * `rounded-*` olvidada en un componente reintroduzca una curva por
-       * accidente. Los puntos decorativos pasan a ser cuadrados, que es lo
-       * correcto en este lenguaje visual.
+       * Sin esquinas redondeadas: el papel se corta, no se redondea. El override
+       * evita que un `rounded-*` olvidado reintroduzca una curva.
        */
       borderRadius: {
         none: '0',

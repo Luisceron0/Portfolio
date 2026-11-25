@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 /**
  * Verifica en frío los ratios de contraste que tailwind.config.ts AFIRMA que
- * cumplen WCAG AA.
+ * cumplen WCAG AA (RF-110 v5, zine de papel).
  *
- * Existe porque ese archivo tenía un comentario ("cumplen WCAG AA >=4.5:1")
- * que citaba un test (`e2e/accessibility.spec.ts`) que nunca se escribió. Los
- * números estaban calculados de memoria, no medidos. Ver tasks/lessons.md.
+ * Existe porque una versión anterior de la paleta citaba ratios calculados de
+ * memoria. Aquí se miden. Ver tasks/lessons.md.
  *
  * Fórmula de contraste relativo: WCAG 2.x, relative luminance + ratio.
  * https://www.w3.org/TR/WCAG21/#contrast-minimum
@@ -27,108 +26,80 @@ function contrastRatio(hexA, hexB) {
   return (lighter + 0.05) / (darker + 0.05)
 }
 
-/**
- * Compone un color semitransparente sobre un fondo y devuelve el hex efectivo.
- *
- * Hace falta porque `.card-surface` no es opaca: es la superficie de tarjeta al
- * 72% sobre el lienzo. Medir el contraste contra el hex nominal daría un número
- * que no ve nadie. Esto calcula el color real resultante.
- */
-function over(foregroundHex, backgroundHex, alpha) {
-  const channel = (hex, index) => parseInt(hex.slice(index, index + 2), 16)
-  const mixed = [1, 3, 5].map((index) => {
-    const value =
-      alpha * channel(foregroundHex, index) + (1 - alpha) * channel(backgroundHex, index)
-    return Math.round(value).toString(16).padStart(2, '0')
-  })
-  return `#${mixed.join('')}`
-}
-
 // Los mismos valores hex que tailwind.config.ts. Si uno cambia allá y no
-// aquí, este script deja de reflejar la realidad — es la razón por la que
-// tailwind.config.ts enlaza a este archivo en su comentario.
+// aquí, este script deja de reflejar la realidad.
 const PALETTE = {
-  ink: '#f5f3fa',
-  inkMuted: '#aaa6b8',
-  inkDim: '#3a3448',
-  surface: '#09080d',
-  surfaceCard: '#15121d',
-  surfaceSubtle: '#1d1a27',
-  abyss: '#130a26',
-  abyssCard: '#1e1238',
-  violet: '#7a1fff',
-  violetHover: '#6420cf',
+  surface: '#121014', // cartulina negra
+  surfaceCard: '#1b181e', // cartulina negra de tarjeta
+  paper: '#f2efe8', // fotocopia
+  paperDark: '#e6e2d8', // campos del formulario
+  ink: '#f2efe8',
+  inkMuted: '#b9b3ab',
+  tinta: '#0b0a0f',
+  tintaMuted: '#4a4540',
+  magenta: '#D903D5',
+  magentaDeep: '#A8009F',
+  magentaText: '#F25CEB',
   warn: '#ffd23f',
-  warnSurface: '#241d0c',
-  toneViolet: '#b07cff',
-  toneGreen: '#a6f13c',
-  toneMint: '#5ef0a8',
-  toneLilac: '#d7c4ff',
-  toneSilver: '#c3c0cf',
+  toneMagenta: '#F25CEB',
+  tonePink: '#FF9CF5',
+  toneOchre: '#E0A24A',
+  toneCyan: '#46C3D8',
+  toneLilac: '#B6A6B6',
+  blue: '#1E3BFF',
+  blueDeep: '#0B1A8C',
+  violet: '#4F1BC4',
 }
 
-/**
- * Fondos REALES compuestos. Las tarjetas de las bandas `abyss` son
- * `abyss-card` al 70-80% sobre `abyss`; se mide el caso al 70%, que es
- * el que más se aleja del par sólido.
- */
-const ABYSS_CARD_EFFECTIVE = over(PALETTE.abyssCard, PALETTE.abyss, 0.7)
-
-/**
- * El emblema del hero va detrás del texto en móvil al 15% de opacidad. Su
- * color más claro es el blanco de los tajos: ese es el caso peor para la letra
- * del hero. Si cambias `opacity-[0.15]` en hero.tsx, cambia esto.
- */
-const EMBLEM_ALPHA = 0.15
-const HERO_WORST = over(PALETTE.ink, PALETTE.surface, EMBLEM_ALPHA)
-
-const TONE_KEYS = ['toneViolet', 'toneGreen', 'toneMint', 'toneLilac', 'toneSilver']
+const TONE_KEYS = ['toneMagenta', 'tonePink', 'toneOchre', 'toneCyan', 'toneLilac']
 
 /** Cada par que el sitio realmente usa como texto sobre fondo. */
 const PAIRS = [
+  // Cartulina negra.
   { label: 'ink sobre surface (texto principal)', fg: PALETTE.ink, bg: PALETTE.surface, min: 4.5 },
-  { label: 'ink sobre surface-card (tarjetas de proyecto)', fg: PALETTE.ink, bg: PALETTE.surfaceCard, min: 4.5 },
-  { label: 'ink sobre surface-subtle (entradas del formulario)', fg: PALETTE.ink, bg: PALETTE.surfaceSubtle, min: 4.5 },
+  { label: 'ink sobre surface-card (tarjetas)', fg: PALETTE.ink, bg: PALETTE.surfaceCard, min: 4.5 },
   { label: 'ink-muted sobre surface', fg: PALETTE.inkMuted, bg: PALETTE.surface, min: 4.5 },
   { label: 'ink-muted sobre surface-card', fg: PALETTE.inkMuted, bg: PALETTE.surfaceCard, min: 4.5 },
-  { label: 'ink-muted sobre surface-subtle', fg: PALETTE.inkMuted, bg: PALETTE.surfaceSubtle, min: 4.5 },
+  { label: 'magenta-text sobre surface (sellos, números, organización)', fg: PALETTE.magentaText, bg: PALETTE.surface, min: 4.5 },
+  { label: 'magenta-text sobre surface-card', fg: PALETTE.magentaText, bg: PALETTE.surfaceCard, min: 4.5 },
 
-  // Bandas `abyss` (trayectoria, habilidades).
-  { label: 'ink sobre abyss', fg: PALETTE.ink, bg: PALETTE.abyss, min: 4.5 },
-  { label: 'ink-muted sobre abyss', fg: PALETTE.inkMuted, bg: PALETTE.abyss, min: 4.5 },
-  { label: `ink-muted sobre tarjeta abyss REAL (${ABYSS_CARD_EFFECTIVE})`, fg: PALETTE.inkMuted, bg: ABYSS_CARD_EFFECTIVE, min: 4.5 },
-  { label: 'ink-muted sobre abyss-card sólida', fg: PALETTE.inkMuted, bg: PALETTE.abyssCard, min: 4.5 },
+  // Fotocopia (papel).
+  { label: 'tinta sobre paper (fotocopias, títulos, formulario)', fg: PALETTE.tinta, bg: PALETTE.paper, min: 4.5 },
+  { label: 'tinta-muted sobre paper (secundario sobre papel)', fg: PALETTE.tintaMuted, bg: PALETTE.paper, min: 4.5 },
+  { label: 'magenta-deep sobre paper (sello y organización sobre papel)', fg: PALETTE.magentaDeep, bg: PALETTE.paper, min: 4.5 },
+  { label: 'tinta sobre paper-dark (texto de los campos)', fg: PALETTE.tinta, bg: PALETTE.paperDark, min: 4.5 },
+  { label: 'tinta-muted sobre paper-dark (placeholder)', fg: PALETTE.tintaMuted, bg: PALETTE.paperDark, min: 4.5 },
+  { label: 'magenta-deep sobre paper-dark (error de campo)', fg: PALETTE.magentaDeep, bg: PALETTE.paperDark, min: 4.5 },
 
-  // Rellenos con letra encima: botones, etiquetas inclinadas, banda del CV.
-  { label: 'ink sobre violet (botón primario, banda del CV, etiquetas)', fg: PALETTE.ink, bg: PALETTE.violet, min: 4.5 },
-  { label: 'ink sobre violet-hover (botón primario en hover)', fg: PALETTE.ink, bg: PALETTE.violetHover, min: 4.5 },
-  { label: 'ink sobre violet en tarjeta abyss (etiqueta de trayectoria)', fg: PALETTE.ink, bg: PALETTE.violet, min: 4.5 },
-  { label: 'surface sobre ink (botón secundario en hover, caja del título)', fg: PALETTE.surface, bg: PALETTE.ink, min: 4.5 },
-  { label: 'ink-muted sobre surface-subtle (botón deshabilitado)', fg: PALETTE.inkMuted, bg: PALETTE.surfaceSubtle, min: 4.5 },
+  // Papel magenta y rellenos.
+  { label: 'tinta sobre magenta (bandas, hero, CV)', fg: PALETTE.tinta, bg: PALETTE.magenta, min: 4.5 },
+  { label: 'paper sobre magenta-deep (botón primario)', fg: PALETTE.paper, bg: PALETTE.magentaDeep, min: 4.5 },
+  { label: 'paper sobre tinta (Dymo, botón oscuro, cinta tinta)', fg: PALETTE.paper, bg: PALETTE.tinta, min: 4.5 },
 
-  // Entrada de trayectoria invertida a blanco al pasar el ratón (LOAD DATA de P3R).
-  { label: 'ink-dim sobre ink (texto secundario invertido)', fg: PALETTE.inkDim, bg: PALETTE.ink, min: 4.5 },
-  { label: 'violet sobre ink (organización invertida)', fg: PALETTE.violet, bg: PALETTE.ink, min: 4.5 },
-
-  // Hero con el emblema detrás (móvil).
-  { label: `ink sobre hero con emblema detrás (${HERO_WORST}, caso peor)`, fg: PALETTE.ink, bg: HERO_WORST, min: 4.5 },
-  { label: 'ink-muted sobre hero con emblema detrás (caso peor)', fg: PALETTE.inkMuted, bg: HERO_WORST, min: 4.5 },
-
-  { label: 'warn sobre warn-surface (aviso [PENDIENTE])', fg: PALETTE.warn, bg: PALETTE.warnSurface, min: 4.5 },
-  { label: 'ink sobre warn-surface (cuerpo del aviso)', fg: PALETTE.ink, bg: PALETTE.warnSurface, min: 4.5 },
+  // Nota adhesiva.
+  { label: 'tinta sobre warn (nota adhesiva, [PENDIENTE])', fg: PALETTE.tinta, bg: PALETTE.warn, min: 4.5 },
+  { label: 'tinta-muted sobre warn (evidencia en nota)', fg: PALETTE.tintaMuted, bg: PALETTE.warn, min: 4.5 },
 
   /*
-   * Cada tono se usa como texto sobre negro, sobre tarjeta y sobre las bandas
-   * `abyss`, y como relleno con letra `surface` encima (cursor de la nav,
-   * pestañas de fecha, etiquetas, nota de rescate verde).
+   * Cada tono: como texto sobre negro y sobre tarjeta, y como papel con tinta
+   * encima (notas, recortes, chips, bandas lila, resaltador).
    */
   ...TONE_KEYS.flatMap((key) => [
     { label: `${key} sobre surface`, fg: PALETTE[key], bg: PALETTE.surface, min: 4.5 },
     { label: `${key} sobre surface-card`, fg: PALETTE[key], bg: PALETTE.surfaceCard, min: 4.5 },
-    { label: `${key} sobre abyss`, fg: PALETTE[key], bg: PALETTE.abyss, min: 4.5 },
-    { label: `${key} sobre tarjeta abyss REAL`, fg: PALETTE[key], bg: ABYSS_CARD_EFFECTIVE, min: 4.5 },
-    { label: `surface sobre ${key} (relleno, letra oscura)`, fg: PALETTE.surface, bg: PALETTE[key], min: 4.5 },
+    { label: `tinta sobre ${key} (papel con tinta encima)`, fg: PALETTE.tinta, bg: PALETTE[key], min: 4.5 },
   ]),
+
+  // Secundario en notas de color (pasos del proceso): solo donde llega.
+  { label: 'tinta-muted sobre tonePink (nota rosa)', fg: PALETTE.tintaMuted, bg: PALETTE.tonePink, min: 4.5 },
+  { label: 'tinta-muted sobre toneCyan (nota cian)', fg: PALETTE.tintaMuted, bg: PALETTE.toneCyan, min: 4.5 },
+
+  /* Ajuste Persona punk: bandas azul P3R y violeta, y el panel azul del menú. */
+  { label: 'paper sobre blue (banda azul, parte clara)', fg: PALETTE.paper, bg: PALETTE.blue, min: 4.5 },
+  { label: 'paper sobre blue-deep (banda azul, panel del menú)', fg: PALETTE.paper, bg: PALETTE.blueDeep, min: 4.5 },
+  { label: 'ink-muted sobre blue-deep (pista del menú)', fg: PALETTE.inkMuted, bg: PALETTE.blueDeep, min: 4.5 },
+  { label: 'tonePink sobre blue-deep (elementos del menú)', fg: PALETTE.tonePink, bg: PALETTE.blueDeep, min: 4.5 },
+  { label: 'paper sobre violet (banda de habilidades)', fg: PALETTE.paper, bg: PALETTE.violet, min: 4.5 },
 ]
 
 let failed = false

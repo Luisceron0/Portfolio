@@ -19,12 +19,9 @@ import { useEffect, useState } from 'react'
  */
 export function NavLinks({
   items,
-  tones,
   menuLabel,
 }: {
   items: readonly { href: string; label: string }[]
-  /** Clase de fondo del cursor, una por enlace (clases completas: Tailwind). */
-  tones: readonly string[]
   /** Nombre accesible del botón de menú en el idioma de la página. */
   menuLabel: string
 }) {
@@ -70,14 +67,16 @@ export function NavLinks({
         aria-expanded={open}
         aria-controls="nav-secciones"
         onClick={() => setOpen((value) => !value)}
-        className="flex h-10 w-10 items-center justify-center border-2 border-ink text-ink transition-colors hover:bg-ink hover:text-surface xl:hidden"
+        // Recorte de cartulina con borde de papel; la X y la hamburguesa son
+        // trazos de rotulador.
+        className="m-card flex h-11 w-11 items-center justify-center text-ink transition-transform duration-200 hover:-rotate-3 xl:hidden"
       >
         <span className="sr-only">{menuLabel}</span>
-        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
           {open ? (
-            <path d="M5 5l14 14M19 5L5 19" />
+            <path d="M5.4 5c4.4 4.2 9 9 13.4 14.2M18.6 5.2C14 9.6 9.6 14.4 5.2 19" />
           ) : (
-            <path d="M3 6h18M3 12h18M3 18h18" />
+            <path d="M3.6 6.4c5.6-.6 11.2-.4 16.8.2M3.2 12.2c5.8-.4 11.6-.3 17.4.1M3.8 18c5.4-.6 10.8-.5 16.4.1" />
           )}
         </svg>
       </button>
@@ -86,9 +85,9 @@ export function NavLinks({
         id="nav-secciones"
         className={`${
           open ? 'flex' : 'hidden'
-        } absolute inset-x-0 top-full flex-col gap-1 border-b-2 border-violet bg-surface px-5 py-4 shadow-[0_12px_24px_rgba(0,0,0,0.5)] xl:static xl:flex xl:flex-row xl:items-center xl:gap-2 xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none`}
+        } m-sheet absolute inset-x-3 top-full mt-3 flex-col gap-1 px-5 py-5 xl:static xl:m-0 xl:flex xl:flex-row xl:items-center xl:gap-1 xl:bg-transparent xl:bg-none xl:p-0 xl:shadow-none`}
       >
-        {items.map((item, index) => {
+        {items.map((item) => {
           const isActive = active === item.href
           return (
             <li key={item.href}>
@@ -96,16 +95,10 @@ export function NavLinks({
                 href={item.href}
                 onClick={() => setOpen(false)}
                 aria-current={isActive ? 'location' : undefined}
-                className={`group relative isolate inline-block whitespace-nowrap px-3 py-2.5 font-display text-lg font-black uppercase italic transition-colors duration-150 xl:px-3.5 xl:py-1.5 xl:text-sm ${
-                  isActive ? 'text-surface' : 'text-ink-muted hover:text-ink'
-                }`}
+                // Lo que entra desde la izquierda (con `--ease-snap`) es una tira
+                // de resaltador de bordes irregulares; el texto pasa a tinta.
+                className="m-marker p-display inline-block whitespace-nowrap px-3 py-2 text-lg text-tinta xl:px-3 xl:py-1.5 xl:text-sm xl:text-ink-muted xl:hover:text-tinta xl:aria-[current]:text-tinta"
               >
-                <span
-                  aria-hidden="true"
-                  className={`pointer-events-none absolute inset-0 -z-10 -skew-x-[14deg] transition-transform duration-200 ease-out ${tones[index % tones.length]} ${
-                    isActive ? 'scale-100' : 'scale-x-0 group-hover:scale-x-[0.12] group-hover:origin-left'
-                  }`}
-                />
                 {item.label}
               </a>
             </li>

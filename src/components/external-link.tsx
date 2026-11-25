@@ -10,18 +10,19 @@ import { PendingNote } from '@/components/pending'
 type Variant = 'primary' | 'secondary' | 'dark'
 
 /*
- * Botones de P5R: un paralelogramo inclinado que se desplaza y deja ver una
- * sombra sólida al pasar el ratón. La forma vive en `::before` (ver `.p-slant`
- * en globals.css) y el enlace queda rectangular, así el anillo de foco no se
- * recorta.
+ * Botones del zine (RF-110 v5): etiquetas recortadas. La forma irregular vive
+ * en `::before` y la sombra sólida en `::after` (`.p-btn` en globals.css); el
+ * enlace queda rectangular, así el anillo de foco no se recorta. El hover es
+ * el de P3R: se desplaza y estira con `--ease-snap`.
  *
- * Toda la letra es `ink` sobre violeta, negro o blanco: pares medidos en
- * `check:contrast`. `dark` es para fondos violeta, donde el violeta no se vería.
+ *  - primary: relleno magenta.deep con letra papel (5.78:1).
+ *  - secondary: recorte de fotocopia con letra tinta; sombra magenta en hover.
+ *  - dark: cartulina tinta con letra papel, para fondos de papel magenta.
  */
 const VARIANTS: Record<Variant, string> = {
-  primary: 'p-btn--primary text-ink',
-  secondary: 'p-btn--secondary text-ink',
-  dark: 'p-btn--dark text-ink',
+  primary: '',
+  secondary: 'p-btn--secondary',
+  dark: 'p-btn--dark',
 }
 
 /**
@@ -59,7 +60,7 @@ export function ExternalLinkButton({
         ? {}
         : { target: '_blank', rel: 'noopener noreferrer' })}
       {...(isDownload ? { download } : {})}
-      className={`p-slant p-btn p-display inline-flex min-h-[48px] items-center justify-center px-7 py-2.5 text-sm tracking-wide ${VARIANTS[variant]}`}
+      className={`p-btn inline-flex min-h-[48px] items-center justify-center px-7 py-2.5 text-sm font-extrabold uppercase tracking-dymo ${VARIANTS[variant]}`}
     >
       {link.label[locale]}
       {!isInternalAnchor && !isDownload && (

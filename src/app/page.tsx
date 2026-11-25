@@ -4,6 +4,7 @@ import { CvDownloads } from '@/components/cv'
 import { Education } from '@/components/education'
 import { Footer } from '@/components/footer'
 import { Hero } from '@/components/hero'
+import { Labs } from '@/components/labs'
 import { Pillars } from '@/components/pillars'
 import { Process } from '@/components/process'
 import { CrossedMarquees } from '@/components/persona'
@@ -50,6 +51,7 @@ export default function HomePage() {
         <Process locale={locale} />
         <Timeline locale={locale} />
         <Skills locale={locale} />
+        <Labs locale={locale} />
         <Education locale={locale} />
         <CvDownloads locale={locale} />
         <Contact locale={locale} />

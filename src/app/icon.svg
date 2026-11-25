@@ -1,13 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <!--
-    Favicon en clave suiza: rectángulo, sin curvas, con la franja de los dos
-    colores principales (violeta y verde) y un monograma calado. Coherente con
-    el lienzo oscuro del sitio, así que en una pestaña oscura no se ve como un
-    recorte blanco. Sin recursos externos: lo sirve la convención de App Router.
+    Favicon del zine (RF-110 v5): cartulina negra, una franja de papel magenta
+    con el borde rasgado y el monograma como un recorte de papel girado, con su
+    sombra sólida plum. Sin recursos externos: lo sirve la convención de App
+    Router.
   -->
-  <rect width="64" height="64" fill="#09080d"/>
-  <rect x="0" y="0" width="40" height="5" fill="#7a1fff"/>
-  <rect x="40" y="0" width="24" height="5" fill="#a6f13c"/>
-  <path d="M16 18 H24 V40 H38 V48 H16 Z" fill="#f5f3fa"/>
-  <rect x="42" y="18" width="6" height="6" fill="#a6f13c"/>
+  <rect width="64" height="64" fill="#121014"/>
+  <path d="M0 0H64V9L58 11 52 8 45 11 38 8 31 10 24 7 17 10 10 8 4 11 0 9Z" fill="#D903D5"/>
+  <g transform="rotate(-6 32 36)">
+    <path d="M18 20H29L28.6 40H43L43.4 50H17.6Z" fill="#5a1257" transform="translate(3 3)"/>
+    <path d="M18 20H29L28.6 40H43L43.4 50H17.6Z" fill="#f2efe8"/>
+  </g>
 </svg>

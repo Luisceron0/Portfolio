@@ -2,30 +2,26 @@ import { CASE_NAMES, pillars, profile, type Locale, type Pillar } from '@/conten
 import { caseHref } from '@/lib/locale'
 import { PendingNote } from '@/components/pending'
 import { Reveal } from '@/components/reveal'
-import {
-  Section,
-  SectionHeading,
-  TONE_BG,
-  TONE_BORDER,
-  TONE_TEXT,
-  type Tone,
-} from '@/components/section'
-import { ProfileIcon } from '@/components/icons'
+import { Section, SectionHeading, TONE_BG, TONE_TEXT, type Tone } from '@/components/section'
 
 /** Un tono por pilar: tres frentes de igual peso, tres colores distintos. */
-const PILLAR_TONES: readonly Tone[] = ['violet', 'green', 'mint']
+const PILLAR_TONES: readonly Tone[] = ['magenta', 'cyan', 'ochre']
 
 /**
  * "Qué hago" (SRS v1.4): el perfil y los tres pilares de igual peso.
  *
  * Abre con el resumen del perfil (ver la nota de TONO en `profile.summary`) y
- * sigue con los pilares. Cada punto enlaza a los casos de seguridad que lo
+ * sigue con los pilares. Cada punto enlaza a los proyectos que lo
  * demuestran: así el desarrollo queda como evidencia de la seguridad y no
  * como una lista de habilidades suelta. Un punto sin caso que lo respalde
  * muestra su `[PENDIENTE]`, nunca un enlace vacío.
  *
  * Las tres tarjetas tienen la misma anchura y la misma estructura a propósito:
  * ninguno de los tres frentes va por encima de los otros.
+ *
+ * En papel (RF-110 v5): el perfil es una carta fotocopiada, grapada, con un
+ * garabato en el margen; los pilares son fichas de archivo de cartulina con
+ * una franja de cinta del tono arriba y el número sellado.
  */
 export function Pillars({ locale }: { locale: Locale }) {
   // Tipo ancho: `satisfies` en content.ts conserva el literal de cada punto, y
@@ -38,42 +34,38 @@ export function Pillars({ locale }: { locale: Locale }) {
         id="seguridad-title"
         number="01"
         title={pillars.heading[locale]}
-        tone="violet"
-        icon={<ProfileIcon />}
+        tone="magenta"
       />
 
       <Reveal>
-        {/* Panel de diálogo de P5R: el perfil, en primera persona implícita. */}
-        <div className="relative mt-12 max-w-4xl border-2 border-ink bg-surface p-6 shadow-[8px_8px_0_#7a1fff] sm:p-8">
-          <span
-            aria-hidden="true"
-            className="absolute -left-3 -top-3 h-6 w-14 -skew-x-[20deg] bg-violet"
-          />
-          <div className="space-y-4">
-            {profile.summary[locale].map((paragraph) => (
-              <p key={paragraph} className="text-lg leading-relaxed text-ink">
-                {paragraph}
-              </p>
-            ))}
+        {/* Carta fotocopiada: el perfil, en primera persona implícita. */}
+        <div className="relative mt-12 max-w-4xl">
+          <div className="m-sheet -rotate-[0.6deg] p-6 sm:p-8">
+            <div className="space-y-4">
+              {profile.summary[locale].map((paragraph) => (
+                <p key={paragraph} className="text-lg leading-relaxed text-tinta">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           </div>
         </div>
       </Reveal>
 
-      <div className="mt-12 grid gap-5 lg:grid-cols-3">
+      <div className="mt-14 grid gap-8 lg:grid-cols-3">
         {items.map((pillar, index) => {
           const tone = PILLAR_TONES[index % PILLAR_TONES.length]
           const headingId = `pilar-${pillar.id}`
           return (
             <Reveal key={pillar.id} delayMs={index * 80}>
-              <article
-                aria-labelledby={headingId}
-                className={`h-full border-t-4 bg-surface-card/90 p-5 sm:p-6 ${TONE_BORDER[tone]}`}
-              >
+              <article aria-labelledby={headingId} className="m-card h-full p-5 pt-7 sm:p-6 sm:pt-8">
+                {/* Franja de cinta de color arriba: la pestaña de la ficha. */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute -top-2 left-6 h-4 w-24 -rotate-2 opacity-90 [clip-path:polygon(0_15%,6%_0,94%_10%,100%_0,98%_100%,4%_88%)] ${TONE_BG[tone]}`}
+                />
                 <div className="flex items-center gap-3">
-                  <span
-                    aria-hidden="true"
-                    className={`p-display p-outline text-3xl leading-none ${TONE_TEXT[tone]}`}
-                  >
+                  <span aria-hidden="true" className="m-stamp text-xl [--stamp-r:-6deg]">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <h3 id={headingId} className={`p-display text-lg sm:text-xl ${TONE_TEXT[tone]}`}>
@@ -84,20 +76,16 @@ export function Pillars({ locale }: { locale: Locale }) {
 
                 <ul className="mt-5 space-y-4">
                   {pillar.points.map((point) => (
-                    <li key={point.label.es} className="relative pl-5">
-                      <span
-                        aria-hidden="true"
-                        className={`absolute left-0 top-[0.55em] h-2 w-2 -skew-x-[20deg] ${TONE_BG[tone]}`}
-                      />
+                    <li key={point.label.es} className={`p-bullet ${TONE_TEXT[tone]}`}>
                       <span className="text-base leading-relaxed text-ink">{point.label[locale]}</span>
                       {point.cases.length > 0 && (
-                        <span className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-widest2 text-ink-muted">
+                        <span className="p-type mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-muted">
                           <span>{pillars.evidenceLabel[locale]}:</span>
                           {point.cases.map((slug) => (
                             <a
                               key={slug}
                               href={caseHref(slug, locale)}
-                              className="inline-flex min-h-[24px] items-center text-ink underline decoration-2 underline-offset-4 hover:text-tone-green"
+                              className="p-link inline-flex min-h-[24px] items-center px-0.5 text-ink"
                             >
                               {CASE_NAMES[slug]}
                             </a>

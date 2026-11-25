@@ -1,82 +1,90 @@
 import Image from 'next/image'
+import type { CSSProperties } from 'react'
 
 import { resolved, workProcess, type Locale } from '@/content'
 import { EvidenceLink } from '@/components/evidence-link'
 import { Reveal } from '@/components/reveal'
-import { Section, SectionHeading, TONE_BG, TONE_TEXT, type Tone } from '@/components/section'
-import { TimelineIcon } from '@/components/icons'
-
-const STEP_TONES: readonly Tone[] = ['violet', 'green', 'mint', 'lilac']
+import { Section, SectionHeading } from '@/components/section'
+import { Tape } from '@/components/zine'
 
 /**
- * "Cómo trabajo" (SRS v1.4): modelar amenazas → decidir y registrar en ADR →
- * implementar → bloquear en CI. Cada paso enlaza a dónde se ve en los casos.
+ * Paneles Persona en colores alternos, todos con tinta encima (check:contrast).
+ * Sobre la lila solo vale tinta: por eso ningún texto del panel es muted.
+ */
+const NOTE_COLORS = ['#ffd23f', '#FF9CF5', '#46C3D8', '#B6A6B6'] as const
+const NOTE_TILT = [-1.5, 1, -0.8, 1.5] as const
+
+/**
+ * "Cómo trabajo" (SRS v1.4), sobre la banda azul P3R: cuatro paneles de
+ * esquinas cortadas en fila. Modelar amenazas → decidir y registrar en ADR →
+ * implementar → bloquear en CI, y cada paso enlaza a dónde se ve en los casos.
  *
- * La captura de un gate bloqueando un despliegue solo se pinta cuando existe
- * (`workProcess.gateScreenshot`); mientras tanto no hay hueco vacío en la página.
+ * La captura del gate solo se pinta cuando existe (`workProcess.gateScreenshot`),
+ * como foto pegada; mientras tanto no hay hueco vacío en la página.
  */
 export function Process({ locale }: { locale: Locale }) {
   const shot = workProcess.gateScreenshot
   const shotSrc = shot ? resolved(shot.src) : null
 
   return (
-    <Section id="proceso" labelledBy="proceso-title" band="abyss">
+    <Section id="proceso" labelledBy="proceso-title" band="blue">
       <SectionHeading
         id="proceso-title"
         number="03"
         title={workProcess.heading[locale]}
         intro={workProcess.intro[locale]}
-        tone="green"
-        icon={<TimelineIcon />}
+        tone="ochre"
+        onColor
       />
 
-      <ol className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        {workProcess.steps.map((step, index) => {
-          const tone = STEP_TONES[index % STEP_TONES.length]
-          return (
-            <li key={step.id}>
-              <Reveal delayMs={index * 70} className="h-full">
-                <div className="h-full bg-abyss-card/80 p-5 sm:p-6">
-                  <div className="flex items-center gap-3">
-                    <span
-                      aria-hidden="true"
-                      className={`p-display p-outline text-4xl leading-none ${TONE_TEXT[tone]}`}
-                    >
-                      {index + 1}
-                    </span>
-                    <span aria-hidden="true" className={`h-1.5 w-10 -skew-x-[30deg] ${TONE_BG[tone]}`} />
-                  </div>
-                  <h3 className={`p-display mt-4 text-lg sm:text-xl ${TONE_TEXT[tone]}`}>
-                    {step.title[locale]}
-                  </h3>
-                  <p className="mt-3 text-base leading-relaxed text-ink">{step.text[locale]}</p>
-                  <p className="mt-4 font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
-                    {workProcess.evidenceLabel[locale]}
-                  </p>
-                  <ul className="mt-2 space-y-1.5">
-                    {step.evidence.map((link) => (
-                      <li key={link.label.es}>
-                        <EvidenceLink link={link} locale={locale} />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Reveal>
-            </li>
-          )
-        })}
+      <ol className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+        {workProcess.steps.map((step, index) => (
+          <li key={step.id}>
+            <Reveal delayMs={index * 70} className="h-full">
+              <div
+                className="m-panel h-full p-5 pt-6 sm:p-6 sm:pt-7"
+                style={
+                  {
+                    '--panel-bg': NOTE_COLORS[index % NOTE_COLORS.length],
+                    rotate: `${NOTE_TILT[index % NOTE_TILT.length]}deg`,
+                  } as CSSProperties
+                }
+              >
+                <span aria-hidden="true" className="p-display block text-4xl leading-none text-tinta">
+                  {index + 1}
+                </span>
+                <h3 className="p-display mt-3 text-lg text-tinta sm:text-xl">{step.title[locale]}</h3>
+                <p className="mt-3 text-base leading-relaxed text-tinta">{step.text[locale]}</p>
+                <p className="p-type mt-4 text-xs font-bold text-tinta">{workProcess.evidenceLabel[locale]}</p>
+                <ul className="mt-2 space-y-1.5">
+                  {step.evidence.map((link) => (
+                    <li key={link.label.es}>
+                      <EvidenceLink link={link} locale={locale} onPaper />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          </li>
+        ))}
       </ol>
 
       {shot && shotSrc && (
         <Reveal delayMs={120}>
-          <Image
-            src={shotSrc}
-            alt={shot.alt[locale]}
-            width={shot.width ?? 1280}
-            height={shot.height ?? 577}
-            className="mt-12 w-full border-2 border-ink"
-            sizes="100vw"
-          />
+          <div className="relative mt-14 [--tilt:-1.2deg]">
+            <div className="m-photo">
+              <Image
+                src={shotSrc}
+                alt={shot.alt[locale]}
+                width={shot.width ?? 1280}
+                height={shot.height ?? 577}
+                className="w-full"
+                sizes="100vw"
+              />
+            </div>
+            <Tape className="-top-3 left-10" rotate={-7} />
+            <Tape className="-top-3 right-10" rotate={6} />
+          </div>
         </Reveal>
       )}
     </Section>
