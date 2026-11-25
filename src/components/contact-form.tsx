@@ -58,7 +58,7 @@ function SubmitButton({ disabled, locale }: { disabled: boolean; locale: Locale 
     <button
       type="submit"
       disabled={disabled || pending}
-      className="p-slant p-btn p-btn--primary p-display inline-flex min-h-[48px] items-center justify-center self-start px-8 py-2.5 text-sm tracking-wide text-ink disabled:cursor-not-allowed disabled:text-ink-muted disabled:[--slant-bg:#1d1a27] disabled:hover:transform-none"
+      className="p-btn inline-flex min-h-[48px] items-center justify-center self-start px-8 py-2.5 text-sm font-extrabold uppercase tracking-dymo"
     >
       {pending ? contact.labels.submitting[locale] : contact.labels.submit[locale]}
     </button>
@@ -76,7 +76,7 @@ function FieldError({
 }) {
   if (!code) return null
   return (
-    <p id={id} className="mt-1 text-sm font-medium text-warn">
+    <p id={id} className="mt-1 text-sm font-bold text-magenta-deep">
       {contact.fieldErrors[code][locale]}
     </p>
   )
@@ -134,7 +134,7 @@ export function ContactForm({
 
         <div className="space-y-5">
           <div>
-            <label htmlFor="contact-name" className="block font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
+            <label htmlFor="contact-name" className="p-type block text-xs font-bold text-tinta">
               {contact.labels.name[locale]}
             </label>
             <input
@@ -146,13 +146,13 @@ export function ContactForm({
               autoComplete="name"
               aria-invalid={fieldErrors?.name ? true : undefined}
               aria-describedby={fieldErrors?.name ? 'contact-name-error' : undefined}
-              className="mt-1.5 block w-full border-2 border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink transition-colors duration-150 hover:border-ink-muted focus:border-tone-violet"
+              className="mt-1.5 block w-full border-0 border-b-2 border-tinta bg-paper-dark px-3.5 py-2.5 text-base text-tinta placeholder:text-tinta-muted transition-colors duration-150 focus:border-magenta-deep"
             />
             <FieldError id="contact-name-error" code={fieldErrors?.name} locale={locale} />
           </div>
 
           <div>
-            <label htmlFor="contact-email" className="block font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
+            <label htmlFor="contact-email" className="p-type block text-xs font-bold text-tinta">
               {contact.labels.email[locale]}
             </label>
             <input
@@ -164,13 +164,13 @@ export function ContactForm({
               autoComplete="email"
               aria-invalid={fieldErrors?.email ? true : undefined}
               aria-describedby={fieldErrors?.email ? 'contact-email-error' : undefined}
-              className="mt-1.5 block w-full border-2 border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink transition-colors duration-150 hover:border-ink-muted focus:border-tone-violet"
+              className="mt-1.5 block w-full border-0 border-b-2 border-tinta bg-paper-dark px-3.5 py-2.5 text-base text-tinta placeholder:text-tinta-muted transition-colors duration-150 focus:border-magenta-deep"
             />
             <FieldError id="contact-email-error" code={fieldErrors?.email} locale={locale} />
           </div>
 
           <div>
-            <label htmlFor="contact-message" className="block font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
+            <label htmlFor="contact-message" className="p-type block text-xs font-bold text-tinta">
               {contact.labels.message[locale]}
             </label>
             <textarea
@@ -184,9 +184,9 @@ export function ContactForm({
               aria-describedby={
                 fieldErrors?.message ? 'contact-message-error' : 'contact-message-hint'
               }
-              className="mt-1.5 block w-full border-2 border-hairline-strong bg-surface-subtle px-3.5 py-2.5 text-base text-ink transition-colors duration-150 hover:border-ink-muted focus:border-tone-violet"
+              className="mt-1.5 block w-full border-0 border-b-2 border-tinta bg-paper-dark px-3.5 py-2.5 text-base text-tinta placeholder:text-tinta-muted transition-colors duration-150 focus:border-magenta-deep"
             />
-            <p id="contact-message-hint" className="mt-1 text-sm text-ink-muted">
+            <p id="contact-message-hint" className="mt-1 text-sm text-tinta-muted">
               {contact.hints.message[locale]}
             </p>
             <FieldError id="contact-message-error" code={fieldErrors?.message} locale={locale} />
@@ -201,12 +201,12 @@ export function ContactForm({
 
           {/* Por qué el botón está deshabilitado, dicho en voz alta. */}
           {!sitekey && (
-            <p role="alert" className="text-sm font-medium text-warn">
+            <p role="alert" className="m-postit self-start px-3 py-2 text-sm font-bold">
               {contact.captcha.unavailable[locale]}
             </p>
           )}
           {sitekey && !token && (
-            <p data-testid="captcha-pending" className="text-sm text-ink-muted">
+            <p data-testid="captcha-pending" className="text-sm text-tinta-muted">
               {contact.captcha.pending[locale]}
             </p>
           )}
@@ -217,7 +217,7 @@ export function ContactForm({
           {state.status === 'success' && (
             <p
               data-testid="contact-success"
-              className="border-l-4 border-violet bg-surface-subtle px-4 py-3 text-base font-medium text-ink"
+              className="m-postit px-4 py-3 text-base font-bold [--postit-bg:#46C3D8]"
             >
               {contact.successMessage[locale]}
             </p>
@@ -225,7 +225,7 @@ export function ContactForm({
           {state.status === 'error' && (
             <p
               data-testid="contact-error"
-              className="border-l-2 border-warn bg-warn-surface px-4 py-3 text-base font-medium text-warn"
+              className="m-postit px-4 py-3 text-base font-bold"
             >
               {contact.errors[state.code][locale]}
             </p>

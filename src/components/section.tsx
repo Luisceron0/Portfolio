@@ -1,28 +1,28 @@
 import type { CSSProperties, ReactNode } from 'react'
 
-import { ShardField, VerticalWatermark } from '@/components/persona'
 import { Reveal } from '@/components/reveal'
+import { BrushStroke, CrossOut, MarkerCircle, SplatStar } from '@/components/zine'
 
 /**
- * RF-110: cada sección tiene su propio tono. El color es orientación: dice en
- * qué parte de la página estás.
+ * RF-110 v5: cada sección tiene su tono de MATERIAL (tinta magenta, papel rosa,
+ * kraft, resaltador cian, fotocopia lila). El color orienta: dice en qué parte
+ * de la página estás.
  *
  * Las clases se escriben completas y no se componen con plantillas
  * (`text-tone-${x}`): Tailwind analiza el código como texto plano y una clase
  * construida en tiempo de ejecución nunca llega al CSS final.
  *
- * `TONE_HEX` existe porque algunos efectos (la sombra sólida del título, el
- * `drop-shadow` de las tarjetas) leen el tono desde la variable CSS `--tone`,
- * y una variable no puede apuntar a una clase de Tailwind.
+ * Todos los tonos son legibles como texto sobre negro y con tinta encima
+ * cuando son papel (check:contrast).
  */
-export type Tone = 'violet' | 'green' | 'mint' | 'lilac' | 'silver'
+export type Tone = 'magenta' | 'pink' | 'ochre' | 'cyan' | 'lilac'
 
 export const TONE_HEX: Record<Tone, string> = {
-  violet: '#b07cff',
-  green: '#a6f13c',
-  mint: '#5ef0a8',
-  lilac: '#d7c4ff',
-  silver: '#c3c0cf',
+  magenta: '#F25CEB',
+  pink: '#FF9CF5',
+  ochre: '#E0A24A',
+  cyan: '#46C3D8',
+  lilac: '#B6A6B6',
 }
 
 /** Estilo en línea que expone el tono a los efectos de globals.css. */
@@ -31,44 +31,45 @@ export function toneVar(tone: Tone): CSSProperties {
 }
 
 export const TONE_TEXT: Record<Tone, string> = {
-  violet: 'text-tone-violet',
-  green: 'text-tone-green',
-  mint: 'text-tone-mint',
+  magenta: 'text-tone-magenta',
+  pink: 'text-tone-pink',
+  ochre: 'text-tone-ochre',
+  cyan: 'text-tone-cyan',
   lilac: 'text-tone-lilac',
-  silver: 'text-tone-silver',
 }
 
 export const TONE_BG: Record<Tone, string> = {
-  violet: 'bg-tone-violet',
-  green: 'bg-tone-green',
-  mint: 'bg-tone-mint',
+  magenta: 'bg-tone-magenta',
+  pink: 'bg-tone-pink',
+  ochre: 'bg-tone-ochre',
+  cyan: 'bg-tone-cyan',
   lilac: 'bg-tone-lilac',
-  silver: 'bg-tone-silver',
 }
 
 export const TONE_BORDER: Record<Tone, string> = {
-  violet: 'border-tone-violet',
-  green: 'border-tone-green',
-  mint: 'border-tone-mint',
+  magenta: 'border-tone-magenta',
+  pink: 'border-tone-pink',
+  ochre: 'border-tone-ochre',
+  cyan: 'border-tone-cyan',
   lilac: 'border-tone-lilac',
-  silver: 'border-tone-silver',
 }
 
 export const TONE_HOVER_BORDER: Record<Tone, string> = {
-  violet: 'hover:border-tone-violet',
-  green: 'hover:border-tone-green',
-  mint: 'hover:border-tone-mint',
+  magenta: 'hover:border-tone-magenta',
+  pink: 'hover:border-tone-pink',
+  ochre: 'hover:border-tone-ochre',
+  cyan: 'hover:border-tone-cyan',
   lilac: 'hover:border-tone-lilac',
-  silver: 'hover:border-tone-silver',
 }
 
 /**
- * Cabecera de sección en clave de menú de P5R: el número enorme, relleno e
- * inclinado, y el título en una caja blanca torcida con sombra sólida del tono
- * de la sección. Debajo, una regla violeta que se corta en diagonal.
+ * Cabecera de sección del zine: el número a rotulador con una salpicadura
+ * plum detrás, el título en una tira de fotocopia rasgada con su sombra
+ * sólida, y debajo un brochazo que termina en un tachón.
  *
  * El número es decorativo (`aria-hidden`): un lector de pantalla ya anuncia el
- * orden de los encabezados.
+ * orden de los encabezados. `onPaper` cambia número, regla e intro a tinta
+ * cuando la sección es una banda de papel magenta o lila.
  */
 export function SectionHeading({
   id,
@@ -77,6 +78,7 @@ export function SectionHeading({
   intro,
   tone,
   icon,
+  onPaper = false,
 }: {
   id: string
   number: string
@@ -84,43 +86,46 @@ export function SectionHeading({
   intro?: string
   tone: Tone
   icon?: ReactNode
+  onPaper?: boolean
 }) {
   return (
     <Reveal>
-      <div className="relative flex items-end gap-4 sm:gap-6" style={toneVar(tone)}>
-        <span
-          aria-hidden="true"
-          className={`p-display p-parallax -mb-2 select-none text-7xl leading-none sm:text-8xl md:text-9xl ${TONE_TEXT[tone]}`}
-        >
-          {number}
+      <div className="relative flex items-end gap-3 sm:gap-6" style={toneVar(tone)}>
+        <span aria-hidden="true" className="relative -mb-2 select-none">
+          <SplatStar
+            className="absolute -left-4 -top-6 h-28 w-28 sm:h-36 sm:w-36"
+            color={onPaper ? '#f2efe8' : '#5a1257'}
+          />
+          <span
+            className={`p-display p-parallax relative block text-6xl leading-none min-[400px]:text-7xl sm:text-8xl md:text-9xl ${
+              onPaper ? 'text-tinta' : 'text-magenta-text'
+            }`}
+          >
+            {number}
+          </span>
         </span>
 
         <div className="min-w-0 pb-1">
           {icon && (
-            <span
-              aria-hidden="true"
-              className={`mb-3 inline-flex h-8 w-8 items-center justify-center border-2 ${TONE_BORDER[tone]} ${TONE_TEXT[tone]} -rotate-6`}
-            >
+            <MarkerCircle className={`mb-3 h-10 w-10 ${onPaper ? 'text-tinta' : TONE_TEXT[tone]}`}>
               {icon}
-            </span>
+            </MarkerCircle>
           )}
-          <h2
-            id={id}
-            className="p-display text-[1.6rem] leading-none [overflow-wrap:anywhere] sm:text-5xl md:text-6xl"
-          >
+          <h2 id={id} className="p-display text-[clamp(1.1rem,5.4vw,1.6rem)] leading-none [overflow-wrap:anywhere] sm:text-5xl md:text-6xl">
             <span className="p-title-box">{title}</span>
           </h2>
         </div>
       </div>
 
-      <div aria-hidden="true" className="mt-6 flex h-1.5 gap-1.5">
-        <span className="w-24 -skew-x-[30deg] bg-violet" />
-        <span className={`w-6 -skew-x-[30deg] ${TONE_BG[tone]}`} />
-        <span className="flex-1 -skew-x-[30deg] bg-hairline" />
+      <div aria-hidden="true" className={`mt-6 flex items-center gap-2 ${onPaper ? 'text-tinta' : 'text-paper'}`}>
+        <BrushStroke className="h-3 w-full max-w-md" color={onPaper ? '#0b0a0f' : '#f2efe8'} draw />
+        <CrossOut className="h-5 w-5 shrink-0" />
       </div>
 
       {intro && (
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">{intro}</p>
+        <p className={`mt-6 max-w-2xl text-lg leading-relaxed ${onPaper ? 'text-tinta' : 'text-ink-muted'}`}>
+          {intro}
+        </p>
       )}
     </Reveal>
   )
@@ -129,8 +134,11 @@ export function SectionHeading({
 /**
  * Contenedor de sección.
  *
- * `band="abyss"` saca la sección a sangre sobre el violeta abismo, con cortes
- * diagonales arriba y abajo; el contenido sigue centrado al ancho del sitio.
+ * `band` saca la sección a sangre sobre papel: `magenta` (papel magenta con
+ * semitonos en las esquinas) o `lilac` (fotocopia vieja), los dos con bordes
+ * rasgados arriba y abajo. Sobre papel el texto es tinta; las tarjetas que van
+ * dentro son su propio material (cartulina, nota, ficha).
+ *
  * El `<section>` es SIEMPRE el elemento con `id` y `aria-labelledby`, con o
  * sin banda: los tests y las anclas de la nav no dependen del estilo.
  */
@@ -139,29 +147,21 @@ export function Section({
   labelledBy,
   className = '',
   band,
-  watermark,
   children,
 }: {
   id: string
   labelledBy: string
   className?: string
-  band?: 'abyss'
-  /** Rótulo vertical gigante del borde de la banda (solo con `band`). */
-  watermark?: string
+  band?: 'magenta' | 'lilac'
   children: ReactNode
 }) {
-  if (band === 'abyss') {
+  if (band) {
     return (
       <section
         id={id}
         aria-labelledby={labelledBy}
-        className={`p-band relative my-8 bg-abyss ${className}`}
+        className={`${band === 'magenta' ? 'm-magenta' : 'm-band-lilac'} relative my-8 py-20 sm:py-28 ${className}`}
       >
-        {/* Agua P3R en movimiento, fragmentos flotando y el rótulo vertical.
-            Todo decorativo y detrás del contenido. */}
-        <div aria-hidden="true" className="p-water pointer-events-none absolute inset-0" />
-        <ShardField className="opacity-60" />
-        {watermark && <VerticalWatermark text={watermark} />}
         <div className="relative mx-auto max-w-content px-5 sm:px-8">{children}</div>
       </section>
     )

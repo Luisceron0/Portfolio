@@ -49,3 +49,6 @@ yarn-error.log*
 # Salida intermedia de RenderCV (Typst, PNG): solo se versionan los PDF de public/cv.
 cv/rendercv_output/
 rendercv_output/
+
+# Capturas de revisión del rediseño (locales, no se versionan).
+.impeccable/review/

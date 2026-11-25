@@ -7,7 +7,16 @@ import { PendingNote } from '@/components/pending'
  * Si el destino sigue `[PENDIENTE]`, no se pinta un enlace roto: se muestra el
  * aviso con la pregunta para el dueño (regla 3 de copilot-instructions).
  */
-export function EvidenceLink({ link, locale }: { link: ExternalLink; locale: Locale }) {
+export function EvidenceLink({
+  link,
+  locale,
+  onPaper = false,
+}: {
+  link: ExternalLink
+  locale: Locale
+  /** Sobre papel o notas: subrayado en tinta y texto tinta. */
+  onPaper?: boolean
+}) {
   const target = linkHref(link, locale)
   const href = resolved(target)
 
@@ -20,7 +29,9 @@ export function EvidenceLink({ link, locale }: { link: ExternalLink; locale: Loc
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex min-h-[24px] items-center break-all font-mono text-xs text-ink underline decoration-tone-green decoration-2 underline-offset-4 hover:text-tone-green"
+      className={`p-type p-link inline-flex min-h-[24px] items-center break-all px-0.5 text-xs ${
+        onPaper ? 'p-link--ink text-tinta' : 'text-ink'
+      }`}
     >
       {link.label[locale]}
       <span className="sr-only">{casesSection.labels.newTab[locale]}</span>

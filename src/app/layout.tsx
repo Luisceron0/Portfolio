@@ -18,7 +18,9 @@ const marker = localFont({
   variable: '--font-display',
   display: 'swap',
   weight: '400',
-  fallback: ['Arial Black', 'sans-serif'],
+  // Con comillas: sin ellas el minificador convierte "Black" en el color #000
+  // y la variable entera queda inválida (el rótulo caía en la sans).
+  fallback: ["'Arial Black'", 'sans-serif'],
 })
 
 /**

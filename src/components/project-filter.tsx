@@ -69,10 +69,10 @@ export function ProjectFilter({
                 type="button"
                 aria-pressed={pressed}
                 onClick={() => choose(option.value)}
-                className={`p-slant min-h-[44px] px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest2 transition-colors ${
-                  pressed
-                    ? 'text-surface [--slant-bg:#a6f13c]'
-                    : 'border border-hairline-strong text-ink hover:border-tone-green'
+                // Etiquetas Dymo: la activa en magenta, el resto en tinta con
+                // borde papel. `aria-pressed` dice cuál está activa, no el color.
+                className={`m-dymo min-h-[44px] text-xs transition-transform duration-200 hover:-translate-y-0.5 ${
+                  pressed ? 'm-dymo--magenta -rotate-2' : 'm-dymo--edge'
                 }`}
               >
                 {option.label}

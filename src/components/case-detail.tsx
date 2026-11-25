@@ -12,12 +12,13 @@ import {
 /** Controles a la vista en la página del caso; el resto va plegado. */
 const VISIBLE_CONTROLS = 5
 import { homeAnchor } from '@/lib/locale'
-import { CASE_TONES, CaseScreenshot, StatusBadge } from '@/components/cases'
+import { CASE_TONES, CasePhoto, StatusBadge } from '@/components/cases'
 import { ArchitectureDiagram } from '@/components/architecture-diagram'
 import { EvidenceLink } from '@/components/evidence-link'
-import { TONE_BG, TONE_BORDER, TONE_TEXT, type Tone } from '@/components/section'
+import { TONE_TEXT, type Tone } from '@/components/section'
+import { ArrowDoodle, BrushStroke } from '@/components/zine'
 
-/** Bloque de la plantilla: un H2 con su regla de color y el contenido. */
+/** Bloque de la plantilla: un H2 a rotulador con su brochazo y el contenido. */
 function Block({
   id,
   title,
@@ -30,10 +31,10 @@ function Block({
   children: ReactNode
 }) {
   return (
-    <section aria-labelledby={id} className="mt-14">
+    <section aria-labelledby={id} className="mt-16">
       <h2 id={id} className="flex items-center gap-3">
-        <span aria-hidden="true" className={`h-1.5 w-10 -skew-x-[30deg] ${TONE_BG[tone]}`} />
-        <span className="p-display text-2xl leading-none sm:text-3xl">{title}</span>
+        <BrushStroke className={`h-3 w-12 shrink-0 ${TONE_TEXT[tone]}`} color="currentColor" />
+        <span className="p-display text-2xl leading-none text-paper sm:text-3xl">{title}</span>
       </h2>
       <div className="mt-6">{children}</div>
     </section>
@@ -105,7 +106,7 @@ export function CaseDetail({
 
   function ControlCard({ control, heading: Heading }: { control: CaseControl; heading: 'h3' | 'h4' }) {
     return (
-      <li className={`border-t-4 bg-surface-card/90 p-5 ${TONE_BORDER[tone]}`}>
+      <li className="m-card p-5 sm:p-6">
         <Heading className="text-lg font-bold leading-snug text-ink">{control.title[locale]}</Heading>
         <p className="mt-2 text-base leading-relaxed text-ink-muted">{control.why[locale]}</p>
         <EvidenceList links={control.evidence} locale={locale} label={labels.evidence[locale]} />
@@ -117,21 +118,21 @@ export function CaseDetail({
     <article aria-labelledby="caso-title" className="mx-auto max-w-content px-5 pb-20 pt-10 sm:px-8 sm:pt-14">
       <a
         href={homeAnchor('#casos', locale, false)}
-        className="inline-flex min-h-[44px] items-center font-mono text-xs font-bold uppercase tracking-widest2 text-ink underline decoration-2 underline-offset-4 hover:text-tone-green"
+        className="p-type group inline-flex min-h-[44px] items-center gap-2 text-sm font-bold text-ink"
       >
-        ← {labels.backToCases[locale]}
+        <ArrowDoodle direction="left" className="h-6 w-5 text-magenta-text" />
+        <span className="p-link px-0.5">{labels.backToCases[locale]}</span>
       </a>
 
       <header className="mt-6 grid items-start gap-10 lg:grid-cols-[1.2fr_1fr]">
         <div>
-          <p className={`font-mono text-[0.72rem] uppercase tracking-spec ${TONE_TEXT[tone]}`}>
-            {item.kicker[locale]}
-          </p>
-          <h1 id="caso-title" className="p-display mt-3 text-5xl leading-none sm:text-7xl">
+          <p className="p-type text-sm text-ink-muted">{item.kicker[locale]}</p>
+          <h1 id="caso-title" className="p-display mt-3 text-5xl leading-none text-paper sm:text-7xl">
             {name}
           </h1>
 
-          <dl className="mt-8 space-y-5">
+          {/* Hoja de cuaderno: margen magenta, dt mecanografiado, dd en cuerpo. */}
+          <dl className="m-sheet m-ruled mt-8 space-y-4 py-5 pl-12 pr-5 sm:pr-6">
             {/*
               Bloque inicial de tres líneas (portafolio v2): problema, qué
               construí y resultado. La plantilla completa va debajo para quien
@@ -144,34 +145,30 @@ export function CaseDetail({
                 [labels.outcome, item.outcome],
               ] as const
             ).map(([label, text]) => (
-              <div key={label.es} className={`border-l-4 pl-4 ${TONE_BORDER[tone]}`}>
-                <dt className="font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
-                  {label[locale]}
-                </dt>
-                <dd className="mt-1 text-lg leading-relaxed text-ink">{text[locale]}</dd>
+              <div key={label.es}>
+                <dt className="p-type text-xs font-bold text-tinta-muted">{label[locale]}</dt>
+                <dd className="mt-1 text-lg leading-relaxed text-tinta">{text[locale]}</dd>
               </div>
             ))}
-            <div className={`border-l-4 pl-4 ${TONE_BORDER[tone]}`}>
-              <dt className="font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
-                {labels.stack[locale]}
-              </dt>
+          </dl>
+
+          {/* Stack y estado, sobre la cartulina: el sello magenta no llega al
+              contraste sobre papel. */}
+          <dl className="mt-8 space-y-5">
+            <div>
+              <dt className="p-type text-xs font-bold text-ink-muted">{labels.stack[locale]}</dt>
               <dd className="mt-2">
                 <ul className="flex flex-wrap gap-2">
                   {item.stack.map((tech) => (
-                    <li
-                      key={tech}
-                      className="border border-hairline-strong bg-surface px-2.5 py-1 font-mono text-[0.7rem] uppercase tracking-widest2 text-ink-muted"
-                    >
+                    <li key={tech} className="m-dymo m-dymo--edge text-[0.62rem]">
                       {tech}
                     </li>
                   ))}
                 </ul>
               </dd>
             </div>
-            <div className={`border-l-4 pl-4 ${TONE_BORDER[tone]}`}>
-              <dt className="font-mono text-[0.65rem] font-bold uppercase tracking-spec text-ink-muted">
-                {labels.status[locale]}
-              </dt>
+            <div>
+              <dt className="p-type text-xs font-bold text-ink-muted">{labels.status[locale]}</dt>
               <dd className="mt-2">
                 <StatusBadge item={item} locale={locale} />
               </dd>
@@ -180,7 +177,7 @@ export function CaseDetail({
         </div>
 
         {item.screenshot ? (
-          <CaseScreenshot item={item} locale={locale} sizes="(min-width: 1024px) 40vw, 100vw" />
+          <CasePhoto item={item} locale={locale} sizes="(min-width: 1024px) 40vw, 100vw" tilt={1.4} />
         ) : item.architecture ? (
           <ArchitectureDiagram
             layers={item.architecture}
@@ -193,24 +190,18 @@ export function CaseDetail({
       </header>
 
       {item.privateRepo && (
-        <p role="note" className="mt-8 max-w-4xl border border-hairline-strong px-4 py-3 text-sm leading-relaxed text-ink-muted">
+        <p role="note" className="m-postit mt-10 max-w-3xl px-4 py-3 text-sm font-medium leading-relaxed">
           {labels.privateRepo[locale]}
         </p>
       )}
 
       <Block id="flujo" title={labels.dataFlow[locale]} tone={tone}>
-        <p className="max-w-4xl font-mono text-sm leading-relaxed text-ink">{item.dataFlow[locale]}</p>
-        <h3 className="mt-8 font-mono text-[0.7rem] font-bold uppercase tracking-spec text-ink-muted">
-          {labels.assets[locale]}
-        </h3>
+        <p className="p-type m-sheet max-w-4xl -rotate-[0.4deg] px-5 py-4 text-sm leading-relaxed">{item.dataFlow[locale]}</p>
+        <h3 className="p-type mt-10 text-xs font-bold text-ink-muted">{labels.assets[locale]}</h3>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">
           {item.assets[locale].map((asset) => (
-            <li key={asset} className="relative pl-5 text-base leading-relaxed text-ink">
-              <span
-                aria-hidden="true"
-                className={`absolute left-0 top-[0.55em] h-2 w-2 -skew-x-[20deg] ${TONE_BG[tone]}`}
-              />
-              {asset}
+            <li key={asset} className={`p-bullet text-base leading-relaxed ${TONE_TEXT[tone]}`}>
+              <span className="text-ink">{asset}</span>
             </li>
           ))}
         </ul>
@@ -231,21 +222,15 @@ export function CaseDetail({
       )}
 
       <Block id="amenazas" title={(item.threatsHeading ?? labels.threats)[locale]} tone={tone}>
-        <ol className="space-y-3">
+        <ol className="space-y-4">
           {item.threats.map((threat) => (
             <li
               key={threat.text.es}
-              className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-hairline pb-3"
+              className="flex flex-wrap items-center gap-x-3 gap-y-2"
             >
-              {threat.ref && (
-                <span className={`font-mono text-xs font-bold ${TONE_TEXT[tone]}`}>{threat.ref}</span>
-              )}
+              {threat.ref && <span className="m-stamp text-xs [--stamp-r:-4deg]">{threat.ref}</span>}
               <span className="text-base leading-relaxed text-ink">{threat.text[locale]}</span>
-              {threat.stride && (
-                <span className="border border-hairline-strong px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-widest2 text-ink-muted">
-                  STRIDE: {threat.stride}
-                </span>
-              )}
+              {threat.stride && <span className="m-dymo m-dymo--edge text-[0.6rem]">STRIDE: {threat.stride}</span>}
             </li>
           ))}
         </ol>
@@ -270,11 +255,11 @@ export function CaseDetail({
             return (
               <div key={group.heading?.es ?? 'controles'}>
                 {group.heading && (
-                  <h3 className={`p-display text-xl sm:text-2xl ${TONE_TEXT[tone]}`}>
+                  <h3 className="p-display text-xl text-magenta-text sm:text-2xl">
                     {group.heading[locale]}
                   </h3>
                 )}
-                <ul className={`grid gap-5 md:grid-cols-2 ${group.heading ? 'mt-5' : ''}`}>
+                <ul className={`grid gap-7 md:grid-cols-2 ${group.heading ? 'mt-5' : ''}`}>
                   {group.controls.map((control) => (
                     <ControlCard key={control.title.es} control={control} heading={ControlHeading} />
                   ))}
@@ -285,10 +270,10 @@ export function CaseDetail({
         </div>
         {hiddenControls.length > 0 && (
           <details className="mt-8">
-            <summary className="inline-flex min-h-[44px] cursor-pointer items-center font-mono text-xs font-bold uppercase tracking-widest2 text-ink underline decoration-2 underline-offset-4 hover:text-tone-green">
-              {labels.moreControls[locale](hiddenControls.length)}
+            <summary className="p-type inline-flex min-h-[44px] cursor-pointer items-center text-sm font-bold text-ink">
+              <span className="p-link px-0.5">{labels.moreControls[locale](hiddenControls.length)}</span>
             </summary>
-            <ul className="mt-5 grid gap-5 md:grid-cols-2">
+            <ul className="mt-6 grid gap-7 md:grid-cols-2">
               {hiddenControls.map(({ control, heading }) => (
                 <ControlCard key={control.title.es} control={control} heading={heading} />
               ))}
@@ -300,7 +285,7 @@ export function CaseDetail({
       <Block id="verificacion" title={labels.verification[locale]} tone={tone}>
         <ul className="space-y-6">
           {item.verification.map((check) => (
-            <li key={check.text.es} className={`border-l-4 pl-4 ${TONE_BORDER[tone]}`}>
+            <li key={check.text.es} className={`p-bullet p-bullet--check ${TONE_TEXT[tone]}`}>
               <p className="text-base leading-relaxed text-ink">{check.text[locale]}</p>
               <EvidenceList links={check.evidence} locale={locale} label={labels.evidence[locale]} />
             </li>
@@ -312,12 +297,8 @@ export function CaseDetail({
         <Block id="abierto" title={labels.openItems[locale]} tone={tone}>
           <ul className="space-y-3">
             {item.openItems[locale].map((entry) => (
-              <li key={entry} className="relative pl-5 text-base leading-relaxed text-ink">
-                <span
-                  aria-hidden="true"
-                  className={`absolute left-0 top-[0.55em] h-2 w-2 -skew-x-[20deg] ${TONE_BG[tone]}`}
-                />
-                {entry}
+              <li key={entry} className={`p-bullet text-base leading-relaxed ${TONE_TEXT[tone]}`}>
+                <span className="text-ink">{entry}</span>
               </li>
             ))}
           </ul>

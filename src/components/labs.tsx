@@ -26,18 +26,18 @@ export function Labs({ locale }: { locale: Locale }) {
         {writeups.map((writeup) => (
           <li key={writeup.link}>
             <Reveal className="h-full">
-              <article className="h-full border-t-4 border-tone-lilac bg-surface-card/90 p-5 sm:p-6">
+              <article className="m-card h-full p-5 sm:p-6">
                 <h3 className="text-lg font-bold leading-snug text-ink">
                   <a
                     href={writeup.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline decoration-2 underline-offset-4 hover:text-tone-green"
+                    className="p-link px-0.5"
                   >
                     {writeup.title}
                   </a>
                 </h3>
-                <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 font-mono text-xs text-ink-muted">
+                <dl className="p-type mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs text-ink-muted">
                   <dt>{labels.platform[locale]}</dt>
                   <dd>{writeup.platform}</dd>
                   <dt>{labels.vulnClass[locale]}</dt>
@@ -47,7 +47,7 @@ export function Labs({ locale }: { locale: Locale }) {
                   <span className="font-bold">{labels.lesson[locale]}: </span>
                   {writeup.lesson[locale]}
                 </p>
-                <p className="mt-2 font-mono text-xs text-ink-muted">{writeup.date}</p>
+                <p className="m-stamp mt-3 text-xs [--stamp-r:-3deg]">{writeup.date}</p>
               </article>
             </Reveal>
           </li>

@@ -2,11 +2,14 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 
+import { MarkerCircle } from '@/components/zine'
+
 /**
- * Menú de pausa al estilo de P3R: una pila de rótulos en cursiva, cada uno con
- * su tamaño y su giro, y un cursor que VIAJA hasta el elemento señalado y se
- * redimensiona para envolverlo, con un rebote al llegar. El elemento elegido
- * crece y cambia de color.
+ * Menú de pausa al estilo de P3R, repintado en papel (RF-110 v5): una pila de
+ * rótulos a rotulador, cada uno con su tamaño y su giro, y un cursor que VIAJA
+ * hasta el elemento señalado y se redimensiona para envolverlo, con un rebote
+ * al llegar. El cursor es ahora un brochazo magenta con un trozo de cinta como
+ * punta; el elemento elegido crece y pasa a tinta sobre el brochazo.
  *
  * En el juego (y en la recreación de Ultipuk en Godot) el cursor son dos
  * polígonos, uno violeta y uno blanco, que se interpolan hacia el elemento. Aquí
@@ -16,18 +19,19 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProp
  * Accesibilidad: son enlaces normales dentro de una lista. El cursor es
  * `aria-hidden` y sigue tanto al ratón como al foco del teclado. Sin
  * JavaScript, los enlaces funcionan igual y el cursor simplemente no aparece.
- * El texto elegido es `ink` sobre el violeta de relleno (5.5:1) y el resto son tonos
- * claros sobre `abyss`, todos medidos en `check:contrast`.
+ * El texto elegido es `tinta` sobre el brochazo magenta (4.63:1) y el resto
+ * alterna papel y rosa sobre la cartulina negra, todo medido en
+ * `check:contrast`.
  */
 
 /** Giro, tamaño y tono de cada rótulo: la "pila desordenada" del menú. */
 const LAYOUT = [
-  { rotate: -7, size: 'text-3xl xl:text-4xl', tone: 'text-tone-green', indent: 'ml-2' },
-  { rotate: -4, size: 'text-2xl xl:text-3xl', tone: 'text-tone-lilac', indent: 'ml-8' },
-  { rotate: -6, size: 'text-3xl xl:text-4xl', tone: 'text-tone-green', indent: 'ml-0' },
-  { rotate: -3, size: 'text-2xl xl:text-3xl', tone: 'text-tone-lilac', indent: 'ml-6' },
-  { rotate: -8, size: 'text-3xl xl:text-4xl', tone: 'text-tone-green', indent: 'ml-1' },
-  { rotate: -5, size: 'text-2xl xl:text-3xl', tone: 'text-tone-lilac', indent: 'ml-10' },
+  { rotate: -7, size: 'text-3xl xl:text-4xl', tone: 'text-paper', indent: 'ml-2' },
+  { rotate: -4, size: 'text-2xl xl:text-3xl', tone: 'text-tone-pink', indent: 'ml-8' },
+  { rotate: -6, size: 'text-3xl xl:text-4xl', tone: 'text-paper', indent: 'ml-0' },
+  { rotate: -3, size: 'text-2xl xl:text-3xl', tone: 'text-tone-pink', indent: 'ml-6' },
+  { rotate: -8, size: 'text-3xl xl:text-4xl', tone: 'text-paper', indent: 'ml-1' },
+  { rotate: -5, size: 'text-2xl xl:text-3xl', tone: 'text-tone-pink', indent: 'ml-10' },
 ] as const
 
 interface Box {
@@ -109,13 +113,13 @@ export function PauseMenu({
     <div className="relative">
       <p
         aria-hidden="true"
-        className="p-display mb-2 text-sm tracking-[0.3em] text-tone-green"
+        className="p-type mb-2 text-sm text-ink-muted"
       >
         {title}
       </p>
 
       <ul ref={listRef} aria-label={label} className="relative isolate flex flex-col items-start">
-        {/* Cursor: sombra blanca desplazada + paralelogramo violeta. */}
+        {/* Cursor: brochazo magenta estirado con un trozo de cinta de punta. */}
         <span
           aria-hidden="true"
           style={cursorStyle}
@@ -140,7 +144,7 @@ export function PauseMenu({
                 onFocus={() => choose(index)}
                 style={{ '--r': `${layout.rotate}deg` } as CSSProperties}
                 className={`p-menu-item p-display inline-block leading-[1.05] ${layout.size} ${
-                  isSelected ? 'is-selected text-ink' : layout.tone
+                  isSelected ? 'is-selected text-tinta' : layout.tone
                 }`}
               >
                 {item.label}
@@ -150,10 +154,10 @@ export function PauseMenu({
         })}
       </ul>
 
-      <p aria-hidden="true" className="mt-4 flex items-center justify-end gap-2 font-display text-sm font-black italic text-ink">
-        <span className="inline-flex h-5 w-5 items-center justify-center rounded-[50%] border-2 border-ink text-[0.65rem] not-italic">
-          A
-        </span>
+      <p aria-hidden="true" className="p-type mt-4 flex items-center justify-end gap-2 text-sm text-ink">
+        <MarkerCircle className="h-7 w-7 text-magenta-text">
+          <span className="p-display text-xs text-ink">A</span>
+        </MarkerCircle>
         {hint}
       </p>
     </div>
