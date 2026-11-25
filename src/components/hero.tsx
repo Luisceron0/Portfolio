@@ -66,7 +66,7 @@ export function Hero({ locale }: { locale: Locale }) {
             nombre legible va en un `sr-only`. La región del hero toma su nombre
             de aquí.
           */}
-          <h1 id="hero-title" className="p-display mt-4 text-[2.15rem] leading-none sm:mt-6 sm:text-6xl md:text-7xl">
+          <h1 id="hero-title" className="p-display mt-3 text-[1.9rem] leading-none sm:mt-6 sm:text-6xl md:text-7xl">
             <span className="sr-only">{hero.name}</span>
             <span aria-hidden="true">
               {words.map((word, index) => (
@@ -121,14 +121,14 @@ export function Hero({ locale }: { locale: Locale }) {
         </div>
 
         {/*
-          Menú de pausa P3R en cartulina negra recortada, girada y pegada con
-          dos cintas. "MENÚ" en vertical, a rotulador, relleno de tinta magenta.
+          Menú de pausa P3R en un panel azul profundo recortado, girado y
+          pegado con cinta. "MENÚ" en vertical, a brocha, en tinta magenta.
         */}
         <div className="p-enter relative -rotate-2" style={delay(640)}>
-          <div className="m-card px-6 py-8 sm:px-10">
+          <div className="m-card m-card--blue px-6 py-8 sm:px-10">
             <span
               aria-hidden="true"
-              className="p-display pointer-events-none absolute left-2 top-4 select-none text-6xl leading-none text-magenta-text [writing-mode:vertical-rl]"
+              className="p-brush pointer-events-none absolute left-2 top-4 select-none text-6xl leading-none text-magenta-text [writing-mode:vertical-rl]"
             >
               {hero.menu.title[locale]}
             </span>

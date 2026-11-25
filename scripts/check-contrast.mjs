@@ -46,6 +46,9 @@ const PALETTE = {
   toneOchre: '#E0A24A',
   toneCyan: '#46C3D8',
   toneLilac: '#B6A6B6',
+  blue: '#1E3BFF',
+  blueDeep: '#0B1A8C',
+  violet: '#4F1BC4',
 }
 
 const TONE_KEYS = ['toneMagenta', 'tonePink', 'toneOchre', 'toneCyan', 'toneLilac']
@@ -90,6 +93,13 @@ const PAIRS = [
   // Secundario en notas de color (pasos del proceso): solo donde llega.
   { label: 'tinta-muted sobre tonePink (nota rosa)', fg: PALETTE.tintaMuted, bg: PALETTE.tonePink, min: 4.5 },
   { label: 'tinta-muted sobre toneCyan (nota cian)', fg: PALETTE.tintaMuted, bg: PALETTE.toneCyan, min: 4.5 },
+
+  /* Ajuste Persona punk: bandas azul P3R y violeta, y el panel azul del menú. */
+  { label: 'paper sobre blue (banda azul, parte clara)', fg: PALETTE.paper, bg: PALETTE.blue, min: 4.5 },
+  { label: 'paper sobre blue-deep (banda azul, panel del menú)', fg: PALETTE.paper, bg: PALETTE.blueDeep, min: 4.5 },
+  { label: 'ink-muted sobre blue-deep (pista del menú)', fg: PALETTE.inkMuted, bg: PALETTE.blueDeep, min: 4.5 },
+  { label: 'tonePink sobre blue-deep (elementos del menú)', fg: PALETTE.tonePink, bg: PALETTE.blueDeep, min: 4.5 },
+  { label: 'paper sobre violet (banda de habilidades)', fg: PALETTE.paper, bg: PALETTE.violet, min: 4.5 },
 ]
 
 let failed = false

@@ -26,6 +26,9 @@
      */
     --font-sans: 'Helvetica Neue', Helvetica, Arial, ui-sans-serif, system-ui,
       sans-serif;
+    /* Rótulos Persona: sans negra en cursiva, del sistema (cero bytes). Arial
+       Black en Windows; en macOS, Helvetica Neue a peso 900. */
+    --font-heavy: 'Arial Black', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
       'Liberation Mono', monospace;
 
@@ -62,6 +65,10 @@
       61% calc(100% - 11px), 54% calc(100% - 2px), 47% calc(100% - 9px),
       40% calc(100% - 1px), 33% calc(100% - 10px), 26% calc(100% - 3px),
       19% calc(100% - 9px), 12% calc(100% - 1px), 6% calc(100% - 8px), 0 calc(100% - 2px)
+    );
+    /* Panel Persona: dos esquinas cortadas en diagonal. */
+    --cut-panel: polygon(
+      0 0, calc(100% - 1.4rem) 0, 100% 1.4rem, 100% 100%, 1.4rem 100%, 0 calc(100% - 1.4rem)
     );
     /* Recorte irregular de cartulina (12 puntos): tarjetas. */
     --cut: polygon(
@@ -125,9 +132,14 @@
     @apply outline-none ring-2 ring-magenta-text ring-offset-2 ring-offset-surface;
   }
 
+  .m-blue :focus-visible,
+  .m-violet :focus-visible {
+    @apply ring-paper ring-offset-[#0b1a8c];
+  }
+
   .m-sheet :focus-visible,
   .m-magenta :focus-visible,
-  .m-postit :focus-visible,
+  .m-panel :focus-visible,
   .m-kraft :focus-visible,
   .p-on-paper:focus-visible {
     @apply ring-tinta ring-offset-paper;
@@ -137,10 +149,6 @@
     @apply ring-offset-magenta;
   }
 
-  /* Banda lila: el magenta del fondo negro casi no se ve sobre lila. */
-  .m-band-lilac :focus-visible {
-    @apply ring-tinta ring-offset-tone-lilac;
-  }
 
   [id] {
     scroll-margin-top: 5rem;
@@ -153,9 +161,20 @@
    * =================================================================== */
 
   /* Rótulo a rotulador: nombre, títulos, números, menú de pausa. */
+  /* Rótulo Persona: negra, cursiva, mayúsculas, apretada. */
   .p-display {
+    font-family: var(--font-heavy);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+  }
+
+  /* Brochazo a rotulador: solo acentos (MENÚ vertical), nunca texto de lectura. */
+  .p-brush {
     font-family: var(--font-display);
     font-weight: 400;
+    font-style: normal;
     text-transform: uppercase;
     letter-spacing: 0.01em;
   }
@@ -212,12 +231,6 @@
   }
 
   /* Hoja de cuaderno rayada con margen magenta (habilidades, listas). */
-  .m-ruled {
-    background-image:
-      linear-gradient(90deg, transparent 2.1rem, #d903d5 2.1rem, #d903d5 2.25rem, transparent 2.25rem),
-      repeating-linear-gradient(180deg, transparent 0 1.7rem, rgba(182, 166, 182, 0.45) 1.7rem 1.78rem),
-      var(--grain-dark);
-  }
 
   /* Papel magenta a sangre: bordes rasgados y semitonos solo en las esquinas. */
   .m-magenta {
@@ -247,13 +260,67 @@
   }
 
   /* Banda de fotocopia vieja lila (alterna con la magenta). */
-  .m-band-lilac {
+  /*
+   * Azul P3R a sangre: de azul profundo arriba a azul eléctrico abajo, con
+   * manchas de luz de agua en la parte alta, planas y de borde duro (cel), sin
+   * animación. Las manchas quedan sobre el azul profundo y por encima de la
+   * intro, para que el papel siga por encima de 4.5:1. Texto SIEMPRE paper.
+   */
+  .m-blue {
     position: relative;
     isolation: isolate;
-    background-color: #b6a6b6;
-    background-image: var(--grain-dark);
-    color: #0b0a0f;
+    background-color: #0b1a8c;
+    background-image: linear-gradient(180deg, #0b1a8c 10%, #1e3bff 100%);
+    color: #f2efe8;
     clip-path: var(--torn-y);
+  }
+
+  .m-blue::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 7.5rem;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='720' height='120' viewBox='0 0 720 120'%3E%3Cg fill='%2346C3D8'%3E%3Cpath fill-opacity='.42' d='M14 26c22-12 58-10 84-3 14 4 10 13-6 15-26 3-46 1-66 6-18 5-30-9-12-18z'/%3E%3Cpath fill-opacity='.3' d='M150 14c40-8 92-4 126 4 12 3 6 12-10 12-30 0-50 4-82 8-30 4-52-16-34-24z'/%3E%3Cpath fill-opacity='.36' d='M318 52c18-10 46-12 66-4 10 4 4 12-8 13-18 2-30 6-46 4-14-2-20-8-12-13z'/%3E%3Cpath fill-opacity='.4' d='M430 20c30-10 70-9 98 0 12 4 6 11-8 12-22 1-38 7-64 7-26 0-44-11-26-19z'/%3E%3Cpath fill-opacity='.26' d='M570 64c20-8 50-8 70 0 8 3 2 10-10 10-16 0-28 4-44 3-16-1-26-8-16-13z'/%3E%3Cpath fill-opacity='.34' d='M602 10c26-6 66-4 92 4 10 3 4 10-8 10-20 1-34 4-56 4-22 0-40-12-28-18z'/%3E%3Cpath fill-opacity='.22' d='M80 80c14-6 36-6 50 0 6 3 0 8-8 8-12 0-20 3-32 2-12-1-18-6-10-10z'/%3E%3Cpath fill-opacity='.24' d='M236 92c12-5 30-5 42 0 5 2 0 7-7 7-10 0-17 2-27 1-10-1-15-5-8-8z'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 720px 120px;
+  }
+
+  /*
+   * Violeta del menú P3R, con la cuña diagonal en azul y motas claras.
+   * Texto SIEMPRE paper.
+   */
+  .m-violet {
+    position: relative;
+    isolation: isolate;
+    background-color: #4f1bc4;
+    background-image:
+      linear-gradient(112deg, transparent 58%, rgba(30, 59, 255, 0.5) 58% 74%, transparent 74%),
+      var(--grain-specks);
+    color: #f2efe8;
+    clip-path: var(--torn-y);
+  }
+
+  /*
+   * Palabras gigantes en abanico (menú P3R): fondo tipográfico de la banda
+   * violeta. Solo decoración (`aria-hidden`); son líneas, no bloques altos, y
+   * la banda recorta lo que sobresale.
+   */
+  .p-fan span {
+    display: block;
+    font-family: var(--font-heavy);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 0.84;
+    letter-spacing: -0.04em;
+    font-size: clamp(3.2rem, 10vw, 9rem);
+    color: #d9c8ff;
+    opacity: 0.16;
+    transform-origin: 0 50%;
+    transform: rotate(calc((var(--i) - 2.5) * -6deg)) translateX(calc(var(--i) * 1.4rem));
   }
 
   /* Cinta de embalaje / kraft, con extremos dentados. */
@@ -286,13 +353,41 @@
   }
 
   /* Nota adhesiva: tinta, giro leve, sombra sólida tinta y franja adhesiva. */
-  .m-postit {
+  /*
+   * Panel Persona: papel de color con dos esquinas cortadas y sombra sólida
+   * tinta desplazada. Forma y sombra en pseudo-elementos, así el foco de lo que
+   * va dentro no se recorta. Texto en tinta.
+   */
+  .m-panel {
     position: relative;
-    background-color: var(--postit-bg, #ffd23f);
-    background-image: linear-gradient(rgba(11, 10, 15, 0.06) 0 0.9rem, transparent 0.9rem);
+    isolation: isolate;
     color: #0b0a0f;
-    transform: rotate(var(--postit-r, -1.5deg));
-    box-shadow: 3px 3px 0 #0b0a0f;
+  }
+
+  .m-panel::before,
+  .m-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    clip-path: var(--cut-panel);
+    pointer-events: none;
+  }
+
+  .m-panel::before {
+    z-index: -1;
+    background-color: var(--panel-bg, #ffd23f);
+    background-image: var(--grain-dark);
+  }
+
+  .m-panel::after {
+    z-index: -2;
+    background: #0b0a0f;
+    translate: 6px 6px;
+  }
+
+  /* Panel del menú de pausa: cartulina en azul P3R profundo. */
+  .m-card--blue::after {
+    background-color: #0b1a8c;
   }
 
   /* Etiqueta Dymo: cinta con letra en relieve y extremos en V. */
@@ -332,7 +427,10 @@
   .m-stamp {
     display: inline-block;
     padding: 0.36em 0.7em 0.3em;
-    font-family: var(--font-display);
+    font-family: var(--font-heavy);
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     line-height: 1.05;
     color: #f25ceb;
@@ -487,7 +585,7 @@
     position: absolute;
     inset: 0;
     clip-path: var(--torn-x);
-    transform: rotate(-1.5deg);
+    transform: skewX(-12deg) rotate(-1.5deg);
   }
 
   .p-title-box::before {

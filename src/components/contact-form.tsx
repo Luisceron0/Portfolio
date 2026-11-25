@@ -201,7 +201,7 @@ export function ContactForm({
 
           {/* Por qué el botón está deshabilitado, dicho en voz alta. */}
           {!sitekey && (
-            <p role="alert" className="m-postit self-start px-3 py-2 text-sm font-bold">
+            <p role="alert" className="m-panel self-start px-3 py-2 text-sm font-bold">
               {contact.captcha.unavailable[locale]}
             </p>
           )}
@@ -217,7 +217,7 @@ export function ContactForm({
           {state.status === 'success' && (
             <p
               data-testid="contact-success"
-              className="m-postit px-4 py-3 text-base font-bold [--postit-bg:#46C3D8]"
+              className="m-panel px-4 py-3 text-base font-bold [--panel-bg:#46C3D8]"
             >
               {contact.successMessage[locale]}
             </p>
@@ -225,7 +225,7 @@ export function ContactForm({
           {state.status === 'error' && (
             <p
               data-testid="contact-error"
-              className="m-postit px-4 py-3 text-base font-bold"
+              className="m-panel px-4 py-3 text-base font-bold"
             >
               {contact.errors[state.code][locale]}
             </p>

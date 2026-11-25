@@ -11,7 +11,7 @@ export function PendingNote({ value }: { value: string }) {
   return (
     <span
       role="note"
-      className="m-postit p-type inline-block px-2.5 py-1 text-sm font-bold"
+      className="m-panel p-type inline-block px-2.5 py-1 text-sm font-bold"
     >
       {value}
     </span>

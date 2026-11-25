@@ -78,6 +78,7 @@ export function SectionHeading({
   intro,
   tone,
   onPaper = false,
+  onColor = false,
 }: {
   id: string
   number: string
@@ -85,6 +86,8 @@ export function SectionHeading({
   intro?: string
   tone: Tone
   onPaper?: boolean
+  /** Banda azul o violeta: número e intro en papel. */
+  onColor?: boolean
 }) {
   return (
     <Reveal>
@@ -92,11 +95,11 @@ export function SectionHeading({
         <span aria-hidden="true" className="relative -mb-2 select-none">
           <SplatStar
             className="absolute -left-4 -top-6 h-28 w-28 sm:h-36 sm:w-36"
-            color={onPaper ? '#f2efe8' : '#5a1257'}
+            color={onPaper ? '#f2efe8' : onColor ? '#0b0a0f' : '#5a1257'}
           />
           <span
             className={`p-display p-parallax relative block text-6xl leading-none min-[400px]:text-7xl sm:text-8xl md:text-9xl ${
-              onPaper ? 'text-tinta' : 'text-magenta-text'
+              onPaper ? 'text-tinta' : onColor ? 'text-paper' : 'text-magenta-text'
             }`}
           >
             {number}
@@ -115,7 +118,7 @@ export function SectionHeading({
       </div>
 
       {intro && (
-        <p className={`mt-6 max-w-2xl text-lg leading-relaxed ${onPaper ? 'text-tinta' : 'text-ink-muted'}`}>
+        <p className={`mt-6 max-w-2xl text-lg leading-relaxed ${onPaper ? 'text-tinta' : onColor ? 'text-paper' : 'text-ink-muted'}`}>
           {intro}
         </p>
       )}
@@ -123,13 +126,15 @@ export function SectionHeading({
   )
 }
 
+const BAND_CLASS = { magenta: 'm-magenta', blue: 'm-blue', violet: 'm-violet' } as const
+
 /**
  * Contenedor de sección.
  *
- * `band` saca la sección a sangre sobre papel: `magenta` (papel magenta con
- * semitonos en las esquinas) o `lilac` (fotocopia vieja), los dos con bordes
- * rasgados arriba y abajo. Sobre papel el texto es tinta; las tarjetas que van
- * dentro son su propio material (cartulina, nota, ficha).
+ * `band` saca la sección a sangre: `magenta` (papel magenta, texto tinta),
+ * `blue` (azul P3R con luz de agua) o `violet` (violeta del menú P3R), los
+ * tres con bordes rasgados. Sobre azul y violeta el texto es papel; las
+ * tarjetas que van dentro son su propio material (cartulina, panel, hoja).
  *
  * El `<section>` es SIEMPRE el elemento con `id` y `aria-labelledby`, con o
  * sin banda: los tests y las anclas de la nav no dependen del estilo.
@@ -144,7 +149,7 @@ export function Section({
   id: string
   labelledBy: string
   className?: string
-  band?: 'magenta' | 'lilac'
+  band?: 'magenta' | 'blue' | 'violet'
   children: ReactNode
 }) {
   if (band) {
@@ -152,7 +157,7 @@ export function Section({
       <section
         id={id}
         aria-labelledby={labelledBy}
-        className={`${band === 'magenta' ? 'm-magenta' : 'm-band-lilac'} relative my-8 py-20 sm:py-28 ${className}`}
+        className={`${BAND_CLASS[band]} relative my-8 overflow-x-clip py-20 sm:py-28 ${className}`}
       >
         <div className="relative mx-auto max-w-content px-5 sm:px-8">{children}</div>
       </section>

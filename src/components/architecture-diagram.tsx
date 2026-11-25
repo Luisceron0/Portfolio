@@ -1,6 +1,6 @@
 import type { CaseLayer, Locale } from '@/content'
 import type { Tone } from '@/components/section'
-import { ArrowDoodle, Staple } from '@/components/zine'
+import { ArrowDoodle } from '@/components/zine'
 
 /**
  * Diagrama de capas de un caso, de fuera hacia dentro, como fichas de papel
@@ -34,7 +34,6 @@ export function ArchitectureDiagram({
             className={`m-sheet px-4 ${compact ? 'py-2' : 'py-3'}`}
             style={{ rotate: `${index % 2 === 0 ? -1 : 1}deg` }}
           >
-            {index === 0 && <Staple className="-top-1 left-4" />}
             <p className="p-type text-xs font-bold text-tinta">{layer.label[locale]}</p>
             {!compact && <p className="mt-1 text-sm leading-relaxed text-tinta">{layer.detail[locale]}</p>}
           </div>

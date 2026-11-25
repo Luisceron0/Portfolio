@@ -60,7 +60,7 @@ export function CaseScreenshot({
   const src = resolved(shot.src)
   if (!src) {
     return (
-      <div className="m-postit flex aspect-[16/10] w-full items-center justify-center p-4 text-center">
+      <div className="m-panel flex aspect-[16/10] w-full items-center justify-center p-4 text-center">
         <PendingNote value={shot.src} />
       </div>
     )

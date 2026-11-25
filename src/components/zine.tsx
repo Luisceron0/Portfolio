@@ -116,14 +116,19 @@ export function ArrowDoodle({
   )
 }
 
-/** Grapa metálica con patas, su sombra y su línea de luz (30 x 10). */
-export function Staple({ className = '', style }: { className?: string; style?: CSSProperties }) {
+/**
+ * Palabras gigantes en abanico (menú P3R), fondo tipográfico de una banda.
+ * Solo decoración: `aria-hidden`, y repite texto que ya está en la página.
+ */
+export function FanWords({ words, className = '' }: { words: readonly string[]; className?: string }) {
   return (
-    <svg {...base} viewBox="0 0 30 10" width="30" height="10" className={cls(`absolute ${className}`)} style={style}>
-      <path d="M2 9V3.2C2 2.5 2.5 2 3.2 2h23.6c.7 0 1.2.5 1.2 1.2V9" fill="none" stroke="#0b0a0f" strokeWidth="3.4" strokeLinecap="round" opacity="0.35" transform="translate(1 1)" />
-      <path d="M2 9V3.2C2 2.5 2.5 2 3.2 2h23.6c.7 0 1.2.5 1.2 1.2V9" fill="none" stroke="#8d8a92" strokeWidth="2.6" strokeLinecap="round" />
-      <path d="M4 2.6h22" stroke="#f2efe8" strokeWidth="0.9" opacity="0.8" />
-    </svg>
+    <div aria-hidden="true" className={cls(`p-fan absolute -z-10 ${className}`)}>
+      {words.map((word, i) => (
+        <span key={word} style={{ '--i': i } as CSSProperties}>
+          {word}
+        </span>
+      ))}
+    </div>
   )
 }
 

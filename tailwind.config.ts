@@ -51,6 +51,17 @@ const config: Config = {
         /** SOLO decoración: sombras sólidas y papeles de fondo. */
         plum: '#5a1257',
         /**
+         * Azul P3R (ajuste Persona punk): banda "Cómo trabajo" y panel del menú
+         * de pausa. Encima, SOLO `paper` (o `ink.muted` y `tone.pink` sobre
+         * `blue.deep`): `tone.pink` sobre `blue` no llega (3.6:1).
+         */
+        blue: {
+          DEFAULT: '#1E3BFF',
+          deep: '#0B1A8C',
+        },
+        /** Violeta del menú P3R: banda de Habilidades. Encima, SOLO `paper`. */
+        violet: '#4F1BC4',
+        /**
          * Tonos de material. Todos legibles como texto sobre negro y con tinta
          * encima cuando son papel (rosa, kraft, cian, lila).
          */

@@ -132,7 +132,7 @@ export function CaseDetail({
           </h1>
 
           {/* Hoja de cuaderno: margen magenta, dt mecanografiado, dd en cuerpo. */}
-          <dl className="m-sheet m-ruled mt-8 space-y-4 py-5 pl-12 pr-5 sm:pr-6">
+          <dl className="m-sheet mt-8 space-y-4 px-5 py-5 sm:px-6">
             {/*
               Bloque inicial de tres líneas (portafolio v2): problema, qué
               construí y resultado. La plantilla completa va debajo para quien
@@ -190,7 +190,7 @@ export function CaseDetail({
       </header>
 
       {item.privateRepo && (
-        <p role="note" className="m-postit mt-10 max-w-3xl px-4 py-3 text-sm font-medium leading-relaxed">
+        <p role="note" className="m-panel mt-10 max-w-3xl px-4 py-3 text-sm font-medium leading-relaxed">
           {labels.privateRepo[locale]}
         </p>
       )}

@@ -8,15 +8,15 @@ import { Section, SectionHeading } from '@/components/section'
 import { Tape } from '@/components/zine'
 
 /**
- * Notas adhesivas en colores alternos, todos con tinta encima (check:contrast).
- * Sobre la lila solo vale tinta: por eso ningún texto de la nota es muted.
+ * Paneles Persona en colores alternos, todos con tinta encima (check:contrast).
+ * Sobre la lila solo vale tinta: por eso ningún texto del panel es muted.
  */
 const NOTE_COLORS = ['#ffd23f', '#FF9CF5', '#46C3D8', '#B6A6B6'] as const
-const NOTE_TILT = [-2, 1.5, -1, 2] as const
+const NOTE_TILT = [-1.5, 1, -0.8, 1.5] as const
 
 /**
- * "Cómo trabajo" (SRS v1.4), en papel (RF-110 v5): cuatro notas adhesivas en
- * fila sobre la banda magenta. Modelar amenazas → decidir y registrar en ADR →
+ * "Cómo trabajo" (SRS v1.4), sobre la banda azul P3R: cuatro paneles de
+ * esquinas cortadas en fila. Modelar amenazas → decidir y registrar en ADR →
  * implementar → bloquear en CI, y cada paso enlaza a dónde se ve en los casos.
  *
  * La captura del gate solo se pinta cuando existe (`workProcess.gateScreenshot`),
@@ -27,14 +27,14 @@ export function Process({ locale }: { locale: Locale }) {
   const shotSrc = shot ? resolved(shot.src) : null
 
   return (
-    <Section id="proceso" labelledBy="proceso-title" band="magenta">
+    <Section id="proceso" labelledBy="proceso-title" band="blue">
       <SectionHeading
         id="proceso-title"
         number="03"
         title={workProcess.heading[locale]}
         intro={workProcess.intro[locale]}
         tone="ochre"
-        onPaper
+        onColor
       />
 
       <ol className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
@@ -42,11 +42,11 @@ export function Process({ locale }: { locale: Locale }) {
           <li key={step.id}>
             <Reveal delayMs={index * 70} className="h-full">
               <div
-                className="m-postit h-full p-5 pt-6 sm:p-6 sm:pt-7"
+                className="m-panel h-full p-5 pt-6 sm:p-6 sm:pt-7"
                 style={
                   {
-                    '--postit-bg': NOTE_COLORS[index % NOTE_COLORS.length],
-                    '--postit-r': `${NOTE_TILT[index % NOTE_TILT.length]}deg`,
+                    '--panel-bg': NOTE_COLORS[index % NOTE_COLORS.length],
+                    rotate: `${NOTE_TILT[index % NOTE_TILT.length]}deg`,
                   } as CSSProperties
                 }
               >

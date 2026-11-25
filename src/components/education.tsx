@@ -55,7 +55,7 @@ export function Education({ locale }: { locale: Locale }) {
             <h3>
               <span className={`m-dymo text-xs ${index === 0 ? 'm-dymo--magenta' : ''}`}>{heading[locale]}</span>
             </h3>
-            <ul className="m-sheet m-ruled mt-4 py-4 pl-12 pr-5">
+            <ul className="m-sheet mt-4 px-6 py-4">
               {list[locale].map((item) => (
                 <li key={item} className="p-bullet p-bullet--check py-1.5 text-base leading-relaxed text-tinta">
                   {item}
